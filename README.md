@@ -19,7 +19,7 @@ The K framework takes a formal semantics of a language as trusted input (e.g., o
 
 (Links and completion dates to be added soon)
 
-* Daian's Viper ERC20 token: fully conforming to the ERC20 standard
+* Philip Daian's Viper ERC20 token: fully conforming to the ERC20 standard
 * OpenZeppelin ERC20 token: conforming to the standard, but:
    * Rejecting transfers to address 0
 * ConsenSys ERC20 token: conforming to the standard, but:
