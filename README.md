@@ -61,7 +61,7 @@ the mathematical domain constraints.
 
 * [KEVM](https://github.com/kframework/evm-semantics/):
 formal semantics of the EVM in K
-   * [Jellowpaper](https://jellopaper.org/): a more readable variant of KEVM
+   * [Jellowpaper](https://jellopaper.org/): reader-friendly formatting
    * [KEVM technical report](http://hdl.handle.net/2142/97207)
 * [ERC20-K](https://github.com/runtimeverification/erc20-semantics):
 a formal specification of the high-level business logic of
