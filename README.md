@@ -11,15 +11,15 @@ The K framework takes a formal semantics of a language as trusted input (e.g., o
 
 (Links to be added soon)
 
-* **2018/**/** Casper - Ethereum Foundation
-* **2018/**/** Fabian Vogelsteller's ICO contract and ICO schema
+* **2018/??/??** Casper - Ethereum Foundation
+* **2018/??/??** Fabian Vogelsteller's ICO contract and ICO schema
 * **2018/02/??** Bihu
 
 ## Completed
 
-(Links to be added soon)
+(Links and completion dates to be added soon)
 
-* Viper ERC20 token: fully conforming to the ERC20 standard
+* Daian's Viper ERC20 token: fully conforming to the ERC20 standard
 * OpenZeppelin ERC20 token: conforming to the standard, but:
    * Rejecting transfers to address 0
 * ConsenSys ERC20 token: conforming to the standard, but:
