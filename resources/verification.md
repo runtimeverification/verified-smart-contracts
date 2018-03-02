@@ -50,12 +50,6 @@ The following syntactic sugars capture the storage layout schemes of Solidity an
       requires 0 <=Int V andBool V <Int pow256
 ```
 
-### `chop` Reduction
-
-```k
-    rule chop(I) => I requires 0 <=Int I andBool I <Int pow256
-```
-
 ### Wordstack
 
 These lemma abstracts some properties about `#sizeWordStack`:
