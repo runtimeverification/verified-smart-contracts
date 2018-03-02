@@ -1,3 +1,5 @@
+*2018/02/28*
+
 # Bihu Smart Contract Formal Verification
 
 We present a formal verification of Bihu KEY token operation contracts, upon request from the [Bihu] team represented by Dr. Bin Lu (Gulu) and Mr. Huafu Bao.
@@ -7,9 +9,10 @@ Bihu is a blockchain-based ID system, and [KEY] is the utility token for the Bih
 The smart contracts requested to be formally verified are the ones for operating the KEY tokens.
 The [Solidity source code][src] of those contracts and their [informal specification] are publicly available.
 
-This directory contains the artifact of the Bihu contracts formal verification.
+This directory contains the artifact of the Bihu contracts formal verification, as a companion to the formal verification report:
 
-*Refer to our [formal verification report] for complete details.*
+* [Bihu Smart Contract Formal Verification]
+
 
 ## Formal Verification Methodology
 
@@ -32,7 +35,7 @@ More specifically, we formally verified the functional correctness of the follow
 ### Solidity Source Code and Compiled EVM Bytecode
 
 We verified mathematically equivalent variants of each target function.
-Note that, due to the time constraints, we have *not* verified the external call to `key.balanceOf` and `key.transfer`.
+Due to time constraints (we started working on this verification project on 2018/02/13), we have *not* verified the external call to `key.balanceOf` and `key.transfer`.
 We took the modified source code, inlined the DSMath contract and the DSToken contract interface, and compiled it to the EVM bytecode using Remix Solidity IDE (of the version `soljson-v0.4.20+commit.3155dd80`).
 
 The modified and inlined source code of (the contracts of) each target function:
@@ -62,7 +65,7 @@ The original, inlined source code of (the contracts of) each target function:
 
 ### Mechanized Specifications and Proofs
 
-Following the formal verification methodology, we formalized the high-level specification of the smart contracts, based on the [informal specification], and Bihu team confirmed that the specification correctly captures the intended behavior of their contract.
+Following our formal verification methodology described above, we formalized the high-level specification of the smart contracts based on the [informal specification], and the Bihu team has confirmed that the specification correctly captured the intended behavior of their contract.
 Then, we refined the specification all the way down to the Ethereum Virtual Machine (EVM) level to capture the EVM-specific details.
 The EVM-level specification is fully mechanized within and automatically verified by our EVM verifier, a correct-by-construction deductive program verifier derived from [KEVM] and [K-framework]'s [reachability logic theorem prover].
 
@@ -71,9 +74,7 @@ The following are the mechanized EVM-level specifications of each target functio
 * EVM specification of `collectToken`: [collectTokens-spec.ini]
 * EVM specification of `forwardToHotWallet`: [forwardToHotWallet-spec.ini]
 
-The specifications are written in [eDSL], a domain-specific language for EVM specifications. The knowledge of [eDSL] is required to read and fully understand the specification. Refer to [resources] for more background knowledge about the [K-framework] and its verification infrastructure.
-
-Indeed, the above files provide the specification template parameters. The full specifications are supposed to be derived from the specification template by instantiating the template with the template parameters. The following commands generate the full specifications.
+The specifications are written in [eDSL], a domain-specific language for EVM specifications, whose good understanding is required in order to understand any of our EVM-level specifications well.  Refer to [resources] for background on our technology.  The above files provide the [eDSL] specification template parameters, the full K reachability logic specifications being automatically derived from a specification template by instantiating it with the template parameters.  The following commands generate the full specifications:
 
 ```
 $ ../scripts/gen-spec.py spec-tmpl.k collectToken-spec.ini       > collectToken-spec.k
@@ -82,7 +83,7 @@ $ ../scripts/gen-spec.py spec-tmpl.k forwardToHotWallet-spec.ini > forwardToHotW
 
 #### Reproducing Proofs
 
-To prove that each specification is satisfied by (the compiled EVM bytecode of) each target function, run our EVM verifier as follows:
+To prove that each specification is satisfied by (the compiled EVM bytecode of) each target function, run the EVM verifier as follows:
 
 ```
 $ kevm prove collectTokens-spec.k
@@ -96,9 +97,9 @@ $ kprove collectTokens-spec.k      -m VERIFICATION --z3-executable -d /path/to/e
 $ kprove forwardToHotWallet-spec.k -m VERIFICATION --z3-executable -d /path/to/evm-semantics/.build/java
 ```
 
-#### Installing EVM Verifier
+#### Installing the EVM Verifier
 
-Note that the EVM verifier installation (via the KEVM) is required (for the first time only). The following commands will successfully install the verifier provided that all of the dependencies are installed.
+The EVM verifier is part of the KEVM project.  The following commands will successfully install it, provided that all of the dependencies are installed.
 
 ```
 $ git clone git@github.com:kframework/evm-semantics.git
@@ -107,7 +108,7 @@ $ make deps
 $ make
 ```
 
-For the detailed instruction of installing and running the EVM verifier, refer to [KEVM]'s [Installing/Building](https://github.com/kframework/evm-semantics/blob/master/README.md#installingbuilding) and [Example Usage](https://github.com/kframework/evm-semantics/blob/master/README.md#example-usage) pages.
+For detailed instructions on installing and running the EVM verifier, see [KEVM]'s [Installing/Building](https://github.com/kframework/evm-semantics/blob/master/README.md#installingbuilding) and [Example Usage](https://github.com/kframework/evm-semantics/blob/master/README.md#example-usage) pages.
 
 
 ## [Resources](../README.md#resources)
@@ -126,5 +127,6 @@ For the detailed instruction of installing and running the EVM verifier, refer t
 [informal specification]: <https://docs.google.com/document/d/1-PilHhInQxGod7FZNbtfv2bbgV1045ROT5TO3WLhDOE>
 [src]: <https://github.com/bihu-id/bihu-contracts/tree/f9a7ab65181cc204332e17df30406612d5d350ef/src>
 [formal verification report]: <bihu-contracts-verification-report.pdf>
+[Bihu Smart Contract Formal Verification]: <bihu-contracts-verification-report.pdf>
 [resources]: <../README.md#resources>
 [eDSL]: <../resources/edsl.md>
