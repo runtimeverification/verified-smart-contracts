@@ -3,7 +3,7 @@ eDSL: Domain-Specific Language for EVM Specifications
 
 The [K-framework] provides the [reachability logic theorem prover] that is parameterized by the langauge semantics.
 Instantiated with the [KEVM], a complete formal semantics of the Ethereum Virtual Machine (EVM),
-the K prover yields a correct-by-construct deductive program verifer for the EVM.
+the K prover yields a correct-by-construction deductive program verifer for the EVM.
 The EVM verifier takes an EVM bytecode and a specification as inputs, and automatically proves that the bytecode satisfies the specification, if it is the case.
 The EVM specification essentially specifies the pre- and post-conditions of the EVM bytecode in the form of the reachability logic claims.
 
