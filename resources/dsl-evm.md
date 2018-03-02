@@ -186,6 +186,5 @@ Specifically, `#hashedLocation` is defined as follows, capturing the storage lay
     rule intList2ByteStack(.IntList) => .WordStack
     rule intList2ByteStack(V VS)     => #asByteStackInWidth(V, 32) ++ intList2ByteStack(VS)
       requires 0 <=Int V andBool V <Int pow256
-```
 endmodule
 ```
