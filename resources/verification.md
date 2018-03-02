@@ -50,18 +50,6 @@ The following syntactic sugars capture the storage layout schemes of Solidity an
       requires 0 <=Int V andBool V <Int pow256
 ```
 
-### Wordstack
-
-These lemma abstracts some properties about `#sizeWordStack`:
-
-```k
-    rule #sizeWordStack ( _ , _ ) >=Int 0 => true [smt-lemma]
-    rule #sizeWordStack ( WS , N:Int )
-      => #sizeWordStack ( WS , 0 ) +Int N
-      requires N =/=K 0
-      [lemma]
-```
-
 ABI Abstraction DSL
 -------------------
 
