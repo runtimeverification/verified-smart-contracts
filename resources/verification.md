@@ -1,5 +1,5 @@
-eDSL: KEVM Domain-Specific Language
-===================================
+eDSL: Domain-Specific Language for KEVM Specifications
+======================================================
 
 This module defines some helpers which make writing specifications simpler.
 
