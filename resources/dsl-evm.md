@@ -3,6 +3,11 @@ eDSL: Domain-Specific Language for KEVM Specifications
 
 This module defines, eDSL, a domain-specific language for the EVM specifications.
 
+The eDSL makes EVM specifications more succinct and closer to their high-level specifications.
+The succinctness increases the readability, and the closeness helps "eye-ball validation" of the specification refinement.
+The eDSL is defined by translation to the corresponding EVM terms, and thus can be freely used with other EVM terms.
+The eDSL is inspired by the production compilers of the smart contract languages like Solidity and Viper, and their definition is derived by formalizing the corresponding translation made by the compilers.
+
 ```k
 module DSL-EVM [symbolic]
     imports EVM
