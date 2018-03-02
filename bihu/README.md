@@ -76,8 +76,8 @@ The specifications are written in [eDSL], a domain-specific language for EVM spe
 Indeed, the above files provide the specification template parameters. The full specifications are supposed to be derived from the specification template by instantiating the template with the template parameters. The following commands generate the full specifications.
 
 ```
-$ python3 gen-spec.py spec-tmpl.k collectToken-spec.ini       > collectToken-spec.k
-$ python3 gen-spec.py spec-tmpl.k forwardToHotWallet-spec.ini > forwardToHotWallet-spec.k
+$ ../scripts/gen-spec.py spec-tmpl.k collectToken-spec.ini       > collectToken-spec.k
+$ ../scripts/gen-spec.py spec-tmpl.k forwardToHotWallet-spec.ini > forwardToHotWallet-spec.k
 ```
 
 #### Reproducing Proofs
