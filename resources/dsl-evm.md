@@ -16,9 +16,21 @@ module DSL-EVM [symbolic]
 ABI Abstraction DSL
 -------------------
 
-### Calldata
+### ABI Call Data
 
-Below is the ABI call abstraction, a formalization for ABI encoding of the call data, that helps to keep the specification succinct.
+When a function is called in EVM, its arguments are encoded in a single byte-array and put in the so-called 'call data' section.
+The encoding is defined in the [Ethereum contract application binary interface (ABI) specification](https://solidity.readthedocs.io/en/develop/abi-spec.html).
+eDSL provides `#abiCallData`, a notation to specify the ABI call data in a way similar to a high-level function call notation, defined below.
+It specifies the function name and the (symbolic) arguments along with their types.
+For example, the following abstraction represents a data that encodes a call to the `transfer` function with two arguments: `TO`, the receiver account address of type `address` (an 160-bit unsigned integer), and `VALUE`, the value to transfer of type `unit256` (a 256-bit unsigned integer).
+```
+  #abiCallData("transfer", #address(TO), #uint256(VALUE))
+```
+which denotes (indeed, is translated to) the following byte array:
+```
+  F1 : F2 : F3 : F4 : T1 : ... : T32 : V1 : ... : V32
+```
+where `F1 : F2 : F3 : F4` is the (two's complement) byte-array representation of `2835717307`, the hash value of the `transfer` function signature ABI encoding, `keccak256("transfer(address,unit256)")`, and `T1 : ... : T32` and `V1 : ... : V32` are the byte-array representations of `TO` and `VALUE` respectively.
 
 ```k
     syntax TypedArg ::= #uint160 ( Int )
