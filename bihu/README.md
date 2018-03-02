@@ -64,6 +64,13 @@ The following are the mechanized EVM-level specifications of each target functio
 
 The specifications are written in [eDSL], a domain-specific language for EVM specifications. The knowledge of [eDSL] is required to read and fully understand the specification. Refer to [resources] for more background knowledge about the [K-framework] and its verification infrastructure.
 
+Indeed, the above files provide the specification template parameters. The full specifications are supposed to be derived from the specification template by instantiating the template with the template parameters. The following commands generate the full specifications.
+
+```
+$ python3 gen-spec.py spec-tmpl.k collectToken-spec.ini     > collectToken-spec.k
+$ python3 gen-spec.py spec-tmpl.k forwardHotWallet-spec.ini > forwardHotWallet-spec.k
+```
+
 To prove that each specification is satisfied by (the compiled EVM bytecode of) each target function, run our EVM verifier as follows:
 
 ```
