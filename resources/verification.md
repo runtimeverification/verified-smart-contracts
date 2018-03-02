@@ -1,5 +1,5 @@
-KEVM Verification
-=================
+eDSL: KEVM Domain-Specific Language
+===================================
 
 Using K's reachability logic theorem prover, we're able to verify many properties about EVM programs as reachability claims.
 Safety properties (and some of the liveness properties) can be naturally specified in the reachability claims.
