@@ -37,7 +37,7 @@ the mathematical domain constraints.
 
 ## Completed
 
-* **2018/02/28** [Bihu](bihu/README.md)
+* **2018/02/28** [Bihu KEY token operation contracts](bihu/README.md)
 
 (Links and completion dates to be added soon)
 
