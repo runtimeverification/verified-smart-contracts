@@ -50,36 +50,6 @@ The following syntactic sugars capture the storage layout schemes of Solidity an
       requires 0 <=Int V andBool V <Int pow256
 ```
 
-### Boolean
-
-In EVM, no boolean value exist but instead, 1 and 0 are used to represent true and false respectively.
-`bool2Word` is used to convert from booleans to integers, and lemmas are provided here for it.
-
-```k
-    rule bool2Word(A) |Int bool2Word(B) => bool2Word(A  orBool B)
-    rule bool2Word(A) &Int bool2Word(B) => bool2Word(A andBool B)
-
-    rule bool2Word(A)  ==K 0 => notBool(A)
-    rule bool2Word(A)  ==K 1 => A
-    rule bool2Word(A) =/=K 0 => A
-    rule bool2Word(A) =/=K 1 => notBool(A)
-
-    rule chop(bool2Word(B)) => bool2Word(B)
-```
-
-Some lemmas over the comparison operators are also provided.
-
-```k
-    rule 0 <=Int chop(V)             => true
-    rule         chop(V) <Int pow256 => true
-
-    rule 0 <=Int keccak(V)             => true
-    rule         keccak(V) <Int pow256 => true
-
-    rule 0 <=Int X &Int Y             => true requires 0 <=Int X andBool X <Int pow256 andBool 0 <=Int Y andBool Y <Int pow256
-    rule         X &Int Y <Int pow256 => true requires 0 <=Int X andBool X <Int pow256 andBool 0 <=Int Y andBool Y <Int pow256
-```
-
 ### `chop` Reduction
 
 ```k
