@@ -71,7 +71,7 @@ The EVM-level specification is fully mechanized within and automatically verifie
 
 The following are the mechanized EVM-level specifications of each target function:
 
-* EVM specification of `collectToken`: [collectTokens-spec.ini]
+* EVM specification of `collectToken`: [collectToken-spec.ini]
 * EVM specification of `forwardToHotWallet`: [forwardToHotWallet-spec.ini]
 
 The specifications are written in [eDSL], a domain-specific language for EVM specifications, whose good understanding is required in order to understand any of our EVM-level specifications well.  Refer to [resources] for background on our technology.  The above files provide the [eDSL] specification template parameters, the full K reachability logic specifications being automatically derived from a specification template by instantiating it with the template parameters.  The following commands generate the full specifications:
@@ -122,7 +122,7 @@ For detailed instructions on installing and running the EVM verifier, see [KEVM]
 [KEVM]: <https://github.com/kframework/evm-semantics>
 [K-framework]: <http://www.kframework.org>
 [reachability logic theorem prover]: <http://fsl.cs.illinois.edu/index.php/Semantics-Based_Program_Verifiers_for_All_Languages>
-[collectTokens-spec.ini]: <collectTokens-spec.ini>
+[collectToken-spec.ini]: <collectToken-spec.ini>
 [forwardToHotWallet-spec.ini]: <forwardToHotWallet-spec.ini>
 [informal specification]: <https://docs.google.com/document/d/1-PilHhInQxGod7FZNbtfv2bbgV1045ROT5TO3WLhDOE>
 [src]: <https://github.com/bihu-id/bihu-contracts/tree/f9a7ab65181cc204332e17df30406612d5d350ef/src>
