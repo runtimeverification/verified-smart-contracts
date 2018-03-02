@@ -1,6 +1,6 @@
 # eDSL Specifications
 
-Even with the [eDSL high-level notations](edsl-notations), the refined EVM specification is still quite large due to the sheer size of the KEVM configuration, while large part of that is the same across the different specifications.
+Even with the [eDSL high-level notations](edsl-notations.md), the refined EVM specification is still quite large due to the sheer size of the KEVM configuration, while large part of that is the same across the different specifications.
 The eDSL specification template allows to reuse and share the common part over the different specifications, avoiding duplication.
 The template is essentially a specification but contains several parameters which are place-holders to be filled with parameter values when being instantiated.
 The template is supposed to be instantiated with the parameter values for each specification.
