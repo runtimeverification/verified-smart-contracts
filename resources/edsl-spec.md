@@ -1,10 +1,15 @@
 # eDSL Specifications
 
+Even with the [eDSL high-level notations](edsl-notations), the refined EVM specification is still quite large due to the sheer size of the KEVM configuration, while large part of that is the same across the different specifications.
+The eDSL specification template allows to reuse and share the common part over the different specifications, avoiding duplication.
+The template is essentially a specification but contains several parameters which are place-holders to be filled with parameter values when being instantiated.
+The template is supposed to be instantiated with the parameter values for each specification.
+
 ## eDSL Specification Template
 
 EVM specifications are written over the full KEVM configuration.
 However, large part of the configuration is not relevant for functional correctness specification and can be shared across the different specifications.
-eDSL allows to specify a template specification that can be instantiated for each specification.
+The eDSL allows to specify a template specification that can be instantiated for each specification.
 
 Below is the template specification.
 Essentially, it is a reachability claim over the KEVM configurations.
@@ -226,7 +231,7 @@ Below is an example of the program-specific parameters.
 
 The position index parameters (the ones starting with the underline `_`) specify the indexes of the storage variables in the order that their declarations appear in the source code, meaning that the `balances` variable is declared first, followed by the `totalSupply` variable being declared, and followed by the `allowances` variable at last.
 Note that the actual variable names in the source code may be different with the parameter names.
-The literal name of the variable is not relevant for the EVM specification because the variable name disappears during compilation to EVM, being identified only by it position index.
+The literal name of the variable is not relevant for the EVM specification because the variable name disappears during compilation to the EVM, being identified only by it position index.
 
 `gasCap` specifies the gas limit.
 Here we give a rough upper-bound for demonstration purposes.
