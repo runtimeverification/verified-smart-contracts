@@ -55,6 +55,11 @@ The (annotated) EVM assemblies disassembled from each bytecode:
 * [collectToken/KeyRewardPool.modified.inlined.evm](collectToken/KeyRewardPool.modified.inlined.evm)
 * [forwardToHotWallet/WarmWallet.modified.inlined.evm](forwardToHotWallet/WarmWallet.modified.inlined.evm)
 
+The original, inlined source code of (the contracts of) each target function:
+
+* [collectToken/KeyRewardPool.inlined.sol](collectToken/KeyRewardPool.inlined.sol) &nbsp; [[Gist link]()]
+* [forwardToHotWallet/WarmWallet.inlined.sol](forwardToHotWallet/WarmWallet.inlined.sol) &nbsp; [[Gist link](https://gist.github.com/anonymous/c95f67810dff2af73b240c78aab4e3b9)]
+
 ### Mechanized Specifications and Proofs
 
 Following the formal verification methodology, we formalized the high-level specification of the smart contracts, based on the [informal specification], and Bihu team confirmed that the specification correctly captures the intended behavior of their contract.
