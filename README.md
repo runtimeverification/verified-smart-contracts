@@ -34,9 +34,10 @@ the mathematical domain constraints.
 
 * **2018/??/??** Casper - Ethereum Foundation
 * **2018/??/??** Fabian Vogelsteller's ICO contract and ICO schema
-* **2018/02/??** Bihu
 
 ## Completed
+
+* **2018/02/28** [Bihu](bihu/README.md)
 
 (Links and completion dates to be added soon)
 
@@ -60,10 +61,10 @@ the mathematical domain constraints.
 ## Resources
 
 
-We use the [K-framework] and its verification infrastructure throughout the formal verification effort as mentioned above.
+We use the [K-framework] and its verification infrastructure throughout the formal verification effort.
 All of the formal specifications are mechanized within the K-framework as well.
 Therefore, some background knowledge about the K-framework would be necessary for reading and fully understanding the formal specifications and reproducing the mechanized proofs.
-We refer the reader to existing resources for background knowledge about the K-framework and its verification infrastructure as follows.
+We refer the reader to the following resources for background knowledge about the K-framework and its verification infrastructure.
 
 * [K-framework]
   * [Download] and [install]
@@ -74,7 +75,6 @@ We refer the reader to existing resources for background knowledge about the K-f
   * [KEVM technical report]
 * [K reachability logic prover]
   * [eDSL]: domain-specific language for EVM-level specifications
-
 * [ERC20-K](https://github.com/runtimeverification/erc20-semantics):
 a formal specification of the high-level business logic of
 [ERC20](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md)
