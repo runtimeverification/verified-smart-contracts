@@ -127,3 +127,4 @@ For the detailed instruction of installing and running the EVM verifier, refer t
 [src]: <https://github.com/bihu-id/bihu-contracts/tree/f9a7ab65181cc204332e17df30406612d5d350ef/src>
 [formal verification report]: <bihu-contracts-verification-report.pdf>
 [resources]: <../README.md#resources>
+[eDSL]: <../resources/edsl.md>
