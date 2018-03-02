@@ -1,10 +1,6 @@
 eDSL: KEVM Domain-Specific Language
 ===================================
 
-Using K's reachability logic theorem prover, we're able to verify many properties about EVM programs as reachability claims.
-Safety properties (and some of the liveness properties) can be naturally specified in the reachability claims.
-Liveness properties can be specified by using the reduction to safety properties, while some of the liveness properties can be directly specified in the reachability claims as well.
-
 This module defines some helpers which make writing specifications simpler.
 
 ```k
