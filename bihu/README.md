@@ -57,7 +57,7 @@ The (annotated) EVM assemblies disassembled from each bytecode:
 
 The original, inlined source code of (the contracts of) each target function:
 
-* [collectToken/KeyRewardPool.inlined.sol](collectToken/KeyRewardPool.inlined.sol) &nbsp; [[Gist link]()]
+* [collectToken/KeyRewardPool.inlined.sol](collectToken/KeyRewardPool.inlined.sol) &nbsp; [[Gist link]]
 * [forwardToHotWallet/WarmWallet.inlined.sol](forwardToHotWallet/WarmWallet.inlined.sol) &nbsp; [[Gist link](https://gist.github.com/anonymous/c95f67810dff2af73b240c78aab4e3b9)]
 
 ### Mechanized Specifications and Proofs
