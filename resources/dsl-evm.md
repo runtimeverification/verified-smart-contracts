@@ -142,6 +142,7 @@ where `1003892871367861763272476045097431689001461395759728643661426852242313133
     rule #getValue(#uint160(V)) => V
     rule #getValue(#address(V)) => V
     rule #getValue(#uint256(V)) => V
+```
 
 
 ### Abstraction for Hash
