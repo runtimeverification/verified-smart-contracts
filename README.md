@@ -97,6 +97,7 @@ business logic of
 [Jellowpaper]: <https://jellopaper.org/>
 [KEVM technical report]: <https://www.ideals.illinois.edu/handle/2142/97207>
 [Z3]: <https://github.com/Z3Prover/z3>
+[eDSL]: <resources/edsl.md>
 
 
 ## Disclaimer
