@@ -80,6 +80,8 @@ $ python3 gen-spec.py spec-tmpl.k collectToken-spec.ini       > collectToken-spe
 $ python3 gen-spec.py spec-tmpl.k forwardToHotWallet-spec.ini > forwardToHotWallet-spec.k
 ```
 
+#### Reproducing Proofs
+
 To prove that each specification is satisfied by (the compiled EVM bytecode of) each target function, run our EVM verifier as follows:
 
 ```
@@ -93,6 +95,8 @@ The above commands essentially execute the following commands:
 $ kprove collectTokens-spec.k      -m VERIFICATION --z3-executable -d /path/to/evm-semantics/.build/java
 $ kprove forwardToHotWallet-spec.k -m VERIFICATION --z3-executable -d /path/to/evm-semantics/.build/java
 ```
+
+#### Installing EVM Verifier
 
 Note that the EVM verifier installation (via the KEVM) is required (for the first time only). The following commands will successfully install the verifier provided that all of the dependencies are installed.
 
