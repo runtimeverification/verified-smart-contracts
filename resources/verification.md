@@ -14,11 +14,6 @@ module VERIFICATION [symbolic]
     imports EVM
 ```
 
-Reasoning Simplifications
--------------------------
-
-We design abstractions that capture the EVM low-level specific details, allowing to specify specifications and reason about properties in a higher level similar to that of the surface languages (e.g., Solidity or Viper) in which smart contracts are written.
-
 ### Abstraction for Hash
 
 We do not model the hash function as an injective function simply because it is not true due to the pigeonhole principle.
