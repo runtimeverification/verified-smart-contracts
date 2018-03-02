@@ -145,9 +145,28 @@ where `1003892871367861763272476045097431689001461395759728643661426852242313133
 ```
 
 
-### Abstraction for Hash
+### Hashed Location for Storage
 
-The following syntactic sugars capture the storage layout schemes of Solidity and Viper.
+The storage accommodates permanent data such as the `balances` map.
+A map is laid out in the storage where the map entries are scattered over the entire storage space for which the (256-bit) hash of each key is used to determine the location.
+The detailed mechanism of calculating the location varies by compilers.
+In Viper, for example, `map[key1][key2]` is stored at the location:
+```
+  hash(hash(idx(map)) + key1) + key2
+```
+where `idx(map)` is the position index of `map` in the program, and `+` is the addition modulo `2**256`, while in Solidity, it is stored at:
+```
+  hash(key2 ++ hash(key1 ++ idx(map)))
+```
+where `++` is the byte-array concatenation.
+
+eDSL provides `#hashedLocation` that allows to uniformly specify the locations in a form parameterized by the underlying compilers. For example, the location of `map[key1][key2]` can be specified as follows, where `{COMPILER}` is a place-holder to be replaced by the name of the compiler.
+Note that the keys are separated by the white spaces instead of commas.
+```
+  #hashedLocation({COMPILER}, idx(map), key1 key2)
+```
+This notation makes the specification independent of the underlying compilers, enabling it to be reused for differently compiled programs.
+Specifically, `#hashedLocation` is defined as follows, capturing the storage layout schemes of Solidity and Viper.
 
 ```k
     syntax IntList ::= List{Int, ""}                             [klabel(intList)]
