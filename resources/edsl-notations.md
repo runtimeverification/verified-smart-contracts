@@ -1,15 +1,13 @@
-eDSL: Domain-Specific Language for KEVM Specifications
-======================================================
+eDSL High-Level Notations
+=========================
 
-This module defines, eDSL, a domain-specific language for the EVM specifications.
-
-The eDSL makes EVM specifications more succinct and closer to their high-level specifications.
+The eDSL high-level notations make EVM specifications more succinct and closer to their high-level specifications.
 The succinctness increases the readability, and the closeness helps "eye-ball validation" of the specification refinement.
-The eDSL is defined by translation to the corresponding EVM terms, and thus can be freely used with other EVM terms.
-The eDSL is inspired by the production compilers of the smart contract languages like Solidity and Viper, and their definition is derived by formalizing the corresponding translation made by the compilers.
+The high-level notations are defined by translation to the corresponding EVM terms, and thus can be freely used with other EVM terms.
+The notations are inspired by the production compilers of the smart contract languages like Solidity and Viper, and their definition is derived by formalizing the corresponding translation made by the compilers.
 
 ```k
-module DSL-EVM [symbolic]
+module EDSL-NOTATIONS [symbolic]
     imports EVM
 ```
 
@@ -19,7 +17,7 @@ When a function is called in EVM, its arguments are encoded in a single byte-arr
 The encoding is defined in the [Ethereum contract application binary interface (ABI) specification](https://solidity.readthedocs.io/en/develop/abi-spec.html).
 eDSL provides `#abiCallData`, a notation to specify the ABI call data in a way similar to a high-level function call notation, defined below.
 It specifies the function name and the (symbolic) arguments along with their types.
-For example, the following abstraction represents a data that encodes a call to the `transfer` function with two arguments: `TO`, the receiver account address of type `address` (an 160-bit unsigned integer), and `VALUE`, the value to transfer of type `unit256` (a 256-bit unsigned integer).
+For example, the following notation represents a data that encodes a call to the `transfer` function with two arguments: `TO`, the receiver account address of type `address` (an 160-bit unsigned integer), and `VALUE`, the value to transfer of type `unit256` (a 256-bit unsigned integer).
 ```
   #abiCallData("transfer", #address(TO), #uint256(VALUE))
 ```
