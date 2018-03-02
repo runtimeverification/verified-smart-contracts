@@ -13,30 +13,6 @@ module DSL-EVM [symbolic]
     imports EVM
 ```
 
-### Abstraction for Hash
-
-The following syntactic sugars capture the storage layout schemes of Solidity and Viper.
-
-```k
-    syntax IntList ::= List{Int, ""}                             [klabel(intList)]
-    syntax Int     ::= #hashedLocation( String , Int , IntList ) [function]
- // -----------------------------------------------------------------------
-    rule #hashedLocation(LANG, BASE, .IntList) => BASE
-
-    rule #hashedLocation("Viper",    BASE, OFFSET OFFSETS) => #hashedLocation("Viper",    keccakIntList(BASE) +Word OFFSET, OFFSETS)
-    rule #hashedLocation("Solidity", BASE, OFFSET OFFSETS) => #hashedLocation("Solidity", keccakIntList(OFFSET BASE),       OFFSETS)
-
-    syntax Int ::= keccakIntList( IntList ) [function]
- // --------------------------------------------------
-    rule keccakIntList(VS) => keccak(intList2ByteStack(VS))
-
-    syntax WordStack ::= intList2ByteStack( IntList ) [function]
- // ------------------------------------------------------------
-    rule intList2ByteStack(.IntList) => .WordStack
-    rule intList2ByteStack(V VS)     => #asByteStackInWidth(V, 32) ++ intList2ByteStack(VS)
-      requires 0 <=Int V andBool V <Int pow256
-```
-
 ABI Abstraction DSL
 -------------------
 
@@ -130,5 +106,30 @@ Below is the ABI call abstraction, a formalization for ABI encoding of the call 
     rule #getValue(#uint160(V)) => V
     rule #getValue(#address(V)) => V
     rule #getValue(#uint256(V)) => V
+
+
+### Abstraction for Hash
+
+The following syntactic sugars capture the storage layout schemes of Solidity and Viper.
+
+```k
+    syntax IntList ::= List{Int, ""}                             [klabel(intList)]
+    syntax Int     ::= #hashedLocation( String , Int , IntList ) [function]
+ // -----------------------------------------------------------------------
+    rule #hashedLocation(LANG, BASE, .IntList) => BASE
+
+    rule #hashedLocation("Viper",    BASE, OFFSET OFFSETS) => #hashedLocation("Viper",    keccakIntList(BASE) +Word OFFSET, OFFSETS)
+    rule #hashedLocation("Solidity", BASE, OFFSET OFFSETS) => #hashedLocation("Solidity", keccakIntList(OFFSET BASE),       OFFSETS)
+
+    syntax Int ::= keccakIntList( IntList ) [function]
+ // --------------------------------------------------
+    rule keccakIntList(VS) => keccak(intList2ByteStack(VS))
+
+    syntax WordStack ::= intList2ByteStack( IntList ) [function]
+ // ------------------------------------------------------------
+    rule intList2ByteStack(.IntList) => .WordStack
+    rule intList2ByteStack(V VS)     => #asByteStackInWidth(V, 32) ++ intList2ByteStack(VS)
+      requires 0 <=Int V andBool V <Int pow256
+```
 endmodule
 ```
