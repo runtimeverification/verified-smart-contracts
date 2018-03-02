@@ -9,10 +9,10 @@ The EVM specification essentially specifies the pre- and post-conditions of the 
 
 We present a domain-specific language (DSL) for the EVM specifications, called eDSL, to succintly specify the specifications.
 The eDSL consists of two parts:
-* [eDSL high-level notations](edsl-notations.md)
-* [eDSL specifications](edsl-spec.md)
-  * [Specification templates](edsl-spec.md#edsl-specification-template)
-  * [Template parameters](edsl-spec.md#edsl-template-parameters)
+* [eDSL High-Level Notations](edsl-notations.md)
+* [eDSL Specifications](edsl-spec.md)
+  * [eDSL Specification Templates](edsl-spec.md#edsl-specification-template)
+  * [eDSL Template Parameters](edsl-spec.md#edsl-template-parameters)
 
 
 [KEVM]: <https://github.com/kframework/evm-semantics>
