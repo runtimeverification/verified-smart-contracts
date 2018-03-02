@@ -6,7 +6,7 @@ This module defines, eDSL, a domain-specific language for the EVM specifications
 ```k
 requires "evm.k"
 
-module VERIFICATION [symbolic]
+module DSL-EVM [symbolic]
     imports EVM
 ```
 
