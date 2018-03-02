@@ -4,8 +4,6 @@ eDSL: Domain-Specific Language for KEVM Specifications
 This module defines, eDSL, a domain-specific language for the EVM specifications.
 
 ```k
-requires "evm.k"
-
 module DSL-EVM [symbolic]
     imports EVM
 ```
