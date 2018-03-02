@@ -1,8 +1,8 @@
-requires "verification.k"
+requires "dsl-evm.k"
 
-module VERIFICATION-LEMMAS
+module VERIFICATION
     imports EVM
-    imports VERIFICATION
+    imports DSL-EVM
 
 
     rule N -Int N => 0
