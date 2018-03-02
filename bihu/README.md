@@ -83,11 +83,27 @@ $ python3 gen-spec.py spec-tmpl.k forwardToHotWallet-spec.ini > forwardToHotWall
 To prove that each specification is satisfied by (the compiled EVM bytecode of) each target function, run our EVM verifier as follows:
 
 ```
-$ kprove collectTokens-spec.k      -m VERIFICATION-LEMMAS --z3-executable -d /path/to/evm-semantics/.build/java
-$ kprove forwardToHotWallet-spec.k -m VERIFICATION-LEMMAS --z3-executable -d /path/to/evm-semantics/.build/java
+$ kevm prove collectTokens-spec.k
+$ kevm prove forwardToHotWallet-spec.k
 ```
 
-For the detailed instruction of installing and running the EVM verifier, refer to [INSTRUCTION](INSTRUCTION.md).
+The above commands essentially execute the following commands:
+
+```
+$ kprove collectTokens-spec.k      -m VERIFICATION --z3-executable -d /path/to/evm-semantics/.build/java
+$ kprove forwardToHotWallet-spec.k -m VERIFICATION --z3-executable -d /path/to/evm-semantics/.build/java
+```
+
+Note that the EVM verifier installation (via the KEVM) is required (for the first time only). The following commands will successfully install the verifier provided that all of the dependencies are installed.
+
+```
+$ git clone git@github.com:kframework/evm-semantics.git
+$ cd evm-semantics
+$ make deps
+$ make
+```
+
+For the detailed instruction of installing and running the EVM verifier, refer to [KEVM]'s [Installing/Building](https://github.com/kframework/evm-semantics/blob/master/README.md#installingbuilding) and [Example Usage](https://github.com/kframework/evm-semantics/blob/master/README.md#example-usage) pages.
 
 
 ## [Resources](../README.md#resources)
