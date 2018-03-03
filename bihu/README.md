@@ -11,8 +11,7 @@ The [Solidity source code][src] of those contracts and their [informal specifica
 
 This directory contains the artifact of the Bihu contracts formal verification, as a companion to the formal verification report:
 
-<img src="../scripts/pdf-icon.png" alt="PDF" width="2%" />
-*[Bihu Smart Contract Formal Verification]*
+<img src="../scripts/pdf-icon.png" alt="PDF" width="2%" /> *[Bihu Smart Contract Formal Verification]*
 
 ## Formal Verification Methodology
 
