@@ -1,4 +1,4 @@
-*2018/02/28*
+*2018-02-28*
 
 # Bihu Smart Contract Formal Verification
 
@@ -34,7 +34,7 @@ More specifically, we formally verified the functional correctness of the follow
 ### Solidity Source Code and Compiled EVM Bytecode
 
 We verified mathematically equivalent variants of each target function.
-Due to time constraints (we started working on this verification project on 2018/02/13), we have *not* verified the external call to `key.balanceOf` and `key.transfer`.
+Due to time constraints (we started working on this verification project on 2018-02-13), we have *not* verified the external call to `key.balanceOf` and `key.transfer`.
 We took the modified source code, inlined the DSMath contract and the DSToken contract interface, and compiled it to the EVM bytecode using Remix Solidity IDE (of the version `soljson-v0.4.20+commit.3155dd80`).
 
 The modified and inlined source code of (the contracts of) each target function:
