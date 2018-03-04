@@ -32,12 +32,12 @@ the mathematical domain constraints.
 
 (Links to be added soon)
 
-* **2018/??/??** Casper - Ethereum Foundation
-* **2018/??/??** Fabian Vogelsteller's ICO contract and ICO schema
+* **2018-??-??** Casper - Ethereum Foundation
+* **2018-??-??** Fabian Vogelsteller's ICO contract and ICO schema
 
 ## Completed
 
-* **2018/02/28** [Bihu KEY token operation contracts](bihu/README.md)
+* **2018-02-28** [Bihu KEY token operation contracts](bihu/README.md)
 
 (Links and completion dates to be added soon)
 
