@@ -19,12 +19,12 @@ The target contract of our formal verification is the following, where we took t
 
 We formally verified the full functional correctness of the following ERC20 functions:
 
-* [totalSupply]
-* [balanceOf]
-* [allowance]
-* [approve]
-* [transfer]
-* [transferFrom]
+* [totalSupply](ERC20.v.py#L43)
+* [balanceOf](ERC20.v.py#L48)
+* [allowance](ERC20.v.py#L83)
+* [approve](ERC20.v.py#L74)
+* [transfer](ERC20.v.py#L52)
+* [transferFrom](ERC20.v.py#L62)
 
 ## Verification Artifacts
 
