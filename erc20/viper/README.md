@@ -13,7 +13,7 @@ The Vyper ERC20 token is successfully verified against the ERC20-EVM specificati
 
 ## Target Smart Contract
 
-The target contract of our formal verification is the following, where we took the Vyper source code from the Vyper Github repository, https://github.com/ethereum/vyper, commit [bf6ed1bf](https://github.com/ethereum/vyper/tree/bf6ed1bfde2071ee2d5fdd6fbe1c09cf3bec44f2):
+The target contract of our formal verification is the following, where we took the Vyper source code from the Vyper Github repository, https://github.com/ethereum/vyper, commit [`bf6ed1bf`][version]:
 
 * [ERC20.v.py]
 
@@ -30,7 +30,7 @@ We formally verified the full functional correctness of the following ERC20 func
 
 ### Compiled EVM Bytecode
 
-We compiled the [source code][ERC20.v.py] down to the EVM bytecode using the official Vyper compiler with the version 0.0.2 (of the commit `bf6ed1bfde2071ee2d5fdd6fbe1c09cf3bec44f2`). Specifically, the EVM bytecode is obtained by running the following command:
+We compiled the [source code][ERC20.v.py] down to the EVM bytecode using the official Vyper compiler with the version 0.0.2 (of the commit [`bf6ed1bfde2071ee2d5fdd6fbe1c09cf3bec44f2`][version]). Specifically, the EVM bytecode is obtained by running the following command:
 ```
 $ viper -f bytecode_runtime examples/tokens/ERC20_solidity_compatible/ERC20.v.py
 ```
@@ -64,7 +64,7 @@ The resulting specification is the following:
 The specification is written in [eDSL], a domain-specific language for EVM specifications, whose good understanding is required in order to understand any of our EVM-level specification well.  Refer to [resources] for background on our technology.  The above file provides the [eDSL] specification template parameters, the full K reachability logic specification being automatically derived from a specification template by instantiating it with the template parameters.  The following command generates the full specification:
 
 ```
-$ ../scripts/gen-spec.py spec-tmpl.k vyper-erc20-spec.ini > vyper-erc20-spec.k
+$ /path/to/this/repo/scripts/gen-spec.py spec-tmpl.k vyper-erc20-spec.ini > vyper-erc20-spec.k
 ```
 
 #### Reproducing Proofs
@@ -95,17 +95,18 @@ $ make
 For detailed instructions on installing and running the EVM verifier, see [KEVM]'s [Installing/Building](https://github.com/kframework/evm-semantics/blob/master/README.md#installingbuilding) and [Example Usage](https://github.com/kframework/evm-semantics/blob/master/README.md#example-usage) pages.
 
 
-## [Resources](../README.md#resources)
+## [Resources](/README.md#resources)
 
-## [Disclaimer](../README.md#disclaimer)
+## [Disclaimer](/README.md#disclaimer)
 
 
 [KEVM]: <https://github.com/kframework/evm-semantics>
 [K-framework]: <http://www.kframework.org>
 [reachability logic theorem prover]: <http://fsl.cs.illinois.edu/index.php/Semantics-Based_Program_Verifiers_for_All_Languages>
-[resources]: <../README.md#resources>
-[eDSL]: <../resources/edsl.md>
+[resources]: </README.md#resources>
+[eDSL]: </resources/edsl.md>
 [Vyper ERC20 token]: <https://github.com/ethereum/vyper/blob/master/examples/tokens/ERC20_solidity_compatible/ERC20.v.py>
 [Vyper]: <https://github.com/ethereum/vyper>
 [ERC20.v.py]: <ERC20.v.py>
-[program-specific parameters]: <../../resources/edsl-spec.md#program-specific-parameters>
+[program-specific parameters]: </resources/edsl-spec.md#program-specific-parameters>
+[version]: <https://github.com/ethereum/vyper/tree/bf6ed1bfde2071ee2d5fdd6fbe1c09cf3bec44f2>
