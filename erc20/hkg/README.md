@@ -67,15 +67,15 @@ Due to its deviation from ERC20-K, we could not verify the HKG token against the
 * To capture the absence of the `totalSupply` function, we wrote a new specification for `totalSupply` that throws an exception immediately when being called, as follows:
 
     ```
-       [totalSupply]
-       k: #execute => #exception
-       callData: #abiCallData("totalSupply", .TypedArgs)
-       localMem: .Map => _:Map
-       gas: {GASCAP} => _
-       log: _
-       refund: _
-       storage: _:Map
-       requires:
+    [totalSupply]
+    k: #execute => #exception
+    callData: #abiCallData("totalSupply", .TypedArgs)
+    localMem: .Map => _:Map
+    gas: {GASCAP} => _
+    log: _
+    refund: _
+    storage: _:Map
+    requires:
     ```
 
     Note that the local memory could end up with some contents due to the function signature extraction process, for which some gas will be consumed. Other than that, nothing (`log`, `refund`, and `storage`) will be updated.
@@ -83,15 +83,15 @@ Due to its deviation from ERC20-K, we could not verify the HKG token against the
 * To capture the false return value, we changed the `k` and `localMem` parameters of the `transfer-failure` section, from:
 
     ```
-       k: #execute => #exception
-       localMem: .Map => _:Map
+    k: #execute => #exception
+    localMem: .Map => _:Map
     ```
 
     to:
 
     ```
-       k: #execute => (RETURN RET_ADDR:Int 32 ~> _)
-       localMem: .Map => .Map[ RET_ADDR := #asByteStackInWidth(0, 32) ] _:Map
+    k: #execute => (RETURN RET_ADDR:Int 32 ~> _)
+    localMem: .Map => .Map[ RET_ADDR := #asByteStackInWidth(0, 32) ] _:Map
     ```
 
     The modified parameter values specify that it returns `false` (denoted by 0) instead of throwing an exception. We changed the `transferFrom-failure` section similarly as the above.
@@ -99,13 +99,13 @@ Due to its deviation from ERC20-K, we could not verify the HKG token against the
 * To capture the rejection of transferring 0 value, we added the following additional `requires` conditions, one for the success cases:
 
     ```
-       andBool VALUE >Int 0
+    andBool VALUE >Int 0
     ```
 
     and its complement for the failure cases:
 
     ```
-       orBool VALUE <=Int 0
+    orBool VALUE <=Int 0
     ```
 
     Note that the above complement, combined with the value range condition, implies `VALUE ==Int 0`.
@@ -113,13 +113,13 @@ Due to its deviation from ERC20-K, we could not verify the HKG token against the
 * To capture the arithmetic overflow behavior, we changed the storage parameter values, from:
 
     ```
-       #hashedLocation({COMPILER}, {_BALANCES}, TO_ID) |-> (BAL_TO => BAL_TO +Int VALUE)
+    #hashedLocation({COMPILER}, {_BALANCES}, TO_ID) |-> (BAL_TO => BAL_TO +Int VALUE)
     ```
 
     to:
 
     ```
-       #hashedLocation({COMPILER}, {_BALANCES}, TO_ID) |-> (BAL_TO => BAL_TO +Word VALUE)
+    #hashedLocation({COMPILER}, {_BALANCES}, TO_ID) |-> (BAL_TO => BAL_TO +Word VALUE)
     ```
 
     Note the difference between `+Word` and `+Int`. The `+Word` operation wraps around `2**256 − 1`, the maximum unsigned 256-bit integer value, while the `+Int` operation is the mathematical integer addition (i.e., the arbitrary precision integer addition).
@@ -127,13 +127,13 @@ Due to its deviation from ERC20-K, we could not verify the HKG token against the
     Also, we dropped the `requires` conditions for the overflow, the one for the success cases:
 
     ```
-       andBool BAL_TO +Int VALUE <Int (2 ^Int 256)
+    andBool BAL_TO +Int VALUE <Int (2 ^Int 256)
     ```
 
     and its complement for the failure cases:
 
     ```
-       orBool BAL_TO +Int VALUE >=Int (2 ^Int 256)
+    orBool BAL_TO +Int VALUE >=Int (2 ^Int 256)
     ```
 
     The full changes made in ERC20-EVM are shown in [here] and [here]. The specifications of other functions except `transfer` and `transferFrom` are the same as the original ERC20-EVM.
@@ -198,15 +198,7 @@ For detailed instructions on installing and running the EVM verifier, see [KEVM]
 [reachability logic theorem prover]: <http://fsl.cs.illinois.edu/index.php/Semantics-Based_Program_Verifiers_for_All_Languages>
 [resources]: </README.md#resources>
 [eDSL]: </resources/edsl.md>
-[Vyper ERC20 token]: <https://github.com/ethereum/vyper/blob/master/examples/tokens/ERC20_solidity_compatible/ERC20.v.py>
-[Vyper]: <https://github.com/ethereum/vyper>
-[ERC20.v.py]: <ERC20.v.py>
 [program-specific parameters]: </resources/edsl-spec.md#program-specific-parameters>
 [version]: <https://github.com/ether-camp/virtual-accelerator/tree/42258200952f2796df93023887f9fa6c1ecdf61a>
 [src]: <https://github.com/ether-camp/virtual-accelerator/blob/42258200952f2796df93023887f9fa6c1ecdf61a/contracts/StandardToken.sol>
 [`TokenInterface`]: <https://github.com/ether-camp/virtual-accelerator/blob/42258200952f2796df93023887f9fa6c1ecdf61a/contracts/TokenInterface.sol>
-
-
-
-
-
