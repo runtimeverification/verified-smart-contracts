@@ -4,7 +4,7 @@
 
 We present a formal verification of Philip Daian's Vyper ERC20 token contract.
 
-The [Vyper ERC20 token] is shipped as part of the official [Vyper] language compiler distribution.
+The [Vyper ERC20 token][src] is shipped as part of the official [Vyper] language compiler distribution.
 Vyper, being developed by the Ethereum Foundation, is an experimental smart contract language with syntax similar to Python, designed with the goal of being a simpler and more secure alternative to Solidity.
 
 The Vyper ERC20 token is successfully verified against the ERC20-EVM specification, implying its full conformance to the ERC20 standard.
@@ -30,7 +30,7 @@ We formally verified the full functional correctness of the following ERC20 func
 
 ### Compiled EVM Bytecode
 
-We compiled the [source code][ERC20.v.py] down to the EVM bytecode using the official Vyper compiler with the version 0.0.2 (of the commit [`bf6ed1bfde2071ee2d5fdd6fbe1c09cf3bec44f2`][version]). Specifically, the EVM bytecode is obtained by running the following command:
+We compiled the [source code][src] down to the EVM bytecode using the official Vyper compiler with the version 0.0.2 (of the commit [`bf6ed1bfde2071ee2d5fdd6fbe1c09cf3bec44f2`][version]). Specifically, the EVM bytecode is obtained by running the following command:
 ```
 $ viper -f bytecode_runtime ERC20.v.py
 ```
@@ -109,9 +109,7 @@ For detailed instructions on installing and running the EVM verifier, see [KEVM]
 [reachability logic theorem prover]: <http://fsl.cs.illinois.edu/index.php/Semantics-Based_Program_Verifiers_for_All_Languages>
 [resources]: </README.md#resources>
 [eDSL]: </resources/edsl.md>
-[Vyper ERC20 token]: <https://github.com/ethereum/vyper/blob/master/examples/tokens/ERC20_solidity_compatible/ERC20.v.py>
-[Vyper]: <https://github.com/ethereum/vyper>
-[ERC20.v.py]: <ERC20.v.py>
 [program-specific parameters]: </resources/edsl-spec.md#program-specific-parameters>
+[Vyper]: <https://github.com/ethereum/vyper>
 [version]: <https://github.com/ethereum/vyper/tree/bf6ed1bfde2071ee2d5fdd6fbe1c09cf3bec44f2>
 [src]: <https://github.com/ethereum/vyper/blob/bf6ed1bfde2071ee2d5fdd6fbe1c09cf3bec44f2/examples/tokens/ERC20_solidity_compatible/ERC20.v.py>
