@@ -1,3 +1,5 @@
+*2017-12-23*
+
 # Formal Verification of Philip Daian's Vyper ERC20 Token Contract
 
 We present a formal verification of Philip Daian's Vyper ERC20 token contract.
