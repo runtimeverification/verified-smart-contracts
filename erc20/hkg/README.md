@@ -1,4 +1,4 @@
-*2018-01-??*
+*2018-01-16*
 
 # Formal Verification of HackerGold (HKG) ERC20 Token Contract
 
