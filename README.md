@@ -38,24 +38,12 @@ the mathematical domain constraints.
 ## Completed
 
 * **2018-02-28** [Bihu KEY token operation contracts](bihu/README.md)
+* **2018-01-30** [MyKidsEducationToken ERC20 token contracts](erc20/hobby/README.md)
 * **2018-01-26** [OpenZeppelin ERC20 token contract](erc20/zeppelin/README.md)
 * **2018-01-16** [HackerGold (HKG) ERC20 token contract](erc20/hkg/README.md)
 * **2017-12-23** [Philip Daian's Vyper ERC20 token contract](erc20/viper/README.md)
 
-
-(Links and completion dates to be added soon)
-
-* ConsenSys ERC20 token: conforming to the standard, but:
-   * No arithmetic overflow protection
-   * Supporting infinite allowances variant
-* KidsEducationToken (personal hobby ERC20 token): buggy implementation:
-   * Typographical bug: <= instead of >=
-   * Incorrect overflow detection for self-transfers
-   * Rejecting transfers of 0 values
-   * Returning false in failure
-
 ## Resources
-
 
 We use the [K-framework] and its verification infrastructure throughout the formal verification effort.
 All of the formal specifications are mechanized within the K-framework as well.
@@ -80,6 +68,17 @@ an EVM-level refinement of ERC20-K
 business logic of
 [ERC777](https://github.com/ethereum/eips/issues/777)
 
+## Disclaimer
+
+This repository does not constitute legal or investment advice. The preparers of this repository present it as an informational exercise documenting the due diligence involved in the secure development of the target contract only, and make no material claims or guarantees concerning the contract's operation post-deployment. The preparers of this repository assume no liability for any and all potential consequences of the deployment or use of this contract.
+
+*The formal verification result presented here only shows that the target contract behaviors meet the formal (functional) specifications. Moreover, the correctness of the generated formal proofs is conditioned by the correctness of the specifications and their refinement, by the correctness of the [KEVM], by the correctness of the [K-framework]'s [reachability logic theorem prover], and by the correctness of the [Z3] SMT solver. The presented result makes no guarantee about properties not specified in the formal specification. Importantly, the presented formal specification considers only the behaviors within the EVM, without considering the block/transaction level properties or off-chain behaviors, meaning that the verification result does not completely rule out the possibility of the contract being vulnerable to existing and/or unknown attacks.*
+
+Smart contracts are still a nascent software arena, and their deployment and public offering carries substantial risk. This repository makes no claims that its analysis is fully comprehensive, and recommends always seeking multiple opinions and audits.
+
+This repository is also not comprehensive in scope, excluding a number of components critical to the correct operation of this system.
+
+The possibility of human error in the manual review process is very real, and we recommend seeking multiple independent opinions on any claims which impact a large number of funds.
 
 
 [KEVM]: <https://github.com/kframework/evm-semantics>
@@ -94,17 +93,3 @@ business logic of
 [KEVM technical report]: <https://www.ideals.illinois.edu/handle/2142/97207>
 [Z3]: <https://github.com/Z3Prover/z3>
 [eDSL]: <resources/edsl.md>
-
-
-## Disclaimer
-
-This repository does not constitute legal or investment advice. The preparers of this repository present it as an informational exercise documenting the due diligence involved in the secure development of the target contract only, and make no material claims or guarantees concerning the contract's operation post-deployment. The preparers of this repository assume no liability for any and all potential consequences of the deployment or use of this contract.
-
-*The formal verification result presented here only shows that the target contract behaviors meet the formal (functional) specifications. Moreover, the correctness of the generated formal proofs is conditioned by the correctness of the specifications and their refinement, by the correctness of the [KEVM], by the correctness of the [K-framework]'s [reachability logic theorem prover], and by the correctness of the [Z3] SMT solver. The presented result makes no guarantee about properties not specified in the formal specification. Importantly, the presented formal specification considers only the behaviors within the EVM, without considering the block/transaction level properties or off-chain behaviors, meaning that the verification result does not completely rule out the possibility of the contract being vulnerable to existing and/or unknown attacks.*
-
-Smart contracts are still a nascent software arena, and their deployment and public offering carries substantial risk. This repository makes no claims that its analysis is fully comprehensive, and recommends always seeking multiple opinions and audits.
-
-This repository is also not comprehensive in scope, excluding a number of components critical to the correct operation of this system.
-
-The possibility of human error in the manual review process is very real, and we recommend seeking multiple independent opinions on any claims which impact a large number of funds.
-
