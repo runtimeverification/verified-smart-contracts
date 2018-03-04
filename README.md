@@ -38,10 +38,10 @@ the mathematical domain constraints.
 ## Completed
 
 * **2018-02-28** [Bihu KEY token operation contracts](bihu/README.md)
+* **2017-12-23** [Philip Daian's Viper ERC20 token contract](erc20/viper/README.md)
 
 (Links and completion dates to be added soon)
 
-* Philip Daian's Viper ERC20 token: fully conforming to the ERC20 standard
 * OpenZeppelin ERC20 token: conforming to the standard, but:
    * Rejecting transfers to address 0
 * ConsenSys ERC20 token: conforming to the standard, but:
