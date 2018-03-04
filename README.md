@@ -40,12 +40,11 @@ the mathematical domain constraints.
 * **2018-02-28** [Bihu KEY token operation contracts](bihu/README.md)
 * **2017-12-23** [Philip Daian's Vyper ERC20 token contract](erc20/viper/README.md)
 * **2018-01-??** [HackerGold (HKG) ERC20 token contract](erc20/hkg/README.md)
+* **2018-01-??** [OpenZeppelin ERC20 token contract](erc20/zeppelin/README.md)
 
 
 (Links and completion dates to be added soon)
 
-* OpenZeppelin ERC20 token: conforming to the standard, but:
-   * Rejecting transfers to address 0
 * ConsenSys ERC20 token: conforming to the standard, but:
    * No arithmetic overflow protection
    * Supporting infinite allowances variant
