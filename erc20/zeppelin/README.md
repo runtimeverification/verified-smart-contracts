@@ -1,4 +1,4 @@
-*2018-01-??*
+*2018-01-26*
 
 # Formal Verification of OpenZeppelin ERC20 Token Contract
 
