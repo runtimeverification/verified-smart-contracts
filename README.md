@@ -34,11 +34,12 @@ the mathematical domain constraints.
 
 * **2018-??-??** Casper - Ethereum Foundation
 * **2018-??-??** Fabian Vogelsteller's ICO contract and ICO schema
+* **2018-??-??** DappSys DSToken contract
 
 ## Completed
 
 * **2018-02-28** [Bihu KEY token operation contracts](bihu/README.md)
-* **2018-01-30** [MyKidsEducationToken ERC20 token contracts](erc20/hobby/README.md)
+* **2018-01-30** [MyKidsEducationToken ERC20 token contract](erc20/hobby/README.md)
 * **2018-01-26** [OpenZeppelin ERC20 token contract](erc20/zeppelin/README.md)
 * **2018-01-16** [HackerGold (HKG) ERC20 token contract](erc20/hkg/README.md)
 * **2017-12-23** [Philip Daian's Vyper ERC20 token contract](erc20/viper/README.md)
@@ -59,14 +60,9 @@ We refer the reader to the following resources for background knowledge about th
   * [KEVM technical report]
 * [K reachability logic prover]
   * [eDSL]: domain-specific language for EVM-level specifications
-* [ERC20-K](https://github.com/runtimeverification/erc20-semantics):
-a formal specification of the high-level business logic of
-[ERC20](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md)
-* [ERC20-EVM](https://github.com/kframework/evm-semantics/blob/verification/proofs/erc20):
-an EVM-level refinement of ERC20-K
-* ERC777-K (coming soon): a formal specification of the high-level
-business logic of
-[ERC777](https://github.com/ethereum/eips/issues/777)
+* [ERC20-K]: a formal specification of the high-level business logic of [ERC20]
+* [ERC20-EVM]: an EVM-level refinement of ERC20-K
+* ERC777-K (coming soon): a formal specification of the high-level business logic of [ERC777]
 
 ## Disclaimer
 
@@ -93,3 +89,8 @@ The possibility of human error in the manual review process is very real, and we
 [KEVM technical report]: <https://www.ideals.illinois.edu/handle/2142/97207>
 [Z3]: <https://github.com/Z3Prover/z3>
 [eDSL]: <resources/edsl.md>
+[ERC20]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md>
+[ERC20-K]: <https://github.com/runtimeverification/erc20-semantics>
+[ERC20-EVM]: <https://github.com/kframework/evm-semantics/blob/verification/proofs/erc20>
+[ERC777]: <https://github.com/ethereum/eips/issues/777>
+
