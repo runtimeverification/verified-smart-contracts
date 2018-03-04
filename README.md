@@ -49,11 +49,6 @@ the mathematical domain constraints.
 * ConsenSys ERC20 token: conforming to the standard, but:
    * No arithmetic overflow protection
    * Supporting infinite allowances variant
-* HackerGold (HKG) ERC20 token: deviating from the standard:
-   * No arithmetic overflow protection
-   * No totalSupply function
-   * Rejecting transfers of 0 values
-   * Returning false in failure
 * KidsEducationToken (personal hobby ERC20 token): buggy implementation:
    * Typographical bug: <= instead of >=
    * Incorrect overflow detection for self-transfers
