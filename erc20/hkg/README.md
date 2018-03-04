@@ -6,9 +6,6 @@ We present a formal verification of [HackerGold (HKG) ERC20] token contract.
 
 The HackerGold (HKG) token is an ERC20 token written in Solidity, which became well-known as a [serious security vulnerability] was discovered that even survived a security audit performed by Zeppelin. Specifically, the bug was due to a [typographical error] in the source code, `=+` instead of `+=`, for updating a receiver’s balance during a transfer, which would allow an attacker to reset an account balance. This security issue was resolved by deploying a new, fixed contract with reissuing the tokens.
 
-[serious security vulnerability]: <https://www.ethnews.com/ethercamps-hkg-token-has-a-bug-and-needs-to-be-reissued>
-[typographical error]: <https://github.com/ether-camp/virtual-accelerator/issues/8>
-
 We found that the HKG token implementation does **not** conform to the [ERC20 standard], and deviates from the [ERC20-K] (and thus [ERC20-EVM]) specification as follows:
 
 * *No `totalSupply` function*: No `totalSupply` function is provided in the HKG token, which is **not** compliant to the [ERC20 standard].
@@ -136,7 +133,7 @@ Due to its deviation from ERC20-K, we could not verify the HKG token against the
     orBool BAL_TO +Int VALUE >=Int (2 ^Int 256)
     ```
 
-    The full changes made in ERC20-EVM are shown in [here] and [here]. The specifications of other functions except `transfer` and `transferFrom` are the same as the original ERC20-EVM.
+The full changes made in ERC20-EVM are shown in [here] and [here]. The specifications of other functions except `transfer` and `transferFrom` are the same as the original ERC20-EVM.
 
 We took the modified [ERC20-EVM] specification and instantiated it with the [program-specific parameters] shown below.
 
@@ -202,3 +199,6 @@ For detailed instructions on installing and running the EVM verifier, see [KEVM]
 [version]: <https://github.com/ether-camp/virtual-accelerator/tree/42258200952f2796df93023887f9fa6c1ecdf61a>
 [src]: <https://github.com/ether-camp/virtual-accelerator/blob/42258200952f2796df93023887f9fa6c1ecdf61a/contracts/StandardToken.sol>
 [`TokenInterface`]: <https://github.com/ether-camp/virtual-accelerator/blob/42258200952f2796df93023887f9fa6c1ecdf61a/contracts/TokenInterface.sol>
+[serious security vulnerability]: <https://www.ethnews.com/ethercamps-hkg-token-has-a-bug-and-needs-to-be-reissued>
+[typographical error]: <https://github.com/ether-camp/virtual-accelerator/issues/8>
+

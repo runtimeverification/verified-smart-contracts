@@ -103,6 +103,8 @@ Due to its deviation from [ERC20-K], we could not verify the (fixed) MyKidsEduca
 
     Note that the above complement, combined with the value range condition, implies `VALUE ==Int 0`.
 
+The full changes made in ERC20-EVM are shown in [here] and [here]. The specifications of other functions except `transfer` and `transferFrom` are the same as the original ERC20-EVM.
+
 We took the modified [ERC20-EVM] specification and instantiated it with the [program-specific parameters] shown below.
 
 ```
@@ -164,9 +166,4 @@ For detailed instructions on installing and running the EVM verifier, see [KEVM]
 [resources]: </README.md#resources>
 [eDSL]: </resources/edsl.md>
 [program-specific parameters]: </resources/edsl-spec.md#program-specific-parameters>
-[version]: <https://github.com/OpenZeppelin/zeppelin-solidity/tree/c5d66183abcb63a90a2528b8333b2b17067629fc>
 [src]: <https://github.com/ethereum/mist/issues/3301>
-[`BasicToken`]: <https://github.com/OpenZeppelin/zeppelin-solidity/blob/c5d66183abcb63a90a2528b8333b2b17067629fc/contracts/token/ERC20/BasicToken.sol>
-[`ERC20`]: <https://github.com/OpenZeppelin/zeppelin-solidity/blob/c5d66183abcb63a90a2528b8333b2b17067629fc/contracts/token/ERC20/ERC20.sol>
-[`ERC20Basic`]: <https://github.com/OpenZeppelin/zeppelin-solidity/blob/c5d66183abcb63a90a2528b8333b2b17067629fc/contracts/token/ERC20/ERC20Basic.sol>
-[`SafeMath`]: <https://github.com/OpenZeppelin/zeppelin-solidity/blob/c5d66183abcb63a90a2528b8333b2b17067629fc/contracts/math/SafeMath.sol>
