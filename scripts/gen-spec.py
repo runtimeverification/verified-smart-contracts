@@ -58,7 +58,7 @@ def gen(sepc_template, rule_template, spec_ini, spec_name, rule_name_list):
         rule_spec_list.append(rule_spec)
     delimeter = "\n"
     rules = delimeter.join(rule_spec_list)
-    genspec = subst(spec_template, 'module', spec_name)
+    genspec = subst(spec_template, 'module', spec_name.upper())
     genspec = subst(genspec, 'rules', rules)
     print(genspec)
 #   genspec = template
