@@ -1,7 +1,7 @@
-requires "dsl-evm.k"
+requires "edsl.k"
+requires "../lemmas.k"
 
 module VERIFICATION
-    imports EVM
-    imports DSL-EVM
-
+    imports EDSL
+    imports LEMMAS
 endmodule

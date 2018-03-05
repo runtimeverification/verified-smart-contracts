@@ -1,5 +1,5 @@
-requires "../../erc20-dev/verification.k"
-requires "../../erc20-dev/abstract-semantics.k"
+requires "verification.k"
+requires "abstract-semantics.k"
 
 module {MODULE}-SPEC
   imports ETHEREUM-SIMULATION

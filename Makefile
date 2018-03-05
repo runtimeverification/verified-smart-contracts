@@ -1,58 +1,74 @@
-erc20_rules:=totalSupply \
-             balanceOf \
-             allowance \
-             approve-spec \
-             transfer-success-1 \
-             transfer-success-2 \
-             transfer-failure-1 \
-             transfer-failure-2 \
-             transferFrom-success-1 \
-             transferFrom-success-2 \
-             transferFrom-failure-1 \
-             transferFrom-failure-2
-
-erc20_hobby_rules:=totalSupply \
-                   balanceOf \
-                   allowance \
-                   approve-success \
-                   approve-failure \
-                   transfer-success-1 \
-                   transfer-success-2 \
-                   transfer-failure-1 \
-                   transfer-failure-2 \
-                   transferFrom-success-1 \
-                   transferFrom-success-2 \
-                   transferFrom-failure-1 \
-                   transferFrom-failure-2
-
 specs_dir:=specs
 
-erc20-viper: $(specs_dir)/erc20/viper-spec.k
+erc20_files:=totalSupply-spec.k \
+             balanceOf-spec.k \
+             allowance-spec.k \
+             approve-spec.k \
+             transfer-success-1-spec.k \
+             transfer-success-2-spec.k \
+             transfer-failure-1-spec.k \
+             transfer-failure-2-spec.k \
+             transferFrom-success-1-spec.k \
+             transferFrom-success-2-spec.k \
+             transferFrom-failure-1-spec.k \
+             transferFrom-failure-2-spec.k
 
-erc20-zeppelin: $(specs_dir)/erc20/zeppelin-spec.k
+hobby_erc20_files:=totalSupply-spec.k \
+                   balanceOf-spec.k \
+                   allowance-spec.k \
+                   approve-success-spec.k \
+                   approve-failure-spec.k \
+                   transfer-success-1-spec.k \
+                   transfer-success-2-spec.k \
+                   transfer-failure-1-spec.k \
+                   transfer-failure-2-spec.k \
+                   transferFrom-success-1-spec.k \
+                   transferFrom-success-2-spec.k \
+                   transferFrom-failure-1-spec.k \
+                   transferFrom-failure-2-spec.k
 
-erc20-hkg: $(specs_dir)/erc20/hkg-spec.k
+proof_tests:= erc20-viper erc20-zeppelin erc20-hkg erc20-hobby
 
-erc20-hobby: $(specs_dir)/erc20/hobby-spec.k
+split-proof-tests: $(proof_tests) $(specs_dir)/lemmas.k
 
-split-proofs-tests: erc20-viper erc20-zeppelin erc20-hkg erc20-hobby
+erc20-viper: $(patsubst %, $(specs_dir)/erc20-viper/%, $(erc20_files))
 
-$(specs_dir)/erc20/viper-spec.k: erc20-dev/spec-tmpl.k erc20-dev/rule-tmpl.k erc20-dev/viper/spec-viper.ini
+erc20-zeppelin: $(patsubst %, $(specs_dir)/erc20-zeppelin/%, $(erc20_files))
+
+erc20-hkg: $(patsubst %, $(specs_dir)/erc20-hkg/%, $(erc20_files))
+
+erc20-hobby: $(patsubst %, $(specs_dir)/erc20-hobby/%, $(hobby_erc20_files))
+
+$(specs_dir)/lemmas.k: resources/lemmas.k
+	@echo >&2 "== copy lemmas.k"
+	mkdir -p $(dir $@)
+	cp $^ $@
+
+# #### ERC20
+$(specs_dir)/erc20-viper/%-spec.k: erc20-dev/spec-tmpl.k erc20-dev/rule-tmpl.k erc20-dev/viper/spec-viper.ini erc20-dev/abstract-semantics.k erc20-dev/verification.k
 	@echo >&2 "==  gen-spec: $@"
 	mkdir -p $(dir $@)
-	python3 scripts/gen-spec.py $^ viper $(erc20_rules) > $@
+	python3 scripts/gen-spec.py $^ $* $* > $@
+	cp erc20-dev/abstract-semantics.k $(dir $@)
+	cp erc20-dev/verification.k $(dir $@)
 
-$(specs_dir)/erc20/zeppelin-spec.k: erc20-dev/spec-tmpl.k erc20-dev/rule-tmpl.k erc20-dev/zeppelin/spec-zeppelin.ini
+$(specs_dir)/erc20-zeppelin/%-spec.k: erc20-dev/spec-tmpl.k erc20-dev/rule-tmpl.k erc20-dev/zeppelin/spec-zeppelin.ini erc20-dev/abstract-semantics.k erc20-dev/verification.k
 	@echo >&2 "==  gen-spec: $@"
 	mkdir -p $(dir $@)
-	python3 scripts/gen-spec.py $^ zeppelin $(erc20_rules) > $@
+	python3 scripts/gen-spec.py $^ $* $* > $@
+	cp erc20-dev/abstract-semantics.k $(dir $@)
+	cp erc20-dev/verification.k $(dir $@)
 
-$(specs_dir)/erc20/hkg-spec.k: erc20-dev/spec-tmpl.k erc20-dev/rule-tmpl.k erc20-dev/hkg/spec-hkg.ini
+$(specs_dir)/erc20-hkg/%-spec.k: erc20-dev/spec-tmpl.k erc20-dev/rule-tmpl.k erc20-dev/hkg/spec-hkg.ini
 	@echo >&2 "==  gen-spec: $@"
 	mkdir -p $(dir $@)
-	python3 scripts/gen-spec.py $^ hkg $(erc20_rules) > $@
+	python3 scripts/gen-spec.py $^ $* $* > $@
+	cp erc20-dev/abstract-semantics.k $(dir $@)
+	cp erc20-dev/verification.k $(dir $@)
 
-$(specs_dir)/erc20/hobby-spec.k: erc20-dev/spec-tmpl.k erc20-dev/rule-tmpl.k erc20-dev/hobby/spec-hobby.ini
+$(specs_dir)/erc20-hobby/%-spec.k: erc20-dev/spec-tmpl.k erc20-dev/rule-tmpl.k erc20-dev/hobby/spec-hobby.ini
 	@echo >&2 "==  gen-spec: $@"
 	mkdir -p $(dir $@)
-	python3 scripts/gen-spec.py $^ hobby $(erc20_hobby_rules) > $@
+	python3 scripts/gen-spec.py $^ $* $* > $@
+	cp erc20-dev/abstract-semantics.k $(dir $@)
+	cp erc20-dev/verification.k $(dir $@)
