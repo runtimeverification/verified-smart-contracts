@@ -91,6 +91,6 @@ The possibility of human error in the manual review process is very real, and we
 [eDSL]: <resources/edsl.md>
 [ERC20]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md>
 [ERC20-K]: <https://github.com/runtimeverification/erc20-semantics>
-[ERC20-EVM]: <https://github.com/kframework/evm-semantics/blob/verification/proofs/erc20>
+[ERC20-EVM]: </resources/erc20-evm.md>
 [ERC777]: <https://github.com/ethereum/eips/issues/777>
 
