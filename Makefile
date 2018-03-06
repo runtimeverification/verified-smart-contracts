@@ -45,25 +45,25 @@ $(specs_dir)/lemmas.k: resources/lemmas.k
 	cp $^ $@
 
 # #### ERC20
-$(specs_dir)/erc20-viper/%-spec.k: erc20-dev/spec-tmpl.k erc20-dev/rule-tmpl.k erc20-dev/viper/spec-viper.ini erc20-dev/verification.k
+$(specs_dir)/erc20-viper/%-spec.k: erc20-dev/spec-tmpl.k erc20-dev/rule-tmpl.k erc20-dev/viper/spec-viper.ini
 	@echo >&2 "==  gen-spec: $@"
 	mkdir -p $(dir $@)
 	python3 scripts/gen-spec.py $^ $* $* > $@
 	cp erc20-dev/verification.k $(dir $@)
 
-$(specs_dir)/erc20-zeppelin/%-spec.k: erc20-dev/spec-tmpl.k erc20-dev/rule-tmpl.k erc20-dev/zeppelin/spec-zeppelin.ini erc20-dev/verification.k
+$(specs_dir)/erc20-zeppelin/%-spec.k: erc20-dev/spec-tmpl.k erc20-dev/rule-tmpl.k erc20-dev/zeppelin/spec-zeppelin.ini
 	@echo >&2 "==  gen-spec: $@"
 	mkdir -p $(dir $@)
 	python3 scripts/gen-spec.py $^ $* $* > $@
 	cp erc20-dev/verification.k $(dir $@)
 
-$(specs_dir)/erc20-hkg/%-spec.k: erc20-dev/spec-tmpl.k erc20-dev/rule-tmpl.k erc20-dev/hkg/spec-hkg.ini erc20-dev/verification.k
+$(specs_dir)/erc20-hkg/%-spec.k: erc20-dev/spec-tmpl.k erc20-dev/rule-tmpl.k erc20-dev/hkg/spec-hkg.ini
 	@echo >&2 "==  gen-spec: $@"
 	mkdir -p $(dir $@)
 	python3 scripts/gen-spec.py $^ $* $* > $@
 	cp erc20-dev/verification.k $(dir $@)
 
-$(specs_dir)/erc20-hobby/%-spec.k: erc20-dev/spec-tmpl.k erc20-dev/rule-tmpl.k erc20-dev/hobby/spec-hobby.ini erc20-dev/verification.k
+$(specs_dir)/erc20-hobby/%-spec.k: erc20-dev/spec-tmpl.k erc20-dev/rule-tmpl.k erc20-dev/hobby/spec-hobby.ini
 	@echo >&2 "==  gen-spec: $@"
 	mkdir -p $(dir $@)
 	python3 scripts/gen-spec.py $^ $* $* > $@
