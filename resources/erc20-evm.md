@@ -17,14 +17,17 @@ Below is the ERC20-EVM specification template parameters for `totalSupply`.
 
 ```
 [totalSupply]
-  k: #execute => (RETURN RET_ADDR:Int 32 ~> _)
-  callData: #abiCallData("totalSupply", .TypedArgs)
-  localMem: .Map => .Map[ RET_ADDR := #asByteStackInWidth(TOTAL, 32) ] _:Map
-  gas: {GASCAP} => _
-  log: _
-  refund: _
-  storage: #hashedLocation({COMPILER}, {_TOTALSUPPLY}, .IntList) |-> TOTAL _:Map
-  requires: andBool 0 <=Int TOTAL andBool TOTAL <Int (2 ^Int 256)
+k: #execute => (RETURN RET_ADDR:Int 32 ~> _)
+callData: #abiCallData("totalSupply", .TypedArgs)
+localMem: .Map => .Map[ RET_ADDR := #asByteStackInWidth(TOTAL, 32) ] _:Map
+gas: {GASCAP} => _
+log: _
+refund: _
+storage:
+    #hashedLocation({COMPILER}, {_TOTALSUPPLY}, .IntList) |-> TOTAL
+    _:Map
+requires:
+    andBool 0 <=Int TOTAL andBool TOTAL <Int (2 ^Int 256)
 ```
 
 `k` specifies that the execution eventually reaches the `RETURN` instruction, meaning that the program will successfully terminate. The `RETURN` instruction says that a 32-byte return value will be stored in the memory at the location `RET_ADDR`. The followed underline means that there will be more computation tasks to be performed (e.g., cleaning up the VM state) but they are not relevant.
@@ -51,7 +54,21 @@ Specifying the irrelevant entries implicitly expresses the non-interference prop
 
 Below is the specification (template parameters) of `balanceOf`, similarly defined as that of `totalSupply`.
 
-
+```
+[balanceOf]
+k: #execute => (RETURN RET_ADDR:Int 32 ~> _)
+callData: #abiCallData("balanceOf", #address(OWNER))
+localMem: .Map => ( .Map[ RET_ADDR := #asByteStackInWidth(BAL, 32) ] _:Map )
+gas: {GASCAP} => _
+log: _
+refund: _
+storage:
+    #hashedLocation({COMPILER}, {_BALANCES}, OWNER) |-> BAL
+    _:Map
+requires:
+    andBool 0 <=Int OWNER andBool OWNER <Int (2 ^Int 160)
+    andBool 0 <=Int BAL   andBool BAL   <Int (2 ^Int 256)
+```
 
 Notable differences are as follows:
 
@@ -64,6 +81,22 @@ Note that the maximum possible value of `OWNER` is `2**160` exclusive, since it 
 
 The specification of `allowance` is similar to that of `totalSupply` as well.
 
+```
+[allowance]
+k: #execute => (RETURN RET_ADDR:Int 32 ~> _)
+callData: #abiCallData("allowance", #address(OWNER), #address(SPENDER))
+localMem: .Map => ( .Map[ RET_ADDR := #asByteStackInWidth(ALLOWANCE, 32) ] _:Map )
+gas: {GASCAP} => _
+log: _
+refund: _
+storage:
+    #hashedLocation({COMPILER}, {_ALLOWANCES}, OWNER SPENDER) |-> ALLOWANCE
+    _:Map
+requires:
+    andBool 0 <=Int OWNER     andBool OWNER     <Int (2 ^Int 160)
+    andBool 0 <=Int SPENDER   andBool SPENDER   <Int (2 ^Int 160)
+    andBool 0 <=Int ALLOWANCE andBool ALLOWANCE <Int (2 ^Int 256)
+```
 
 Notable differences are as follows:
 
@@ -73,6 +106,21 @@ Notable differences are as follows:
 
 Below is the specification of `approve`.
 
+```
+[approve]
+k: #execute => (RETURN RET_ADDR:Int 32 ~> _)
+callData: #abiCallData("approve", #address(SPENDER), #uint256(VALUE))
+localMem: .Map => ( .Map[ RET_ADDR := #asByteStackInWidth(1, 32) ] _:Map )
+gas: {GASCAP} => _
+log: _:List ( .List => ListItem(#abiEventLog(ACCT_ID, "Approval", #indexed(#address(CALLER_ID)), #indexed(#address(SPENDER)), #uint256(VALUE))) )
+refund: _ => _
+storage:
+    #hashedLocation({COMPILER}, {_ALLOWANCES}, CALLER_ID SPENDER) |-> (_:Int => VALUE)
+    _:Map
+requires:
+    andBool 0 <=Int SPENDER andBool SPENDER <Int (2 ^Int 160)
+    andBool 0 <=Int VALUE   andBool VALUE   <Int (2 ^Int 256)
+```
 
 Notable differences with the previous ones are as follows:
 
@@ -83,21 +131,159 @@ Notable differences with the previous ones are as follows:
 
 `storage` specifies that the value of `allowances[CALLER_ID][SPENDER]` will be updated to `VALUE` after the transaction.
 
-Unlike the [ERC20-K] specification, we do not specify the case when `VALUE` is less than 0 because it is not possible -- the `VALUE` parameter is of type `uint256`, an unsigned 256-bit integer. Indeed, the ABI call mechanism will reject a call to this function if the `VALUE` is negative, which is out of the scope of the EVM-level specification since it happens in the network layer outside the virtual machine.
+Unlike the [ERC20-K] specification, we do not specify the case when `VALUE` is less than 0 because it is not possible; the `VALUE` parameter is of type `uint256`, an unsigned 256-bit integer. Indeed, the ABI call mechanism will reject a call to this function if the `VALUE` is negative, which is out of the scope of the EVM-level specification since it happens in the network layer outside the virtual machine.
 
 ### `transfer`
 
 Below is the specification of `transfer`.
 
+```
+[transfer]
+callData: #abiCallData("transfer", #address(TO_ID), #uint256(VALUE))
+gas: {GASCAP} => _
+refund: _ => _
+requires:
+    andBool 0 <=Int TO_ID     andBool TO_ID     <Int (2 ^Int 160)
+    andBool 0 <=Int VALUE     andBool VALUE     <Int (2 ^Int 256)
+    andBool 0 <=Int BAL_FROM  andBool BAL_FROM  <Int (2 ^Int 256)
+    andBool 0 <=Int BAL_TO    andBool BAL_TO    <Int (2 ^Int 256)
+
+[transfer-success]
+k: #execute => (RETURN RET_ADDR:Int 32 ~> _)
+localMem: .Map => ( .Map[ RET_ADDR := #asByteStackInWidth(1, 32) ] _:Map )
+log: _:List ( .List => ListItem(#abiEventLog(ACCT_ID, "Transfer", #indexed(#address(CALLER_ID)), #indexed(#address(TO_ID)), #uint256(VALUE))) )
+
+[transfer-success-1]
+storage:
+    #hashedLocation({COMPILER}, {_BALANCES}, CALLER_ID) |-> (BAL_FROM => BAL_FROM -Int VALUE)
+    #hashedLocation({COMPILER}, {_BALANCES}, TO_ID)     |-> (BAL_TO   => BAL_TO   +Int VALUE)
+    _:Map
++requires:
+    andBool CALLER_ID =/=Int TO_ID
+    andBool VALUE <=Int BAL_FROM
+    andBool BAL_TO +Int VALUE <Int (2 ^Int 256)
+
+[transfer-success-2]
+storage:
+    #hashedLocation({COMPILER}, {_BALANCES}, CALLER_ID) |-> BAL_FROM
+    _:Map
++requires:
+    andBool CALLER_ID ==Int TO_ID
+    andBool VALUE <=Int BAL_FROM
+
+[transfer-failure]
+k: #execute => #exception
+localMem: .Map => _:Map
+log: _
+
+[transfer-failure-1]
+storage:
+    #hashedLocation({COMPILER}, {_BALANCES}, CALLER_ID) |-> (BAL_FROM => _)
+    #hashedLocation({COMPILER}, {_BALANCES}, TO_ID)     |->  BAL_TO
+    _:Map
++requires:
+    andBool CALLER_ID =/=Int TO_ID
+    andBool ( VALUE >Int BAL_FROM
+     orBool   BAL_TO +Int VALUE >=Int (2 ^Int 256) )
+
+[transfer-failure-2]
+storage:
+    #hashedLocation({COMPILER}, {_BALANCES}, CALLER_ID) |-> BAL_FROM
+    _:Map
++requires:
+    andBool CALLER_ID ==Int TO_ID
+    andBool VALUE >Int BAL_FROM
+```
+
 Faithfully following [ERC20-K], it exhibits the four cases, identified by the four sections, `[transfer-success-1]`, `[transfer-success-2]`, `[transfer-failure-1]`, and `[transfer-failure-2]`. Each section corresponds to each of the four cases of [ERC20-K], respectively.
 
-The above specification is written using the section inheritance feature of [eDSL] to avoid duplication and highlight the differences between the four cases. Refer to the [eDSL specification template parameters] for more details.
+The above specification is written using the section inheritance feature of [eDSL] to avoid duplication and highlight the differences between the four cases. Refer to the eDSL specification [template parameters] for more details.
 
 ### `transferFrom`
 
 Below is the specification of `transferFrom`, which is similarly given as that of `transfer`, faithfully capturing the high-level logic of [ERC20-K].
 
+```
+[transferFrom]
+callData: #abiCallData("transferFrom", #address(FROM_ID), #address(TO_ID), #uint256(VALUE))
+gas: {GASCAP} => _
+refund: _ => _
+requires:
+    andBool 0 <=Int FROM_ID   andBool FROM_ID   <Int (2 ^Int 160)
+    andBool 0 <=Int TO_ID     andBool TO_ID     <Int (2 ^Int 160)
+    andBool 0 <=Int VALUE     andBool VALUE     <Int (2 ^Int 256)
+    andBool 0 <=Int BAL_FROM  andBool BAL_FROM  <Int (2 ^Int 256)
+    andBool 0 <=Int BAL_TO    andBool BAL_TO    <Int (2 ^Int 256)
+    andBool 0 <=Int ALLOW     andBool ALLOW     <Int (2 ^Int 256)
 
+[transferFrom-success]
+k: #execute => (RETURN RET_ADDR:Int 32 ~> _)
+localMem: .Map => ( .Map[ RET_ADDR := #asByteStackInWidth(1, 32) ] _:Map )
+log: _:List ( .List => ListItem(#abiEventLog(ACCT_ID, "Transfer", #indexed(#address(FROM_ID)), #indexed(#address(TO_ID)), #uint256(VALUE))) )
+
+[transferFrom-success-1]
+storage:
+    #hashedLocation({COMPILER}, {_BALANCES},   FROM_ID)           |-> (BAL_FROM => BAL_FROM -Int VALUE)
+    #hashedLocation({COMPILER}, {_BALANCES},   TO_ID)             |-> (BAL_TO   => BAL_TO   +Int VALUE)
+    #hashedLocation({COMPILER}, {_ALLOWANCES}, FROM_ID CALLER_ID) |-> (ALLOW    => ALLOW    -Int VALUE)
+    _:Map
++requires:
+    andBool FROM_ID =/=Int TO_ID
+    andBool VALUE <=Int BAL_FROM
+    andBool BAL_TO +Int VALUE <Int (2 ^Int 256)
+    andBool VALUE <=Int ALLOW
+
+[transferFrom-success-2]
+storage:
+    #hashedLocation({COMPILER}, {_BALANCES},   FROM_ID)           |-> BAL_FROM
+    #hashedLocation({COMPILER}, {_ALLOWANCES}, FROM_ID CALLER_ID) |-> (ALLOW => ALLOW -Int VALUE)
+    _:Map
++requires:
+    andBool FROM_ID ==Int TO_ID
+    andBool VALUE <=Int BAL_FROM
+    andBool VALUE <=Int ALLOW
+
+[transferFrom-failure]
+k: #execute => #exception
+localMem: .Map => _:Map
+log: _
+
+[transferFrom-failure-1]
+storage:
+    #hashedLocation({COMPILER}, {_BALANCES},   FROM_ID)           |-> (BAL_FROM => _)  // BAL_FROM
+    #hashedLocation({COMPILER}, {_BALANCES},   TO_ID)             |-> (BAL_TO   => _)  // BAL_TO
+    #hashedLocation({COMPILER}, {_ALLOWANCES}, FROM_ID CALLER_ID) |-> ALLOW
+    _:Map
++requires:
+    andBool FROM_ID =/=Int TO_ID
+    andBool ( VALUE >Int BAL_FROM
+     orBool   BAL_TO +Int VALUE >=Int (2 ^Int 256)
+     orBool   VALUE >Int ALLOW )
+
+[transferFrom-failure-2]
+storage:
+    #hashedLocation({COMPILER}, {_BALANCES},   FROM_ID)           |-> BAL_FROM
+    #hashedLocation({COMPILER}, {_ALLOWANCES}, FROM_ID CALLER_ID) |-> ALLOW
+    _:Map
++requires:
+    andBool FROM_ID ==Int TO_ID
+    andBool ( VALUE >Int BAL_FROM
+     orBool   VALUE >Int ALLOW )
+```
+
+
+[K-framework]: <http://www.kframework.org>
+[reachability logic theorem prover]: <http://fsl.cs.illinois.edu/index.php/Semantics-Based_Program_Verifiers_for_All_Languages>
+
+[ERC20]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md>
+[ERC20-K]: <https://github.com/runtimeverification/erc20-semantics>
+
+[resources]: </README.md#resources>
+[eDSL]: </resources/edsl.md>
+[eDSL notation]: </resources/edsl-notations.md>
+[program-specific parameters]: </resources/edsl-spec.md#program-specific-parameters>
+[template parameters]: </resources/edsl-spec.md#edsl-template-parameters>
+[specification template]: </resources/edsl-spec.md#edsl-specification-template>
 
 [ERC20-K configuration]: <https://github.com/runtimeverification/erc20-semantics/blob/master/erc20.k#L26-L48>
 [KEVM configuration]: <https://github.com/kframework/evm-semantics/blob/master/evm.md#configuration>
