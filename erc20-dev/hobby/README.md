@@ -75,7 +75,17 @@ The original, *buggy* source code of the contract is the following:
 
 Due to its deviation from [ERC20-K], we could not verify the (fixed) MyKidsEducatioinToken contract against the original [ERC20-EVM] specification. In order to show that it is "correct" w.r.t. ERC20-K (thus ERC20-EVM) modulo the deviation, we modified the specification to capture the deviation and successfully verified it against the modified ERC20-EVM specification. Below are the changes made to the original ERC20-EVM specification:
 
-* To capture the inadequate overflow detection for self-transfers, TODO:
+* To capture the inadequate overflow detection for self-transfers, we added the following additional `requires` condition for the self-`transfer` and self-`transferFrom` cases, one for the success cases:
+
+    ```
+    andBool BAL_FROM +Int VALUE <Int (2 ^Int 256)
+    ```
+
+    and its complement for the failure cases:
+
+    ```
+    andBool BAL_FROM +Int VALUE >=Int (2 ^Int 256)
+    ```
 
 * To capture the false return value, we changed the `k` and `localMem` parameters of the `transfer-failure` section, from:
 
