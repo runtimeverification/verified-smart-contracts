@@ -1,0 +1,69 @@
+@@ -81,6 +81,7 @@
+     andBool CALLER_ID =/=Int TO_ID
+     andBool VALUE <=Int BAL_FROM
+     andBool BAL_TO +Int VALUE <Int (2 ^Int 256)
++    andBool TO_ID =/=Int 0
+ 
+ [transfer-success-2]
+ storage:
+@@ -89,6 +90,7 @@
+ +requires:
+     andBool CALLER_ID ==Int TO_ID
+     andBool VALUE <=Int BAL_FROM
++    andBool TO_ID =/=Int 0
+ 
+ [transfer-failure]
+ k: #execute => #exception
+@@ -103,7 +105,8 @@
+ +requires:
+     andBool CALLER_ID =/=Int TO_ID
+     andBool ( VALUE >Int BAL_FROM
+-     orBool   BAL_TO +Int VALUE >=Int (2 ^Int 256) )
++     orBool   BAL_TO +Int VALUE >=Int (2 ^Int 256)
++     orBool   TO_ID ==Int 0 )
+ 
+ [transfer-failure-2]
+ storage:
+@@ -111,7 +114,8 @@
+     _:Map
+ +requires:
+     andBool CALLER_ID ==Int TO_ID
+-    andBool VALUE >Int BAL_FROM
++    andBool ( VALUE >Int BAL_FROM
++     orBool   TO_ID ==Int 0 )
+ 
+ [transferFrom]
+ callData: #abiCallData("transferFrom", #address(FROM_ID), #address(TO_ID), #uint256(VALUE))
+@@ -141,6 +145,7 @@
+     andBool VALUE <=Int BAL_FROM
+     andBool BAL_TO +Int VALUE <Int (2 ^Int 256)
+     andBool VALUE <=Int ALLOW
++    andBool TO_ID =/=Int 0
+ 
+ [transferFrom-success-2]
+ storage:
+@@ -151,6 +156,7 @@
+     andBool FROM_ID ==Int TO_ID
+     andBool VALUE <=Int BAL_FROM
+     andBool VALUE <=Int ALLOW
++    andBool TO_ID =/=Int 0
+ 
+ [transferFrom-failure]
+ k: #execute => #exception
+@@ -167,7 +173,8 @@
+     andBool FROM_ID =/=Int TO_ID
+     andBool ( VALUE >Int BAL_FROM
+      orBool   BAL_TO +Int VALUE >=Int (2 ^Int 256)
+-     orBool   VALUE >Int ALLOW )
++     orBool   VALUE >Int ALLOW
++     orBool   TO_ID ==Int 0 )
+ 
+ [transferFrom-failure-2]
+ storage:
+@@ -177,12 +184,13 @@
+ +requires:
+     andBool FROM_ID ==Int TO_ID
+     andBool ( VALUE >Int BAL_FROM
+-     orBool   VALUE >Int ALLOW )
++     orBool   VALUE >Int ALLOW
++     orBool   TO_ID ==Int 0 )
