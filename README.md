@@ -39,13 +39,10 @@ the mathematical domain constraints.
 ## Completed
 
 * **2018-02-28** [Bihu KEY token operation contracts](bihu/README.md)
-
-(Links to be added soon)
-
-* **2018-01-30** MyKidsEducationToken ERC20 token contract
-* **2018-01-26** OpenZeppelin ERC20 token contract
-* **2018-01-16** HackerGold (HKG) ERC20 token contract
-* **2017-12-23** Philip Daian's Vyper ERC20 token contract
+* **2018-01-30** [MyKidsEducationToken ERC20 token contract](hobby/README.md)
+* **2018-01-26** [OpenZeppelin ERC20 token contract](zeppelin/README.md)
+* **2018-01-16** [HackerGold (HKG) ERC20 token contract](hkg/README.md)
+* **2017-12-23** [Philip Daian's Vyper ERC20 token contract][viper/README.md)
 
 ## Resources
 
