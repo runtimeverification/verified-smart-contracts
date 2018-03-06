@@ -83,7 +83,7 @@ module LEMMAS
     rule #padToWidth(32, #asByteStack(V)) => #asByteStackInWidth(V, 32)
       requires 0 <=Int V andBool V <Int pow256
 
-    // for Viper
+    // for Vyper
     rule #padToWidth(N, #asByteStack(#asWord(WS))) => WS
       requires #noOverflow(WS) andBool N ==Int #sizeWordStack(WS)
 
