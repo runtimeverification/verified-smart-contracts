@@ -49,22 +49,26 @@ $(specs_dir)/vyper-erc20/%-spec.k: erc20/module-tmpl.k erc20/spec-tmpl.k erc20/v
 	@echo >&2 "==  gen-spec: $@"
 	mkdir -p $(dir $@)
 	python3 scripts/gen-spec.py $^ $* $* > $@
+	cp erc20/abstract-semantics.k $(dir $@)
 	cp erc20/verification.k $(dir $@)
 
 $(specs_dir)/zeppelin-erc20/%-spec.k: erc20/module-tmpl.k erc20/spec-tmpl.k erc20/zeppelin/zeppelin-erc20-spec.ini
 	@echo >&2 "==  gen-spec: $@"
 	mkdir -p $(dir $@)
 	python3 scripts/gen-spec.py $^ $* $* > $@
+	cp erc20/abstract-semantics.k $(dir $@)
 	cp erc20/verification.k $(dir $@)
 
 $(specs_dir)/hkg-erc20/%-spec.k: erc20/module-tmpl.k erc20/spec-tmpl.k erc20/hkg/hkg-erc20-spec.ini
 	@echo >&2 "==  gen-spec: $@"
 	mkdir -p $(dir $@)
 	python3 scripts/gen-spec.py $^ $* $* > $@
+	cp erc20/abstract-semantics.k $(dir $@)
 	cp erc20/verification.k $(dir $@)
 
 $(specs_dir)/hobby-erc20/%-spec.k: erc20/module-tmpl.k erc20/spec-tmpl.k erc20/hobby/hobby-erc20-spec.ini
 	@echo >&2 "==  gen-spec: $@"
 	mkdir -p $(dir $@)
 	python3 scripts/gen-spec.py $^ $* $* > $@
+	cp erc20/abstract-semantics.k $(dir $@)
 	cp erc20/verification.k $(dir $@)
