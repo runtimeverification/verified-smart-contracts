@@ -2,7 +2,7 @@
 
 # Formal Verification of OpenZeppelin ERC20 Token Contract
 
-We present a formal verification of [OpenZeppelin ERC20] token contract.
+We present a formal verification of [OpenZeppelin ERC20][src] token contract.
 
 The OpenZeppelin ERC20 token is a high-profile ERC20 token contract written in Solidity implemented by Zeppelin, a consulting firm for smart contracts that provides security audits.
 
