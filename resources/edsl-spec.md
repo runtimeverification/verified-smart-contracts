@@ -245,4 +245,4 @@ In practice, one should set a reasonable amount of the gas limit to see if the p
 
 
 [ERC20-EVM]: </resources/erc20-evm.md>
-[balanceOf-spec.k]: <resources/balanceOf-spec.k>
+[balanceOf-spec.k]: </resources/balanceOf-spec.k>
