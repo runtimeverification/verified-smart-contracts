@@ -91,6 +91,10 @@ Run the following command in the root directory of this repository, and it will 
 $ make zeppelin-erc20
 ```
 
+Run the EVM verifier to prove that the specification is satisfied by (the compiled EVM bytecode of) the target functions.
+See this [instruction] for more details of running the verifier.
+
+<!--
 #### Reproducing Proofs
 
 To prove that the specification is satisfied by (the compiled EVM bytecode of) the target functions, run the EVM verifier as follows:
@@ -101,13 +105,11 @@ $ ./kevm prove tests/proofs/specs/zeppelin-erc20/<func>-spec.k
 
 where `<func>` is the name of the ERC20 function to verify.
 
-<!--
 The above command essentially executes the following command:
 
 ```
 $ kprove zeppelin-erc20-spec.k -m VERIFICATION --z3-executable -d /path/to/evm-semantics/.build/java
 ```
--->
 
 #### Installing the EVM Verifier
 
@@ -121,6 +123,7 @@ $ make
 ```
 
 For detailed instructions on installing and running the EVM verifier, see [KEVM]'s [Installing/Building](https://github.com/kframework/evm-semantics/blob/master/README.md#installingbuilding) and [Example Usage](https://github.com/kframework/evm-semantics/blob/master/README.md#example-usage) pages.
+-->
 
 
 ## [Resources](/README.md#resources)
@@ -144,3 +147,4 @@ For detailed instructions on installing and running the EVM verifier, see [KEVM]
 [ERC20 standard]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md>
 [ERC20-K]: <https://github.com/runtimeverification/erc20-semantics>
 [ERC20-EVM]: </resources/erc20-evm.md>
+[instruction]: </resources/instruction.md>

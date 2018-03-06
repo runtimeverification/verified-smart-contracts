@@ -160,7 +160,7 @@ $ make hkg-erc20
 ```
 
 Run the EVM verifier to prove that the specification is satisfied by (the compiled EVM bytecode of) the target functions.
-See this [instruction] for more details.
+See this [instruction] for more details of running the verifier.
 
 <!--
 #### Reproducing Proofs
