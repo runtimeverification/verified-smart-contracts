@@ -42,7 +42,7 @@ the mathematical domain constraints.
 * **2018-01-30** [MyKidsEducationToken ERC20 token contract](erc20/hobby/README.md)
 * **2018-01-26** [OpenZeppelin ERC20 token contract](erc20/zeppelin/README.md)
 * **2018-01-16** [HackerGold (HKG) ERC20 token contract](erc20/hkg/README.md)
-* **2017-12-23** [Philip Daian's Vyper ERC20 token contract](erc20/viper/README.md)
+* **2017-12-23** [Philip Daian's Vyper ERC20 token contract](erc20/vyper/README.md)
 
 ## Resources
 
