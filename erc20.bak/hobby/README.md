@@ -1,211 +1,113 @@
-; ERC20-EVM Specification Template Parameters
-; For more details, refer to README.md and the technical report (Section 3 & 5)
+*2018-01-30*
 
-[totalSupply]
-k: #execute => (RETURN RET_ADDR:Int 32 ~> _)
-callData: #abiCallData("totalSupply", .TypedArgs)
-localMem: .Map => ( .Map[ RET_ADDR := #asByteStackInWidth(TOTAL, 32) ] _:Map )
-gas: {GASCAP} => _
-log: _
-refund: _
-storage:
-    #hashedLocation({COMPILER}, {_TOTALSUPPLY}, .IntList) |-> TOTAL
-    _:Map
-requires:
-    andBool 0 <=Int TOTAL     andBool TOTAL     <Int (2 ^Int 256)
+# Formal Verification of MyKidsEducationToken ERC20 Token Contract
 
-[balanceOf]
-k: #execute => (RETURN RET_ADDR:Int 32 ~> _)
-callData: #abiCallData("balanceOf", #address(OWNER))
-localMem: .Map => ( .Map[ RET_ADDR := #asByteStackInWidth(BAL, 32) ] _:Map )
-gas: {GASCAP} => _
-log: _
-refund: _
-storage:
-    #hashedLocation({COMPILER}, {_BALANCES}, OWNER) |-> BAL
-    _:Map
-requires:
-    andBool 0 <=Int OWNER     andBool OWNER     <Int (2 ^Int 160)
-    andBool 0 <=Int BAL       andBool BAL       <Int (2 ^Int 256)
+We present a formal verification of [MyKidsEducationToken ERC20] token contract, written by a personal hobby
 
-[allowance]
-k: #execute => (RETURN RET_ADDR:Int 32 ~> _)
-callData: #abiCallData("allowance", #address(OWNER), #address(SPENDER))
-localMem: .Map => ( .Map[ RET_ADDR := #asByteStackInWidth(ALLOWANCE, 32) ] _:Map )
-gas: {GASCAP} => _
-log: _
-refund: _
-storage:
-    #hashedLocation({COMPILER}, {_ALLOWANCES}, OWNER SPENDER) |-> ALLOWANCE
-    _:Map
-requires:
-    andBool 0 <=Int OWNER     andBool OWNER     <Int (2 ^Int 160)
-    andBool 0 <=Int SPENDER   andBool SPENDER   <Int (2 ^Int 160)
-    andBool 0 <=Int ALLOWANCE andBool ALLOWANCE <Int (2 ^Int 256)
+We found that the MyKidsEducationToken implementation deviates from the [ERC20-K] (and thus [ERC20-EVM])  specification as follows:
 
-[approve]
-k: #execute => (RETURN RET_ADDR:Int 32 ~> _)
-callData: #abiCallData("approve", #address(SPENDER), #uint256(VALUE))
-gas: {GASCAP} => _
-requires:
-    andBool 0 <=Int SPENDER   andBool SPENDER   <Int (2 ^Int 160)
-    andBool 0 <=Int VALUE     andBool VALUE     <Int (2 ^Int 256)
-    andBool 0 <=Int ALLOWANCE andBool ALLOWANCE <Int (2 ^Int 256)
+* *Typographical bugs*: The overflow detection code is wrong due to typographical bugs. Below is the code snippet of transferFrom exhibiting the bugs. The inequalities were flipped; `<=` was misused at the place where `>=` should be used, and `>` was misused where `<` should be:
 
-[approve-success]
-localMem: .Map => ( .Map[ RET_ADDR := #asByteStackInWidth(1, 32) ] _:Map )
-log: _:List ( .List => ListItem(#abiEventLog(ACCT_ID, "Approval", #indexed(#address(CALLER_ID)), #indexed(#address(SPENDER)), #uint256(VALUE))) )
-refund: _ => _
-storage:
-    #hashedLocation({COMPILER}, {_ALLOWANCES}, CALLER_ID SPENDER) |-> (ALLOWANCE => VALUE)
-    _:Map
-+requires:
-    andBool ( VALUE ==Int 0 orBool ALLOWANCE ==Int 0 )
+    ```
+    bool sufficientFunds = fromBalance <= _value;
+    bool sufficientAllowance = allowance <= _value;
+    bool overflowed = balances[_to] + _value > balances[_to];
+    ```
 
-[approve-failure]
-localMem: .Map => ( .Map[ RET_ADDR := #asByteStackInWidth(0, 32) ] _:Map )
-log: _
-refund: _
-storage:
-    #hashedLocation({COMPILER}, {_ALLOWANCES}, CALLER_ID SPENDER) |-> ALLOWANCE
-    _:Map
-+requires:
-    andBool ( VALUE =/=Int 0 andBool ALLOWANCE =/=Int 0 )
+    Below is our fixed code that is used for the rest of the verification:
 
-[transfer]
-callData: #abiCallData("transfer", #address(TO_ID), #uint256(VALUE))
-gas: {GASCAP} => _
-refund: _ => _
-requires:
-    andBool 0 <=Int TO_ID     andBool TO_ID     <Int (2 ^Int 160)
-    andBool 0 <=Int VALUE     andBool VALUE     <Int (2 ^Int 256)
-    andBool 0 <=Int BAL_FROM  andBool BAL_FROM  <Int (2 ^Int 256)
-    andBool 0 <=Int BAL_TO    andBool BAL_TO    <Int (2 ^Int 256)
+    ```
+    bool sufficientFunds = fromBalance >= _value;
+    bool sufficientAllowance = allowance >= _value;
+    bool overflowed = balances[_to] + _value < balances[_to];
+    ```
 
-[transfer-success]
-k: #execute => (RETURN RET_ADDR:Int 32 ~> _)
-localMem: .Map => ( .Map[ RET_ADDR := #asByteStackInWidth(1, 32) ] _:Map )
-log: _:List ( .List => ListItem(#abiEventLog(ACCT_ID, "Transfer", #indexed(#address(CALLER_ID)), #indexed(#address(TO_ID)), #uint256(VALUE))) )
+* *Inadequate overflow detection for self-transfers*: In addition to the obvious bug, the overflow detection logic is inadequate for self-transfers. It detects arithmetic overflow by testing a condition `balances[_to] + _value < balances[_to]` in the beginning of transfer. If the condition evaluates to true, it immediately rejects the transfer, returning false. This works in case of the sender and the receiver being different, but in the other case (i.e., self-transfers), the condition is too strong since the receiver’s balance does not increase at all.
 
-[transfer-success-1]
-storage:
-    #hashedLocation({COMPILER}, {_BALANCES}, CALLER_ID) |-> (BAL_FROM => BAL_FROM -Int VALUE)
-    #hashedLocation({COMPILER}, {_BALANCES}, TO_ID)     |-> (BAL_TO   => BAL_TO   +Int VALUE)
-    _:Map
-+requires:
-    andBool CALLER_ID =/=Int TO_ID
+    This issue can be resolved by checking the condition immediately before increasing the receiver’s balance, or simply delegating the overflow detection to a math library.
+
+* *Rejecting transfers of 0 value*: Similar to the [one described in the HKG token].
+
+* *Returning false in failure*: Similar to the [one described in the HKG token].
+
+## Target Smart Contract
+
+The target contract of our formal verification is the following:
+
+* [MyKidsEducationToken.sol][src]
+
+We formally verified the full functional correctness of the following ERC20 functions:
+
+* `totalSupply`
+* `balanceOf`
+* `allowance`
+* `approve`
+* `transfer`
+* `transferFrom`
+
+## Verification Artifacts
+
+### Solidity Source Code and Compiled EVM Bytecode
+
+We took the [source code][src], fixed the typographical bugs, and compiled it to the EVM bytecode using Remix Solidity IDE (of the version `soljson-v0.4.19+commit.c4cbbb05`).
+
+The fixed source code of the contract is the following:
+
+* [MyKidsEducationToken.fixed.sol]
+
+The EVM (runtime) bytecode generated by the Remix Solidity compiler is the following:
+
+* [MyKidsEducationToken.fixed.bytes]
+
+The Remix IDE-generated Gist link:
+
+* MyKidsEducationToken.fixed.gist: http://
+
+The (annotated) EVM assembly disassembled from the bytecode is the following:
+
+* [MyKidsEducationToken.fixed.evm]
+
+### Mechanized Specifications and Proofs
+
+Due to its deviation from [ERC20-K], we could not verify the (fixed) MyKidsEducatioinToken contract against the original [ERC20-EVM] specification. In order to show that it is "correct" w.r.t. ERC20-K (thus ERC20-EVM) modulo the deviation, we modified the specification to capture the deviation and successfully verified it against the modified ERC20-EVM specification. Below are the changes made to the original ERC20-EVM specification:
+
+* To capture the inadequate overflow detection for self-transfers, TODO:
+
+* To capture the false return value, we changed the `k` and `localMem` parameters of the `transfer-failure` section, from:
+
+    ```
+    k: #execute => #exception
+    localMem: .Map => _:Map
+    ```
+
+    to:
+
+    ```
+    k: #execute => (RETURN RET_ADDR:Int 32 ~> _)
+    localMem: .Map => .Map[ RET_ADDR := #asByteStackInWidth(0, 32) ] _:Map
+    ```
+
+    The modified parameter values specify that it returns `false` (denoted by 0) instead of throwing an exception. We changed the `transferFrom-failure` section similarly as the above.
+
+* To capture the rejection of transferring 0 value, we added the following additional `requires` conditions, one for the success cases:
+
+    ```
     andBool VALUE >Int 0
-    andBool VALUE <=Int BAL_FROM
-    andBool BAL_TO +Int VALUE <Int (2 ^Int 256)
+    ```
 
-[transfer-success-2]
-storage:
-    #hashedLocation({COMPILER}, {_BALANCES}, CALLER_ID) |-> BAL_FROM
-    _:Map
-+requires:
-    andBool CALLER_ID ==Int TO_ID
-    andBool VALUE >Int 0
-    andBool VALUE <=Int BAL_FROM
-    andBool BAL_FROM +Int VALUE <Int (2 ^Int 256)
+    and its complement for the failure cases:
 
-[transfer-failure]
-k: #execute => (RETURN RET_ADDR:Int 32 ~> _)
-localMem: .Map => ( .Map[ RET_ADDR := #asByteStackInWidth(0, 32) ] _:Map )
-log: _
+    ```
+    orBool VALUE <=Int 0
+    ```
 
-[transfer-failure-1]
-storage:
-    #hashedLocation({COMPILER}, {_BALANCES}, CALLER_ID) |-> (BAL_FROM => _)
-    #hashedLocation({COMPILER}, {_BALANCES}, TO_ID)     |->  BAL_TO
-    _:Map
-+requires:
-    andBool CALLER_ID =/=Int TO_ID
-    andBool ( VALUE <=Int 0
-     orBool   VALUE >Int BAL_FROM
-     orBool   BAL_TO +Int VALUE >=Int (2 ^Int 256) )
+    Note that the above complement, combined with the value range condition, implies `VALUE ==Int 0`.
 
-[transfer-failure-2]
-storage:
-    #hashedLocation({COMPILER}, {_BALANCES}, CALLER_ID) |-> BAL_FROM
-    _:Map
-+requires:
-    andBool CALLER_ID ==Int TO_ID
-    andBool ( VALUE <=Int 0
-     orBool   VALUE >Int BAL_FROM
-     orBool   BAL_FROM +Int VALUE >=Int (2 ^Int 256) )
+The full changes made in ERC20-EVM are shown in [here] and [here]. The specifications of other functions except `transfer` and `transferFrom` are the same as the original ERC20-EVM.
 
-[transferFrom]
-callData: #abiCallData("transferFrom", #address(FROM_ID), #address(TO_ID), #uint256(VALUE))
-gas: {GASCAP} => _
-refund: _ => _
-requires:
-    andBool 0 <=Int FROM_ID   andBool FROM_ID   <Int (2 ^Int 160)
-    andBool 0 <=Int TO_ID     andBool TO_ID     <Int (2 ^Int 160)
-    andBool 0 <=Int VALUE     andBool VALUE     <Int (2 ^Int 256)
-    andBool 0 <=Int BAL_FROM  andBool BAL_FROM  <Int (2 ^Int 256)
-    andBool 0 <=Int BAL_TO    andBool BAL_TO    <Int (2 ^Int 256)
-    andBool 0 <=Int ALLOW     andBool ALLOW     <Int (2 ^Int 256)
+We took the modified [ERC20-EVM] specification and instantiated it with the [program-specific parameters] shown below.
 
-[transferFrom-success]
-k: #execute => (RETURN RET_ADDR:Int 32 ~> _)
-localMem: .Map => ( .Map[ RET_ADDR := #asByteStackInWidth(1, 32) ] _:Map )
-log: _:List ( .List => ListItem(#abiEventLog(ACCT_ID, "Transfer", #indexed(#address(FROM_ID)), #indexed(#address(TO_ID)), #uint256(VALUE))) )
-
-[transferFrom-success-1]
-storage:
-    #hashedLocation({COMPILER}, {_BALANCES},   FROM_ID)           |-> (BAL_FROM => BAL_FROM -Int VALUE)
-    #hashedLocation({COMPILER}, {_BALANCES},   TO_ID)             |-> (BAL_TO   => BAL_TO   +Int VALUE)
-    #hashedLocation({COMPILER}, {_ALLOWANCES}, FROM_ID CALLER_ID) |-> (ALLOW    => ALLOW    -Int VALUE)
-    _:Map
-+requires:
-    andBool FROM_ID =/=Int TO_ID
-    andBool VALUE >Int 0
-    andBool VALUE <=Int BAL_FROM
-    andBool VALUE <=Int ALLOW
-    andBool BAL_TO +Int VALUE <Int (2 ^Int 256)
-
-[transferFrom-success-2]
-storage:
-    #hashedLocation({COMPILER}, {_BALANCES},   FROM_ID)           |-> BAL_FROM
-    #hashedLocation({COMPILER}, {_ALLOWANCES}, FROM_ID CALLER_ID) |-> (ALLOW => ALLOW -Int VALUE)
-    _:Map
-+requires:
-    andBool FROM_ID ==Int TO_ID
-    andBool VALUE >Int 0
-    andBool VALUE <=Int BAL_FROM
-    andBool VALUE <=Int ALLOW
-    andBool BAL_FROM +Int VALUE <Int (2 ^Int 256)
-
-[transferFrom-failure]
-k: #execute => (RETURN RET_ADDR:Int 32 ~> _)
-localMem: .Map => ( .Map[ RET_ADDR := #asByteStackInWidth(0, 32) ] _:Map )
-log: _
-
-[transferFrom-failure-1]
-storage:
-    #hashedLocation({COMPILER}, {_BALANCES},   FROM_ID)           |-> (BAL_FROM => _)  // BAL_FROM
-    #hashedLocation({COMPILER}, {_BALANCES},   TO_ID)             |-> (BAL_TO   => _)  // BAL_TO
-    #hashedLocation({COMPILER}, {_ALLOWANCES}, FROM_ID CALLER_ID) |-> ALLOW
-    _:Map
-+requires:
-    andBool FROM_ID =/=Int TO_ID
-    andBool ( VALUE <=Int 0
-     orBool   VALUE >Int BAL_FROM
-     orBool   VALUE >Int ALLOW
-     orBool   BAL_TO +Int VALUE >=Int (2 ^Int 256) )
-
-[transferFrom-failure-2]
-storage:
-    #hashedLocation({COMPILER}, {_BALANCES},   FROM_ID)           |-> BAL_FROM
-    #hashedLocation({COMPILER}, {_ALLOWANCES}, FROM_ID CALLER_ID) |-> ALLOW
-    _:Map
-+requires:
-    andBool FROM_ID ==Int TO_ID
-    andBool ( VALUE <=Int 0
-     orBool   VALUE >Int BAL_FROM
-     orBool   VALUE >Int ALLOW
-     orBool   BAL_FROM +Int VALUE >=Int (2 ^Int 256) )
-
+```
 [pgm]
 compiler: "Solidity"
 _balances: 1
@@ -213,3 +115,55 @@ _allowances: 2
 _totalSupply: 5
 code: "0x6060604052600436106100e6576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff16806306fdde0314610915578063095ea7b3146109a35780630dcf4b8f146109fd57806318160ddd14610a2657806323b872dd14610a4f578063313ce56714610ac857806364acdb7714610af757806370a0823114610b0c5780638f58099614610b5957806395d89b4114610b6e57806398b01fe314610bfc578063a9059cbb14610c25578063c59d484714610c7f578063da040c0f14610cc1578063dd62ed3e14610cee578063e58fc54c14610d5a575b600080600080600060149054906101000a900460ff16151561010757600080fd5b60003414156101155761090f565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff166108fc349081150290604051600060405180830381858888f19350505050151561017657600080fd5b34600360008282540192505081905550606434029350662386f26fc100003410151561084c57600354840193506003414342600060405160200152604051808473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff166c01000000000000000000000000028152601401838152602001828152602001935050505060206040518083038160008661646e5a03f1151561022457600080fd5b5050604051516c0100000000000000000000000002925060007f01000000000000000000000000000000000000000000000000000000000000000283600060148110151561026e57fe5b1a7f0100000000000000000000000000000000000000000000000000000000000000027effffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916141561084b5760007f01000000000000000000000000000000000000000000000000000000000000000260807f01000000000000000000000000000000000000000000000000000000000000000284600160148110151561031057fe5b1a7f010000000000000000000000000000000000000000000000000000000000000002167effffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff19161415610363576000610366565b60015b60007f01000000000000000000000000000000000000000000000000000000000000000260407f0100000000000000000000000000000000000000000000000000000000000000028560016014811015156103bd57fe5b1a7f010000000000000000000000000000000000000000000000000000000000000002167effffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff19161415610410576000610413565b60015b60007f01000000000000000000000000000000000000000000000000000000000000000260207f01000000000000000000000000000000000000000000000000000000000000000286600160148110151561046a57fe5b1a7f010000000000000000000000000000000000000000000000000000000000000002167effffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff191614156104bd5760006104c0565b60015b60007f01000000000000000000000000000000000000000000000000000000000000000260107f01000000000000000000000000000000000000000000000000000000000000000287600160148110151561051757fe5b1a7f010000000000000000000000000000000000000000000000000000000000000002167effffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916141561056a57600061056d565b60015b60007f01000000000000000000000000000000000000000000000000000000000000000260087f0100000000000000000000000000000000000000000000000000000000000000028860016014811015156105c457fe5b1a7f010000000000000000000000000000000000000000000000000000000000000002167effffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916141561061757600061061a565b60015b60007f01000000000000000000000000000000000000000000000000000000000000000260047f01000000000000000000000000000000000000000000000000000000000000000289600160148110151561067157fe5b1a7f010000000000000000000000000000000000000000000000000000000000000002167effffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff191614156106c45760006106c7565b60015b60007f01000000000000000000000000000000000000000000000000000000000000000260027f0100000000000000000000000000000000000000000000000000000000000000028a600160148110151561071e57fe5b1a7f010000000000000000000000000000000000000000000000000000000000000002167effffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff19161415610771576000610774565b60015b60007f01000000000000000000000000000000000000000000000000000000000000000260017f0100000000000000000000000000000000000000000000000000000000000000028b60016014811015156107cb57fe5b1a7f010000000000000000000000000000000000000000000000000000000000000002167effffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916141561081e576000610821565b60015b0101010101010191508160ff16606434020290508084019350806004600082825401925050819055505b5b8360056000828254019250508190555083600160003373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020600082825401925050819055503373ffffffffffffffffffffffffffffffffffffffff163073ffffffffffffffffffffffffffffffffffffffff167fddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef866040518082815260200191505060405180910390a35b50505050005b341561092057600080fd5b610928610dab565b6040518080602001828103825283818151815260200191508051906020019080838360005b8381101561096857808201518184015260208101905061094d565b50505050905090810190601f1680156109955780820380516001836020036101000a031916815260200191505b509250505060405180910390f35b34156109ae57600080fd5b6109e3600480803573ffffffffffffffffffffffffffffffffffffffff16906020019091908035906020019091905050610dee565b604051808215151515815260200191505060405180910390f35b3415610a0857600080fd5b610a10610f7c565b6040518082815260200191505060405180910390f35b3415610a3157600080fd5b610a39610f82565b6040518082815260200191505060405180910390f35b3415610a5a57600080fd5b610aae600480803573ffffffffffffffffffffffffffffffffffffffff1690602001909190803573ffffffffffffffffffffffffffffffffffffffff16906020019091908035906020019091905050610f88565b604051808215151515815260200191505060405180910390f35b3415610ad357600080fd5b610adb6112c3565b604051808260ff1660ff16815260200191505060405180910390f35b3415610b0257600080fd5b610b0a6112cc565b005b3415610b1757600080fd5b610b43600480803573ffffffffffffffffffffffffffffffffffffffff16906020019091905050611343565b6040518082815260200191505060405180910390f35b3415610b6457600080fd5b610b6c61138c565b005b3415610b7957600080fd5b610b81611404565b6040518080602001828103825283818151815260200191508051906020019080838360005b83811015610bc1578082015181840152602081019050610ba6565b50505050905090810190601f168015610bee5780820380516001836020036101000a031916815260200191505b509250505060405180910390f35b3415610c0757600080fd5b610c0f611447565b6040518082815260200191505060405180910390f35b3415610c3057600080fd5b610c65600480803573ffffffffffffffffffffffffffffffffffffffff1690602001909190803590602001909190505061144d565b604051808215151515815260200191505060405180910390f35b3415610c8a57600080fd5b610c9261166a565b604051808581526020018481526020018381526020018215151515815260200194505050505060405180910390f35b3415610ccc57600080fd5b610cd4611697565b604051808215151515815260200191505060405180910390f35b3415610cf957600080fd5b610d44600480803573ffffffffffffffffffffffffffffffffffffffff1690602001909190803573ffffffffffffffffffffffffffffffffffffffff169060200190919050506116aa565b6040518082815260200191505060405180910390f35b3415610d6557600080fd5b610d91600480803573ffffffffffffffffffffffffffffffffffffffff16906020019091905050611731565b604051808215151515815260200191505060405180910390f35b610db3611944565b6040805190810160405280601781526020017f4d79204b69647320456475636174696f6e20546f6b656e000000000000000000815250905090565b6000808214158015610e7d57506000600260003373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060008573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000205414155b15610e8b5760009050610f76565b81600260003373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060008573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020819055508273ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff167f8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925846040518082815260200191505060405180910390a3600190505b92915050565b60035481565b60055481565b600080600080600080606460003690501015610fa357600080fd5b6000871415610fb557600095506112b7565b600160008a73ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020549450600260008a73ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060003373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020549350868510159250868410159150600160008973ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000205487600160008b73ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002054011090508280156111115750815b801561111b575080155b156112b25786600160008a73ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000206000828254019250508190555086600160008b73ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000206000828254039250508190555086600260008b73ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060003373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020600082825403925050819055508773ffffffffffffffffffffffffffffffffffffffff168973ffffffffffffffffffffffffffffffffffffffff167fddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef896040518082815260200191505060405180910390a3600195506112b7565b600095505b50505050509392505050565b60006012905090565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614151561132757600080fd5b60008060146101000a81548160ff021916908315150217905550565b6000600160008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020549050919050565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff161415156113e757600080fd5b6001600060146101000a81548160ff021916908315150217905550565b61140c611944565b6040805190810160405280600481526020017f4d544b4500000000000000000000000000000000000000000000000000000000815250905090565b60045481565b60008060008060446000369050101561146557600080fd5b60008514156114775760009350611661565b600160003373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020549250848310159150600160008773ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000205485600160008973ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020540110905081801561154f575080155b1561165c5784600160003373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000206000828254039250508190555084600160008873ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020600082825401925050819055508573ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff167fddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef876040518082815260200191505060405180910390a360019350611661565b600093505b50505092915050565b600080600080600354600554600454600060149054906101000a900460ff16935093509350935090919293565b600060149054906101000a900460ff1681565b6000600260008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002054905092915050565b60008060008060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614151561179157600080fd5b8391508173ffffffffffffffffffffffffffffffffffffffff166370a08231306000604051602001526040518263ffffffff167c0100000000000000000000000000000000000000000000000000000000028152600401808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001915050602060405180830381600087803b151561183757600080fd5b6102c65a03f1151561184857600080fd5b5050506040518051905090508173ffffffffffffffffffffffffffffffffffffffff1663a9059cbb6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff16836000604051602001526040518363ffffffff167c0100000000000000000000000000000000000000000000000000000000028152600401808373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200182815260200192505050602060405180830381600087803b151561192057600080fd5b6102c65a03f1151561193157600080fd5b5050506040518051905092505050919050565b6020604051908101604052806000815250905600a165627a7a72305820ddb21fd716b3cb759987a303d39383600b53ba046a19a61a6a21755e0401479a0029"
 gasCap: 100000
+```
+
+The resulting specification is the following:
+
+* [hobby-erc20-spec.ini]
+
+The specification is written in [eDSL], a domain-specific language for EVM specifications, whose good understanding is required in order to understand any of our EVM-level specification well.  Refer to [resources] for background on our technology.  The above file provides the [eDSL] specification template parameters, the full K reachability logic specification being automatically derived from a specification template by instantiating it with the template parameters.  The following command generates the full specification:
+
+```
+$ /path/to/this/repo/scripts/gen-spec.py spec-tmpl.k hobby-erc20-spec.ini > hobby-erc20-spec.k
+```
+
+#### Reproducing Proofs
+
+To prove that the specification is satisfied by (the compiled EVM bytecode of) the target functions, run the EVM verifier as follows:
+
+```
+$ kevm prove hobby-erc20-spec.k
+```
+
+The above command essentially executes the following command:
+
+```
+$ kprove hobby-erc20-spec.k -m VERIFICATION --z3-executable -d /path/to/evm-semantics/.build/java
+```
+
+#### Installing the EVM Verifier
+
+The EVM verifier is part of the [KEVM] project.  The following commands will successfully install it, provided that all of the dependencies are installed.
+
+```
+$ git clone git@github.com:kframework/evm-semantics.git
+$ cd evm-semantics
+$ make deps
+$ make
+```
+
+For detailed instructions on installing and running the EVM verifier, see [KEVM]'s [Installing/Building](https://github.com/kframework/evm-semantics/blob/master/README.md#installingbuilding) and [Example Usage](https://github.com/kframework/evm-semantics/blob/master/README.md#example-usage) pages.
+
+
+## [Resources](/README.md#resources)
+
+## [Disclaimer](/README.md#disclaimer)
+
+
+[KEVM]: <https://github.com/kframework/evm-semantics>
+[K-framework]: <http://www.kframework.org>
+[reachability logic theorem prover]: <http://fsl.cs.illinois.edu/index.php/Semantics-Based_Program_Verifiers_for_All_Languages>
+[resources]: </README.md#resources>
+[eDSL]: </resources/edsl.md>
+[program-specific parameters]: </resources/edsl-spec.md#program-specific-parameters>
+[src]: <https://github.com/ethereum/mist/issues/3301>
