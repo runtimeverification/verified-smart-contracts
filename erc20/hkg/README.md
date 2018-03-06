@@ -151,10 +151,12 @@ The resulting specification is the following:
 
 * [hkg-erc20-spec.ini](hkg-erc20-spec.ini)
 
-The specification is written in [eDSL], a domain-specific language for EVM specifications, whose good understanding is required in order to understand any of our EVM-level specification well.  Refer to [resources] for background on our technology.  The above file provides the [eDSL] specification template parameters, the full K reachability logic specification being automatically derived from a specification template by instantiating it with the template parameters.  The following command generates the full specification:
+The specification is written in [eDSL], a domain-specific language for EVM specifications, whose good understanding is required in order to understand any of our EVM-level specification well.  Refer to [resources] for background on our technology.  The above file provides the [eDSL] specification template parameters, the full K reachability logic specification being automatically derived from a specification template by instantiating it with the template parameters.
+
+Run the following command in the root directory of this repository, and it will generate the full specification under the directory `specs/hkg-erc20`:
 
 ```
-$ /path/to/this/repo/scripts/gen-spec.py spec-tmpl.k hkg-erc20-spec.ini > hkg-erc20-spec.k
+$ make hkg-erc20
 ```
 
 #### Reproducing Proofs
@@ -162,14 +164,18 @@ $ /path/to/this/repo/scripts/gen-spec.py spec-tmpl.k hkg-erc20-spec.ini > hkg-er
 To prove that the specification is satisfied by (the compiled EVM bytecode of) the target functions, run the EVM verifier as follows:
 
 ```
-$ kevm prove hkg-erc20-spec.k
+$ kevm prove tests/proofs/specs/hkg-erc20/<func>-spec.k
 ```
 
+where `<func>` is the name of the ERC20 function to verify.
+
+<!--
 The above command essentially executes the following command:
 
 ```
 $ kprove hkg-erc20-spec.k -m VERIFICATION --z3-executable -d /path/to/evm-semantics/.build/java
 ```
+-->
 
 #### Installing the EVM Verifier
 
