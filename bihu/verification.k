@@ -14,6 +14,10 @@ module VERIFICATION
     rule 0 <=Int X /Int Y             => true requires 0 <=Int X andBool X <Int pow256 andBool 0 <Int  Y andBool Y <Int pow256
     rule         X /Int Y <Int pow256 => true requires 0 <=Int X andBool X <Int pow256 andBool 0 <Int  Y andBool Y <Int pow256
 
+    rule I1 +Int I2 <Int I1 => false requires 0 <=Int I2
+
+    rule I1 -Int I2 >Int I1 => false requires 0 <=Int I2
+
     rule chop(I1 -Int I2) => I1 -Int I2 requires 0 <=Int I1 andBool I2 <Int pow256 andBool I1 >=Int I2
 
     rule chop(I1 +Int (I2 -Int I3)) => I1 +Int (I2 -Int I3) requires  0 <=Int I2 andBool I2 <Int pow256
