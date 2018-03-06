@@ -134,3 +134,7 @@ For detailed instructions on installing and running the EVM verifier, see [KEVM]
 [`ERC20`]: <https://github.com/OpenZeppelin/zeppelin-solidity/blob/c5d66183abcb63a90a2528b8333b2b17067629fc/contracts/token/ERC20/ERC20.sol>
 [`ERC20Basic`]: <https://github.com/OpenZeppelin/zeppelin-solidity/blob/c5d66183abcb63a90a2528b8333b2b17067629fc/contracts/token/ERC20/ERC20Basic.sol>
 [`SafeMath`]: <https://github.com/OpenZeppelin/zeppelin-solidity/blob/c5d66183abcb63a90a2528b8333b2b17067629fc/contracts/math/SafeMath.sol>
+[ERC20]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md>
+[ERC20 standard]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md>
+[ERC20-K]: <https://github.com/runtimeverification/erc20-semantics>
+[ERC20-EVM]: </resources/erc20-evm.md>

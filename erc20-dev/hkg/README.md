@@ -133,7 +133,7 @@ Due to its deviation from ERC20-K, we could not verify the HKG token against the
     orBool BAL_TO +Int VALUE >=Int (2 ^Int 256)
     ```
 
-The full changes made in ERC20-EVM are shown in [here] and [here]. The specifications of other functions except `transfer` and `transferFrom` are the same as the original ERC20-EVM.
+The full changes made in ERC20-EVM are shown in [here](spec-diff.patch). The specifications of other functions except `transfer` and `transferFrom` are the same as the original ERC20-EVM.
 
 We took the modified [ERC20-EVM] specification and instantiated it with the [program-specific parameters] shown below.
 

@@ -113,3 +113,7 @@ For detailed instructions on installing and running the EVM verifier, see [KEVM]
 [Vyper]: <https://github.com/ethereum/vyper>
 [version]: <https://github.com/ethereum/vyper/tree/bf6ed1bfde2071ee2d5fdd6fbe1c09cf3bec44f2>
 [src]: <https://github.com/ethereum/vyper/blob/bf6ed1bfde2071ee2d5fdd6fbe1c09cf3bec44f2/examples/tokens/ERC20_solidity_compatible/ERC20.v.py>
+[ERC20]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md>
+[ERC20 standard]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md>
+[ERC20-K]: <https://github.com/runtimeverification/erc20-semantics>
+[ERC20-EVM]: </resources/erc20-evm.md>
