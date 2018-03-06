@@ -15,7 +15,7 @@ Currently Verified ERC20 Token Contracts
 
 We considered the following ERC20 token contract implementations as the target of the formal verification against [ERC20-K] and its refinement [ERC20-EVM], and found deviations as follows:
 
--   [Viper ERC20 token](vyper/README.md): fully *conforming* to the ERC20 standard.
+-   [Vyper ERC20 token](vyper/README.md): fully *conforming* to the ERC20 standard.
 -   [OpenZeppelin ERC20 token](zeppelin/README.md): *conforming* to the standard, but:
     -   Rejecting transfers to address `0`.
 -   [HackerGold (HKG) ERC20 token](hkg/README.md): *deviating* from the standard:
@@ -42,7 +42,7 @@ We considered the following ERC20 token contract implementations as the target o
 [ERC20-K]: <https://github.com/runtimeverification/erc20-semantics>
 [ERC20-EVM]: </resources/erc20-evm.md>
 <!--
-[Viper ERC20 token]: <https://github.com/ethereum/vyper/blob/master/examples/tokens/ERC20_solidity_compatible/ERC20.v.py>
+[Vyper ERC20 token]: <https://github.com/ethereum/vyper/blob/master/examples/tokens/ERC20_solidity_compatible/ERC20.v.py>
 [OpenZeppelin ERC20 token]: <https://github.com/OpenZeppelin/zeppelin-solidity/blob/master/contracts/token/ERC20/StandardToken.sol>
 [HackerGold (HKG) ERC20 token]: <https://github.com/ether-camp/virtual-accelerator/blob/master/contracts/StandardToken.sol>
 [KidsEducationToken]: <https://github.com/ethereum/mist/issues/3301>

@@ -73,7 +73,7 @@ Another type of byte-array manipulating operation is used to extract the functio
 The function signature is located in the first four bytes of the call data, but there is no atomic EVM instruction that can load only the four bytes, thus some kind of byte-twiddling operations are necessary.
 
 The extraction mechanism varies by language compilers.
-For example, in Viper, the first 32 bytes of the call data are loaded into the memory at the starting location 28 (i.e., in the memory range of 28 to 59), and the memory range of 0 to 31, which consists of 28 zero bytes and the four signature bytes, is loaded into the stack.
+For example, in Vyper, the first 32 bytes of the call data are loaded into the memory at the starting location 28 (i.e., in the memory range of 28 to 59), and the memory range of 0 to 31, which consists of 28 zero bytes and the four signature bytes, is loaded into the stack.
 In Solidity, however, the first 32 bytes of the call data are loaded into the stack, and the loaded word (i.e., a 256-bit integer) is divided by `2^(28*8)` (i.e., left-shifted by 28 bytes), followed by masked by 0xffffffff (i.e., 4 bytes of bit 1’s).
 
 The following lemmas essentially capture the signature extraction mechanisms.
@@ -83,7 +83,7 @@ It reduces the reasoning efforts of the underlying theorem prover, factoring out
     rule #padToWidth(32, #asByteStack(V)) => #asByteStackInWidth(V, 32)
       requires 0 <=Int V andBool V <Int pow256
 
-    // for Viper
+    // for Vyper
     rule #padToWidth(N, #asByteStack(#asWord(WS))) => WS
       requires #noOverflow(WS) andBool N ==Int #sizeWordStack(WS)
 

@@ -53,7 +53,7 @@ We took the [ERC20-EVM] specification and instantiated it with the [program-spec
 
 ```
 [pgm]
-compiler: "Viper"
+compiler: "Vyper"
 _balances: 0
 _allowances: 1
 _totalSupply: 2

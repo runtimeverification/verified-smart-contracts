@@ -4,7 +4,7 @@ eDSL High-Level Notations
 The eDSL high-level notations make the EVM specifications more succinct and closer to their high-level specifications.
 The succinctness increases the readability, and the closeness helps "eye-ball validation" of the specification refinement.
 The high-level notations are defined by translation to the corresponding EVM terms, and thus can be freely used with other EVM terms.
-The notations are inspired by the production compilers of the smart contract languages like Solidity and Viper, and their definition is derived by formalizing the corresponding translation made by the compilers.
+The notations are inspired by the production compilers of the smart contract languages like Solidity and Vyper, and their definition is derived by formalizing the corresponding translation made by the compilers.
 
 ```k
 module EDSL-NOTATIONS [symbolic]
@@ -145,7 +145,7 @@ where `1003892871367861763272476045097431689001461395759728643661426852242313133
 The storage accommodates permanent data such as the `balances` map.
 A map is laid out in the storage where the map entries are scattered over the entire storage space for which the (256-bit) hash of each key is used to determine the location.
 The detailed mechanism of calculating the location varies by compilers.
-In Viper, for example, `map[key1][key2]` is stored at the location:
+In Vyper, for example, `map[key1][key2]` is stored at the location:
 ```
   hash(hash(idx(map)) + key1) + key2
 ```
@@ -161,7 +161,7 @@ Note that the keys are separated by the white spaces instead of commas.
   #hashedLocation({COMPILER}, idx(map), key1 key2)
 ```
 This notation makes the specification independent of the underlying compilers, enabling it to be reused for differently compiled programs.
-Specifically, `#hashedLocation` is defined as follows, capturing the storage layout schemes of Solidity and Viper.
+Specifically, `#hashedLocation` is defined as follows, capturing the storage layout schemes of Solidity and Vyper.
 
 ```k
     syntax IntList ::= List{Int, ""}                             [klabel(intList)]
@@ -169,7 +169,7 @@ Specifically, `#hashedLocation` is defined as follows, capturing the storage lay
  // -----------------------------------------------------------------------
     rule #hashedLocation(LANG, BASE, .IntList) => BASE
 
-    rule #hashedLocation("Viper",    BASE, OFFSET OFFSETS) => #hashedLocation("Viper",    keccakIntList(BASE) +Word OFFSET, OFFSETS)
+    rule #hashedLocation("Vyper",    BASE, OFFSET OFFSETS) => #hashedLocation("Vyper",    keccakIntList(BASE) +Word OFFSET, OFFSETS)
     rule #hashedLocation("Solidity", BASE, OFFSET OFFSETS) => #hashedLocation("Solidity", keccakIntList(OFFSET BASE),       OFFSETS)
 
     syntax Int ::= keccakIntList( IntList ) [function]
