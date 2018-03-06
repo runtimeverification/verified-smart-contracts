@@ -96,7 +96,7 @@ $ make zeppelin-erc20
 To prove that the specification is satisfied by (the compiled EVM bytecode of) the target functions, run the EVM verifier as follows:
 
 ```
-$ kevm prove tests/proofs/specs/zeppelin-erc20/<func>-spec.k
+$ ./kevm prove tests/proofs/specs/zeppelin-erc20/<func>-spec.k
 ```
 
 where `<func>` is the name of the ERC20 function to verify.
