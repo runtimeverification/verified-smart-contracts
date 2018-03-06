@@ -29,15 +29,15 @@ hobby_erc20_files:=totalSupply-spec.k \
 
 proof_tests:= vyper-erc20 zeppelin-erc20 hkg-erc20 hobby-erc20
 
-split-proof-tests: $(proof_tests) $(specs_dir)/lemmas.k
+split-proof-tests: $(proof_tests)
 
-vyper-erc20: $(patsubst %, $(specs_dir)/vyper-erc20/%, $(erc20_files))
+vyper-erc20: $(patsubst %, $(specs_dir)/vyper-erc20/%, $(erc20_files)) $(specs_dir)/lemmas.k
 
-zeppelin-erc20: $(patsubst %, $(specs_dir)/zeppelin-erc20/%, $(erc20_files))
+zeppelin-erc20: $(patsubst %, $(specs_dir)/zeppelin-erc20/%, $(erc20_files)) $(specs_dir)/lemmas.k
 
-hkg-erc20: $(patsubst %, $(specs_dir)/hkg-erc20/%, $(erc20_files))
+hkg-erc20: $(patsubst %, $(specs_dir)/hkg-erc20/%, $(erc20_files)) $(specs_dir)/lemmas.k
 
-hobby-erc20: $(patsubst %, $(specs_dir)/hobby-erc20/%, $(hobby_erc20_files))
+hobby-erc20: $(patsubst %, $(specs_dir)/hobby-erc20/%, $(hobby_erc20_files)) $(specs_dir)/lemmas.k
 
 $(specs_dir)/lemmas.k: resources/lemmas.k
 	@echo >&2 "== copy lemmas.k"
