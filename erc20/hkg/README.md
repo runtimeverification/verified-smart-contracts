@@ -214,4 +214,4 @@ For detailed instructions on installing and running the EVM verifier, see [KEVM]
 [ERC20 standard]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md>
 [ERC20-K]: <https://github.com/runtimeverification/erc20-semantics>
 [ERC20-EVM]: </resources/erc20-evm.md>
-[instruction]: </resources/instruction>
+[instruction]: </resources/instruction.md>
