@@ -36,7 +36,7 @@ hobby_erc20_files:=totalSupply-spec.k \
                    transferFrom-failure-1-spec.k \
                    transferFrom-failure-2-spec.k
 
-proof_tests:= vyper-erc20 zeppelin-erc20 hkg-erc20 hobby-erc20
+proof_tests:= vyper-erc20 zeppelin-erc20 hkg-erc20 hobby-erc20 sum-to-n
 
 split-proof-tests: $(proof_tests)
 
@@ -50,12 +50,22 @@ hkg-erc20: $(patsubst %, $(specs_dir)/hkg-erc20/%, $(erc20_files)) $(specs_dir)/
 
 hobby-erc20: $(patsubst %, $(specs_dir)/hobby-erc20/%, $(hobby_erc20_files)) $(specs_dir)/lemmas.k
 
-$(specs_dir)/lemmas.k: resources/lemmas.k
-	@echo >&2 "== copy lemmas.k"
-	mkdir -p $(dir $@)
-	cp $^ $@
+sum-to-n: $(specs_dir)/examples/sum-to-n-spec.k $(specs_dir)/lemmas.k
 
-# #### Bihu
+
+# Definition Files
+# ----------------
+
+# Lemmas
+$(specs_dir)/lemmas.k: resources/lemmas.md
+	@echo >&2 "== tangle: $@"
+	mkdir -p $(dir $@)
+	pandoc --from markdown --to "$(TANGLER)" --metadata=code:".k" $< > $@
+
+# Spec Files
+# ----------
+
+# Bihu
 $(specs_dir)/bihu/collectToken-spec.k: bihu/module-tmpl.k bihu/spec-tmpl.k bihu/collectToken-spec.ini
 	@echo >&2 "==  gen-spec: $@"
 	mkdir -p $(dir $@)
@@ -70,7 +80,7 @@ $(specs_dir)/bihu/forwardToHotWallet%-spec.k: bihu/module-tmpl.k bihu/spec-tmpl.
 	cp bihu/abstract-semantics.k $(dir $@)
 	cp bihu/verification.k $(dir $@)
 
-# #### ERC20
+# ERC20
 $(specs_dir)/vyper-erc20/%-spec.k: erc20/module-tmpl.k erc20/spec-tmpl.k erc20/vyper/vyper-erc20-spec.ini
 	@echo >&2 "==  gen-spec: $@"
 	mkdir -p $(dir $@)
@@ -98,3 +108,9 @@ $(specs_dir)/hobby-erc20/%-spec.k: erc20/module-tmpl.k erc20/spec-tmpl.k erc20/h
 	python3 scripts/gen-spec.py $^ $* $* > $@
 	cp erc20/abstract-semantics.k $(dir $@)
 	cp erc20/verification.k $(dir $@)
+
+# Sum to N
+$(specs_dir)/examples/sum-to-n-spec.k: examples/sum-to-n/sum-to-n.md
+	@echo "==  tangle: $@"
+	mkdir -p $(dir $@)
+	pandoc --from markdown --to "$(TANGLER)" --metadata="code:.sum-to-n" $< > $@
