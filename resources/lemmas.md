@@ -2,6 +2,8 @@ Verification Lemmas
 ===================
 
 ```k
+requires "evm.k"
+
 module LEMMAS
     imports EVM
 ```
@@ -206,8 +208,6 @@ These lemma abstracts some properties about `#sizeWordStack`:
       => #sizeWordStack ( WS , 0 ) +Int N
       requires N =/=K 0
       [lemma]
-```
 
-```
 endmodule
 ```
