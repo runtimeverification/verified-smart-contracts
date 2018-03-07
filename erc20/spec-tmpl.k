@@ -8,8 +8,8 @@
 
     <ethereum>
       <evm>
-        <output> {OUTPUT} </output>
-        <memoryUsed> {MEMORYUSED} </memoryUsed>
+        <output> _ </output>
+        <memoryUsed> 0 => _ </memoryUsed>
         <callDepth> CALL_DEPTH </callDepth>
         <callStack> _ => _ </callStack>
         <interimStates> _ </interimStates>
@@ -18,7 +18,7 @@
         <touchedAccounts> _ => _ </touchedAccounts>
 
         <txExecState>
-          <program> #asMapOpCodes(#dasmOpCodes(#parseByteStack({CODE}), BYZANTIUM)) </program>
+          <program> #asMapOpCodes(#dasmOpCodes(#parseByteStack({CODE}), DEFAULT)) </program> // TODO: change to BYZANTIUM
           <programBytes> #parseByteStack({CODE}) </programBytes>
 
           <id> ACCT_ID </id> // contract owner
@@ -27,9 +27,9 @@
           <callData> {CALLDATA} </callData>
 
           <callValue> 0 </callValue>
-          <wordStack> {WORDSTACK} </wordStack>
+          <wordStack> .WordStack => _ </wordStack>
           <localMem> {LOCALMEM} </localMem>
-          <pc> {PC} </pc>
+          <pc> 0 => _ </pc>
           <gas> {GAS} </gas>
           <previousGas> _ => _ </previousGas>
 
@@ -56,7 +56,7 @@
         <number> _ </number>
         <gasLimit> _ </gasLimit>
         <gasUsed> _ </gasUsed>
-        <timestamp> NOW </timestamp> // block.timestamp // now
+        <timestamp> _ </timestamp>
         <extraData> _ </extraData>
         <mixHash> _ </mixHash>
         <blockNonce> _ </blockNonce>
@@ -66,7 +66,7 @@
       </evm>
 
       <network>
-        <activeAccounts> ACCT_ID |-> false _:Map </activeAccounts>
+        <activeAccounts> SetItem(ACCT_ID) _:Set </activeAccounts>
 
         <accounts>
           <account>
@@ -74,7 +74,7 @@
             <balance> _ </balance>
             <code> #parseByteStack({CODE}) </code>
             <storage>
-{STORAGE}
+              {STORAGE}
             </storage>
             <nonce> _ </nonce>
           </account>
@@ -89,8 +89,5 @@
     requires 0 <=Int ACCT_ID    andBool ACCT_ID    <Int (2 ^Int 160)
      andBool 0 <=Int CALLER_ID  andBool CALLER_ID  <Int (2 ^Int 160)
      andBool 0 <=Int ORIGIN_ID  andBool ORIGIN_ID  <Int (2 ^Int 160)
-     andBool 0 <=Int NOW        andBool NOW        <Int (2 ^Int 256)
      andBool 0 <=Int CALL_DEPTH andBool CALL_DEPTH <Int 1024
-{REQUIRES}
-{ENSURES}
-{ATTRIBUTE}
+     {REQUIRES}

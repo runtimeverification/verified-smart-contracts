@@ -39,13 +39,10 @@ the mathematical domain constraints.
 ## Completed
 
 * **2018-02-28** [Bihu KEY token operation contracts](bihu/README.md)
-
-(Links to be added soon)
-
-* **2018-01-30** MyKidsEducationToken ERC20 token contract
-* **2018-01-26** OpenZeppelin ERC20 token contract
-* **2018-01-16** HackerGold (HKG) ERC20 token contract
-* **2017-12-23** Philip Daian's Vyper ERC20 token contract
+* **2018-01-30** [MyKidsEducationToken ERC20 token contract](erc20/hobby/README.md)
+* **2018-01-26** [OpenZeppelin ERC20 token contract](erc20/zeppelin/README.md)
+* **2018-01-16** [HackerGold (HKG) ERC20 token contract](erc20/hkg/README.md)
+* **2017-12-23** [Philip Daian's Vyper ERC20 token contract](erc20/vyper/README.md)
 
 ## Resources
 
@@ -94,6 +91,6 @@ The possibility of human error in the manual review process is very real, and we
 [eDSL]: <resources/edsl.md>
 [ERC20]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md>
 [ERC20-K]: <https://github.com/runtimeverification/erc20-semantics>
-[ERC20-EVM]: <https://github.com/kframework/evm-semantics/blob/verification/proofs/erc20>
+[ERC20-EVM]: </resources/erc20-evm.md>
 [ERC777]: <https://github.com/ethereum/eips/issues/777>
 

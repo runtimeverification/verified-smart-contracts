@@ -1,0 +1,135 @@
+@@ -46,16 +46,31 @@
+ [approve]
+ k: #execute => (RETURN RET_ADDR:Int 32 ~> _)
+ callData: #abiCallData("approve", #address(SPENDER), #uint256(VALUE))
+-localMem: .Map => ( .Map[ RET_ADDR := #asByteStackInWidth(1, 32) ] _:Map )
+ gas: {GASCAP} => _
++requires:
++    andBool 0 <=Int SPENDER   andBool SPENDER   <Int (2 ^Int 160)
++    andBool 0 <=Int VALUE     andBool VALUE     <Int (2 ^Int 256)
++    andBool 0 <=Int ALLOWANCE andBool ALLOWANCE <Int (2 ^Int 256)
++
++[approve-success]
++localMem: .Map => ( .Map[ RET_ADDR := #asByteStackInWidth(1, 32) ] _:Map )
+ log: _:List ( .List => ListItem(#abiEventLog(ACCT_ID, "Approval", #indexed(#address(CALLER_ID)), #indexed(#address(SPENDER)), #uint256(VALUE))) )
+ refund: _ => _
+ storage:
+-    #hashedLocation({COMPILER}, {_ALLOWANCES}, CALLER_ID SPENDER) |-> (_:Int => VALUE)
++    #hashedLocation({COMPILER}, {_ALLOWANCES}, CALLER_ID SPENDER) |-> (ALLOWANCE => VALUE)
+     _:Map
+-requires:
+-    andBool 0 <=Int SPENDER   andBool SPENDER   <Int (2 ^Int 160)
+-    andBool 0 <=Int VALUE     andBool VALUE     <Int (2 ^Int 256)
+++requires:
++    andBool ( VALUE ==Int 0 orBool ALLOWANCE ==Int 0 )
++
++[approve-failure]
++localMem: .Map => ( .Map[ RET_ADDR := #asByteStackInWidth(0, 32) ] _:Map )
++log: _
++refund: _
++storage:
++    #hashedLocation({COMPILER}, {_ALLOWANCES}, CALLER_ID SPENDER) |-> ALLOWANCE
++    _:Map
+++requires:
++    andBool ( VALUE =/=Int 0 andBool ALLOWANCE =/=Int 0 )
+ 
+ [transfer]
+ callData: #abiCallData("transfer", #address(TO_ID), #uint256(VALUE))
+@@ -79,6 +94,7 @@
+     _:Map
+ +requires:
+     andBool CALLER_ID =/=Int TO_ID
++    andBool VALUE >Int 0
+     andBool VALUE <=Int BAL_FROM
+     andBool BAL_TO +Int VALUE <Int (2 ^Int 256)
+ 
+@@ -88,11 +104,13 @@
+     _:Map
+ +requires:
+     andBool CALLER_ID ==Int TO_ID
++    andBool VALUE >Int 0
+     andBool VALUE <=Int BAL_FROM
++    andBool BAL_FROM +Int VALUE <Int (2 ^Int 256)
+ 
+ [transfer-failure]
+-k: #execute => #exception
+-localMem: .Map => _:Map
++k: #execute => (RETURN RET_ADDR:Int 32 ~> _)
++localMem: .Map => ( .Map[ RET_ADDR := #asByteStackInWidth(0, 32) ] _:Map )
+ log: _
+ 
+ [transfer-failure-1]
+@@ -102,7 +120,8 @@
+     _:Map
+ +requires:
+     andBool CALLER_ID =/=Int TO_ID
+-    andBool ( VALUE >Int BAL_FROM
++    andBool ( VALUE <=Int 0
++     orBool   VALUE >Int BAL_FROM
+      orBool   BAL_TO +Int VALUE >=Int (2 ^Int 256) )
+ 
+ [transfer-failure-2]
+@@ -111,7 +130,9 @@
+     _:Map
+ +requires:
+     andBool CALLER_ID ==Int TO_ID
+-    andBool VALUE >Int BAL_FROM
++    andBool ( VALUE <=Int 0
++     orBool   VALUE >Int BAL_FROM
++     orBool   BAL_FROM +Int VALUE >=Int (2 ^Int 256) )
+ 
+ [transferFrom]
+ callData: #abiCallData("transferFrom", #address(FROM_ID), #address(TO_ID), #uint256(VALUE))
+@@ -138,9 +159,10 @@
+     _:Map
+ +requires:
+     andBool FROM_ID =/=Int TO_ID
++    andBool VALUE >Int 0
+     andBool VALUE <=Int BAL_FROM
+-    andBool BAL_TO +Int VALUE <Int (2 ^Int 256)
+     andBool VALUE <=Int ALLOW
++    andBool BAL_TO +Int VALUE <Int (2 ^Int 256)
+ 
+ [transferFrom-success-2]
+ storage:
+@@ -149,12 +171,14 @@
+     _:Map
+ +requires:
+     andBool FROM_ID ==Int TO_ID
++    andBool VALUE >Int 0
+     andBool VALUE <=Int BAL_FROM
+     andBool VALUE <=Int ALLOW
++    andBool BAL_FROM +Int VALUE <Int (2 ^Int 256)
+ 
+ [transferFrom-failure]
+-k: #execute => #exception
+-localMem: .Map => _:Map
++k: #execute => (RETURN RET_ADDR:Int 32 ~> _)
++localMem: .Map => ( .Map[ RET_ADDR := #asByteStackInWidth(0, 32) ] _:Map )
+ log: _
+ 
+ [transferFrom-failure-1]
+@@ -165,9 +189,10 @@
+     _:Map
+ +requires:
+     andBool FROM_ID =/=Int TO_ID
+-    andBool ( VALUE >Int BAL_FROM
+-     orBool   BAL_TO +Int VALUE >=Int (2 ^Int 256)
+-     orBool   VALUE >Int ALLOW )
++    andBool ( VALUE <=Int 0
++     orBool   VALUE >Int BAL_FROM
++     orBool   VALUE >Int ALLOW
++     orBool   BAL_TO +Int VALUE >=Int (2 ^Int 256) )
+ 
+ [transferFrom-failure-2]
+ storage:
+@@ -176,13 +201,15 @@
+     _:Map
+ +requires:
+     andBool FROM_ID ==Int TO_ID
+-    andBool ( VALUE >Int BAL_FROM
+-     orBool   VALUE >Int ALLOW )
++    andBool ( VALUE <=Int 0
++     orBool   VALUE >Int BAL_FROM
++     orBool   VALUE >Int ALLOW
++     orBool   BAL_FROM +Int VALUE >=Int (2 ^Int 256) )

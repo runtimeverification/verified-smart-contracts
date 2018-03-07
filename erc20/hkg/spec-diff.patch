@@ -1,0 +1,118 @@
+@@ -2,17 +2,14 @@
+ ; For more details, refer to README.md and the technical report (Section 3 & 5)
+ 
+ [totalSupply]
+-k: #execute => (RETURN RET_ADDR:Int 32 ~> _)
++k: #execute => #exception
+ callData: #abiCallData("totalSupply", .TypedArgs)
+-localMem: .Map => ( .Map[ RET_ADDR := #asByteStackInWidth(TOTAL, 32) ] _:Map )
++localMem: .Map => _:Map
+ gas: {GASCAP} => _
+ log: _
+ refund: _
+-storage:
+-    #hashedLocation({COMPILER}, {_TOTALSUPPLY}, .IntList) |-> TOTAL
+-    _:Map
++storage: _:Map
+ requires:
+-    andBool 0 <=Int TOTAL     andBool TOTAL     <Int (2 ^Int 256)
+ 
+ [balanceOf]
+ k: #execute => (RETURN RET_ADDR:Int 32 ~> _)
+@@ -75,12 +72,12 @@
+ [transfer-success-1]
+ storage:
+     #hashedLocation({COMPILER}, {_BALANCES}, CALLER_ID) |-> (BAL_FROM => BAL_FROM -Int VALUE)
+-    #hashedLocation({COMPILER}, {_BALANCES}, TO_ID)     |-> (BAL_TO   => BAL_TO   +Int VALUE)
++    #hashedLocation({COMPILER}, {_BALANCES}, TO_ID)     |-> (BAL_TO   => BAL_TO  +Word VALUE)
+     _:Map
+ +requires:
+     andBool CALLER_ID =/=Int TO_ID
+     andBool VALUE <=Int BAL_FROM
+-    andBool BAL_TO +Int VALUE <Int (2 ^Int 256)
++    andBool VALUE >Int 0
+ 
+ [transfer-success-2]
+ storage:
+@@ -89,10 +86,11 @@
+ +requires:
+     andBool CALLER_ID ==Int TO_ID
+     andBool VALUE <=Int BAL_FROM
++    andBool VALUE >Int 0
+ 
+ [transfer-failure]
+-k: #execute => #exception
+-localMem: .Map => _:Map
++k: #execute => (RETURN RET_ADDR:Int 32 ~> _)
++localMem: .Map => ( .Map[ RET_ADDR := #asByteStackInWidth(0, 32) ] _:Map )
+ log: _
+ 
+ [transfer-failure-1]
+@@ -103,7 +101,7 @@
+ +requires:
+     andBool CALLER_ID =/=Int TO_ID
+     andBool ( VALUE >Int BAL_FROM
+-     orBool   BAL_TO +Int VALUE >=Int (2 ^Int 256) )
++     orBool   VALUE <=Int 0 )
+ 
+ [transfer-failure-2]
+ storage:
+@@ -111,7 +109,8 @@
+     _:Map
+ +requires:
+     andBool CALLER_ID ==Int TO_ID
+-    andBool VALUE >Int BAL_FROM
++    andBool ( VALUE >Int BAL_FROM
++     orBool   VALUE <=Int 0 )
+ 
+ [transferFrom]
+ callData: #abiCallData("transferFrom", #address(FROM_ID), #address(TO_ID), #uint256(VALUE))
+@@ -133,14 +132,14 @@
+ [transferFrom-success-1]
+ storage:
+     #hashedLocation({COMPILER}, {_BALANCES},   FROM_ID)           |-> (BAL_FROM => BAL_FROM -Int VALUE)
+-    #hashedLocation({COMPILER}, {_BALANCES},   TO_ID)             |-> (BAL_TO   => BAL_TO   +Int VALUE)
++    #hashedLocation({COMPILER}, {_BALANCES},   TO_ID)             |-> (BAL_TO   => BAL_TO  +Word VALUE)
+     #hashedLocation({COMPILER}, {_ALLOWANCES}, FROM_ID CALLER_ID) |-> (ALLOW    => ALLOW    -Int VALUE)
+     _:Map
+ +requires:
+     andBool FROM_ID =/=Int TO_ID
+     andBool VALUE <=Int BAL_FROM
+-    andBool BAL_TO +Int VALUE <Int (2 ^Int 256)
+     andBool VALUE <=Int ALLOW
++    andBool VALUE >Int 0
+ 
+ [transferFrom-success-2]
+ storage:
+@@ -151,10 +150,11 @@
+     andBool FROM_ID ==Int TO_ID
+     andBool VALUE <=Int BAL_FROM
+     andBool VALUE <=Int ALLOW
++    andBool VALUE >Int 0
+ 
+ [transferFrom-failure]
+-k: #execute => #exception
+-localMem: .Map => _:Map
++k: #execute => (RETURN RET_ADDR:Int 32 ~> _)
++localMem: .Map => ( .Map[ RET_ADDR := #asByteStackInWidth(0, 32) ] _:Map )
+ log: _
+ 
+ [transferFrom-failure-1]
+@@ -166,8 +166,8 @@
+ +requires:
+     andBool FROM_ID =/=Int TO_ID
+     andBool ( VALUE >Int BAL_FROM
+-     orBool   BAL_TO +Int VALUE >=Int (2 ^Int 256)
+-     orBool   VALUE >Int ALLOW )
++     orBool   VALUE >Int ALLOW
++     orBool   VALUE <=Int 0 )
+ 
+ [transferFrom-failure-2]
+ storage:
+@@ -177,12 +177,14 @@
+ +requires:
+     andBool FROM_ID ==Int TO_ID
+     andBool ( VALUE >Int BAL_FROM
+-     orBool   VALUE >Int ALLOW )
++     orBool   VALUE >Int ALLOW
++     orBool   VALUE <=Int 0 )

@@ -109,6 +109,8 @@ An EVM specification can be represented in terms of the parameter values, using 
 ### Function-Specific Parameters
 
 Below is an example of the function-specific parameter definition of a `balanceOf` function which takes as an input the account address and returns its balance if the address is non-zero, otherwise throws.
+(Note that this is *not* the ERC20 standard function, but a hypothetical function designed for explanation.)
+
 
 ```
   [DEFAULT]
@@ -216,7 +218,7 @@ while that of `[balanceOf-failure]` specifies additional pre-condition for the f
 Below is an example of the program-specific parameters.
 
 ```
-  [DEFAULT]
+  [pgm]
   compiler: "Solidity"
   _balances: 0
   _totalSupply: 1
@@ -239,6 +241,11 @@ In practice, one should set a reasonable amount of the gas limit to see if the p
 
 #### Full Examples
 
-[erc20-evm/spec.ini]
+* [balanceOf-spec.k]: The full specification automatically derived from the above example template parameters.
+(As noted above, this is *not* for the ERC20 standard function, but for the hypothetical function designed for the above example.)
 
-[erc20-evm/balanceOf-spec.k]
+* [ERC20-EVM]: An eDSL formal specification of ERC20 token standard
+
+
+[ERC20-EVM]: </resources/erc20-evm.md>
+[balanceOf-spec.k]: </resources/balanceOf-spec.k>

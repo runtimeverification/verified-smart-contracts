@@ -73,27 +73,32 @@ The following are the mechanized EVM-level specifications of each target functio
 * EVM specification of `collectToken`: [collectToken-spec.ini]
 * EVM specification of `forwardToHotWallet`: [forwardToHotWallet-spec.ini]
 
-The specifications are written in [eDSL], a domain-specific language for EVM specifications, whose good understanding is required in order to understand any of our EVM-level specifications well.  Refer to [resources] for background on our technology.  The above files provide the [eDSL] specification template parameters, the full K reachability logic specifications being automatically derived from a specification template by instantiating it with the template parameters.  The following commands generate the full specifications:
+The specifications are written in [eDSL], a domain-specific language for EVM specifications, whose good understanding is required in order to understand any of our EVM-level specifications well.  Refer to [resources] for background on our technology.  The above files provide the [eDSL] specification template parameters, the full K reachability logic specifications being automatically derived from a specification template by instantiating it with the template parameters.
+
+Run the following command in the root directory of this repository, and it will generate the full specifications under the directory `specs/bihu`:
 
 ```
-$ ../scripts/gen-spec.py spec-tmpl.k collectToken-spec.ini       > collectToken-spec.k
-$ ../scripts/gen-spec.py spec-tmpl.k forwardToHotWallet-spec.ini > forwardToHotWallet-spec.k
+$ make bihu
 ```
 
+Run the EVM verifier to prove that the specifications are satisfied by (the compiled EVM bytecode of) the target functions.
+See this [instruction] for more details of running the verifier.
+
+<!--
 #### Reproducing Proofs
 
 To prove that each specification is satisfied by (the compiled EVM bytecode of) each target function, run the EVM verifier as follows:
 
 ```
-$ kevm prove collectTokens-spec.k
-$ kevm prove forwardToHotWallet-spec.k
+$ ./kevm prove tests/proofs/specs/bihu/collectTokens-spec.k
+$ ./kevm prove tests/proofs/specs/bihu/forwardToHotWallet-spec.k
 ```
 
 The above commands essentially execute the following commands:
 
 ```
-$ kprove collectTokens-spec.k      -m VERIFICATION --z3-executable -d /path/to/evm-semantics/.build/java
-$ kprove forwardToHotWallet-spec.k -m VERIFICATION --z3-executable -d /path/to/evm-semantics/.build/java
+$ kprove specs/bihu/collectTokens-spec.k      -m VERIFICATION --z3-executable -d /path/to/evm-semantics/.build/java
+$ kprove specs/bihu/forwardToHotWallet-spec.k -m VERIFICATION --z3-executable -d /path/to/evm-semantics/.build/java
 ```
 
 #### Installing the EVM Verifier
@@ -108,6 +113,7 @@ $ make
 ```
 
 For detailed instructions on installing and running the EVM verifier, see [KEVM]'s [Installing/Building](https://github.com/kframework/evm-semantics/blob/master/README.md#installingbuilding) and [Example Usage](https://github.com/kframework/evm-semantics/blob/master/README.md#example-usage) pages.
+-->
 
 
 ## [Resources](../README.md#resources)
@@ -129,3 +135,4 @@ For detailed instructions on installing and running the EVM verifier, see [KEVM]
 [Bihu Smart Contract Formal Verification]: <bihu-contracts-verification-report.pdf>
 [resources]: <../README.md#resources>
 [eDSL]: <../resources/edsl.md>
+[instruction]: </resources/instruction.md>
