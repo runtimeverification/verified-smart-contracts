@@ -36,7 +36,7 @@ hobby_erc20_files:=totalSupply-spec.k \
                    transferFrom-failure-1-spec.k \
                    transferFrom-failure-2-spec.k
 
-proof_tests:= vyper-erc20 zeppelin-erc20 hkg-erc20 hobby-erc20 sum-to-n
+proof_tests:= bihu vyper-erc20 zeppelin-erc20 hkg-erc20 hobby-erc20 sum-to-n
 
 split-proof-tests: $(proof_tests)
 
