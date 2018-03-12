@@ -1,12 +1,3 @@
-diff --git a/erc20/vyper/vyper-erc20-spec.ini b/erc20/vyper/vyper-erc20-spec.ini
-index 91a391a..133a50b 100644
---- a/erc20/vyper/vyper-erc20-spec.ini
-+++ b/erc20/vyper/vyper-erc20-spec.ini
-@@ -1,5 +1,5 @@
- ; ERC20-EVM Specification Template Parameters
--; For more details, refer to README.md.
-+; For more details, refer to README.md and the technical report (Section 3 & 5)
- 
  [totalSupply]
  k: #execute => (RETURN RET_ADDR:Int 32 ~> _)
 @@ -9,7 +9,7 @@ gas: {GASCAP} => _
