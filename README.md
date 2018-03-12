@@ -34,10 +34,11 @@ the mathematical domain constraints.
 
 * **2018-??-??** Casper - Ethereum Foundation
 * **2018-??-??** Fabian Vogelsteller's ICO contract and ICO schema
-* **2018-??-??** DappSys DSToken contract
+
 
 ## Completed
 
+* **2018-03-12** [DappSys DSToken contract](erc20/ds-token/README.md)
 * **2018-02-28** [Bihu KEY token operation contracts](bihu/README.md)
 * **2018-01-30** [MyKidsEducationToken ERC20 token contract](erc20/hobby/README.md)
 * **2018-01-26** [OpenZeppelin ERC20 token contract](erc20/zeppelin/README.md)
