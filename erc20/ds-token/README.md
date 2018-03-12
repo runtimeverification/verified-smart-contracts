@@ -4,7 +4,7 @@
 
 We present a formal verification of [DSToken ERC20][token] token contract.
 
-The DSToken ERC20 token is a high-profile ERC20 token contract written in Solidity implemented by DappHub(https://dapphub.com/).
+The DSToken ERC20 token is a high-profile ERC20 token contract written in Solidity implemented by [`DappHub`](https://dapphub.com/).
 
 We found that the DSToken ERC20 token deviates from the [ERC20-K] (and thus [ERC20-EVM]) specification as follows:
 
@@ -24,9 +24,9 @@ We formally verified the full functional correctness of the following ERC20 func
 * [`totalSupply`](https://github.com/dapphub/ds-token/blob/bb98ff4841e82137efc9690b9e1cf77e85fdd0bb/src/base.sol#L27) - inherited in DSToken from DSTokenBase 
 * [`balanceOf`](https://github.com/dapphub/ds-token/blob/bb98ff4841e82137efc9690b9e1cf77e85fdd0bb/src/base.sol#L30) - inherited in DSToken from DSTokenBase 
 * [`allowance`](https://github.com/dapphub/ds-token/blob/bb98ff4841e82137efc9690b9e1cf77e85fdd0bb/src/base.sol#L33) - inherited in DSToken from DSTokenBase 
-* [`approve`](https://github.com/dapphub/ds-token/blob/bb98ff4841e82137efc9690b9e1cf77e85fdd0bb/src/token.sol#L35) which extends [`DSTokenBase`](https://github.com/dapphub/ds-token/blob/bb98ff4841e82137efc9690b9e1cf77e85fdd0bb/src/base.sol#L61)
-* [`transfer`](https://github.com/dapphub/ds-token/blob/bb98ff4841e82137efc9690b9e1cf77e85fdd0bb/src/token.sol#L27) which extends [`DSTokenBase`](https://github.com/dapphub/ds-token/blob/bb98ff4841e82137efc9690b9e1cf77e85fdd0bb/src/base.sol#L37)
-* [`transferFrom`](https://github.com/dapphub/ds-token/blob/bb98ff4841e82137efc9690b9e1cf77e85fdd0bb/src/token.sol#L30) which extends [`DSTokenBase`](https://github.com/dapphub/ds-token/blob/bb98ff4841e82137efc9690b9e1cf77e85fdd0bb/src/base.sol#L48)
+* [`approve`](https://github.com/dapphub/ds-token/blob/bb98ff4841e82137efc9690b9e1cf77e85fdd0bb/src/token.sol#L35) which extends [`approve`](https://github.com/dapphub/ds-token/blob/bb98ff4841e82137efc9690b9e1cf77e85fdd0bb/src/base.sol#L61) from DSTokenBase
+* [`transfer`](https://github.com/dapphub/ds-token/blob/bb98ff4841e82137efc9690b9e1cf77e85fdd0bb/src/token.sol#L27) which extends [`transfer`](https://github.com/dapphub/ds-token/blob/bb98ff4841e82137efc9690b9e1cf77e85fdd0bb/src/base.sol#L37) from DSTokenBase
+* [`transferFrom`](https://github.com/dapphub/ds-token/blob/bb98ff4841e82137efc9690b9e1cf77e85fdd0bb/src/token.sol#L30) which extends [`transferFrom`](https://github.com/dapphub/ds-token/blob/bb98ff4841e82137efc9690b9e1cf77e85fdd0bb/src/base.sol#L48) from DSTokenBase
 
 ## Verification Artifacts
 
