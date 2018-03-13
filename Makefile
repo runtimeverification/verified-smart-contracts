@@ -60,6 +60,7 @@ ds_token_erc20_files:=totalSupply-spec.k \
 
 proof_tests:= bihu vyper-erc20 zeppelin-erc20 hkg-erc20 hobby-erc20 sum-to-n ds-token-erc20
 
+
 split-proof-tests: $(proof_tests)
 
 bihu: $(patsubst %, $(specs_dir)/bihu/%, $(bihu_collectToken_file)) $(patsubst %, $(specs_dir)/bihu/%, $(bihu_forwardToHotWallet_files)) $(specs_dir)/lemmas.k
@@ -93,14 +94,14 @@ $(specs_dir)/lemmas.k: resources/lemmas.md
 $(specs_dir)/bihu/collectToken-spec.k: bihu/module-tmpl.k bihu/spec-tmpl.k bihu/collectToken-spec.ini
 	@echo >&2 "==  gen-spec: $@"
 	mkdir -p $(dir $@)
-	python3 scripts/gen-spec.py $^ collectToken collectToken loop ds-math-mul > $@
+	python3 resources/gen-spec.py $^ collectToken collectToken loop ds-math-mul > $@
 	cp bihu/abstract-semantics.k $(dir $@)
 	cp bihu/verification.k $(dir $@)
 
 $(specs_dir)/bihu/forwardToHotWallet%-spec.k: bihu/module-tmpl.k bihu/spec-tmpl.k bihu/forwardToHotWallet-spec.ini
 	@echo >&2 "==  gen-spec: $@"
 	mkdir -p $(dir $@)
-	python3 scripts/gen-spec.py $^ $(addsuffix $*, forwardToHotWallet) $(addsuffix $*, forwardToHotWallet) > $@
+	python3 resources/gen-spec.py $^ $(addsuffix $*, forwardToHotWallet) $(addsuffix $*, forwardToHotWallet) > $@
 	cp bihu/abstract-semantics.k $(dir $@)
 	cp bihu/verification.k $(dir $@)
 
@@ -108,40 +109,40 @@ $(specs_dir)/bihu/forwardToHotWallet%-spec.k: bihu/module-tmpl.k bihu/spec-tmpl.
 $(specs_dir)/vyper-erc20/%-spec.k: erc20/module-tmpl.k erc20/spec-tmpl.k erc20/vyper/vyper-erc20-spec.ini
 	@echo >&2 "==  gen-spec: $@"
 	mkdir -p $(dir $@)
-	python3 scripts/gen-spec.py $^ $* $* > $@
+	python3 resources/gen-spec.py $^ $* $* > $@
 	cp erc20/abstract-semantics.k $(dir $@)
 	cp erc20/verification.k $(dir $@)
 
 $(specs_dir)/zeppelin-erc20/%-spec.k: erc20/module-tmpl.k erc20/spec-tmpl.k erc20/zeppelin/zeppelin-erc20-spec.ini
 	@echo >&2 "==  gen-spec: $@"
 	mkdir -p $(dir $@)
-	python3 scripts/gen-spec.py $^ $* $* > $@
+	python3 resources/gen-spec.py $^ $* $* > $@
 	cp erc20/abstract-semantics.k $(dir $@)
 	cp erc20/verification.k $(dir $@)
 
 $(specs_dir)/hkg-erc20/%-spec.k: erc20/module-tmpl.k erc20/spec-tmpl.k erc20/hkg/hkg-erc20-spec.ini
 	@echo >&2 "==  gen-spec: $@"
 	mkdir -p $(dir $@)
-	python3 scripts/gen-spec.py $^ $* $* > $@
+	python3 resources/gen-spec.py $^ $* $* > $@
 	cp erc20/abstract-semantics.k $(dir $@)
 	cp erc20/verification.k $(dir $@)
 
 $(specs_dir)/hobby-erc20/%-spec.k: erc20/module-tmpl.k erc20/spec-tmpl.k erc20/hobby/hobby-erc20-spec.ini
 	@echo >&2 "==  gen-spec: $@"
 	mkdir -p $(dir $@)
-	python3 scripts/gen-spec.py $^ $* $* > $@
+	python3 resources/gen-spec.py $^ $* $* > $@
 	cp erc20/abstract-semantics.k $(dir $@)
 	cp erc20/verification.k $(dir $@)
 
 $(specs_dir)/ds-token-erc20/%-spec.k: erc20/module-tmpl.k erc20/spec-tmpl.k erc20/ds-token/ds-token-erc20-spec.ini
 	@echo >&2 "==  gen-spec: $@"
 	mkdir -p $(dir $@)
-	python3 scripts/gen-spec.py $^ $* $* > $@
+	python3 resources/gen-spec.py $^ $* $* > $@
 	cp erc20/abstract-semantics.k $(dir $@)
 	cp erc20/verification.k $(dir $@)
 
 # Sum to N
-$(specs_dir)/examples/sum-to-n-spec.k: examples/sum-to-n/sum-to-n.md
+$(specs_dir)/examples/sum-to-n-spec.k: resources/sum-to-n.md
 	@echo "==  tangle: $@"
 	mkdir -p $(dir $@)
 	pandoc --from markdown --to "$(TANGLER)" --metadata="code:.sum-to-n" $< > $@
