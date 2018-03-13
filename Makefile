@@ -137,7 +137,7 @@ $(specs_dir)/hobby-erc20/%-spec.k: erc20/module-tmpl.k erc20/spec-tmpl.k erc20/h
 $(specs_dir)/ds-token-erc20/%-spec.k: erc20/module-tmpl.k erc20/spec-tmpl.k erc20/ds-token/ds-token-erc20-spec.ini
 	@echo >&2 "==  gen-spec: $@"
 	mkdir -p $(dir $@)
-	python3 scripts/gen-spec.py $^ $* $* > $@
+	python3 resources/gen-spec.py $^ $* $* > $@
 	cp erc20/abstract-semantics.k $(dir $@)
 	cp erc20/verification.k $(dir $@)
 
