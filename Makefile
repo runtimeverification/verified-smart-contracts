@@ -44,19 +44,19 @@ ds_token_erc20_files:=totalSupply-spec.k \
                    transfer-success-1-spec.k \
                    transfer-success-2-spec.k \
                    transfer-failure-1-a-spec.k \
-                   transfer-failure-2-a-spec.k \
                    transfer-failure-1-b-spec.k \
-                   transfer-failure-2-b-spec.k \
                    transfer-failure-1-c-spec.k \
+                   transfer-failure-2-a-spec.k \
+                   transfer-failure-2-b-spec.k \
                    transferFrom-success-1-spec.k \
                    transferFrom-success-2-spec.k \
                    transferFrom-failure-1-a-spec.k \
-                   transferFrom-failure-2-a-spec.k \
                    transferFrom-failure-1-b-spec.k \
-                   transferFrom-failure-2-b-spec.k \
                    transferFrom-failure-1-c-spec.k \
-                   transferFrom-failure-2-c-spec.k \
-                   transferFrom-failure-1-d-spec.k
+                   transferFrom-failure-1-d-spec.k \
+                   transferFrom-failure-2-a-spec.k \
+                   transferFrom-failure-2-b-spec.k \
+                   transferFrom-failure-2-c-spec.k
 
 proof_tests:= bihu vyper-erc20 zeppelin-erc20 hkg-erc20 hobby-erc20 sum-to-n ds-token-erc20
 
