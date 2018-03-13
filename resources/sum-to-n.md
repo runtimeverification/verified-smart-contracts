@@ -48,7 +48,7 @@ Sum To N Program and Claim
 
 ### High Level
 
-Canonical "hello world" verification example, in no particular language:
+A canonical "hello world" verification example, in no particular language:
 
 ```
 s = 0;
