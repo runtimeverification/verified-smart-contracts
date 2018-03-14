@@ -1,2 +1,4 @@
 /.build/*
 !/.build/pandoc-tangle
+
+/specs/*
