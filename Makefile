@@ -4,7 +4,7 @@
 specs_dir:=specs
 build_dir:=.build
 
-.PHONY: all clean
+.PHONY: all clean kevm clean-kevm
 
 all: k-files split-proof-tests
 
@@ -18,6 +18,18 @@ export LUA_PATH
 
 $(TANGLER):
 	git submodule update --init -- $(pandoc_tangle_submodule)
+
+kevm_repo:=https://github.com/kframework/evm-semantics
+kevm_repo_dir:=$(build_dir)/evm-semantics
+
+kevm: clean-kevm
+	git clone $(kevm_repo) --depth 1 $(kevm_repo_dir)
+	cd $(kevm_repo_dir) \
+		&& make deps \
+		&& make build-java
+
+clean-kevm:
+	rm -rf $(kevm_repo_dir)
 
 # Definition Files
 # ----------------
