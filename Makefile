@@ -1,4 +1,28 @@
+# Settings
+# --------
+
 specs_dir:=specs
+
+all: k-files split-proof-tests
+
+clean:
+	rm -rf $(specs_dir) .build/
+
+# Definition Files
+# ----------------
+
+k_files:=lemmas.k
+
+k-files: $(patsubst %, $(specs_dir)/%, $(k_files))
+
+# Lemmas
+$(specs_dir)/lemmas.k: resources/lemmas.md
+	@echo >&2 "== tangle: $@"
+	mkdir -p $(dir $@)
+	pandoc --from markdown --to "$(TANGLER)" --metadata=code:".k" $< > $@
+
+# Spec Files
+# ----------
 
 bihu_collectToken_file:=collectToken-spec.k \
 
@@ -51,19 +75,6 @@ hkg-erc20: $(patsubst %, $(specs_dir)/hkg-erc20/%, $(erc20_files)) $(specs_dir)/
 hobby-erc20: $(patsubst %, $(specs_dir)/hobby-erc20/%, $(hobby_erc20_files)) $(specs_dir)/lemmas.k
 
 sum-to-n: $(specs_dir)/examples/sum-to-n-spec.k $(specs_dir)/lemmas.k
-
-
-# Definition Files
-# ----------------
-
-# Lemmas
-$(specs_dir)/lemmas.k: resources/lemmas.md
-	@echo >&2 "== tangle: $@"
-	mkdir -p $(dir $@)
-	pandoc --from markdown --to "$(TANGLER)" --metadata=code:".k" $< > $@
-
-# Spec Files
-# ----------
 
 # Bihu
 $(specs_dir)/bihu/collectToken-spec.k: bihu/module-tmpl.k bihu/spec-tmpl.k bihu/collectToken-spec.ini
