@@ -2,11 +2,22 @@
 # --------
 
 specs_dir:=specs
+build_dir:=.build
+
+.PHONY: all clean
 
 all: k-files split-proof-tests
 
 clean:
-	rm -rf $(specs_dir) .build/
+	rm -rf $(specs_dir) $(build_dir)
+
+pandoc_tangle_submodule:=$(build_dir)/pandoc-tangle
+TANGLER:=$(pandoc_tangle_submodule)/tangle.lua
+LUA_PATH:=$(pandoc_tangle_submodule)/?.lua;;
+export LUA_PATH
+
+$(TANGLER):
+	git submodule update --init -- $(pandoc_tangle_submodule)
 
 # Definition Files
 # ----------------
@@ -16,7 +27,7 @@ k_files:=lemmas.k
 k-files: $(patsubst %, $(specs_dir)/%, $(k_files))
 
 # Lemmas
-$(specs_dir)/lemmas.k: resources/lemmas.md
+$(specs_dir)/lemmas.k: resources/lemmas.md $(TANGLER)
 	@echo >&2 "== tangle: $@"
 	mkdir -p $(dir $@)
 	pandoc --from markdown --to "$(TANGLER)" --metadata=code:".k" $< > $@
@@ -121,7 +132,7 @@ $(specs_dir)/hobby-erc20/%-spec.k: erc20/module-tmpl.k erc20/spec-tmpl.k erc20/h
 	cp erc20/verification.k $(dir $@)
 
 # Sum to N
-$(specs_dir)/examples/sum-to-n-spec.k: resources/sum-to-n.md
+$(specs_dir)/examples/sum-to-n-spec.k: resources/sum-to-n.md $(TANGLER)
 	@echo "==  tangle: $@"
 	mkdir -p $(dir $@)
 	pandoc --from markdown --to "$(TANGLER)" --metadata="code:.sum-to-n" $< > $@
