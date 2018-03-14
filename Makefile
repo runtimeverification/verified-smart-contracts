@@ -152,3 +152,15 @@ $(specs_dir)/examples/sum-to-n-spec.k: resources/sum-to-n.md $(TANGLER)
 	@echo "==  tangle: $@"
 	mkdir -p $(dir $@)
 	pandoc --from markdown --to "$(TANGLER)" --metadata="code:.sum-to-n" $< > $@
+
+# Testing
+# -------
+
+TEST:=$(kevm_repo_dir)/kevm prove
+
+test_files:=$(wildcard specs/*/*-spec.k)
+
+test: $(test_files:=.test)
+
+specs/%-spec.k.test: specs/%-spec.k
+	$(TEST) $<
