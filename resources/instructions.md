@@ -1,8 +1,9 @@
 # General Instruction for Reproducing Mechanized Proofs
 
-The formal specifications presented in this repository are written in [eDSL], a domain-specific language for EVM specifications, whose good understanding is required in order to understand any of our EVM-level specification well.
+The full K reachability logic specification is automatically derived by instantiating a specification template with these template parameters.
 Refer to [resources] for background on our technology.
-Each of the specifications provides the [eDSL] specification template parameters, the full [K]'s [reachability logic] specification being automatically derived from a specification template by instantiating it with the template parameters.
+Each of the specifications provides the [eDSL] specification template parameters.
+The full [K] [reachability logic] specifications are automatically derived by instantiating a specification template with these template parameters.
 
 #### Generating Full Reachability Logic Specifications
 
@@ -14,7 +15,7 @@ $ make
 
 #### Reproducing Proofs
 
-To prove that the specifications are satisfied by (the compiled EVM bytecode of) the target contracts, run the EVM verifier (under the [KEVM]'s root directory, see below) as follows:
+To prove that the specifications are satisfied by (the compiled EVM bytecode of) the target contracts, run the EVM verifier (under the [KEVM] root directory, see below) as follows:
 
 ```
 $ ./kevm prove tests/proofs/specs/<project>/<target>-spec.k

@@ -1,15 +1,15 @@
 # eDSL Specifications
 
-Even with the [eDSL high-level notations](edsl-notations.md), the refined EVM specification is still quite large due to the sheer size of the KEVM configuration, while large part of that is the same across the different specifications.
-The eDSL specification template allows to reuse and share the common part over the different specifications, avoiding duplication.
-The template is essentially a specification but contains several parameters which are place-holders to be filled with parameter values when being instantiated.
-The template is supposed to be instantiated with the parameter values for each specification.
+Even with the [eDSL high-level notations](edsl-notations.md), the refined EVM specification is still quite large due to the sheer size of the KEVM configuration, but large part of that is the same across the different specifications.
+The eDSL specification template allows the common part to be reused and shared between different specifications, avoiding duplication.
+The template is essentially a reachability logic specification but contains several parameters which are place-holders to be filled with parameter values when being instantiated.
+The template is instantiated with suitable parameter values for each specification.
 
 ## eDSL Specification Template
 
 EVM specifications are written over the full KEVM configuration.
 However, large part of the configuration is not relevant for functional correctness specification and can be shared across the different specifications.
-The eDSL allows to specify a template specification that can be instantiated for each specification.
+eDSL allows capturing these common portions in a template specification that can instantiated for each specification.
 
 Below is the template specification.
 Essentially, it is a reachability claim over the KEVM configurations.
@@ -17,7 +17,7 @@ The configurations are generalized as much as possible to capture arbitrary cont
 The underline (`_`) is an anonymous/nameless variable (with no constraint) that matches any value, denoting an arbitrary state.
 The constant values and the `requires` condition represent the pre-condition.
 The upper-case variables enclosed by the curly braces (`{`, `}`) are the template parameters, i.e., place-holders to be replaced with parameter values when being instantiated.
-Note that there are only a few of parameters, meaning that the large part of the specification is shared across the different specifications.
+Note that there are only a few of parameters, meaning that the larger part of the specification is shared across the different specifications.
 
 ```k
   rule
@@ -104,7 +104,7 @@ The specification parameters and their values are given in the [INI format](http
 More precisely, they are given in a variant of the INI format, extended with support for nested inheritance, allowing further reusing parameters over the different but similar specifications.
 Moreover, the specification parameters are grouped into two categories: function-specific parameters and program-specific parameters.
 The program-specific parameters are shared among the specifications of the same program.
-An EVM specification can be represented in terms of the parameter values, using which the full specification is be derived from the specification template.
+An EVM specification can be represented in terms of the parameter values, which are used to produce a full specification from the specification template.
 
 ### Function-Specific Parameters
 
@@ -153,7 +153,7 @@ It specifies the default parameter values.
 The anonymous/nameless variable (`_`) denotes an arbitrary context whose value can be arbitrary and are not relevant w.r.t. functional correctness specification.
 If it appears in the left-hand side of `=>`, it means that all possible input states/values are considered.
 If it appears in the right-hand side of `=>`, it means that the output states/values may be updated and different from the input states, but their specific contents are not relevant for the current specification.
-If it appears solely without `=>`, it means that all possible input states/values are considered but they are not updated at all during the execution, must remain intact.
+If it appears without `=>`, it means that all possible input states/values are considered but they are not updated at all during the execution, must remain intact.
 
 `⚬Int` (e.g., `^Int` and `<=Int`) are (mathematical) integer arithmetic operations.
 
@@ -189,10 +189,10 @@ It is another notion to capture some specific gas refund events that happen, for
 The specification ensures that no such event happens during the execution of the current function.
 
 `callData` specifies the call data using the `#abiCallData` eDSL notation.
-Specifically, in the `[DEFAULT]` section, it specifies the (symbolic) value, `OWNER`, of the first parameter.
+Specifically, in the `[balanceOf]` section, it specifies the (symbolic) value, `OWNER`, of the first parameter.
 
 `storage` specifies the pre- and post-states of the permanent storage.
-Specifically, in the `[DEFAULT]` section, it specifies that the value of `balances[OWNER]` is `VALUE` and other entries are not relevant (and could be arbitrary values).
+Specifically, in the `[balanceOf]` section, it specifies that the value of `balances[OWNER]` is `VALUE` and other entries are not relevant (and could be arbitrary values).
 It refers to another two parameters, `{COMPILER}` and `{_BALANCES}`, which are supposed to be given by the program specification.
 `{COMPILER}` specifies the language in which the program is written.
 `{_BALANCES}` specifies the position index of `balances` global variable in the program.

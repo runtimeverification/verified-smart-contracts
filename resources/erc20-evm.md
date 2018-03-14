@@ -1,13 +1,14 @@
 # ERC20-EVM: EVM-Specific Formal Specification of ERC20 Token Standard
 
-We present a refinement of [ERC20-K] that captures EVM-specific details. [ERC20-K] is a comprehensive formal specification of the business logic, with the goal of the high-level reasoning, thus intentionally omits EVM-specific details such as gas consumption, data layout in storage, ABI encoding, and byte representation of the program. However, reasoning about the low-level details is critical because many security vulnerabilities are related to the EVM quirks.
+We present a refinement of [ERC20-K] that captures EVM-specific details. [ERC20-K] is a comprehensive formal specification of the business logic of ERC20 with the goal of supporting high-level reasoning, which therefore intentionally omits EVM-specific details such as gas consumption, data layout in storage, ABI encoding, and byte representation of the program. However, reasoning about the low-level details is critical for contract verification because many security vulnerabilities are related to the EVM quirks.
 
 We refine ERC20-K into the EVM level, called ERC20-EVM, to capture all of the detailed behaviors that can happen in the EVM level. Specifically, we refine it by lowering the [ERC20-K configuration] into the [KEVM configuration]. That includes laying out the high-level data such as `balances` and `allowances` within the EVM storage, encoding the program and the call data in bytes, and specifying additional information such as the gas consumption.
 
 ## EVM-Level Specifications of ERC20 Functions
 
 We present EVM-level specifications for each ERC20 standard function.
-The specifications are written in [eDSL], a domain-specific language for EVM specifications, whose good understanding is required in order to understand the EVM-level specifications well.  Refer to [resources] for background on our technology.  We provide the [eDSL] specification template parameters, the full K reachability logic specifications being automatically derived from a [specification template] by instantiating it with the template parameters. 
+The specifications are written in [eDSL], a domain-specific language for EVM specifications, which must be known in order to thorougly understand our EVM-level specifications.  Refer to [resources] for background on our technology. We provide the [eDSL] specification template parameters.
+The full K reachability logic specifications are automatically derived by instantiating a specification template with these template parameters.
 
 Here we focus on explaining the EVM-specific detailed behaviors, referring to the [ERC20-K] specification for the high-level logic.
 
@@ -52,7 +53,7 @@ Specifying the irrelevant entries implicitly expresses the non-interference prop
 
 ### `balanceOf`
 
-Below is the specification (template parameters) of `balanceOf`, similarly defined as that of `totalSupply`.
+Below is the specification (template parameters) of `balanceOf`, defined similarly to that of `totalSupply`.
 
 ```
 [balanceOf]
@@ -201,7 +202,7 @@ The above specification is written using the section inheritance feature of [eDS
 
 ### `transferFrom`
 
-Below is the specification of `transferFrom`, which is similarly given as that of `transfer`, faithfully capturing the high-level logic of [ERC20-K].
+Below is the specification of `transferFrom`, which is similar to that of `transfer`, faithfully capturing the high-level logic of [ERC20-K].
 
 ```
 [transferFrom]

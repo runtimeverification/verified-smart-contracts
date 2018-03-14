@@ -25,7 +25,7 @@ which denotes (indeed, is translated to) the following byte array:
 ```
   F1 : F2 : F3 : F4 : T1 : ... : T32 : V1 : ... : V32
 ```
-where `F1 : F2 : F3 : F4` is the (two's complement) byte-array representation of `2835717307`, the hash value of the `transfer` function signature ABI encoding, `keccak256("transfer(address,unit256)")`, and `T1 : ... : T32` and `V1 : ... : V32` are the byte-array representations of `TO` and `VALUE` respectively.
+where `F1 : F2 : F3 : F4` is the (two's complement) byte-array representation of `2835717307`, the first four bytes of the hash value of the `transfer` function signature, `keccak256("transfer(address,unit256)")`, and `T1 : ... : T32` and `V1 : ... : V32` are the byte-array representations of `TO` and `VALUE` respectively.
 
 ```k
     syntax TypedArg ::= #uint160 ( Int )
@@ -143,7 +143,7 @@ where `1003892871367861763272476045097431689001461395759728643661426852242313133
 ### Hashed Location for Storage
 
 The storage accommodates permanent data such as the `balances` map.
-A map is laid out in the storage where the map entries are scattered over the entire storage space for which the (256-bit) hash of each key is used to determine the location.
+A map is laid out in the storage where the map entries are scattered over the entire storage space using the (256-bit) hash of each key to determine the location.
 The detailed mechanism of calculating the location varies by compilers.
 In Vyper, for example, `map[key1][key2]` is stored at the location:
 ```
@@ -153,7 +153,7 @@ where `idx(map)` is the position index of `map` in the program, and `+` is the a
 ```
   hash(key2 ++ hash(key1 ++ idx(map)))
 ```
-where `++` is the byte-array concatenation.
+where `++` is byte-array concatenation.
 
 The eDSL provides `#hashedLocation` that allows to uniformly specify the locations in a form parameterized by the underlying compilers. For example, the location of `map[key1][key2]` can be specified as follows, where `{COMPILER}` is a place-holder to be replaced by the name of the compiler.
 Note that the keys are separated by the white spaces instead of commas.
