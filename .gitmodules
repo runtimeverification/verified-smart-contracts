@@ -1,0 +1,4 @@
+[submodule ".build/pandoc-tangle"]
+	path = .build/pandoc-tangle
+	url = https://github.com/ehildenb/pandoc-tangle
+	ignore = untracked
