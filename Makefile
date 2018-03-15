@@ -47,7 +47,7 @@ $(specs_dir)/lemmas.k: resources/lemmas.md $(TANGLER)
 # Spec Files
 # ----------
 
-bihu_collectToken_file:=collectToken-spec.k \
+bihu_collectToken_file:=collectToken-spec.k
 
 bihu_forwardToHotWallet_files:=forwardToHotWallet-success-1-spec.k \
                                forwardToHotWallet-success-2-spec.k \
