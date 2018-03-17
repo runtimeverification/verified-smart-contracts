@@ -1,6 +1,53 @@
-specs_dir:=specs
+# Settings
+# --------
 
-bihu_collectToken_file:=collectToken-spec.k \
+specs_dir:=specs
+build_dir:=.build
+
+.PHONY: all clean kevm clean-kevm
+
+all: k-files split-proof-tests
+
+clean:
+	rm -rf $(specs_dir) $(build_dir)
+
+pandoc_tangle_submodule:=$(build_dir)/pandoc-tangle
+TANGLER:=$(pandoc_tangle_submodule)/tangle.lua
+LUA_PATH:=$(pandoc_tangle_submodule)/?.lua;;
+export LUA_PATH
+
+$(TANGLER):
+	git submodule update --init -- $(pandoc_tangle_submodule)
+
+kevm_repo:=https://github.com/kframework/evm-semantics
+kevm_repo_dir:=$(build_dir)/evm-semantics
+
+kevm: clean-kevm
+	git clone $(kevm_repo) --depth 1 $(kevm_repo_dir)
+	cd $(kevm_repo_dir) \
+		&& make deps \
+		&& make build-java
+
+clean-kevm:
+	rm -rf $(kevm_repo_dir)
+
+# Definition Files
+# ----------------
+
+k_files:=lemmas.k
+
+k-files: $(patsubst %, $(specs_dir)/%, $(k_files))
+
+# Lemmas
+$(specs_dir)/lemmas.k: resources/lemmas.md $(TANGLER)
+	@echo >&2 "== tangle: $@"
+	mkdir -p $(dir $@)
+	pandoc --from markdown --to "$(TANGLER)" --metadata=code:".k" $< > $@
+
+# Spec Files
+# ----------
+
+bihu_collectToken_file:=collectToken-spec.k
 
 bihu_forwardToHotWallet_files:=forwardToHotWallet-success-1-spec.k \
                                forwardToHotWallet-success-2-spec.k \
@@ -77,28 +124,17 @@ sum-to-n: $(specs_dir)/examples/sum-to-n-spec.k $(specs_dir)/lemmas.k
 
 ds-token-erc20: $(patsubst %, $(specs_dir)/ds-token-erc20/%, $(ds_token_erc20_files)) $(specs_dir)/lemmas.k
 
-
-# Definition Files
-# ----------------
-
-# Lemmas
-$(specs_dir)/lemmas.k: resources/lemmas.md
-	@echo >&2 "== tangle: $@"
-	mkdir -p $(dir $@)
-	pandoc --from markdown --to "$(TANGLER)" --metadata=code:".k" $< > $@
-
-# Spec Files
-# ----------
-
 # Bihu
-$(specs_dir)/bihu/collectToken-spec.k: bihu/module-tmpl.k bihu/spec-tmpl.k bihu/collectToken-spec.ini
+bihu_tmpls:=bihu/module-tmpl.k bihu/spec-tmpl.k
+
+$(specs_dir)/bihu/collectToken-spec.k: $(bihu_tmpls) bihu/collectToken-spec.ini
 	@echo >&2 "==  gen-spec: $@"
 	mkdir -p $(dir $@)
 	python3 resources/gen-spec.py $^ collectToken collectToken loop ds-math-mul > $@
 	cp bihu/abstract-semantics.k $(dir $@)
 	cp bihu/verification.k $(dir $@)
 
-$(specs_dir)/bihu/forwardToHotWallet%-spec.k: bihu/module-tmpl.k bihu/spec-tmpl.k bihu/forwardToHotWallet-spec.ini
+$(specs_dir)/bihu/forwardToHotWallet%-spec.k: $(bihu_tmpls) bihu/forwardToHotWallet-spec.ini
 	@echo >&2 "==  gen-spec: $@"
 	mkdir -p $(dir $@)
 	python3 resources/gen-spec.py $^ $(addsuffix $*, forwardToHotWallet) $(addsuffix $*, forwardToHotWallet) > $@
@@ -106,28 +142,30 @@ $(specs_dir)/bihu/forwardToHotWallet%-spec.k: bihu/module-tmpl.k bihu/spec-tmpl.
 	cp bihu/verification.k $(dir $@)
 
 # ERC20
-$(specs_dir)/vyper-erc20/%-spec.k: erc20/module-tmpl.k erc20/spec-tmpl.k erc20/vyper/vyper-erc20-spec.ini
+erc20_tmpls:=erc20/module-tmpl.k erc20/spec-tmpl.k
+
+$(specs_dir)/vyper-erc20/%-spec.k: $(erc20_tmpls) erc20/vyper/vyper-erc20-spec.ini
 	@echo >&2 "==  gen-spec: $@"
 	mkdir -p $(dir $@)
 	python3 resources/gen-spec.py $^ $* $* > $@
 	cp erc20/abstract-semantics.k $(dir $@)
 	cp erc20/verification.k $(dir $@)
 
-$(specs_dir)/zeppelin-erc20/%-spec.k: erc20/module-tmpl.k erc20/spec-tmpl.k erc20/zeppelin/zeppelin-erc20-spec.ini
+$(specs_dir)/zeppelin-erc20/%-spec.k: $(erc20_tmpls) erc20/zeppelin/zeppelin-erc20-spec.ini
 	@echo >&2 "==  gen-spec: $@"
 	mkdir -p $(dir $@)
 	python3 resources/gen-spec.py $^ $* $* > $@
 	cp erc20/abstract-semantics.k $(dir $@)
 	cp erc20/verification.k $(dir $@)
 
-$(specs_dir)/hkg-erc20/%-spec.k: erc20/module-tmpl.k erc20/spec-tmpl.k erc20/hkg/hkg-erc20-spec.ini
+$(specs_dir)/hkg-erc20/%-spec.k: $(erc20_tmpls) erc20/hkg/hkg-erc20-spec.ini
 	@echo >&2 "==  gen-spec: $@"
 	mkdir -p $(dir $@)
 	python3 resources/gen-spec.py $^ $* $* > $@
 	cp erc20/abstract-semantics.k $(dir $@)
 	cp erc20/verification.k $(dir $@)
 
-$(specs_dir)/hobby-erc20/%-spec.k: erc20/module-tmpl.k erc20/spec-tmpl.k erc20/hobby/hobby-erc20-spec.ini
+$(specs_dir)/hobby-erc20/%-spec.k: $(erc20_tmpls) erc20/hobby/hobby-erc20-spec.ini
 	@echo >&2 "==  gen-spec: $@"
 	mkdir -p $(dir $@)
 	python3 resources/gen-spec.py $^ $* $* > $@
@@ -142,7 +180,19 @@ $(specs_dir)/ds-token-erc20/%-spec.k: erc20/module-tmpl.k erc20/spec-tmpl.k erc2
 	cp erc20/verification.k $(dir $@)
 
 # Sum to N
-$(specs_dir)/examples/sum-to-n-spec.k: resources/sum-to-n.md
+$(specs_dir)/examples/sum-to-n-spec.k: resources/sum-to-n.md $(TANGLER)
 	@echo "==  tangle: $@"
 	mkdir -p $(dir $@)
 	pandoc --from markdown --to "$(TANGLER)" --metadata="code:.sum-to-n" $< > $@
+
+# Testing
+# -------
+
+TEST:=$(kevm_repo_dir)/kevm prove
+
+test_files:=$(wildcard specs/*/*-spec.k)
+
+test: $(test_files:=.test)
+
+specs/%-spec.k.test: specs/%-spec.k
+	$(TEST) $<
