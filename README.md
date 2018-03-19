@@ -23,17 +23,14 @@ The K framework takes a formal semantics of a language as trusted input
 it to symbolically execute the smart contract exhaustively on all paths,
 making use of SMT solvers like [Z3] to solve the mathematical domain constraints.
 
-## Pending
-
-(Links to be added soon)
-
+<!--
 * **2018-??-??** Casper - Ethereum Foundation
 * **2018-??-??** Fabian Vogelsteller's ICO contract and ICO schema
+-->
 
+## List of Verified Smart Contracts
 
-## Completed
-
-* **2018-03-12** [DappSys DSToken contract](erc20/ds-token/README.md)
+* **2018-03-12** [DappSys DSToken ERC20 token contract](erc20/ds-token/README.md)
 * **2018-02-28** [Bihu KEY token operation contracts](bihu/README.md)
 * **2018-01-30** [MyKidsEducationToken ERC20 token contract](erc20/hobby/README.md)
 * **2018-01-26** [OpenZeppelin ERC20 token contract](erc20/zeppelin/README.md)
