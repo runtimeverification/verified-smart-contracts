@@ -90,7 +90,7 @@ $ make ds-token-erc20
 ```
 
 Run the EVM verifier to prove that the specification is satisfied by (the compiled EVM bytecode of) the target functions.
-See this [instruction] for more details of running the verifier.
+See this [instructions] for more details of running the verifier.
 
 
 ## [Resources](/README.md#resources)
@@ -114,4 +114,4 @@ See this [instruction] for more details of running the verifier.
 [ERC20 standard]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md>
 [ERC20-K]: <https://github.com/runtimeverification/erc20-semantics>
 [ERC20-EVM]: </resources/erc20-evm.md>
-[instruction]: </resources/instruction.md>
+[instructions]: </resources/instructions.md>
