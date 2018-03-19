@@ -9,7 +9,7 @@ The template is instantiated with suitable parameter values for each specificati
 
 EVM specifications are written over the full KEVM configuration.
 However, large part of the configuration is not relevant for functional correctness specification and can be shared across the different specifications.
-eDSL allows capturing these common portions in a template specification that can instantiated for each specification.
+eDSL allows capturing these common portions in a template specification that can instantiate for each specification.
 
 Below is the template specification.
 Essentially, it is a reachability claim over the KEVM configurations.

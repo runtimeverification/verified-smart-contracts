@@ -25,7 +25,7 @@ We found that the HKG token implementation does **not** conform to the [ERC20 st
 
 ## Target Smart Contract
 
-The target contract of our formal verification has the following Solidity source code, taken the Github repository https://github.com/ether-camp/virtual-accelerator at commit [`42258200`][version]:
+The target contract of our formal verification has the following Solidity source code, taken from the Github repository https://github.com/ether-camp/virtual-accelerator at commit [`42258200`][version]:
 
 * [StandardToken.sol][src]
 
