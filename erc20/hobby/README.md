@@ -135,7 +135,7 @@ The resulting specification is the following:
 
 * [hobby-erc20-spec.ini](hobby-erc20-spec.ini)
 
-The specification is written in [eDSL], a domain-specific language for EVM specifications, which must be known in order to thorougly understand our EVM-level specification.  Refer to [resources] for background on our technology.  The above file provides the [eDSL] specification template parameters.
+The specification is written in [eDSL], a domain-specific language for EVM specifications, which must be known in order to thoroughly understand our EVM-level specification.  Refer to [resources] for background on our technology.  The above file provides the [eDSL] specification template parameters.
 The full K reachability logic specification is automatically derived by instantiating a specification template with these template parameters.
 
 Run the following command in the root directory of this repository to generate the full specification under the directory `specs/hobby-erc20`:
