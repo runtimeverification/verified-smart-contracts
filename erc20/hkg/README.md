@@ -42,7 +42,7 @@ We formally verified the full functional correctness of the following ERC20 func
 
 ### Solidity Source Code and Compiled EVM Bytecode
 
-We took the [source code][src], inlined the [`TokenInterface`] contract, and compiled it to the EVM bytecode using Remix Solidity IDE (of the version `soljson-v0.4.19+commit.c4cbbb05`).
+We took the [source code][src], inlined the [`TokenInterface`] contract, and compiled it to the EVM bytecode using Remix Solidity IDE (version `soljson-v0.4.19+commit.c4cbbb05`).
 
 The inlined source code of the contract is the following:
 

@@ -69,7 +69,7 @@ The following are the mechanized EVM-level specifications of each target functio
 * EVM specification of `collectToken`: [collectToken-spec.ini]
 * EVM specification of `forwardToHotWallet`: [forwardToHotWallet-spec.ini]
 
-The specifications are written in [eDSL], a domain-specific language for EVM specifications, which must be known in order to thorougly understand our EVM-level specifications.  Refer to [resources] for background on our technology.  The above files provide the [eDSL] specification template parameters.
+The specifications are written in [eDSL], a domain-specific language for EVM specifications, which must be known in order to thoroughly understand our EVM-level specifications.  Refer to [resources] for background on our technology.  The above files provide the [eDSL] specification template parameters.
 The full K reachability logic specifications are automatically derived by instantiating a specification template with these template parameters.
 
 Run the following command in the root directory of this repository, and it will generate the full specifications under the directory `specs/bihu`:

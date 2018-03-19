@@ -7,7 +7,7 @@ We refine ERC20-K into the EVM level, called ERC20-EVM, to capture all of the de
 ## EVM-Level Specifications of ERC20 Functions
 
 We present EVM-level specifications for each ERC20 standard function.
-The specifications are written in [eDSL], a domain-specific language for EVM specifications, which must be known in order to thorougly understand our EVM-level specifications.  Refer to [resources] for background on our technology. We provide the [eDSL] specification template parameters.
+The specifications are written in [eDSL], a domain-specific language for EVM specifications, which must be known in order to thoroughly understand our EVM-level specifications.  Refer to [resources] for background on our technology. We provide the [eDSL] specification template parameters.
 The full K reachability logic specifications are automatically derived by instantiating a specification template with these template parameters.
 
 Here we focus on explaining the EVM-specific detailed behaviors, referring to the [ERC20-K] specification for the high-level logic.

@@ -1,6 +1,6 @@
 # General Instruction for Reproducing Mechanized Proofs
 
-The full K reachability logic specification is automatically derived by instantiating a specification template with these template parameters.
+The formal specifications presented in this repository are written in [eDSL], a domain-specific language for EVM specifications, which must be known in order to thoroughly understand the specifications.
 Refer to [resources] for background on our technology.
 Each of the specifications provides the [eDSL] specification template parameters.
 The full [K] [reachability logic] specifications are automatically derived by instantiating a specification template with these template parameters.
