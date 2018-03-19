@@ -15,10 +15,10 @@ $ make
 
 #### Reproducing Proofs
 
-To prove that the specifications are satisfied by (the compiled EVM bytecode of) the target contracts, run the EVM verifier (under the [KEVM] root directory, see below) as follows:
+To prove that the specifications are satisfied by (the compiled EVM bytecode of) the target contracts, run the EVM verifier <!-- (under the [KEVM] root directory, see below) --> as follows:
 
 ```
-$ ./kevm prove tests/proofs/specs/<project>/<target>-spec.k
+$ .build/evm-semantics/kevm prove specs/<project>/<target>-spec.k
 ```
 
 where `<project>/<target>` is the target contract (or function) to verify.
@@ -36,11 +36,17 @@ $ kprove specs/<project>/<target>-spec.k -m VERIFICATION --z3-executable -d /pat
 The EVM verifier is part of the [KEVM] project.  The following commands will successfully install it, provided that all of the dependencies are installed.
 
 ```
+$ make kevm
+```
+
+<!--
+```
 $ git clone git@github.com:kframework/evm-semantics.git
 $ cd evm-semantics
 $ make deps
 $ make
 ```
+-->
 
 For detailed instructions on installing and running the EVM verifier, see [KEVM]'s [Installing/Building](https://github.com/kframework/evm-semantics/blob/master/README.md#installingbuilding) and [Example Usage](https://github.com/kframework/evm-semantics/blob/master/README.md#example-usage) pages.
 
