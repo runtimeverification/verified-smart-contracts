@@ -12,21 +12,16 @@ intended functionality of the smart contract.
 Not surprisingly, many bugs or opportunities for improvement in the smart
 contract code are found at this early stage.
 Then we need to show that the binary or low-level code
-(e.g., [EVM binary](https://github.com/kframework/evm-semantics) or
-[IELE code](https://github.com/runtimeverification/iele-semantics)) generated
+(e.g., [EVM binary][KEVM] or [IELE code][IELE]) generated
 by the compiler from the smart contract high level code
-(e.g., [Solidity](https://solidity.readthedocs.io/en/develop/) or
-[Vyper](https://github.com/ethereum/vyper)) indeed satisfies the specification.
-In our approach the proofs use
-[reachability logic](http://fsl.cs.illinois.edu/index.php/Reachability_Logic),
+(e.g., [Solidity] or [Vyper]) indeed satisfies the specification.
+In our approach the proofs use [reachability logic],
 a generalization of Hoare logic, separation logic and modal logic, and are
-performed using the [K framework](http://kframework.org).
+performed using the [K-framework].
 The K framework takes a formal semantics of a language as trusted input
-(e.g., that of [EVM](https://github.com/kframework/evm-semantics) or
-[IELE](https://github.com/runtimeverification/iele-semantics)), and then uses
+(e.g., that of [EVM][KEVM] or [IELE]), and then uses
 it to symbolically execute the smart contract exhaustively on all paths,
-making use of SMT solvers like [Z3](https://github.com/Z3Prover/z3) to solve
-the mathematical domain constraints.
+making use of SMT solvers like [Z3] to solve the mathematical domain constraints.
 
 ## Pending
 
@@ -95,3 +90,7 @@ The possibility of human error in the manual review process is very real, and we
 [ERC20-EVM]: </resources/erc20-evm.md>
 [ERC777]: <https://github.com/ethereum/eips/issues/777>
 
+[IELE]: <https://github.com/runtimeverification/iele-semantics>
+[Solidity]: <https://solidity.readthedocs.io/en/develop/>
+[Vyper]: <https://github.com/ethereum/vyper>
+[reachability logic]: <http://fsl.cs.illinois.edu/index.php/Reachability_Logic>
