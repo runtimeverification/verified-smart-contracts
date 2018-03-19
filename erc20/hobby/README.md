@@ -2,7 +2,7 @@
 
 # Formal Verification of MyKidsEducationToken ERC20 Token Contract
 
-We present a formal verification of [MyKidsEducationToken ERC20][src] token contract, written by a personal hobby
+We present a formal verification of [MyKidsEducationToken ERC20][src] token contract, written as a personal hobby
 
 We found that the MyKidsEducationToken implementation deviates from the [ERC20-K] (and thus [ERC20-EVM])  specification as follows:
 
@@ -49,7 +49,7 @@ We formally verified the full functional correctness of the following ERC20 func
 
 ### Solidity Source Code and Compiled EVM Bytecode
 
-We took the [source code][src], fixed the typographical bugs, and compiled it to the EVM bytecode using Remix Solidity IDE (of the version `soljson-v0.4.19+commit.c4cbbb05`).
+We took the [source code][src], fixed the typographical bugs, and compiled it to the EVM bytecode using Remix Solidity IDE (version `soljson-v0.4.19+commit.c4cbbb05`).
 
 The fixed source code of the contract is the following:
 
@@ -135,48 +135,17 @@ The resulting specification is the following:
 
 * [hobby-erc20-spec.ini](hobby-erc20-spec.ini)
 
-The specification is written in [eDSL], a domain-specific language for EVM specifications, whose good understanding is required in order to understand any of our EVM-level specification well.  Refer to [resources] for background on our technology.  The above file provides the [eDSL] specification template parameters, the full K reachability logic specification being automatically derived from a specification template by instantiating it with the template parameters.
+The specification is written in [eDSL], a domain-specific language for EVM specifications, which must be known in order to thorougly understand our EVM-level specification.  Refer to [resources] for background on our technology.  The above file provides the [eDSL] specification template parameters.
+The full K reachability logic specification is automatically derived by instantiating a specification template with these template parameters.
 
-Run the following command in the root directory of this repository, and it will generate the full specification under the directory `specs/hobby-erc20`:
+Run the following command in the root directory of this repository to generate the full specification under the directory `specs/hobby-erc20`:
 
 ```
 $ make hobby-erc20
 ```
 
 Run the EVM verifier to prove that the specification is satisfied by (the compiled EVM bytecode of) the target functions.
-See this [instruction] for more details of running the verifier.
-
-<!--
-#### Reproducing Proofs
-
-To prove that the specification is satisfied by (the compiled EVM bytecode of) the target functions, run the EVM verifier as follows:
-
-```
-$ ./kevm prove tests/proofs/specs/hobby-erc20/<func>-spec.k
-```
-
-where `<func>` is the name of the ERC20 function to verify.
-
-The above command essentially executes the following command:
-
-```
-$ kprove hobby-erc20-spec.k -m VERIFICATION --z3-executable -d /path/to/evm-semantics/.build/java
-```
-
-#### Installing the EVM Verifier
-
-The EVM verifier is part of the [KEVM] project.  The following commands will successfully install it, provided that all of the dependencies are installed.
-
-```
-$ git clone git@github.com:kframework/evm-semantics.git
-$ cd evm-semantics
-$ make deps
-$ make
-```
-
-For detailed instructions on installing and running the EVM verifier, see [KEVM]'s [Installing/Building](https://github.com/kframework/evm-semantics/blob/master/README.md#installingbuilding) and [Example Usage](https://github.com/kframework/evm-semantics/blob/master/README.md#example-usage) pages.
--->
-
+See these [instructions] for more details of running the verifier.
 
 ## [Resources](/README.md#resources)
 
@@ -195,4 +164,4 @@ For detailed instructions on installing and running the EVM verifier, see [KEVM]
 [ERC20-K]: <https://github.com/runtimeverification/erc20-semantics>
 [ERC20-EVM]: </resources/erc20-evm.md>
 [hkg]: <../hkg/README.md>
-[instruction]: </resources/instruction.md>
+[instructions]: </resources/instructions.md>

@@ -16,7 +16,7 @@ Our abstraction helps to fill the gap and make the reasoning easier.
 
 Specifically, we introduce uninterpreted function abstractions and refinements for the word-level reasoning.
 
-The term `nthbyteof(v, i, n)` represents the i-th byte of the two's complement representation of v in n bytes (0 being MSB), with discarding high-order bytes when v is not fit in n bytes.
+The term `nthbyteof(v, i, n)` represents the i-th byte of the two's complement representation of v in n bytes (i=0 being the MSB), with high-order bytes discarded when v does not fit in n bytes.
 
 ```k
     syntax Int ::= nthbyteof ( Int , Int , Int ) [function, smtlib(smt_nthbyteof)]
@@ -76,7 +76,7 @@ The function signature is located in the first four bytes of the call data, but 
 
 The extraction mechanism varies by language compilers.
 For example, in Vyper, the first 32 bytes of the call data are loaded into the memory at the starting location 28 (i.e., in the memory range of 28 to 59), and the memory range of 0 to 31, which consists of 28 zero bytes and the four signature bytes, is loaded into the stack.
-In Solidity, however, the first 32 bytes of the call data are loaded into the stack, and the loaded word (i.e., a 256-bit integer) is divided by `2^(28*8)` (i.e., left-shifted by 28 bytes), followed by masked by 0xffffffff (i.e., 4 bytes of bit 1’s).
+In Solidity, however, the first 32 bytes of the call data are loaded into the stack, and the loaded word (i.e., a 256-bit integer) is divided by `2^(28*8)` (i.e., right-shifted by 28 bytes), followed by masked by 0xffffffff (i.e., 4 bytes of bit 1’s).
 
 The following lemmas essentially capture the signature extraction mechanisms.
 It reduces the reasoning efforts of the underlying theorem prover, factoring out the essence of the byte-twiddling operations.
@@ -200,7 +200,7 @@ Some lemmas over the comparison operators are also provided.
 
 ### Wordstack
 
-These lemma abstracts some properties about `#sizeWordStack`:
+These lemmas abstract some properties about `#sizeWordStack`:
 
 ```k
     rule #sizeWordStack ( _ , _ ) >=Int 0 => true [smt-lemma]

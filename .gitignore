@@ -2,3 +2,5 @@
 !/.build/pandoc-tangle
 
 /specs/*
+
+*.html

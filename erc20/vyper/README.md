@@ -5,15 +5,15 @@
 We present a formal verification of Philip Daian's Vyper ERC20 token contract.
 
 The [Vyper ERC20 token][src] is shipped as part of the official [Vyper] language compiler distribution.
-Vyper, being developed by the Ethereum Foundation, is an experimental smart contract language with syntax similar to Python, designed with the goal of being a simpler and more secure alternative to Solidity.
+Vyper, currently being developed by the Ethereum Foundation, is an experimental smart contract language with syntax similar to Python, designed with the goal of being a simpler and more secure alternative to Solidity.
 
-The Vyper ERC20 token is successfully verified against the ERC20-EVM specification, implying its full conformance to the ERC20 standard.
+The Vyper ERC20 token was successfully verified against the ERC20-EVM specification, implying its full conformance to the ERC20 standard.
 
 **NOTE**: The Vyper language/compiler project [changed its name from Viper to Vyper](https://github.com/ethereum/vyper/issues/501) after we had verified the token contract. The legacy name Viper is used when necessary throughout this document and the files in the current directory.
 
 ## Target Smart Contract
 
-The target contract of our formal verification is the following, where we took the Vyper source code from the Vyper Github repository, https://github.com/ethereum/vyper, commit [`bf6ed1bf`][version]:
+The target contract of our formal verification has the following Vyper source code, taken from the Vyper Github repository https://github.com/ethereum/vyper at commit [`bf6ed1bf`][version]:
 
 * [ERC20.v.py][src]
 
@@ -30,7 +30,7 @@ We formally verified the full functional correctness of the following ERC20 func
 
 ### Compiled EVM Bytecode
 
-We compiled the [source code][src] down to the EVM bytecode using the official Vyper compiler with the version 0.0.2 (of the commit [`bf6ed1bfde2071ee2d5fdd6fbe1c09cf3bec44f2`][version]). Specifically, the EVM bytecode is obtained by running the following command:
+We compiled the [source code][src] down to the EVM bytecode using the official Vyper compiler version 0.0.2 (from commit [`bf6ed1bfde2071ee2d5fdd6fbe1c09cf3bec44f2`][version]). Specifically, the EVM bytecode is obtained by running the following command:
 ```
 $ viper -f bytecode_runtime ERC20.v.py
 ```
@@ -65,48 +65,17 @@ The resulting specification is the following:
 
 * [vyper-erc20-spec.ini](vyper-erc20-spec.ini)
 
-The specification is written in [eDSL], a domain-specific language for EVM specifications, whose good understanding is required in order to understand any of our EVM-level specification well.  Refer to [resources] for background on our technology.  The above file provides the [eDSL] specification template parameters, the full K reachability logic specification being automatically derived from a specification template by instantiating it with the template parameters.
+The specification is written in [eDSL], a domain-specific language for EVM specifications, which must be known in order to thorougly understand our EVM-level specification.  Refer to [resources] for background on our technology.  The above file provides the [eDSL] specification template parameters.
+The full K reachability logic specification is automatically derived by instantiating a specification template with these template parameters.
 
-Run the following command in the root directory of this repository, and it will generate the full specification under the directory `specs/vyper-erc20`:
+Run the following command in the root directory of this repository to generate the full specification under the directory `specs/vyper-erc20`:
 
 ```
 $ make vyper-erc20
 ```
 
 Run the EVM verifier to prove that the specification is satisfied by (the compiled EVM bytecode of) the target functions.
-See this [instruction] for more details of running the verifier.
-
-<!--
-#### Reproducing Proofs
-
-To prove that the specification is satisfied by (the compiled EVM bytecode of) the target functions, run the EVM verifier as follows:
-
-```
-$ ./kevm prove tests/proofs/specs/vyper-erc20/<func>-spec.k
-```
-
-where `<func>` is the name of the ERC20 function to verify.
-
-The above command essentially executes the following command:
-
-```
-$ kprove vyper-erc20-spec.k -m VERIFICATION --z3-executable -d /path/to/evm-semantics/.build/java
-```
-
-#### Installing the EVM Verifier
-
-The EVM verifier is part of the [KEVM] project.  The following commands will successfully install it, provided that all of the dependencies are installed.
-
-```
-$ git clone git@github.com:kframework/evm-semantics.git
-$ cd evm-semantics
-$ make deps
-$ make
-```
-
-For detailed instructions on installing and running the EVM verifier, see [KEVM]'s [Installing/Building](https://github.com/kframework/evm-semantics/blob/master/README.md#installingbuilding) and [Example Usage](https://github.com/kframework/evm-semantics/blob/master/README.md#example-usage) pages.
--->
-
+These [instructions] describe how to run the verifier.
 
 ## [Resources](/README.md#resources)
 
@@ -126,4 +95,4 @@ For detailed instructions on installing and running the EVM verifier, see [KEVM]
 [ERC20 standard]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md>
 [ERC20-K]: <https://github.com/runtimeverification/erc20-semantics>
 [ERC20-EVM]: </resources/erc20-evm.md>
-[instruction]: </resources/instruction.md>
+[instructions]: </resources/instructions.md>

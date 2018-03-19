@@ -4,17 +4,20 @@
 
 We present a formal verification of [HackerGold (HKG) ERC20][src] token contract.
 
-The HackerGold (HKG) token is an ERC20 token written in Solidity, which became well-known as a [serious security vulnerability] was discovered that even survived a security audit performed by Zeppelin. Specifically, the bug was due to a [typographical error] in the source code, `=+` instead of `+=`, for updating a receiver’s balance during a transfer, which would allow an attacker to reset an account balance. This security issue was resolved by deploying a new, fixed contract with reissuing the tokens.
+The HackerGold (HKG) token is an ERC20 token written in Solidity, which became well-known when a [serious security vulnerability] was discovered that even survived a security audit performed by Zeppelin.
+Specifically, the bug was due to a [typographical error] in the source code, using `=+` instead of `+=` for updating a receiver’s balance during a transfer, which would allow an attacker to reset an account balance. This security issue was resolved by deploying a new, fixed contract and reissuing the tokens.
 
 We found that the HKG token implementation does **not** conform to the [ERC20 standard], and deviates from the [ERC20-K] (and thus [ERC20-EVM]) specification as follows:
 
 * *No `totalSupply` function*: No `totalSupply` function is provided in the HKG token, which is **not** compliant to the [ERC20 standard].
 
 * *Returning `false` in failure*: It returns `false` instead of throwing an exception in case of failure for both `transfer` and `transferFrom`. It does not violate the standard, as throwing an exception is recommended but not mandatory according to the [ERC20 standard]:
-   > "The function SHOULD throw if the from account balance does not have enough tokens to spend."
+
+> "The function SHOULD throw if the from account balance does not have enough tokens to spend."
 
 * *Rejecting transfers of 0 value*: It does not allow transferring 0 value (for both `transfer` and `transferFrom`), returning `false` immediately without logging any event. It is **not** compliant to the standard, as the standard explicitly states that:
-   > "transfers of 0 values MUST be treated as normal transfers and fire the Transfer event."
+
+> "transfers of 0 values MUST be treated as normal transfers and fire the Transfer event."
 
    This is a potential security vulnerability for any API clients assuming the ERC20-compliant behavior.
 
@@ -22,7 +25,7 @@ We found that the HKG token implementation does **not** conform to the [ERC20 st
 
 ## Target Smart Contract
 
-The target contract of our formal verification is the following, where we took the Solidity source code from the Github repository, https://github.com/ether-camp/virtual-accelerator, commit [`42258200`][version]:
+The target contract of our formal verification has the following Solidity source code, taken from the Github repository https://github.com/ether-camp/virtual-accelerator at commit [`42258200`][version]:
 
 * [StandardToken.sol][src]
 
@@ -151,48 +154,17 @@ The resulting specification is the following:
 
 * [hkg-erc20-spec.ini](hkg-erc20-spec.ini)
 
-The specification is written in [eDSL], a domain-specific language for EVM specifications, whose good understanding is required in order to understand any of our EVM-level specification well.  Refer to [resources] for background on our technology.  The above file provides the [eDSL] specification template parameters, the full K reachability logic specification being automatically derived from a specification template by instantiating it with the template parameters.
+The specification is written in [eDSL], a domain-specific language for EVM specifications, which must be known in order to to thorougly understand our EVM-level specification.  Refer to [resources] for background on our technology.  The above file provides the [eDSL] specification template parameters.
+The full K reachability logic specification is automatically derived by instantiating a specification template with these template parameters.
 
-Run the following command in the root directory of this repository, and it will generate the full specification under the directory `specs/hkg-erc20`:
+Run the following command in the root directory of this repository to generate the full specification under the directory `specs/hkg-erc20`:
 
 ```
 $ make hkg-erc20
 ```
 
 Run the EVM verifier to prove that the specification is satisfied by (the compiled EVM bytecode of) the target functions.
-See this [instruction] for more details of running the verifier.
-
-<!--
-#### Reproducing Proofs
-
-To prove that the specification is satisfied by (the compiled EVM bytecode of) the target functions, run the EVM verifier as follows:
-
-```
-$ ./kevm prove tests/proofs/specs/hkg-erc20/<func>-spec.k
-```
-
-where `<func>` is the name of the ERC20 function to verify.
-
-The above command essentially executes the following command:
-
-```
-$ kprove hkg-erc20-spec.k -m VERIFICATION --z3-executable -d /path/to/evm-semantics/.build/java
-```
-
-#### Installing the EVM Verifier
-
-The EVM verifier is part of the [KEVM] project.  The following commands will successfully install it, provided that all of the dependencies are installed.
-
-```
-$ git clone git@github.com:kframework/evm-semantics.git
-$ cd evm-semantics
-$ make deps
-$ make
-```
-
-For detailed instructions on installing and running the EVM verifier, see [KEVM]'s [Installing/Building](https://github.com/kframework/evm-semantics/blob/master/README.md#installingbuilding) and [Example Usage](https://github.com/kframework/evm-semantics/blob/master/README.md#example-usage) pages.
--->
-
+See the [instructions] for more details of running the verifier.
 
 ## [Resources](/README.md#resources)
 
@@ -214,4 +186,4 @@ For detailed instructions on installing and running the EVM verifier, see [KEVM]
 [ERC20 standard]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md>
 [ERC20-K]: <https://github.com/runtimeverification/erc20-semantics>
 [ERC20-EVM]: </resources/erc20-evm.md>
-[instruction]: </resources/instruction.md>
+[instructions]: </resources/instructions.md>
