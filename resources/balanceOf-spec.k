@@ -104,7 +104,7 @@ andBool 0 <=Int VALUE andBool VALUE <Int (2 ^Int 256)andBool OWNER =/=Int 0
 
   // balanceOf-failure
   rule
-    <k> #execute => #exception </k>
+    <k> #execute => #exception EVM_INVALID_INSTRUCTION </k>
     <exit-code> 1 </exit-code>
     <mode> NORMAL </mode>
     <schedule> BYZANTIUM </schedule>

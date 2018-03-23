@@ -39,7 +39,7 @@
 +    andBool STOPPED ==Int 0 
 +
 +[approve-failure]
-+k: #execute => #exception
++k: #execute => #exception EVM_INVALID_INSTRUCTION
 +localMem: .Map => _:Map
 ++requires:
 +    andBool STOPPED ==Int 1 <<Int (20 *Int 8)
@@ -86,7 +86,7 @@
 +    andBool STOPPED ==Int 0
  
  [transfer-failure]
- k: #execute => #exception
+ k: #execute => #exception EVM_INVALID_INSTRUCTION
  localMem: .Map => _:Map
 -log: _
  
@@ -178,7 +178,7 @@
 +    andBool STOPPED ==Int 0
  
  [transferFrom-failure]
- k: #execute => #exception
+ k: #execute => #exception EVM_INVALID_INSTRUCTION
  localMem: .Map => _:Map
 -log: _
 +log: _ => _

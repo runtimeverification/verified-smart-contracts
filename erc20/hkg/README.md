@@ -68,7 +68,7 @@ Due to its deviation from ERC20-K, we could not verify the HKG token against the
 
     ```
     [totalSupply]
-    k: #execute => #exception
+    k: #execute => #exception EVM_INVALID_INSTRUCTION
     callData: #abiCallData("totalSupply", .TypedArgs)
     localMem: .Map => _:Map
     gas: {GASCAP} => _
@@ -83,7 +83,7 @@ Due to its deviation from ERC20-K, we could not verify the HKG token against the
 * To capture the false return value, we changed the `k` and `localMem` parameters of the `transfer-failure` section, from:
 
     ```
-    k: #execute => #exception
+    k: #execute => #exception EVM_INVALID_INSTRUCTION
     localMem: .Map => _:Map
     ```
 

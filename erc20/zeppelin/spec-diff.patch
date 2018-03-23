@@ -13,7 +13,7 @@
 +    andBool TO_ID =/=Int 0
  
  [transfer-failure]
- k: #execute => #exception
+ k: #execute => #exception EVM_INVALID_INSTRUCTION
 @@ -103,7 +105,8 @@
  +requires:
      andBool CALLER_ID =/=Int TO_ID
@@ -49,7 +49,7 @@
 +    andBool TO_ID =/=Int 0
  
  [transferFrom-failure]
- k: #execute => #exception
+ k: #execute => #exception EVM_INVALID_INSTRUCTION
 @@ -167,7 +173,8 @@
      andBool FROM_ID =/=Int TO_ID
      andBool ( VALUE >Int BAL_FROM
