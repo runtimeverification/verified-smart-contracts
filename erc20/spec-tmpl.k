@@ -18,7 +18,7 @@
         <touchedAccounts> _ => _ </touchedAccounts>
 
         <txExecState>
-          <program> #asMapOpCodes(#dasmOpCodes(#parseByteStack({CODE}), DEFAULT)) </program> // TODO: change to BYZANTIUM
+          <program> #asMapOpCodes(#dasmOpCodes(#parseByteStack({CODE}), BYZANTIUM)) </program>
           <programBytes> #parseByteStack({CODE}) </programBytes>
 
           <id> ACCT_ID </id> // contract owner
