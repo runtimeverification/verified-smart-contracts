@@ -133,7 +133,7 @@ Below is an example of the function-specific parameter definition of a `balanceO
   +requires: andBool OWNER =/=Int 0
 
   [balanceOf-failure]
-  k: #execute => #exception
+  k: #execute => #exception EVM_INVALID_INSTRUCTION
   +requires: andBool OWNER ==Int 0
 ```
 

@@ -173,7 +173,7 @@ storage:
     andBool VALUE <=Int BAL_FROM
 
 [transfer-failure]
-k: #execute => #exception
+k: #execute => #exception EVM_INVALID_INSTRUCTION
 localMem: .Map => _:Map
 log: _
 
@@ -245,7 +245,7 @@ storage:
     andBool VALUE <=Int ALLOW
 
 [transferFrom-failure]
-k: #execute => #exception
+k: #execute => #exception EVM_INVALID_INSTRUCTION
 localMem: .Map => _:Map
 log: _
 

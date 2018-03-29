@@ -52,7 +52,7 @@
 +    andBool BAL_FROM +Int VALUE <Int (2 ^Int 256)
  
  [transfer-failure]
--k: #execute => #exception
+-k: #execute => #exception EVM_INVALID_INSTRUCTION
 -localMem: .Map => _:Map
 +k: #execute => (RETURN RET_ADDR:Int 32 ~> _)
 +localMem: .Map => ( .Map[ RET_ADDR := #asByteStackInWidth(0, 32) ] _:Map )
@@ -102,7 +102,7 @@
 +    andBool BAL_FROM +Int VALUE <Int (2 ^Int 256)
  
  [transferFrom-failure]
--k: #execute => #exception
+-k: #execute => #exception EVM_INVALID_INSTRUCTION
 -localMem: .Map => _:Map
 +k: #execute => (RETURN RET_ADDR:Int 32 ~> _)
 +localMem: .Map => ( .Map[ RET_ADDR := #asByteStackInWidth(0, 32) ] _:Map )
