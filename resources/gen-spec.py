@@ -39,7 +39,7 @@ def inherit_get(config, section):
                 del merged[key]
         return merged
 
-def gen(sepc_template, rule_template, spec_ini, spec_name, rule_name_list):
+def gen(spec_template, rule_template, spec_ini, spec_name, rule_name_list):
     spec_config = configparser.ConfigParser(comment_prefixes=(';'))
     spec_config.read(spec_ini)
     if 'pgm' not in spec_config:
