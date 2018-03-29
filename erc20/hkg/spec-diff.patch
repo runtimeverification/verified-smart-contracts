@@ -3,7 +3,7 @@
  
  [totalSupply]
 -k: #execute => (RETURN RET_ADDR:Int 32 ~> _)
-+k: #execute => #exception EVM_INVALID_INSTRUCTION
++k: #execute => #exception EVM_UNDEFINED_INSTRUCTION
  callData: #abiCallData("totalSupply", .TypedArgs)
 -localMem: .Map => ( .Map[ RET_ADDR := #asByteStackInWidth(TOTAL, 32) ] _:Map )
 +localMem: .Map => _:Map
@@ -41,7 +41,7 @@
 +    andBool VALUE >Int 0
  
  [transfer-failure]
--k: #execute => #exception EVM_INVALID_INSTRUCTION
+-k: #execute => #exception EVM_UNDEFINED_INSTRUCTION
 -localMem: .Map => _:Map
 +k: #execute => (RETURN RET_ADDR:Int 32 ~> _)
 +localMem: .Map => ( .Map[ RET_ADDR := #asByteStackInWidth(0, 32) ] _:Map )
@@ -91,7 +91,7 @@
 +    andBool VALUE >Int 0
  
  [transferFrom-failure]
--k: #execute => #exception EVM_INVALID_INSTRUCTION
+-k: #execute => #exception EVM_UNDEFINED_INSTRUCTION
 -localMem: .Map => _:Map
 +k: #execute => (RETURN RET_ADDR:Int 32 ~> _)
 +localMem: .Map => ( .Map[ RET_ADDR := #asByteStackInWidth(0, 32) ] _:Map )
