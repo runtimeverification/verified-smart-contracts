@@ -9,15 +9,13 @@
     <ethereum>
       <evm>
         <output> _ </output>
-        <memoryUsed> 0 => _ </memoryUsed>
-        <callDepth> CALL_DEPTH </callDepth>
         <callStack> _ => _ </callStack>
         <interimStates> _ </interimStates>
         <substateStack> _ </substateStack>
         <callLog> .Set </callLog> // for vmtest only
         <touchedAccounts> _ => _ </touchedAccounts>
 
-        <txExecState>
+        <callState>
           <program> #asMapOpCodes(#dasmOpCodes(#parseByteStack({CODE}), DEFAULT)) </program> // TODO: change to BYZANTIUM
           <programBytes> #parseByteStack({CODE}) </programBytes>
 
@@ -31,10 +29,12 @@
           <localMem> {LOCALMEM} </localMem>
           <pc> 0 => _ </pc>
           <gas> {GAS} </gas>
+          <memoryUsed> 0 => _ </memoryUsed>
           <previousGas> _ => _ </previousGas>
 
           <static> false </static> // NOTE: non-static call
-        </txExecState>
+          <callDepth> CALL_DEPTH </callDepth>
+        </callState>
 
         <substate>
           <selfDestruct> _ </selfDestruct>
