@@ -105,7 +105,9 @@ ds_token_erc20_files:=totalSupply-spec.k \
                    transferFrom-failure-2-b-spec.k \
                    transferFrom-failure-2-c-spec.k
 
-proof_tests:= bihu vyper-erc20 zeppelin-erc20 hkg-erc20 hobby-erc20 sum-to-n ds-token-erc20
+casper_files:=vote-spec.k
+
+proof_tests:= bihu vyper-erc20 zeppelin-erc20 hkg-erc20 hobby-erc20 sum-to-n ds-token-erc20 casper
 
 
 split-proof-tests: $(proof_tests)
@@ -123,6 +125,8 @@ hobby-erc20: $(patsubst %, $(specs_dir)/hobby-erc20/%, $(hobby_erc20_files)) $(s
 sum-to-n: $(specs_dir)/examples/sum-to-n-spec.k $(specs_dir)/lemmas.k
 
 ds-token-erc20: $(patsubst %, $(specs_dir)/ds-token-erc20/%, $(ds_token_erc20_files)) $(specs_dir)/lemmas.k
+
+casper: $(patsubst %, $(specs_dir)/casper/%, $(casper_files)) $(specs_dir)/lemmas.k
 
 # Bihu
 bihu_tmpls:=bihu/module-tmpl.k bihu/spec-tmpl.k
@@ -184,6 +188,16 @@ $(specs_dir)/examples/sum-to-n-spec.k: resources/sum-to-n.md $(TANGLER)
 	@echo "==  tangle: $@"
 	mkdir -p $(dir $@)
 	pandoc --from markdown --to "$(TANGLER)" --metadata="code:.sum-to-n" $< > $@
+
+# Casper
+casper_tmpls:=casper/module-tmpl.k casper/spec-tmpl.k
+
+$(specs_dir)/casper/vote-spec.k: $(casper_tmpls) casper/casper-spec.ini
+	@echo >&2 "==  gen-spec: $@"
+	mkdir -p $(dir $@)
+	python3 resources/gen-spec.py $^ vote recommended_target_hash vote > $@
+	cp casper/abstract-semantics.k $(dir $@)
+	cp casper/verification.k $(dir $@)
 
 # Testing
 # -------
