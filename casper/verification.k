@@ -33,12 +33,40 @@ module VERIFICATION
     rule X &Int Y <Int pow256 => true  requires 0 <=Int X andBool X <Int pow256
                                         andBool 0 <=Int Y andBool Y <Int pow256
 
+    rule 0 <=Int X |Int Y => true  requires 0 <=Int X andBool X <Int pow256
+                                    andBool 0 <=Int Y andBool Y <Int pow256
+
+    rule X |Int Y <Int pow256 => true  requires 0 <=Int X andBool X <Int pow256
+                                        andBool 0 <=Int Y andBool Y <Int pow256
+
     rule X modInt Y => X requires 0 <=Int X andBool X <Int Y
 
-    rule A s<Word (B -Word C) => 0  requires 0 <=Int A andBool A <Int 2 ^Int 127
-                                     andBool 0 <=Int B andBool B <Int 2 ^Int 127
-                                     andBool 0 <=Int C andBool C <Int 2 ^Int 127 
+
+    syntax Int ::= "maxInt128"    [function]
+                 | "minInt128"    [function]
+                 | "minInt128_2s" [function]
+ // ---------------------------------------
+    rule maxInt128    => 170141183460469231731687303715884105727  [macro]  /* 2^127 - 1 */
+
+    rule minInt128    => -170141183460469231731687303715884105728  [macro]
+
+    rule minInt128_2s => 115792089237316195423570985008687907853099843482180094807725896704197245534208  [macro]  /* pow256 - 2^127 */
+
+
+    rule A s<Word (B -Word C) => 0  requires 0 <=Int A andBool A <=Int maxInt128
+                                     andBool 0 <=Int B andBool B <=Int maxInt128
+                                     andBool 0 <=Int C andBool C <=Int maxInt128
                                      andBool B -Int C <=Int A
+
+    rule maxInt128 s<Word (A -Word B) => 0  requires 0 <=Int A andBool A <=Int maxInt128
+                                             andBool 0 <=Int B andBool B <=Int maxInt128
+
+    rule (A -Word B) s<Word minInt128_2s => 0  requires 0 <=Int A andBool A <=Int maxInt128
+                                                andBool 0 <=Int B andBool B <=Int maxInt128
+
+    rule 0 <=Int (A -Word B) => true
+
+    rule (A -Word B) <Int pow256 => true
 
     rule (0 <=Int #blockhash(_, _, _, _)) => true
 
@@ -58,7 +86,13 @@ module VERIFICATION
     syntax Int ::= "#recommendedBlockHash" "(" List "," Int "," Int "," Int ")"  [function]
  // ---------------------------------------------------------------------------------------
     rule #recommendedBlockHash(HASHES, BLOCKNUM, EPOCH, EPOCHLEN)
-        => #blockhash(HASHES, #expectedBlockNumber(EPOCH, EPOCHLEN), BLOCKNUM -Int 1, 0)  
+        => #blockhash(HASHES, #expectedBlockNumber(EPOCH, EPOCHLEN), BLOCKNUM -Int 1, 0)
+
+
+    syntax Int ::= "#setVoteBit" "(" Int "," Int ")"  [function]
+ // ------------------------------------------------------------
+    rule #setVoteBit(BITVECTOR, VID) => BITVECTOR |Int (2 ^Int (VID modInt 256))
+
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -67,8 +101,18 @@ module VERIFICATION
 
 
     syntax Bool ::= "#notVoteBefore" "(" Int "," Int ")"  [function]
- // -----------------------------------------------------------------
-    rule #notVoteBefore(VOTEBITS, VID)
-        => (VOTEBITS &Int (2 ^Int (VID modInt 256))) ==Int 0  [macro]
+ // ----------------------------------------------------------------
+    rule #notVoteBefore(BITVECTOR, VID)
+        => (BITVECTOR &Int (2 ^Int (VID modInt 256))) ==Int 0
+
+
+    syntax Bool ::= "#inCurDynasty" "(" Int "," Int "," Int ")"  [function]
+ // -----------------------------------------------------------------------
+    rule #inCurDynasty(START, END, CUR) => (START <=Int CUR) andBool (CUR <Int END)
+
+
+    syntax Bool ::= "#inPrevDynasty" "(" Int "," Int "," Int ")"  [function]
+ // ------------------------------------------------------------------------
+    rule #inPrevDynasty(START, END, CUR) => (START <=Int (CUR -Int 1)) andBool ((CUR -Int 1) <Int END)
 
 endmodule

@@ -90,7 +90,7 @@
      andBool (notBool ACCT_ID in #precompiledAccounts(BYZANTIUM))
      andBool 0 <=Int CALLER_ID andBool CALLER_ID <Int (2 ^Int 160)
      andBool 0 <=Int ORIGIN_ID andBool ORIGIN_ID <Int (2 ^Int 160)
-     andBool 0 <=Int BLOCK_NUM andBool BLOCK_NUM <Int (2 ^Int 127)
+     andBool 0 <=Int BLOCK_NUM andBool BLOCK_NUM <=Int maxInt128
      andBool 0 <=Int NOW       andBool NOW       <Int (2 ^Int 256)
      andBool 0 <=Int BAL       andBool BAL       <Int (2 ^Int 256)
 {REQUIRES}
