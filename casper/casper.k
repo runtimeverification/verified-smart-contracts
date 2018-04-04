@@ -59,7 +59,7 @@ module CASPER
   rule <k> initializeEpoch(EPOCH) => incrementDynasty ... </k>
        <currentEpoch> CURRENT_EPOCH => EPOCH </currentEpoch>
        <blockNumber> BLOCK_NUMBER </blockNumber>
-       requires EPOCH <=Int BLOCK_NUMBER /Int epochLength
+       requires EPOCH <=Int BLOCK_NUMBER /Int epochLength   // TODO: explain why <=Int instead of ==Int
         andBool EPOCH ==Int CURRENT_EPOCH +Int 1
 
   syntax KItem ::= "incrementDynasty"
@@ -77,6 +77,7 @@ module CASPER
        <deltaDeposits> DELTA_DEPOSITS </deltaDeposits>
        requires EPOCH >=Int 2
 
+  // do nothing if (EPOCH - 2) is not finalized
   rule <k> incrementDynasty => updateExpectedSourceEpoch ... </k>
        <currentEpoch> EPOCH </currentEpoch>
        <votes>
@@ -98,6 +99,7 @@ module CASPER
        <expectedSourceEpoch> _ => EPOCH -Int 1 </expectedSourceEpoch>
        requires EPOCH >=Int 1
 
+  // do nothing if (EPOCH - 1) is not justified
   rule <k> updateExpectedSourceEpoch => . ... </k>
        <currentEpoch> EPOCH </currentEpoch>
        <votes>
