@@ -44,7 +44,8 @@ module CASPER
   </T>
 
   // TODO: reward
-  rule <k> vote(VALIDATOR_INDEX, TARGET_HASH, TARGET_EPOCH, SOURCE_EPOCH, SIG) => justify(TARGET_EPOCH, SOURCE_EPOCH) ~> finalize(TARGET_EPOCH, SOURCE_EPOCH) ... </k>
+  rule <k> vote(VALIDATOR_INDEX, TARGET_HASH, TARGET_EPOCH, SOURCE_EPOCH, SIG)
+        => justify(TARGET_EPOCH, SOURCE_EPOCH) ~> finalize(TARGET_EPOCH, SOURCE_EPOCH) ... </k>
        <votesMap>
          <votes>
            <epoch> TARGET_EPOCH </epoch>
