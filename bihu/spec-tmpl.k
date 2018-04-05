@@ -11,7 +11,6 @@
         <output> {OUTPUT} </output>
         <callStack> _ => _ </callStack>
         <interimStates> _ </interimStates>
-        <substateStack> _ </substateStack>
         <callLog> .Set </callLog> // for vmtest only
         <touchedAccounts> _ => _ </touchedAccounts>
 
