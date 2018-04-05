@@ -53,6 +53,8 @@ module CASPER
        <lastFinalizedEpoch> 0 </lastFinalizedEpoch>
 
        <blockNumber> 0 </blockNumber>
+
+       <rewardFactor> 0 </rewardFactor> // TODO: float
   </T>
 
   // TODO: reward
@@ -119,9 +121,10 @@ module CASPER
 //     <mainHashJustified> MAIN_HASH_JUSTIFIED => false </mainHashJustified>
 //     requires EPOCH >Int 0 // TODO: necessary? epoch starts from 0
 
-  // TODO: reward
   rule <k> vote(VALIDATOR_INDEX, TARGET_HASH, TARGET_EPOCH, SOURCE_EPOCH, SIG)
-        => justify(TARGET_EPOCH, SOURCE_EPOCH) ~> finalize(TARGET_EPOCH, SOURCE_EPOCH) ... </k>
+        => reward(VALIDATOR_INDEX, SOURCE_EPOCH)
+        ~> justify(TARGET_EPOCH, SOURCE_EPOCH)
+        ~> finalize(TARGET_EPOCH, SOURCE_EPOCH) ... </k>
        <votesMap>
          <votes>
            <epoch> TARGET_EPOCH </epoch>
@@ -204,6 +207,45 @@ module CASPER
   rule inCurrDynasty(START_DYNASTY, CURRENT_DYNASTY, END_DYNASTY) => START_DYNASTY <=Int CURRENT_DYNASTY andBool CURRENT_DYNASTY  <Int END_DYNASTY
   rule inPrevDynasty(START_DYNASTY, CURRENT_DYNASTY, END_DYNASTY) => START_DYNASTY  <Int CURRENT_DYNASTY andBool CURRENT_DYNASTY <=Int END_DYNASTY
 
+  // Reward/penalty scheme
+
+  syntax KItem ::= reward(Int, Int)
+
+  rule <k> reward(VALIDATOR_INDEX, SOURCE_EPOCH) => procReward(VALIDATOR_INDEX, DEPOSIT *Int REWARD_FACTOR) ... </k>
+       <validator>
+         <index> VALIDATOR_INDEX </index>
+         <deposit> DEPOSIT </deposit>
+         ...
+       </validator>
+       <expectedSourceEpoch> SOURCE_EPOCH </expectedSourceEpoch>
+       <rewardFactor> REWARD_FACTOR </rewardFactor>
+
+  syntax KItem ::= procReward(Int, Int) // TODO: float
+
+  rule <k> procReward(VALIDATOR_INDEX, REWARD) => . ... </k>
+       <validator>
+         <index> VALIDATOR_INDEX </index>
+         <deposit> DEPOSIT => DEPOSIT +Int REWARD </deposit> // TODO: float
+         <startDynasty> START_DYNASTY </startDynasty>
+         <endDynasty>   END_DYNASTY   </endDynasty>
+       </validator>
+       <currentDynasty> CURRENT_DYNASTY </currentDynasty>
+       <totalCurrDynDeposits>
+         TOTAL_CURR_DYN_DEPOSITS => #if inCurrDynasty(START_DYNASTY, CURRENT_DYNASTY, END_DYNASTY)
+                                    #then TOTAL_CURR_DYN_DEPOSITS +Int REWARD
+                                    #else TOTAL_CURR_DYN_DEPOSITS #fi
+       </totalCurrDynDeposits>
+       <totalPrevDynDeposits>
+         TOTAL_PREV_DYN_DEPOSITS => #if inPrevDynasty(START_DYNASTY, CURRENT_DYNASTY, END_DYNASTY)
+                                    #then TOTAL_PREV_DYN_DEPOSITS +Int REWARD
+                                    #else TOTAL_PREV_DYN_DEPOSITS #fi
+       </totalPrevDynDeposits>
+       <deltaDeposits>
+         DELTA_DEPOSITS => #if END_DYNASTY <Int defaultEndDynasty
+                           #then DELTA_DEPOSITS -Int REWARD
+                           #else DELTA_DEPOSITS #fi
+       </deltaDeposits>
+
   // External functions
 
   syntax Bool ::= isValidSignature(Int, Int, Int, Int, Int) [function, hook(isValidSignature)]
@@ -211,5 +253,7 @@ module CASPER
   // Parameters
 
   syntax Int ::= "epochLength" [function]
+
+  syntax Int ::= "defaultEndDynasty" [function]
 
 endmodule
