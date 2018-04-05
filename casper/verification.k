@@ -21,12 +21,6 @@ module VERIFICATION
 
     rule ((X *Int Y) /Int Z) /Int Y => X /Int Z
 
-
-    syntax Int ::= symkeccak ( Int ) [function, smtlib(smt_symkeccak)]
- // -------------------------------------------------------------------
-    rule keccak(WS) => symkeccak(#asWord(WS))  requires notBool #isConcrete(WS)
-
-
     rule 0 <=Int X &Int Y => true  requires 0 <=Int X andBool X <Int pow256
                                     andBool 0 <=Int Y andBool Y <Int pow256
 
@@ -42,15 +36,27 @@ module VERIFICATION
     rule X modInt Y => X requires 0 <=Int X andBool X <Int Y
 
 
+    syntax Int ::= symkeccak ( Int ) [function, smtlib(smt_symkeccak)]
+ // -------------------------------------------------------------------
+    rule keccak(WS) => symkeccak(#asWord(WS))  requires notBool #isConcrete(WS)
+
+    rule 0 <=Int symkeccak(N) => true
+
+    rule symkeccak(N) <Int pow256 => true
+
+
     syntax Int ::= "maxInt128"    [function]
                  | "minInt128"    [function]
                  | "minInt128_2s" [function]
- // ---------------------------------------
+                 | "maxDecimal"   [function]
+ // ----------------------------------------
     rule maxInt128    => 170141183460469231731687303715884105727  [macro]  /* 2^127 - 1 */
 
     rule minInt128    => -170141183460469231731687303715884105728  [macro]
 
     rule minInt128_2s => 115792089237316195423570985008687907853099843482180094807725896704197245534208  [macro]  /* pow256 - 2^127 */
+
+    rule maxDecimal   => 1701411834604692317316873037158841057270000000000  [macro]  /* (2^127 - 1) * 10^10 */
 
 
     rule A s<Word (B -Word C) => 0  requires 0 <=Int A andBool A <=Int maxInt128
