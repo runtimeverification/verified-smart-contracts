@@ -5,9 +5,11 @@ module CASPER-SYNTAX
   imports INT
 
   syntax KItem ::= InitializeEpoch(Int)
-                 | Vote(Int, Int, Int, Int, Int)
                  | Deposit(Int, Int, Int)
                  | Logout(Int, Int, Int)
+                 | Withdraw(Int)
+                 | Vote(Int, Int, Int, Int, Int)
+               //| Slash
 
 endmodule
 
@@ -37,6 +39,7 @@ module CASPER
            <deposit> 0 </deposit>
            <startDynasty> 0 </startDynasty>
            <endDynasty>   0 </endDynasty>
+           <withdrawalAddr> 0 </withdrawalAddr>
          </validator>
        </validatorMap>
 
@@ -59,6 +62,7 @@ module CASPER
        <rewardFactor> 0 </rewardFactor> // TODO: float
        <depositScaleFactor> .Map </depositScaleFactor> // epoch |-> deposit_scale_factor
        <nextValidatorIndex> 0 </nextValidatorIndex>
+       <dynastyStartEpoch> .Map </dynastyStartEpoch> // dynasty |-> start_epoch
   </T>
 
   rule <k> InitializeEpoch(EPOCH) => updateRewardFactor ~> incrementDynasty ... </k>
@@ -132,6 +136,7 @@ module CASPER
        <totalCurrDynDeposits> TOTAL_CURR_DYN_DEPOSITS => TOTAL_CURR_DYN_DEPOSITS +Int DELTA_DEPOSITS </totalCurrDynDeposits>
        <totalPrevDynDeposits> _                       => TOTAL_CURR_DYN_DEPOSITS </totalPrevDynDeposits>
        <deltaDeposits> ... DYNASTY +Int 1 |-> DELTA_DEPOSITS ... </deltaDeposits>
+       <dynastyStartEpoch> ... (.Map => DYNASTY +Int 1 |-> EPOCH) ... </dynastyStartEpoch>
        requires EPOCH >=Int 2
 
   // do nothing if (EPOCH - 2) is not finalized
@@ -190,6 +195,7 @@ module CASPER
            <deposit> DEPOSIT /Int DEPOSIT_SCALE_FACTOR </deposit>
            <startDynasty> CURRENT_DYNASTY +Int 2 </startDynasty>
            <endDynasty>   defaultEndDynasty      </endDynasty>
+           <withdrawalAddr> WITHDRAWAL_ADDR </withdrawalAddr>
          </validator>
        )
          ...
@@ -207,14 +213,30 @@ module CASPER
        <validator>
          <index> VALIDATOR_INDEX </index>
          <deposit> DEPOSIT </deposit>
-         <startDynasty> _ </startDynasty>
          <endDynasty> END_DYNASTY => CURRENT_DYNASTY +Int dynastyLogoutDelay </endDynasty>
+         ...
        </validator>
        <deltaDeposits> ... CURRENT_DYNASTY +Int dynastyLogoutDelay |-> (DELTA_DEPOSITS => DELTA_DEPOSITS -Int DEPOSIT) ... </deltaDeposits>
        requires CURRENT_EPOCH ==Int BLOCK_NUMBER /Int epochLength
         andBool CURRENT_EPOCH >=Int EPOCH
         andBool isValidSignature(VALIDATOR_INDEX, EPOCH, SIG)
         andBool END_DYNASTY >Int CURRENT_DYNASTY +Int dynastyLogoutDelay
+
+  rule <k> Withdraw(VALIDATOR_INDEX)
+        => send(WITHDRAWAL_ADDR, DEPOSIT *Int DEPOSIT_SCALE_FACTOR) ... </k>
+       <currentDynasty> CURRENT_DYNASTY </currentDynasty>
+       <currentEpoch> CURRENT_EPOCH </currentEpoch>
+       <depositScaleFactor> ... END_EPOCH |-> DEPOSIT_SCALE_FACTOR ... </depositScaleFactor>
+       <validator>
+         <index> VALIDATOR_INDEX </index>
+         <deposit> DEPOSIT => 0 </deposit>
+         <startDynasty> _ => 0 </startDynasty>
+         <endDynasty> END_DYNASTY => 0 </endDynasty>
+         <withdrawalAddr> WITHDRAWAL_ADDR => 0 </withdrawalAddr>
+       </validator>
+       <dynastyStartEpoch> ... END_DYNASTY +Int 1 |-> END_EPOCH ... </dynastyStartEpoch>
+       requires CURRENT_DYNASTY >=Int END_DYNASTY +Int 1
+        andBool CURRENT_EPOCH >=Int END_EPOCH +Int withdrawalDelay
 
   rule <k> Vote(VALIDATOR_INDEX, TARGET_HASH, TARGET_EPOCH, SOURCE_EPOCH, SIG)
         => reward(VALIDATOR_INDEX, SOURCE_EPOCH)
@@ -256,6 +278,7 @@ module CASPER
            <deposit> DEPOSIT </deposit>
            <startDynasty> START_DYNASTY </startDynasty>
            <endDynasty>   END_DYNASTY   </endDynasty>
+           ...
          </validator>
          ...
        </validatorMap>
@@ -323,6 +346,7 @@ module CASPER
          <deposit> DEPOSIT => DEPOSIT +Int REWARD </deposit> // TODO: float
          <startDynasty> START_DYNASTY </startDynasty>
          <endDynasty>   END_DYNASTY   </endDynasty>
+         ...
        </validator>
        <currentDynasty> CURRENT_DYNASTY </currentDynasty>
        <totalCurrDynDeposits>
@@ -350,6 +374,8 @@ module CASPER
 
   syntax Bool ::= purityChecker(Int) [function, hook(purityChecker)]
 
+  syntax KItem ::= send(Int, Int) [function, hook(send)]
+
   // Parameters
 
   syntax Int ::= "epochLength" [function]
@@ -363,5 +389,7 @@ module CASPER
   syntax Int ::= "minDepositSize" [function]
 
   syntax Int ::= "dynastyLogoutDelay" [function]
+
+  syntax Int ::= "withdrawalDelay" [function]
 
 endmodule
