@@ -4,8 +4,8 @@ module CASPER-SYNTAX
 
   imports INT
 
-  syntax KItem ::= initializeEpoch(Int)
-                 | vote(Int, Int, Int, Int, Int)
+  syntax KItem ::= InitializeEpoch(Int)
+                 | Vote(Int, Int, Int, Int, Int)
                  | Deposit(Int, Int, Int)
 
 endmodule
@@ -60,7 +60,7 @@ module CASPER
        <nextValidatorIndex> 0 </nextValidatorIndex>
   </T>
 
-  rule <k> initializeEpoch(EPOCH) => updateRewardFactor ~> incrementDynasty ... </k>
+  rule <k> InitializeEpoch(EPOCH) => updateRewardFactor ~> incrementDynasty ... </k>
        <currentEpoch> CURRENT_EPOCH => EPOCH </currentEpoch>
        <blockNumber> BLOCK_NUMBER </blockNumber>
        requires EPOCH <=Int BLOCK_NUMBER /Int epochLength   // TODO: explain why <=Int instead of ==Int
@@ -199,7 +199,7 @@ module CASPER
         andBool purityChecker(VALIDATION_ADDR) ==K true
         andBool DEPOSIT >=Int minDepositSize
 
-  rule <k> vote(VALIDATOR_INDEX, TARGET_HASH, TARGET_EPOCH, SOURCE_EPOCH, SIG)
+  rule <k> Vote(VALIDATOR_INDEX, TARGET_HASH, TARGET_EPOCH, SOURCE_EPOCH, SIG)
         => reward(VALIDATOR_INDEX, SOURCE_EPOCH)
         ~> justify(TARGET_EPOCH, SOURCE_EPOCH)
         ~> finalize(TARGET_EPOCH, SOURCE_EPOCH) ... </k>
