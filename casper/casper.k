@@ -7,6 +7,7 @@ module CASPER-SYNTAX
   syntax KItem ::= InitializeEpoch(Int)
                  | Vote(Int, Int, Int, Int, Int)
                  | Deposit(Int, Int, Int)
+                 | Logout(Int, Int, Int)
 
 endmodule
 
@@ -199,6 +200,22 @@ module CASPER
         andBool purityChecker(VALIDATION_ADDR) ==K true
         andBool DEPOSIT >=Int minDepositSize
 
+  rule <k> Logout(VALIDATOR_INDEX, EPOCH, SIG) => . ... </k>
+       <currentDynasty> CURRENT_DYNASTY </currentDynasty>
+       <currentEpoch> CURRENT_EPOCH </currentEpoch>
+       <blockNumber> BLOCK_NUMBER </blockNumber>
+       <validator>
+         <index> VALIDATOR_INDEX </index>
+         <deposit> DEPOSIT </deposit>
+         <startDynasty> _ </startDynasty>
+         <endDynasty> END_DYNASTY => CURRENT_DYNASTY +Int dynastyLogoutDelay </endDynasty>
+       </validator>
+       <deltaDeposits> ... CURRENT_DYNASTY +Int dynastyLogoutDelay |-> (DELTA_DEPOSITS => DELTA_DEPOSITS -Int DEPOSIT) ... </deltaDeposits>
+       requires CURRENT_EPOCH ==Int BLOCK_NUMBER /Int epochLength
+        andBool CURRENT_EPOCH >=Int EPOCH
+        andBool isValidSignature(VALIDATOR_INDEX, EPOCH, SIG)
+        andBool END_DYNASTY >Int CURRENT_DYNASTY +Int dynastyLogoutDelay
+
   rule <k> Vote(VALIDATOR_INDEX, TARGET_HASH, TARGET_EPOCH, SOURCE_EPOCH, SIG)
         => reward(VALIDATOR_INDEX, SOURCE_EPOCH)
         ~> justify(TARGET_EPOCH, SOURCE_EPOCH)
@@ -329,6 +346,7 @@ module CASPER
   // External functions
 
   syntax Bool ::= isValidSignature(Int, Int, Int, Int, Int) [function, hook(isValidSignature)]
+                | isValidSignature(Int, Int, Int)           [function, hook(isValidSignature)]
 
   syntax Bool ::= purityChecker(Int) [function, hook(purityChecker)]
 
@@ -343,5 +361,7 @@ module CASPER
   syntax Int ::= "basePenaltyFactor" [function]
 
   syntax Int ::= "minDepositSize" [function]
+
+  syntax Int ::= "dynastyLogoutDelay" [function]
 
 endmodule
