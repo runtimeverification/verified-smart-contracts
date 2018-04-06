@@ -9,7 +9,8 @@ module CASPER-SYNTAX
                  | Logout(Int, Int, Int)
                  | Withdraw(Int)
                  | Vote(Int, Int, Int, Int, Int)
-               //| Slash
+                 | Slash(Int, Int, Int, Int, Int,
+                         Int, Int, Int, Int, Int)
 
 endmodule
 
@@ -110,6 +111,10 @@ module CASPER
   // TODO: the case of not deposit_exists()
 
   syntax Int ::= sqrtTotalDeposits(Int, Int, Int) [function]
+
+  rule sqrtTotalDeposits(TOTAL_CURR_DYN_DEPOSITS, TOTAL_PREV_DYN_DEPOSITS, DEPOSIT_SCALE_FACTOR)
+       =>
+       sqrt(maxInt(TOTAL_CURR_DYN_DEPOSITS, TOTAL_PREV_DYN_DEPOSITS) *Int DEPOSIT_SCALE_FACTOR /Int etherToWei +Int 1) // TODO: decimal
 
   syntax Int ::= collectiveReward(Int, Int, Int, Int, Int, Int, Int) [function]
 
@@ -409,6 +414,8 @@ module CASPER
 
   syntax KItem ::= send(Int, Int) [function, hook(send)]
 
+  syntax Int ::= sqrt(Int) [function, hook(sqrt)] // TODO: decimal
+
   // Parameters
 
   syntax Int ::= "epochLength" [function]
@@ -424,5 +431,10 @@ module CASPER
   syntax Int ::= "dynastyLogoutDelay" [function]
 
   syntax Int ::= "withdrawalDelay" [function]
+
+  // Macros
+
+  syntax Int ::= "etherToWei" [macro]
+  rule etherToWei => 1000000000000000000 // 10^18
 
 endmodule
