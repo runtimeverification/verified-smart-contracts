@@ -6,6 +6,7 @@ module CASPER-SYNTAX
 
   syntax KItem ::= initializeEpoch(Int)
                  | vote(Int, Int, Int, Int, Int)
+                 | Deposit(Int, Int, Int)
 
 endmodule
 
@@ -47,7 +48,7 @@ module CASPER
 
        <totalCurrDynDeposits> 0 </totalCurrDynDeposits>
        <totalPrevDynDeposits> 0 </totalPrevDynDeposits>
-       <deltaDeposits> 0 </deltaDeposits>
+       <deltaDeposits> .Map </deltaDeposits> // dynasty |-> delta_deposits
 
        <lastJustifiedEpoch> 0 </lastJustifiedEpoch>
        <lastFinalizedEpoch> 0 </lastFinalizedEpoch>
@@ -56,6 +57,7 @@ module CASPER
 
        <rewardFactor> 0 </rewardFactor> // TODO: float
        <depositScaleFactor> .Map </depositScaleFactor> // epoch |-> deposit_scale_factor
+       <nextValidatorIndex> 0 </nextValidatorIndex>
   </T>
 
   rule <k> initializeEpoch(EPOCH) => updateRewardFactor ~> incrementDynasty ... </k>
@@ -128,7 +130,7 @@ module CASPER
        <currentDynasty> DYNASTY => DYNASTY +Int 1 </currentDynasty>
        <totalCurrDynDeposits> TOTAL_CURR_DYN_DEPOSITS => TOTAL_CURR_DYN_DEPOSITS +Int DELTA_DEPOSITS </totalCurrDynDeposits>
        <totalPrevDynDeposits> _                       => TOTAL_CURR_DYN_DEPOSITS </totalPrevDynDeposits>
-       <deltaDeposits> DELTA_DEPOSITS </deltaDeposits>
+       <deltaDeposits> ... DYNASTY +Int 1 |-> DELTA_DEPOSITS ... </deltaDeposits>
        requires EPOCH >=Int 2
 
   // do nothing if (EPOCH - 2) is not finalized
@@ -173,8 +175,29 @@ module CASPER
 //     <mainHashJustified> MAIN_HASH_JUSTIFIED => false </mainHashJustified>
 //     requires EPOCH >Int 0 // TODO: necessary? epoch starts from 0
 
-
-//rule <k> deposit(VALIDATION_ADDR, WITHDRAWAL_ADDR) => . ... </k>
+  rule <k> Deposit(VALIDATION_ADDR, WITHDRAWAL_ADDR, DEPOSIT) => . ... </k>
+       <currentDynasty> CURRENT_DYNASTY </currentDynasty>
+       <currentEpoch> CURRENT_EPOCH </currentEpoch>
+       <blockNumber> BLOCK_NUMBER </blockNumber>
+       <depositScaleFactor> ... CURRENT_EPOCH |-> DEPOSIT_SCALE_FACTOR ... </depositScaleFactor>
+       <validatorMap>
+       (
+         .Bag
+       =>
+         <validator>
+           <index> NEXT_VALIDATOR_INDEX </index>
+           <deposit> DEPOSIT /Int DEPOSIT_SCALE_FACTOR </deposit>
+           <startDynasty> CURRENT_DYNASTY +Int 2 </startDynasty>
+           <endDynasty>   defaultEndDynasty      </endDynasty>
+         </validator>
+       )
+         ...
+       </validatorMap>
+       <deltaDeposits> ... CURRENT_DYNASTY +Int 2 |-> (DELTA_DEPOSITS => DELTA_DEPOSITS +Int (DEPOSIT /Int DEPOSIT_SCALE_FACTOR)) ... </deltaDeposits>
+       <nextValidatorIndex> NEXT_VALIDATOR_INDEX => NEXT_VALIDATOR_INDEX +Int 1 </nextValidatorIndex>
+       requires CURRENT_EPOCH ==Int BLOCK_NUMBER /Int epochLength
+        andBool purityChecker(VALIDATION_ADDR) ==K true
+        andBool DEPOSIT >=Int minDepositSize
 
   rule <k> vote(VALIDATOR_INDEX, TARGET_HASH, TARGET_EPOCH, SOURCE_EPOCH, SIG)
         => reward(VALIDATOR_INDEX, SOURCE_EPOCH)
@@ -296,14 +319,18 @@ module CASPER
                                     #else TOTAL_PREV_DYN_DEPOSITS #fi
        </totalPrevDynDeposits>
        <deltaDeposits>
-         DELTA_DEPOSITS => #if END_DYNASTY <Int defaultEndDynasty
-                           #then DELTA_DEPOSITS -Int REWARD
-                           #else DELTA_DEPOSITS #fi
+         ...
+         END_DYNASTY |-> ( DELTA_DEPOSITS => #if END_DYNASTY <Int defaultEndDynasty
+                                             #then DELTA_DEPOSITS -Int REWARD
+                                             #else DELTA_DEPOSITS #fi )
+         ...
        </deltaDeposits>
 
   // External functions
 
   syntax Bool ::= isValidSignature(Int, Int, Int, Int, Int) [function, hook(isValidSignature)]
+
+  syntax Bool ::= purityChecker(Int) [function, hook(purityChecker)]
 
   // Parameters
 
@@ -314,5 +341,7 @@ module CASPER
   syntax Int ::= "baseInterestFactor" [function]
 
   syntax Int ::= "basePenaltyFactor" [function]
+
+  syntax Int ::= "minDepositSize" [function]
 
 endmodule
