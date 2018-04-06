@@ -58,6 +58,7 @@ module CASPER
        <lastFinalizedEpoch> 0 </lastFinalizedEpoch>
 
        <blockNumber> 0 </blockNumber>
+       <caller> 0 </caller>
 
        <rewardFactor> 0 </rewardFactor> // TODO: float
        <depositScaleFactor> .Map </depositScaleFactor> // epoch |-> deposit_scale_factor
@@ -324,6 +325,38 @@ module CASPER
 
   rule inCurrDynasty(START_DYNASTY, CURRENT_DYNASTY, END_DYNASTY) => START_DYNASTY <=Int CURRENT_DYNASTY andBool CURRENT_DYNASTY  <Int END_DYNASTY
   rule inPrevDynasty(START_DYNASTY, CURRENT_DYNASTY, END_DYNASTY) => START_DYNASTY  <Int CURRENT_DYNASTY andBool CURRENT_DYNASTY <=Int END_DYNASTY
+
+  rule <k> Slash(VALIDATOR_INDEX1, TARGET_HASH1, TARGET_EPOCH1, SOURCE_EPOCH1, SIG1,
+                 VALIDATOR_INDEX2, TARGET_HASH2, TARGET_EPOCH2, SOURCE_EPOCH2, SIG2)
+        => send(MSG_SENDER, DEPOSIT *Int DEPOSIT_SCALE_FACTOR /Int 25) ... </k>
+       <caller> MSG_SENDER </caller>
+       <currentDynasty> CURRENT_DYNASTY </currentDynasty>
+       <currentEpoch> CURRENT_EPOCH </currentEpoch>
+       <depositScaleFactor> ... CURRENT_EPOCH |-> DEPOSIT_SCALE_FACTOR ... </depositScaleFactor>
+       <validator>
+         <index> VALIDATOR_INDEX1 </index>
+         <deposit> DEPOSIT => 0 </deposit>
+         <startDynasty> _ => 0 </startDynasty>
+         <endDynasty> END_DYNASTY => 0 </endDynasty>
+         <withdrawalAddr> _ => 0</withdrawalAddr>
+       </validator>
+       <deltaDeposits>
+         ...
+         CURRENT_DYNASTY +Int 1 |-> (CURR_DELTA_DEPOSITS => CURR_DELTA_DEPOSITS -Int DEPOSIT)
+       //    END_DYNASTY        |-> ( END_DELTA_DEPOSITS =>  END_DELTA_DEPOSITS +Int DEPOSIT)  // TODO: fix this when CURRENT_DYNASTY >= END_DYNASTY
+         ...
+       </deltaDeposits>
+       requires isValidSignature(VALIDATOR_INDEX1, TARGET_HASH1, TARGET_EPOCH1, SOURCE_EPOCH1, SIG1)
+        andBool isValidSignature(VALIDATOR_INDEX2, TARGET_HASH2, TARGET_EPOCH2, SOURCE_EPOCH2, SIG2)
+        andBool VALIDATOR_INDEX1 ==K VALIDATOR_INDEX2
+        andBool (        TARGET_HASH1  =/=K TARGET_HASH2
+                  orBool TARGET_EPOCH1 =/=K TARGET_EPOCH2
+                  orBool SOURCE_EPOCH1 =/=K SOURCE_EPOCH2 )
+        andBool (
+                         TARGET_EPOCH1 ==K TARGET_EPOCH2
+                  orBool ( TARGET_EPOCH1 >Int TARGET_EPOCH2 andBool SOURCE_EPOCH2 >Int SOURCE_EPOCH1 )
+                  orBool ( TARGET_EPOCH2 >Int TARGET_EPOCH1 andBool SOURCE_EPOCH1 >Int SOURCE_EPOCH2 )
+                )
 
   // Reward/penalty scheme
 
