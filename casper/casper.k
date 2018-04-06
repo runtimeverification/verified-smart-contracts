@@ -55,14 +55,66 @@ module CASPER
        <blockNumber> 0 </blockNumber>
 
        <rewardFactor> 0 </rewardFactor> // TODO: float
+       <depositScaleFactor> .Map </depositScaleFactor> // epoch |-> deposit_scale_factor
   </T>
 
-  // TODO: reward
-  rule <k> initializeEpoch(EPOCH) => incrementDynasty ... </k>
+  rule <k> initializeEpoch(EPOCH) => updateRewardFactor ~> incrementDynasty ... </k>
        <currentEpoch> CURRENT_EPOCH => EPOCH </currentEpoch>
        <blockNumber> BLOCK_NUMBER </blockNumber>
        requires EPOCH <=Int BLOCK_NUMBER /Int epochLength   // TODO: explain why <=Int instead of ==Int
         andBool EPOCH ==Int CURRENT_EPOCH +Int 1
+
+  syntax KItem ::= "updateRewardFactor"
+
+  rule <k> updateRewardFactor => . ... </k>
+       <currentEpoch> CURRENT_EPOCH </currentEpoch>
+       <expectedSourceEpoch> SOURCE_EPOCH </expectedSourceEpoch>
+       <lastFinalizedEpoch> LAST_FINALIZED_EPOCH </lastFinalizedEpoch>
+       <votes>
+         <epoch> CURRENT_EPOCH -Int 1 </epoch>
+         <currDynVotes> ... SOURCE_EPOCH |-> CURR_DYNASTY_VOTES ... </currDynVotes>
+         <prevDynVotes> ... SOURCE_EPOCH |-> PREV_DYNASTY_VOTES ... </prevDynVotes>
+         ...
+       </votes>
+       <totalCurrDynDeposits> TOTAL_CURR_DYN_DEPOSITS </totalCurrDynDeposits>
+       <totalPrevDynDeposits> TOTAL_PREV_DYN_DEPOSITS </totalPrevDynDeposits>
+       <depositScaleFactor>
+         ...
+         CURRENT_EPOCH -Int 1 |-> DEPOSIT_SCALE_FACTOR
+       (
+         .Map
+       =>
+         CURRENT_EPOCH        |-> DEPOSIT_SCALE_FACTOR *Int (1 +Int collectiveReward(CURR_DYNASTY_VOTES, TOTAL_CURR_DYN_DEPOSITS,
+                                                                                     PREV_DYNASTY_VOTES, TOTAL_PREV_DYN_DEPOSITS, REWARD_FACTOR,
+                                                                                     CURRENT_EPOCH, LAST_FINALIZED_EPOCH))
+                                                       /Int (1 +Int REWARD_FACTOR)
+       )
+         ...
+       </depositScaleFactor>
+       <rewardFactor>
+         REWARD_FACTOR
+       =>
+         baseInterestFactor /Int sqrtTotalDeposits(TOTAL_CURR_DYN_DEPOSITS, TOTAL_PREV_DYN_DEPOSITS, DEPOSIT_SCALE_FACTOR)
+         +Int basePenaltyFactor *Int (CURRENT_EPOCH -Int LAST_FINALIZED_EPOCH)
+       </rewardFactor>
+       requires TOTAL_CURR_DYN_DEPOSITS >Int 0
+        andBool TOTAL_PREV_DYN_DEPOSITS >Int 0
+  // TODO: the case of not deposit_exists()
+
+  syntax Int ::= sqrtTotalDeposits(Int, Int, Int) [function]
+
+  syntax Int ::= collectiveReward(Int, Int, Int, Int, Int, Int, Int) [function]
+
+  rule collectiveReward(CURR_DYNASTY_VOTES, TOTAL_CURR_DYN_DEPOSITS,
+                        PREV_DYNASTY_VOTES, TOTAL_PREV_DYN_DEPOSITS, REWARD_FACTOR,
+                        CURRENT_EPOCH, LAST_FINALIZED_EPOCH)
+       =>
+       minInt(CURR_DYNASTY_VOTES /Int TOTAL_CURR_DYN_DEPOSITS,
+              PREV_DYNASTY_VOTES /Int TOTAL_PREV_DYN_DEPOSITS) *Int REWARD_FACTOR /Int 2
+       requires CURRENT_EPOCH -Int LAST_FINALIZED_EPOCH <=Int 2  // TODO: explain why <= instead of ==
+
+  rule collectiveReward(_, _, _, _, _, CURRENT_EPOCH, LAST_FINALIZED_EPOCH) => 0
+       requires CURRENT_EPOCH -Int LAST_FINALIZED_EPOCH >Int 2
 
   syntax KItem ::= "incrementDynasty"
 
@@ -120,6 +172,9 @@ module CASPER
 //     </expectedSourceEpoch>
 //     <mainHashJustified> MAIN_HASH_JUSTIFIED => false </mainHashJustified>
 //     requires EPOCH >Int 0 // TODO: necessary? epoch starts from 0
+
+
+//rule <k> deposit(VALIDATION_ADDR, WITHDRAWAL_ADDR) => . ... </k>
 
   rule <k> vote(VALIDATOR_INDEX, TARGET_HASH, TARGET_EPOCH, SOURCE_EPOCH, SIG)
         => reward(VALIDATOR_INDEX, SOURCE_EPOCH)
@@ -255,5 +310,9 @@ module CASPER
   syntax Int ::= "epochLength" [function]
 
   syntax Int ::= "defaultEndDynasty" [function]
+
+  syntax Int ::= "baseInterestFactor" [function]
+
+  syntax Int ::= "basePenaltyFactor" [function]
 
 endmodule
