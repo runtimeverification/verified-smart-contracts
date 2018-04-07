@@ -28,7 +28,7 @@ module ABSTRACT-CASPER
        <epochs>
          <epoch multiplicity="*" type="Map">
            <id> 0 </id>
-           <dynasty> 0 </dynasty>
+         //<dynasty> 0 </dynasty> // TODO: maintain
            <targetHash> 0 </targetHash>
            <voted> .Map </voted> // validator_index |-> voted?
            <currDynVotes> .Map </currDynVotes> // source_epoch |-> curr_dyn_votes_count
@@ -131,12 +131,11 @@ module ABSTRACT-CASPER
        <validators>
          <validator>
            <index> VALIDATOR_INDEX </index>
-           <deposit> DS:Map CURRENT_EPOCH |-> DEPOSIT (.Map => CURRENT_EPOCH +Int 1 |-> DEPOSIT *Real FACTOR) </deposit>    // TODO: even if start_dynasty > current_dynasty ?
+           <deposit> ... CURRENT_EPOCH +Int 1 |-> (DEPOSIT => DEPOSIT *Real FACTOR) </deposit>    // TODO: even if start_dynasty > current_dynasty ?
            ...
          </validator>
          ...
        </validators>
-       requires notBool(CURRENT_EPOCH +Int 1 in keys(DS))
 
   // TODO:
   syntax List ::= indexes(ValidatorsCell) [function]
@@ -166,8 +165,25 @@ module ABSTRACT-CASPER
   syntax KItem ::= "incrementEpoch"
 
   rule <k> incrementEpoch => updateExpectedSourceEpoch ... </k>
+       <currentDynasty> CURRENT_DYNASTY </currentDynasty>
        <currentEpoch> EPOCH => EPOCH +Int 1 </currentEpoch>
        <blockNumber> BLOCK_NUMBER </blockNumber>
+       <epochs>
+       (
+         .Bag
+       =>
+         <epoch>
+           <id> EPOCH +Int 1 </id>
+           <targetHash> blockhash((EPOCH +Int 1) *Int epochLength -Int 1) </targetHash>
+           <voted> .Map </voted>                // TODO: initialize entries
+           <currDynVotes> .Map </currDynVotes>  // TODO: initialize entries
+           <prevDynVotes> .Map </prevDynVotes>  // TODO: initialize entries
+           <isJustified> false </isJustified>
+           <isFinalized> false </isFinalized>
+         </epoch>
+       )
+         ...
+       </epochs>
        requires EPOCH +Int 1 ==Int BLOCK_NUMBER /Int epochLength
 
   syntax KItem ::= "updateExpectedSourceEpoch"
@@ -324,7 +340,7 @@ module ABSTRACT-CASPER
   rule <k> deleteValidator(VALIDATOR_INDEX) => . ...</k>
        <validator>
          <index> VALIDATOR_INDEX </index>
-         <deposit> DEPOSITS:Map => setZero(DEPOSITS) </deposit>  // TODO: necessary to zero? (withdrawl_addr already becomes zero.)
+         <deposit> DEPOSITS:Map => setZero(DEPOSITS) </deposit>  // NOTE: necessary to set to zero (even if withdrawl_addr already becomes zero), for bounty calculation
          <startDynasty> _ => 0 </startDynasty>
          <endDynasty> _ => 0 </endDynasty>
          <addr> _ => 0 </addr>
@@ -381,7 +397,7 @@ module ABSTRACT-CASPER
        <validators>
          <validator>
            <index> VALIDATOR_INDEX </index>
-           <deposit> ... CURRENT_EPOCH |-> DEPOSIT ... </deposit>
+           <deposit> ... CURRENT_EPOCH |-> DEPOSIT </deposit>
            <startDynasty> START_DYNASTY </startDynasty>
            <endDynasty>   END_DYNASTY   </endDynasty>
            ...
@@ -398,11 +414,12 @@ module ABSTRACT-CASPER
        <currentEpoch> CURRENT_EPOCH </currentEpoch>
        <validator>
          <index> VALIDATOR_INDEX </index>
-         <deposit> ... CURRENT_EPOCH |-> (DEPOSIT => DEPOSIT *Real (1.0 +Real REWARD_FACTOR)) </deposit>    // TODO: increase for next epoch
+         <deposit> DS:Map CURRENT_EPOCH |-> DEPOSIT (.Map => CURRENT_EPOCH +Int 1 |-> DEPOSIT *Real (1.0 +Real REWARD_FACTOR)) </deposit>
          ...
        </validator>
        <expectedSourceEpoch> SOURCE_EPOCH </expectedSourceEpoch>
        <rewardFactor> REWARD_FACTOR </rewardFactor>
+       requires notBool(CURRENT_EPOCH +Int 1 in keys(DS))
 
   rule <k> reward(VALIDATOR_INDEX, SOURCE_EPOCH) => . ... </k>
        <expectedSourceEpoch> EXPECTED_SOURCE_EPOCH </expectedSourceEpoch>
@@ -450,7 +467,7 @@ module ABSTRACT-CASPER
        <currentEpoch> CURRENT_EPOCH </currentEpoch>
        <validator>
          <index> VALIDATOR_INDEX1 </index>
-         <deposit> ... CURRENT_EPOCH |-> DEPOSIT </deposit>
+         <deposit> ... CURRENT_EPOCH |-> DEPOSIT </deposit>     // NOTE: if too late (if already withdrawn), deposit is 0
          ...
        </validator>
        requires isValidSignature(VALIDATOR_INDEX1, TARGET_HASH1, TARGET_EPOCH1, SOURCE_EPOCH1, SIG1)
@@ -475,6 +492,8 @@ module ABSTRACT-CASPER
   syntax Bool ::= purityChecker(Int) [function, hook(purityChecker)]
 
   syntax KItem ::= send(Int, Real) [function, hook(send)]
+
+  syntax Int ::= blockhash(Int) [function, hook(blockhash)]
 
   //
   // Parameters
