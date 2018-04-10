@@ -122,7 +122,7 @@ module ABSTRACT-CASPER
                PREV_DYNASTY_VOTES /Real TOTAL_PREV_DYN_DEPOSITS) *Real REWARD_FACTOR /Real 2.0
        requires CURRENT_EPOCH -Int LAST_FINALIZED_EPOCH ==Int 2
 
-  rule collectiveReward(_, _, _, _, _, CURRENT_EPOCH, LAST_FINALIZED_EPOCH) => 0
+  rule collectiveReward(_, _, _, _, _, CURRENT_EPOCH, LAST_FINALIZED_EPOCH) => 0.0
        requires CURRENT_EPOCH -Int LAST_FINALIZED_EPOCH >Int 2
 
   syntax KItem ::= updateDeposit(List, Real)
