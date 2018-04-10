@@ -1,4 +1,4 @@
-  // {RULENAME}
+  // {RULENAME} {COMMENT}
   rule
     <k> {K} </k>
     <exit-code> 1 </exit-code>

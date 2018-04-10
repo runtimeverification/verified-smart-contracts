@@ -13,8 +13,6 @@ module VERIFICATION
 
     rule 2 ^%Int X pow256 => 2 ^Int X  requires 0 <=Int X andBool X <Int 256
 
-    rule log2Int(X) => 0
-
     rule 0 <=Int 2 ^Int X => true
 
     rule 2 ^Int X <Int pow256 => true  requires X <Int 256
@@ -35,6 +33,17 @@ module VERIFICATION
 
     rule X modInt Y => X requires 0 <=Int X andBool X <Int Y
 
+    rule 0 <=Int (A -Word B) => true
+
+    rule (A -Word B) <Int pow256 => true
+
+    rule (0 <=Int #blockhash(_, _, _, _)) => true
+
+    rule (#blockhash(_, _, _, _) <Int pow256) => true
+
+    // (A *Int B /Int A ==Int B or A ==Int 0)
+    rule chop(bool2Word((A *Int B) /Word A ==K B) |Int chop(A xorInt maxUInt256)) => 1
+      requires A *Int B <Int pow256
 
     syntax Int ::= symkeccak ( Int ) [function, smtlib(smt_symkeccak)]
  // -------------------------------------------------------------------
@@ -45,11 +54,14 @@ module VERIFICATION
     rule symkeccak(N) <Int pow256 => true
 
 
-    syntax Int ::= "maxInt128"    [function]
+    syntax Int ::= "maxUInt256"   [funciton]
+                 | "maxInt128"    [function]
                  | "minInt128"    [function]
                  | "minInt128_2s" [function]
                  | "maxDecimal"   [function]
  // ----------------------------------------
+    rule maxUInt256   => 115792089237316195423570985008687907853269984665640564039457584007913129639935  [macro]  /* pow256 - 1 */
+
     rule maxInt128    => 170141183460469231731687303715884105727  [macro]  /* 2^127 - 1 */
 
     rule minInt128    => -170141183460469231731687303715884105728  [macro]
@@ -69,14 +81,6 @@ module VERIFICATION
 
     rule (A -Word B) s<Word minInt128_2s => 0  requires 0 <=Int A andBool A <=Int maxInt128
                                                 andBool 0 <=Int B andBool B <=Int maxInt128
-
-    rule 0 <=Int (A -Word B) => true
-
-    rule (A -Word B) <Int pow256 => true
-
-    rule (0 <=Int #blockhash(_, _, _, _)) => true
-
-    rule (#blockhash(_, _, _, _) <Int pow256) => true
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -120,5 +124,11 @@ module VERIFICATION
     syntax Bool ::= "#inPrevDynasty" "(" Int "," Int "," Int ")"  [function]
  // ------------------------------------------------------------------------
     rule #inPrevDynasty(START, END, CUR) => (START <=Int (CUR -Int 1)) andBool ((CUR -Int 1) <Int END)
+
+
+    syntax Bool ::= "#isJustified" "(" Int "," Int "," Int "," Int ")"  [function]
+ // ------------------------------------------------------------------------------
+    rule #isJustified(CURDYNVOTES, CURDYNDEPOSITS, PREVDYNVOTES, PREVDYNDEPOSITS)
+        => (CURDYNVOTES >=Int CURDYNDEPOSITS *Int 2 /Int 3) andBool (PREVDYNVOTES >=Int PREVDYNDEPOSITS *Int 2 /Int 3)
 
 endmodule
