@@ -43,6 +43,7 @@ module ABSTRACT-CASPER
          <validator multiplicity="*" type="Map">
            <index> 0 </index>
            <addr> 0 </addr>
+           <withdrawalAddr> 0 </withdrawalAddr>
            <deposit> .Map </deposit> // epoch |-> deposit
            <startDynasty> 0 </startDynasty>
            <endDynasty>   0 </endDynasty>
@@ -287,7 +288,8 @@ module ABSTRACT-CASPER
            <deposit> CURRENT_EPOCH |-> Int2Real(DEPOSIT) </deposit>     // TODO: may be penalized in the following two dynasties by other validators' behavior?
            <startDynasty> CURRENT_DYNASTY +Int 2 </startDynasty>
            <endDynasty>   defaultEndDynasty      </endDynasty>
-           <addr> WITHDRAWAL_ADDR </addr>
+           <addr> VALIDATION_ADDR </addr>
+           <withdrawalAddr> WITHDRAWAL_ADDR </withdrawalAddr>
          </validator>
        )
          ...
@@ -308,11 +310,12 @@ module ABSTRACT-CASPER
        <validator>
          <index> VALIDATOR_INDEX </index>
          <endDynasty> END_DYNASTY => CURRENT_DYNASTY +Int dynastyLogoutDelay </endDynasty>
+         <addr> VALIDATION_ADDR </addr>
          ...
        </validator>
        requires CURRENT_EPOCH ==Int BLOCK_NUMBER /Int epochLength
         andBool CURRENT_EPOCH >=Int EPOCH
-        andBool isValidSignature(VALIDATOR_INDEX, EPOCH, SIG)
+        andBool isValidSignature(VALIDATION_ADDR, VALIDATOR_INDEX, EPOCH, SIG)
         andBool END_DYNASTY >Int CURRENT_DYNASTY +Int dynastyLogoutDelay    // TODO: enough for preventing double logouts ?
 
   //
@@ -328,7 +331,7 @@ module ABSTRACT-CASPER
          <index> VALIDATOR_INDEX </index>
          <deposit> ... END_EPOCH |-> DEPOSIT ... </deposit>
          <endDynasty> END_DYNASTY </endDynasty>
-         <addr> WITHDRAWAL_ADDR </addr>
+         <withdrawalAddr> WITHDRAWAL_ADDR </withdrawalAddr>
          ...
        </validator>
        <dynastyStartEpoch> ... END_DYNASTY +Int 1 |-> END_EPOCH ... </dynastyStartEpoch>
@@ -344,6 +347,7 @@ module ABSTRACT-CASPER
          <startDynasty> _ => 0 </startDynasty>
          <endDynasty> _ => 0 </endDynasty>
          <addr> _ => 0 </addr>
+         <withdrawalAddr> _ => 0 </withdrawalAddr>
        </validator>
 
   syntax Map ::= setZero(Map)       [function]
@@ -400,11 +404,12 @@ module ABSTRACT-CASPER
            <deposit> ... CURRENT_EPOCH |-> DEPOSIT </deposit>
            <startDynasty> START_DYNASTY </startDynasty>
            <endDynasty>   END_DYNASTY   </endDynasty>
+           <addr> VALIDATION_ADDR </addr>
            ...
          </validator>
          ...
        </validators>
-       requires isValidSignature(VALIDATOR_INDEX, TARGET_HASH, TARGET_EPOCH, SOURCE_EPOCH, SIG)
+       requires isValidSignature(VALIDATION_ADDR, VALIDATOR_INDEX, TARGET_HASH, TARGET_EPOCH, SOURCE_EPOCH, SIG)
         andBool (        inDynasty(Curr, START_DYNASTY, CURRENT_DYNASTY, END_DYNASTY)
                   orBool inDynasty(Prev, START_DYNASTY, CURRENT_DYNASTY, END_DYNASTY) )
 
@@ -468,10 +473,11 @@ module ABSTRACT-CASPER
        <validator>
          <index> VALIDATOR_INDEX1 </index>
          <deposit> ... CURRENT_EPOCH |-> DEPOSIT </deposit>     // NOTE: if too late (if already withdrawn), deposit is 0
+         <addr> VALIDATION_ADDR </addr>
          ...
        </validator>
-       requires isValidSignature(VALIDATOR_INDEX1, TARGET_HASH1, TARGET_EPOCH1, SOURCE_EPOCH1, SIG1)
-        andBool isValidSignature(VALIDATOR_INDEX2, TARGET_HASH2, TARGET_EPOCH2, SOURCE_EPOCH2, SIG2)
+       requires isValidSignature(VALIDATION_ADDR, VALIDATOR_INDEX1, TARGET_HASH1, TARGET_EPOCH1, SOURCE_EPOCH1, SIG1)
+        andBool isValidSignature(VALIDATION_ADDR, VALIDATOR_INDEX2, TARGET_HASH2, TARGET_EPOCH2, SOURCE_EPOCH2, SIG2)
         andBool VALIDATOR_INDEX1 ==K VALIDATOR_INDEX2
         andBool (        TARGET_HASH1  =/=K TARGET_HASH2
                   orBool TARGET_EPOCH1 =/=K TARGET_EPOCH2
@@ -486,8 +492,8 @@ module ABSTRACT-CASPER
   // External functions
   //
 
-  syntax Bool ::= isValidSignature(Int, Int, Int, Int, Int) [function, hook(isValidSignature)]
-                | isValidSignature(Int, Int, Int)           [function, hook(isValidSignature)]
+  syntax Bool ::= isValidSignature(Int, Int, Int, Int, Int, Int) [function, hook(isValidSignature)]
+                | isValidSignature(Int, Int, Int, Int)           [function, hook(isValidSignature)]
 
   syntax Bool ::= purityChecker(Int) [function, hook(purityChecker)]
 
