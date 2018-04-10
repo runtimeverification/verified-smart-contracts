@@ -86,13 +86,13 @@
         <messages> _ </messages>
       </network>
     </ethereum>
-    requires 0 <=Int ACCT_ID   andBool ACCT_ID   <Int (2 ^Int 160)
+    requires 0 <=Int ACCT_ID   andBool ACCT_ID   <=Int maxUInt160
      andBool (notBool ACCT_ID in #precompiledAccounts(BYZANTIUM))
-     andBool 0 <=Int CALLER_ID andBool CALLER_ID <Int (2 ^Int 160)
-     andBool 0 <=Int ORIGIN_ID andBool ORIGIN_ID <Int (2 ^Int 160)
+     andBool 0 <=Int CALLER_ID andBool CALLER_ID <=Int maxUInt160
+     andBool 0 <=Int ORIGIN_ID andBool ORIGIN_ID <=Int maxUInt160
      andBool 0 <=Int BLOCK_NUM andBool BLOCK_NUM <=Int maxInt128
-     andBool 0 <=Int NOW       andBool NOW       <Int (2 ^Int 256)
-     andBool 0 <=Int BAL       andBool BAL       <Int (2 ^Int 256)
+     andBool 0 <=Int NOW       andBool NOW       <=Int maxUInt256
+     andBool 0 <=Int BAL       andBool BAL       <=Int maxUInt256
 {REQUIRES}
 {ENSURES}
 {ATTRIBUTE}

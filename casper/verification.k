@@ -54,20 +54,10 @@ module VERIFICATION
     rule symkeccak(N) <Int pow256 => true
 
 
-    syntax Int ::= "maxUInt256"   [funciton]
-                 | "maxInt128"    [function]
-                 | "minInt128"    [function]
-                 | "minInt128_2s" [function]
+    syntax Int ::= "minInt128_2s" [function]
                  | "maxDecimal"   [function]
  // ----------------------------------------
-    rule maxUInt256   => 115792089237316195423570985008687907853269984665640564039457584007913129639935  [macro]  /* pow256 - 1 */
-
-    rule maxInt128    => 170141183460469231731687303715884105727  [macro]  /* 2^127 - 1 */
-
-    rule minInt128    => -170141183460469231731687303715884105728  [macro]
-
     rule minInt128_2s => 115792089237316195423570985008687907853099843482180094807725896704197245534208  [macro]  /* pow256 - 2^127 */
-
     rule maxDecimal   => 1701411834604692317316873037158841057270000000000  [macro]  /* (2^127 - 1) * 10^10 */
 
 
