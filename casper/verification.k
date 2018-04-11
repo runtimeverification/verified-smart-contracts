@@ -61,16 +61,16 @@ module VERIFICATION
     rule maxDecimal   => 1701411834604692317316873037158841057270000000000  [macro]  /* (2^127 - 1) * 10^10 */
 
 
-    rule A s<Word (B -Word C) => 0  requires 0 <=Int A andBool A <=Int maxInt128
-                                     andBool 0 <=Int B andBool B <=Int maxInt128
-                                     andBool 0 <=Int C andBool C <=Int maxInt128
+    rule A s<Word (B -Word C) => 0  requires 0 <=Int A andBool A <=Int maxSInt128
+                                     andBool 0 <=Int B andBool B <=Int maxSInt128
+                                     andBool 0 <=Int C andBool C <=Int maxSInt128
                                      andBool B -Int C <=Int A
 
-    rule maxInt128 s<Word (A -Word B) => 0  requires 0 <=Int A andBool A <=Int maxInt128
-                                             andBool 0 <=Int B andBool B <=Int maxInt128
+    rule maxSInt128 s<Word (A -Word B) => 0  requires 0 <=Int A andBool A <=Int maxSInt128
+                                             andBool 0 <=Int B andBool B <=Int maxSInt128
 
-    rule (A -Word B) s<Word minInt128_2s => 0  requires 0 <=Int A andBool A <=Int maxInt128
-                                                andBool 0 <=Int B andBool B <=Int maxInt128
+    rule (A -Word B) s<Word minInt128_2s => 0  requires 0 <=Int A andBool A <=Int maxSInt128
+                                                andBool 0 <=Int B andBool B <=Int maxSInt128
 
 
 ///////////////////////////////////////////////////////////////////////////////

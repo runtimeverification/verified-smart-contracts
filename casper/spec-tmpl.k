@@ -9,19 +9,16 @@
     <ethereum>
       <evm>
         <output> {OUTPUT} </output>
-        <memoryUsed> {MEMORYUSED} </memoryUsed>
-        <callDepth> {CALLDEPTH} </callDepth>
         <callStack> {CALLSTACK} </callStack>
         <interimStates> _ </interimStates>
-        <substateStack> _ </substateStack>
         <callLog> .Set </callLog> // for vmtest only
         <touchedAccounts> _ => _ </touchedAccounts>
 
-        <txExecState>
+        <callState>
           <program> #asMapOpCodes(#dasmOpCodes(#parseByteStack({CODE}), BYZANTIUM)) </program>
           <programBytes> #parseByteStack({CODE}) </programBytes>
 
-          <id> ACCT_ID </id> // contract owner
+          <id> CASPER_ACCT_ID </id> // contract owner
           <caller> CALLER_ID </caller> // who called this contract; in the begining, origin // msg.sender
 
           <callData> {CALLDATA} </callData>
@@ -31,10 +28,12 @@
           <localMem> {LOCALMEM} </localMem>
           <pc> {PC} </pc>
           <gas> {GAS} </gas>
+          <memoryUsed> {MEMORYUSED} </memoryUsed>
           <previousGas> _ => _ </previousGas>
 
           <static> false </static> // NOTE: non-static call
-        </txExecState>
+          <callDepth> {CALLDEPTH} </callDepth>
+        </callState>
 
         <substate>
           <selfDestruct> _ </selfDestruct>
@@ -47,7 +46,7 @@
 
         <previousHash> _ </previousHash>
         <ommersHash> _ </ommersHash>
-        <coinbase> _ </coinbase>
+        <coinbase> COINBASE_ID </coinbase>
         <stateRoot> _ </stateRoot>
         <transactionsRoot> _ </transactionsRoot>
         <receiptsRoot> _ </receiptsRoot>
@@ -66,11 +65,11 @@
       </evm>
 
       <network>
-        <activeAccounts> SetItem(ACCT_ID) _:Set </activeAccounts>
+        <activeAccounts> SetItem(CASPER_ACCT_ID) _:Set </activeAccounts>
 
         <accounts>
           <account>
-            <acctID> ACCT_ID </acctID>
+            <acctID> CASPER_ACCT_ID </acctID>
             <balance> BAL </balance>
             <code> #parseByteStack({CODE}) </code>
             <storage>
@@ -86,13 +85,14 @@
         <messages> _ </messages>
       </network>
     </ethereum>
-    requires 0 <=Int ACCT_ID   andBool ACCT_ID   <=Int maxUInt160
-     andBool (notBool ACCT_ID in #precompiledAccounts(BYZANTIUM))
-     andBool 0 <=Int CALLER_ID andBool CALLER_ID <=Int maxUInt160
-     andBool 0 <=Int ORIGIN_ID andBool ORIGIN_ID <=Int maxUInt160
-     andBool 0 <=Int BLOCK_NUM andBool BLOCK_NUM <=Int maxInt128
-     andBool 0 <=Int NOW       andBool NOW       <=Int maxUInt256
-     andBool 0 <=Int BAL       andBool BAL       <=Int maxUInt256
+    requires 0 <=Int CASPER_ACCT_ID andBool CASPER_ACCT_ID <=Int maxUInt160
+     andBool (notBool CASPER_ACCT_ID in #precompiledAccounts(BYZANTIUM))
+     andBool 0 <=Int CALLER_ID   andBool CALLER_ID   <=Int maxUInt160
+     andBool 0 <=Int ORIGIN_ID   andBool ORIGIN_ID   <=Int maxUInt160
+     andBool 0 <=Int COINBASE_ID andBool COINBASE_ID <=Int maxUInt160
+     andBool 0 <=Int BLOCK_NUM   andBool BLOCK_NUM   <=Int maxSInt128
+     andBool 0 <=Int NOW         andBool NOW         <=Int maxUInt256
+     andBool 0 <=Int BAL         andBool BAL         <=Int maxUInt256
 {REQUIRES}
 {ENSURES}
 {ATTRIBUTE}
