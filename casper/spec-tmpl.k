@@ -68,16 +68,25 @@
         <activeAccounts> SetItem(CASPER_ACCT_ID) _:Set </activeAccounts>
 
         <accounts>
+
           <account>
             <acctID> CASPER_ACCT_ID </acctID>
-            <balance> BAL </balance>
+            <balance> CASPER_BAL </balance>
             <code> #parseByteStack({CODE}) </code>
             <storage>
 {STORAGE}
             </storage>
             <nonce> _ </nonce>
           </account>
-       // ... // TODO: fix
+
+          <account>
+            <acctID> COINBASE_ACCT_ID </acctID>
+            <balance> COINBASE_BAL </balance>
+            <code> _ </code>
+            <storage> _ </storage>
+            <nonce> _ </nonce>
+          </account>
+
         </accounts>
 
         <txOrder> _ </txOrder>
@@ -92,7 +101,7 @@
      andBool 0 <=Int COINBASE_ID andBool COINBASE_ID <=Int maxUInt160
      andBool 0 <=Int BLOCK_NUM   andBool BLOCK_NUM   <=Int maxSInt128
      andBool 0 <=Int NOW         andBool NOW         <=Int maxUInt256
-     andBool 0 <=Int BAL         andBool BAL         <=Int maxUInt256
+     andBool 0 <=Int CASPER_BAL  andBool CASPER_BAL  <=Int maxUInt256
 {REQUIRES}
 {ENSURES}
 {ATTRIBUTE}

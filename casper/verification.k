@@ -43,7 +43,7 @@ module VERIFICATION
 
     // (A *Int B /Int A ==Int B or A ==Int 0)
     rule chop(bool2Word((A *Int B) /Word A ==K B) |Int chop(A xorInt maxUInt256)) => 1
-      requires A *Int B <Int pow256
+      requires A *Int B <=Int maxUInt256
 
     syntax Int ::= symkeccak ( Int ) [function, smtlib(smt_symkeccak)]
  // -------------------------------------------------------------------
@@ -67,7 +67,7 @@ module VERIFICATION
                                      andBool B -Int C <=Int A
 
     rule maxSInt128 s<Word (A -Word B) => 0  requires 0 <=Int A andBool A <=Int maxSInt128
-                                             andBool 0 <=Int B andBool B <=Int maxSInt128
+                                              andBool 0 <=Int B andBool B <=Int maxSInt128
 
     rule (A -Word B) s<Word minInt128_2s => 0  requires 0 <=Int A andBool A <=Int maxSInt128
                                                 andBool 0 <=Int B andBool B <=Int maxSInt128
