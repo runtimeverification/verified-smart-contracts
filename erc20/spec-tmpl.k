@@ -8,8 +8,9 @@
 
     <ethereum>
       <evm>
-        <output> _ </output>
-        <callStack> _ => _ </callStack>
+        <output> _ => {OUTPUT} </output>
+        <statusCode> _ => {STATUSCODE} </statusCode>
+        <callStack> _ </callStack>
         <interimStates> _ </interimStates>
         <touchedAccounts> _ => _ </touchedAccounts>
 
@@ -24,7 +25,7 @@
 
           <callValue> 0 </callValue>
           <wordStack> .WordStack => _ </wordStack>
-          <localMem> {LOCALMEM} </localMem>
+          <localMem> .Map => {LOCALMEM} </localMem>
           <pc> 0 => _ </pc>
           <gas> {GAS} </gas>
           <memoryUsed> 0 => _ </memoryUsed>
