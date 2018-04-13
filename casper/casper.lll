@@ -5,8 +5,8 @@
   [mstore, 96, -170141183460469231731687303715884105728],
   [mstore, 128, 1701411834604692317316873037158841057270000000000],
   [mstore, 160, -1701411834604692317316873037158841057280000000000],
-  # Line 122
-  [codecopy, 320, ~codelen, 256],
+  # Line 119
+  [codecopy, 320, ~codelen, 288],
   [assert, [iszero, callvalue]],
   /* checking int128 input */ 
   [clamp,
@@ -18,10 +18,11 @@
     [mload, 96],
     [codeload, [add, ~codelen, 32]],
     [mload, 64]],
-  /* checking address input */ 
-  [uclamplt,
+  /* checking int128 input */ 
+  [clamp,
+    [mload, 96],
     [codeload, [add, ~codelen, 64]],
-    [mload, 32]],
+    [mload, 64]],
   /* checking address input */ 
   [uclamplt,
     [codeload, [add, ~codelen, 96]],
@@ -30,34 +31,50 @@
   [uclamplt,
     [codeload, [add, ~codelen, 128]],
     [mload, 32]],
+  /* checking address input */ 
+  [uclamplt,
+    [codeload, [add, ~codelen, 160]],
+    [mload, 32]],
   /* checking int128 input */ 
   [clamp,
     [mload, 96],
-    [codeload, [add, ~codelen, 224]],
+    [codeload, [add, ~codelen, 256]],
     [mload, 64]],
+  # Line 126
+  [sstore, 20 <self.epoch_length>, [mload, 320 <_epoch_length>]],
+  # Line 127
+  [sstore, 21 <self.withdrawal_delay>, [mload, 352 <_withdrawal_delay>]],
+  # Line 128
+  [sstore, 22 <self.dynasty_logout_delay>, [mload, 384 <_dynasty_logout_delay>]],
+  # Line 129
+  [sstore, 23 <self.owner>, [mload, 416 <_owner>]],
+  # Line 130
+  [sstore, 27 <self.base_interest_factor>, [mload, 512 <_base_interest_factor>]],
+  # Line 131
+  [sstore, 28 <self.base_penalty_factor>, [mload, 544 <_base_penalty_factor>]],
   # Line 132
-  [sstore, 16 <self.epoch_length>, [mload, 320 <_epoch_length>]],
-  # Line 134
-  [sstore, 17 <self.withdrawal_delay>, [mload, 352 <_withdrawal_delay>]],
+  [sstore, 29 <self.min_deposit_size>, [mload, 576 <_min_deposit_size>]],
+  # Line 135
+  [sstore, 24 <self.sighasher>, [mload, 448 <_sighasher>]],
   # Line 136
-  [sstore, 2 <self.nextValidatorIndex>, 1],
-  # Line 138
-  [sstore, 22 <self.owner>, [mload, 384 <_owner>]],
-  # Line 140
-  [sstore, [sha3_32, 13 <self.deposit_scale_factor>], 100000000000000000000],
+  [sstore, 25 <self.purity_checker>, [mload, 480 <_purity_checker>]],
+  # Line 139
+  [sstore, 2 <self.next_validator_index>, 1],
+  # Line 141
+  [sstore, [sha3_32, 12 <self.deposit_scale_factor>], 100000000000000000000],
   # Line 142
   [sstore, 4 <self.dynasty>, 0],
-  # Line 144
+  # Line 143
   [sstore,
-    18 <self.current_epoch>,
+    15 <self.current_epoch>,
     [if,
-      # Line 144
+      # Line 143
       [slt,
         [clamp,
           [mload, 160],
           [sdiv,
             [mul, number, 10000000000],
-            [clamp_nonzero, [sload, 16 <self.epoch_length>]]],
+            [clamp_nonzero, [sload, 20 <self.epoch_length>]]],
           [mload, 128]],
         0],
       [sdiv,
@@ -66,7 +83,7 @@
             [mload, 160],
             [sdiv,
               [mul, number, 10000000000],
-              [clamp_nonzero, [sload, 16 <self.epoch_length>]]],
+              [clamp_nonzero, [sload, 20 <self.epoch_length>]]],
             [mload, 128]],
           9999999999],
         10000000000],
@@ -75,23 +92,15 @@
           [mload, 160],
           [sdiv,
             [mul, number, 10000000000],
-            [clamp_nonzero, [sload, 16 <self.epoch_length>]]],
+            [clamp_nonzero, [sload, 20 <self.epoch_length>]]],
           [mload, 128]],
         10000000000]]],
+  # Line 144
+  [sstore, 6 <self.total_curdyn_deposits>, 0],
+  # Line 145
+  [sstore, 7 <self.total_prevdyn_deposits>, 0],
   # Line 146
-  [sstore, 24 <self.sighasher>, [mload, 416 <_sighasher>]],
-  # Line 148
-  [sstore, 25 <self.purity_checker>, [mload, 448 <_purity_checker>]],
-  # Line 151
-  [sstore, 7 <self.total_curdyn_deposits>, 0],
-  # Line 152
-  [sstore, 8 <self.total_prevdyn_deposits>, 0],
-  # Line 154
-  [sstore, 27 <self.base_interest_factor>, [mload, 480 <_base_interest_factor>]],
-  # Line 155
-  [sstore, 28 <self.base_penalty_factor>, [mload, 512 <_base_penalty_factor>]],
-  # Line 157
-  [sstore, 29 <self.min_deposit_size>, [mload, 544 <_min_deposit_size>]],
+  [sstore, 30 <self.default_end_dynasty>, 1000000000000000000000000000000],
   [return,
     0,
     [lll,
@@ -102,12 +111,12 @@
         [mstore, 96, -170141183460469231731687303715884105728],
         [mstore, 128, 1701411834604692317316873037158841057270000000000],
         [mstore, 160, -1701411834604692317316873037158841057280000000000],
-        # Line 160
+        # Line 149
         [if,
           [eq, [mload, 0], 937364392 <main_hash_voted_frac>],
           [seq,
             [assert, [iszero, callvalue]],
-            # Line 163
+            # Line 152
             [mstore,
               0,
               [with,
@@ -118,11 +127,11 @@
                     l,
                     [sload,
                       [add,
-                        [sha3_32, [sha3_32, [add, [sha3_32, 11 <self.votes>], [sload, 18 <self.current_epoch>]]]],
-                        [sload, 21 <self.expected_source_epoch>]]],
+                        [sha3_32, [sha3_32, [add, [sha3_32, 10 <self.votes>], [sload, 15 <self.current_epoch>]]]],
+                        [sload, 18 <self.expected_source_epoch>]]],
                     [with,
                       r,
-                      [clamp_nonzero, [sload, 7 <self.total_curdyn_deposits>]],
+                      [clamp_nonzero, [sload, 6 <self.total_curdyn_deposits>]],
                       [sdiv, [mul, l, 10000000000], r]]],
                   [mload, 128]],
                 [with,
@@ -135,19 +144,19 @@
                         [add,
                           [sha3_32,
                             [add,
-                              [sha3_32, [add, [sha3_32, 11 <self.votes>], [sload, 18 <self.current_epoch>]]],
+                              [sha3_32, [add, [sha3_32, 10 <self.votes>], [sload, 15 <self.current_epoch>]]],
                               3 <prev_dyn_votes>]],
-                          [sload, 21 <self.expected_source_epoch>]]],
+                          [sload, 18 <self.expected_source_epoch>]]],
                       [with,
                         r,
-                        [clamp_nonzero, [sload, 8 <self.total_prevdyn_deposits>]],
+                        [clamp_nonzero, [sload, 7 <self.total_prevdyn_deposits>]],
                         [sdiv, [mul, l, 10000000000], r]]],
                     [mload, 128]],
                   [if, [sgt, _l, _r], _r, _l]]]],
             [return, 0, 32],
-            # Line 160
+            # Line 149
             stop]],
-        # Line 166
+        # Line 155
         [if,
           [eq, [mload, 0], 2583387884 <deposit_size>],
           [seq,
@@ -158,7 +167,7 @@
               [mload, 96],
               [calldataload, 4],
               [mload, 64]],
-            # Line 169
+            # Line 158
             [mstore,
               0,
               [if,
@@ -169,8 +178,8 @@
                       r,
                       [sload,
                         [add,
-                          [sha3_32, 13 <self.deposit_scale_factor>],
-                          [sload, 18 <self.current_epoch>]]],
+                          [sha3_32, 12 <self.deposit_scale_factor>],
+                          [sload, 15 <self.current_epoch>]]],
                       [with,
                         l,
                         [sload,
@@ -193,8 +202,8 @@
                         r,
                         [sload,
                           [add,
-                            [sha3_32, 13 <self.deposit_scale_factor>],
-                            [sload, 18 <self.current_epoch>]]],
+                            [sha3_32, 12 <self.deposit_scale_factor>],
+                            [sload, 15 <self.current_epoch>]]],
                         [with,
                           l,
                           [sload,
@@ -217,8 +226,8 @@
                       r,
                       [sload,
                         [add,
-                          [sha3_32, 13 <self.deposit_scale_factor>],
-                          [sload, 18 <self.current_epoch>]]],
+                          [sha3_32, 12 <self.deposit_scale_factor>],
+                          [sload, 15 <self.current_epoch>]]],
                       [with,
                         l,
                         [sload,
@@ -234,14 +243,14 @@
                     [mload, 128]],
                   10000000000]]],
             [return, 0, 32],
-            # Line 166
+            # Line 155
             stop]],
-        # Line 171
+        # Line 160
         [if,
-          [eq, [mload, 0], 998321859 <get_total_curdyn_deposits>],
+          [eq, [mload, 0], 2396075952 <total_curdyn_deposits_scaled>],
           [seq,
             [assert, [iszero, callvalue]],
-            # Line 174
+            # Line 163
             [mstore,
               0,
               [if,
@@ -252,11 +261,11 @@
                       r,
                       [sload,
                         [add,
-                          [sha3_32, 13 <self.deposit_scale_factor>],
-                          [sload, 18 <self.current_epoch>]]],
+                          [sha3_32, 12 <self.deposit_scale_factor>],
+                          [sload, 15 <self.current_epoch>]]],
                       [with,
                         l,
-                        [sload, 7 <self.total_curdyn_deposits>],
+                        [sload, 6 <self.total_curdyn_deposits>],
                         [with,
                           ans,
                           [mul, l, r],
@@ -273,11 +282,11 @@
                         r,
                         [sload,
                           [add,
-                            [sha3_32, 13 <self.deposit_scale_factor>],
-                            [sload, 18 <self.current_epoch>]]],
+                            [sha3_32, 12 <self.deposit_scale_factor>],
+                            [sload, 15 <self.current_epoch>]]],
                         [with,
                           l,
-                          [sload, 7 <self.total_curdyn_deposits>],
+                          [sload, 6 <self.total_curdyn_deposits>],
                           [with,
                             ans,
                             [mul, l, r],
@@ -294,11 +303,11 @@
                       r,
                       [sload,
                         [add,
-                          [sha3_32, 13 <self.deposit_scale_factor>],
-                          [sload, 18 <self.current_epoch>]]],
+                          [sha3_32, 12 <self.deposit_scale_factor>],
+                          [sload, 15 <self.current_epoch>]]],
                       [with,
                         l,
-                        [sload, 7 <self.total_curdyn_deposits>],
+                        [sload, 6 <self.total_curdyn_deposits>],
                         [with,
                           ans,
                           [mul, l, r],
@@ -307,99 +316,99 @@
                             [sdiv, ans, 10000000000]]]]],
                     [mload, 128]],
                   10000000000]]],
+            [return, 0, 32],
+            # Line 160
+            stop]],
+        # Line 165
+        [if,
+          [eq, [mload, 0], 2247379592 <total_prevdyn_deposits_scaled>],
+          [seq,
+            [assert, [iszero, callvalue]],
+            # Line 168
+            [mstore,
+              0,
+              [if,
+                [slt,
+                  [clamp,
+                    [mload, 160],
+                    [with,
+                      r,
+                      [sload,
+                        [add,
+                          [sha3_32, 12 <self.deposit_scale_factor>],
+                          [sload, 15 <self.current_epoch>]]],
+                      [with,
+                        l,
+                        [sload, 7 <self.total_prevdyn_deposits>],
+                        [with,
+                          ans,
+                          [mul, l, r],
+                          [seq,
+                            [assert, [or, [eq, [sdiv, ans, l], r], [not, l]]],
+                            [sdiv, ans, 10000000000]]]]],
+                    [mload, 128]],
+                  0],
+                [sdiv,
+                  [sub,
+                    [clamp,
+                      [mload, 160],
+                      [with,
+                        r,
+                        [sload,
+                          [add,
+                            [sha3_32, 12 <self.deposit_scale_factor>],
+                            [sload, 15 <self.current_epoch>]]],
+                        [with,
+                          l,
+                          [sload, 7 <self.total_prevdyn_deposits>],
+                          [with,
+                            ans,
+                            [mul, l, r],
+                            [seq,
+                              [assert, [or, [eq, [sdiv, ans, l], r], [not, l]]],
+                              [sdiv, ans, 10000000000]]]]],
+                      [mload, 128]],
+                    9999999999],
+                  10000000000],
+                [sdiv,
+                  [clamp,
+                    [mload, 160],
+                    [with,
+                      r,
+                      [sload,
+                        [add,
+                          [sha3_32, 12 <self.deposit_scale_factor>],
+                          [sload, 15 <self.current_epoch>]]],
+                      [with,
+                        l,
+                        [sload, 7 <self.total_prevdyn_deposits>],
+                        [with,
+                          ans,
+                          [mul, l, r],
+                          [seq,
+                            [assert, [or, [eq, [sdiv, ans, l], r], [not, l]]],
+                            [sdiv, ans, 10000000000]]]]],
+                    [mload, 128]],
+                  10000000000]]],
+            [return, 0, 32],
+            # Line 165
+            stop]],
+        # Line 171
+        [if,
+          [eq, [mload, 0], 284313141 <recommended_source_epoch>],
+          [seq,
+            [assert, [iszero, callvalue]],
+            # Line 174
+            [mstore, 0, [sload, 18 <self.expected_source_epoch>]],
             [return, 0, 32],
             # Line 171
             stop]],
         # Line 176
         [if,
-          [eq, [mload, 0], 1738402402 <get_total_prevdyn_deposits>],
-          [seq,
-            [assert, [iszero, callvalue]],
-            # Line 179
-            [mstore,
-              0,
-              [if,
-                [slt,
-                  [clamp,
-                    [mload, 160],
-                    [with,
-                      r,
-                      [sload,
-                        [add,
-                          [sha3_32, 13 <self.deposit_scale_factor>],
-                          [sload, 18 <self.current_epoch>]]],
-                      [with,
-                        l,
-                        [sload, 8 <self.total_prevdyn_deposits>],
-                        [with,
-                          ans,
-                          [mul, l, r],
-                          [seq,
-                            [assert, [or, [eq, [sdiv, ans, l], r], [not, l]]],
-                            [sdiv, ans, 10000000000]]]]],
-                    [mload, 128]],
-                  0],
-                [sdiv,
-                  [sub,
-                    [clamp,
-                      [mload, 160],
-                      [with,
-                        r,
-                        [sload,
-                          [add,
-                            [sha3_32, 13 <self.deposit_scale_factor>],
-                            [sload, 18 <self.current_epoch>]]],
-                        [with,
-                          l,
-                          [sload, 8 <self.total_prevdyn_deposits>],
-                          [with,
-                            ans,
-                            [mul, l, r],
-                            [seq,
-                              [assert, [or, [eq, [sdiv, ans, l], r], [not, l]]],
-                              [sdiv, ans, 10000000000]]]]],
-                      [mload, 128]],
-                    9999999999],
-                  10000000000],
-                [sdiv,
-                  [clamp,
-                    [mload, 160],
-                    [with,
-                      r,
-                      [sload,
-                        [add,
-                          [sha3_32, 13 <self.deposit_scale_factor>],
-                          [sload, 18 <self.current_epoch>]]],
-                      [with,
-                        l,
-                        [sload, 8 <self.total_prevdyn_deposits>],
-                        [with,
-                          ans,
-                          [mul, l, r],
-                          [seq,
-                            [assert, [or, [eq, [sdiv, ans, l], r], [not, l]]],
-                            [sdiv, ans, 10000000000]]]]],
-                    [mload, 128]],
-                  10000000000]]],
-            [return, 0, 32],
-            # Line 176
-            stop]],
-        # Line 182
-        [if,
-          [eq, [mload, 0], 284313141 <recommended_source_epoch>],
-          [seq,
-            [assert, [iszero, callvalue]],
-            # Line 185
-            [mstore, 0, [sload, 21 <self.expected_source_epoch>]],
-            [return, 0, 32],
-            # Line 182
-            stop]],
-        # Line 187
-        [if,
           [eq, [mload, 0], 2237609772 <recommended_target_hash>],
           [seq,
             [assert, [iszero, callvalue]],
-            # Line 190
+            # Line 179
             [mstore,
               0,
               [blockhash,
@@ -410,117 +419,113 @@
                       [sub,
                         [clamp,
                           [mload, 96],
-                          [mul, [sload, 18 <self.current_epoch>], [sload, 16 <self.epoch_length>]],
+                          [mul, [sload, 15 <self.current_epoch>], [sload, 20 <self.epoch_length>]],
                           [mload, 64]],
                         1],
                       [mload, 64]],
                     [sub, number, 256]],
                   number]]],
             [return, 0, 32],
-            # Line 187
+            # Line 176
             stop]],
-        # Line 192
+        # Line 181
         [if,
           [eq, [mload, 0], 3732904309 <deposit_exists>],
           [seq,
             [assert, [iszero, callvalue]],
             [assert, [eq, caller, address]],
-            # Line 195
+            # Line 184
             [mstore,
               0,
               [and,
-                [sgt, [sload, 7 <self.total_curdyn_deposits>], 0],
-                [sgt, [sload, 8 <self.total_prevdyn_deposits>], 0]]],
+                [sgt, [sload, 6 <self.total_curdyn_deposits>], 0],
+                [sgt, [sload, 7 <self.total_prevdyn_deposits>], 0]]],
             [return, 0, 32],
-            # Line 192
+            # Line 181
             stop]],
-        # Line 201
+        # Line 190
         [if,
           [eq, [mload, 0], 3532045186 <increment_dynasty>],
           [seq,
             [assert, [iszero, callvalue]],
             [assert, [eq, caller, address]],
-            [mstore, 320, [sload, 18 <self.current_epoch>]],
-            # Line 205
+            [mstore, 320, [sload, 15 <self.current_epoch>]],
+            # Line 194
             [if,
               [sload,
                 [add,
                   [sha3_32,
                     [add,
-                      [sha3_32, 11 <self.votes>],
+                      [sha3_32, 10 <self.votes>],
                       [clamp, [mload, 96], [sub, [mload, 320 <epoch>], 2], [mload, 64]]]],
                   1 <is_finalized>]],
-              # Line 206
+              # Line 195
               [seq,
                 [with,
                   _stloc,
                   4 <self.dynasty>,
                   [sstore, _stloc, [clamp, [mload, 96], [add, [sload, _stloc], 1], [mload, 64]]]],
-                # Line 207
+                # Line 196
                 [sstore,
-                  8 <self.total_prevdyn_deposits>,
-                  [sload, 7 <self.total_curdyn_deposits>]],
-                # Line 208
+                  7 <self.total_prevdyn_deposits>,
+                  [sload, 6 <self.total_curdyn_deposits>]],
+                # Line 197
                 [with,
                   _stloc,
-                  7 <self.total_curdyn_deposits>,
+                  6 <self.total_curdyn_deposits>,
                   [sstore,
                     _stloc,
                     [clamp,
                       [mload, 160],
-                      [add, [sload, _stloc], [sload, 5 <self.next_dynasty_wei_delta>]],
+                      [add,
+                        [sload, _stloc],
+                        [sload, [add, [sha3_32, 5 <self.dynasty_wei_delta>], [sload, 4 <self.dynasty>]]]],
                       [mload, 128]]]],
-                # Line 209
+                # Line 198
                 [sstore,
-                  5 <self.next_dynasty_wei_delta>,
-                  [sload, 6 <self.second_next_dynasty_wei_delta>]],
-                # Line 210
-                [sstore, 6 <self.second_next_dynasty_wei_delta>, 0],
-                # Line 211
-                [sstore,
-                  [add, [sha3_32, 9 <self.dynasty_start_epoch>], [sload, 4 <self.dynasty>]],
+                  [add, [sha3_32, 8 <self.dynasty_start_epoch>], [sload, 4 <self.dynasty>]],
                   [mload, 320 <epoch>]]]],
-            # Line 212
+            # Line 199
             [sstore,
-              [add, [sha3_32, 10 <self.dynasty_in_epoch>], [mload, 320 <epoch>]],
+              [add, [sha3_32, 9 <self.dynasty_in_epoch>], [mload, 320 <epoch>]],
               [sload, 4 <self.dynasty>]],
-            # Line 213
+            # Line 200
             [if,
-              [sload, 12 <self.main_hash_justified>],
-              # Line 214
+              [sload, 11 <self.main_hash_justified>],
+              # Line 201
               [seq,
                 [sstore,
-                  21 <self.expected_source_epoch>,
+                  18 <self.expected_source_epoch>,
                   [clamp, [mload, 96], [sub, [mload, 320 <epoch>], 1], [mload, 64]]]]],
-            # Line 215
-            [sstore, 12 <self.main_hash_justified>, 0],
-            # Line 201
+            # Line 202
+            [sstore, 11 <self.main_hash_justified>, 0],
+            # Line 190
             stop]],
-        # Line 218
+        # Line 205
         [if,
           [eq, [mload, 0], 2593057911 <esf>],
           [seq,
             [assert, [iszero, callvalue]],
             [assert, [eq, caller, address]],
-            # Line 220
+            # Line 207
             [mstore,
               0,
               [clamp,
                 [mload, 96],
                 [sub,
-                  [sload, 18 <self.current_epoch>],
-                  [sload, 19 <self.last_finalized_epoch>]],
+                  [sload, 15 <self.current_epoch>],
+                  [sload, 16 <self.last_finalized_epoch>]],
                 [mload, 64]]],
             [return, 0, 32],
-            # Line 218
+            # Line 205
             stop]],
-        # Line 223
+        # Line 210
         [if,
           [eq, [mload, 0], 2898663875 <collective_reward>],
           [seq,
             [assert, [iszero, callvalue]],
             [assert, [eq, caller, address]],
-            [mstore, 320, [sload, 18 <self.current_epoch>]],
+            [mstore, 320, [sload, 15 <self.current_epoch>]],
             [mstore,
               352,
               [sle,
@@ -530,7 +535,7 @@
                     [assert, [call, gas, address, 0, [seq, [mstore, 384, 2593057911], 412], 4, 480, 32]],
                     480]],
                 2]],
-            # Line 227
+            # Line 214
             [if,
               [or,
                 [iszero,
@@ -540,9 +545,9 @@
                       [assert, [call, gas, address, 0, [seq, [mstore, 512, 3732904309], 540], 4, 608, 32]],
                       608]]],
                 [iszero, [mload, 352 <live>]]],
-              # Line 228
+              # Line 215
               [seq, [mstore, 0, 0], [return, 0, 32]]],
-            # Line 223
+            # Line 210
             [mstore,
               640,
               [clamp,
@@ -554,12 +559,12 @@
                       [sha3_32,
                         [sha3_32,
                           [add,
-                            [sha3_32, 11 <self.votes>],
+                            [sha3_32, 10 <self.votes>],
                             [clamp, [mload, 96], [sub, [mload, 320 <epoch>], 1], [mload, 64]]]]],
-                      [sload, 21 <self.expected_source_epoch>]]],
+                      [sload, 18 <self.expected_source_epoch>]]],
                   [with,
                     r,
-                    [clamp_nonzero, [sload, 7 <self.total_curdyn_deposits>]],
+                    [clamp_nonzero, [sload, 6 <self.total_curdyn_deposits>]],
                     [sdiv, [mul, l, 10000000000], r]]],
                 [mload, 128]]],
             [mstore,
@@ -574,13 +579,13 @@
                         [add,
                           [sha3_32,
                             [add,
-                              [sha3_32, 11 <self.votes>],
+                              [sha3_32, 10 <self.votes>],
                               [clamp, [mload, 96], [sub, [mload, 320 <epoch>], 1], [mload, 64]]]],
                           3 <prev_dyn_votes>]],
-                      [sload, 21 <self.expected_source_epoch>]]],
+                      [sload, 18 <self.expected_source_epoch>]]],
                   [with,
                     r,
-                    [clamp_nonzero, [sload, 8 <self.total_prevdyn_deposits>]],
+                    [clamp_nonzero, [sload, 7 <self.total_prevdyn_deposits>]],
                     [sdiv, [mul, l, 10000000000], r]]],
                 [mload, 128]]],
             [mstore,
@@ -589,7 +594,7 @@
                 _l,
                 [mload, 640 <cur_vote_frac>],
                 [with, _r, [mload, 672 <prev_vote_frac>], [if, [sgt, _l, _r], _r, _l]]]],
-            # Line 233
+            # Line 220
             [mstore,
               0,
               [clamp,
@@ -613,44 +618,44 @@
                   2],
                 [mload, 128]]],
             [return, 0, 32],
-            # Line 223
+            # Line 210
             stop]],
-        # Line 235
+        # Line 222
         [if,
           [eq, [mload, 0], 1697049970 <insta_finalize>],
           [seq,
             [assert, [iszero, callvalue]],
             [assert, [eq, caller, address]],
-            [mstore, 320, [sload, 18 <self.current_epoch>]],
-            # Line 238
-            [sstore, 12 <self.main_hash_justified>, 1],
-            # Line 239
+            [mstore, 320, [sload, 15 <self.current_epoch>]],
+            # Line 225
+            [sstore, 11 <self.main_hash_justified>, 1],
+            # Line 226
             [sstore,
               [add,
                 [sha3_32,
                   [add,
-                    [sha3_32, 11 <self.votes>],
+                    [sha3_32, 10 <self.votes>],
                     [clamp, [mload, 96], [sub, [mload, 320 <epoch>], 1], [mload, 64]]]],
                 2 <is_justified>],
               1],
-            # Line 240
+            # Line 227
             [sstore,
               [add,
                 [sha3_32,
                   [add,
-                    [sha3_32, 11 <self.votes>],
+                    [sha3_32, 10 <self.votes>],
                     [clamp, [mload, 96], [sub, [mload, 320 <epoch>], 1], [mload, 64]]]],
                 1 <is_finalized>],
               1],
-            # Line 241
+            # Line 228
             [sstore,
-              20 <self.last_justified_epoch>,
+              17 <self.last_justified_epoch>,
               [clamp, [mload, 96], [sub, [mload, 320 <epoch>], 1], [mload, 64]]],
-            # Line 242
+            # Line 229
             [sstore,
-              19 <self.last_finalized_epoch>,
+              16 <self.last_finalized_epoch>,
               [clamp, [mload, 96], [sub, [mload, 320 <epoch>], 1], [mload, 64]]],
-            # Line 244
+            # Line 231
             [mstore, 416, 1],
             [mstore, 448, 1],
             [mstore, 352, 64],
@@ -665,15 +670,15 @@
                 [add,
                   [sha3_32, 1 <self.checkpoint_hashes>],
                   [clamp, [mload, 96], [sub, [mload, 320 <epoch>], 1], [mload, 64]]]]],
-            # Line 235
+            # Line 222
             stop]],
-        # Line 247
+        # Line 234
         [if,
           [eq, [mload, 0], 3676565216 <sqrt_of_total_deposits>],
           [seq,
             [assert, [iszero, callvalue]],
             [assert, [eq, caller, address]],
-            [mstore, 320, [sload, 18 <self.current_epoch>]],
+            [mstore, 320, [sload, 15 <self.current_epoch>]],
             [mstore,
               352,
               [clamp,
@@ -690,16 +695,16 @@
                               r,
                               [sload,
                                 [add,
-                                  [sha3_32, 13 <self.deposit_scale_factor>],
+                                  [sha3_32, 12 <self.deposit_scale_factor>],
                                   [clamp, [mload, 96], [sub, [mload, 320 <epoch>], 1], [mload, 64]]]],
                               [with,
                                 l,
                                 [with,
                                   _l,
-                                  [sload, 8 <self.total_prevdyn_deposits>],
+                                  [sload, 7 <self.total_prevdyn_deposits>],
                                   [with,
                                     _r,
-                                    [sload, 7 <self.total_curdyn_deposits>],
+                                    [sload, 6 <self.total_curdyn_deposits>],
                                     [if, [slt, _l, _r], _r, _l]]],
                                 [with,
                                   ans,
@@ -722,16 +727,16 @@
                                 r,
                                 [sload,
                                   [add,
-                                    [sha3_32, 13 <self.deposit_scale_factor>],
+                                    [sha3_32, 12 <self.deposit_scale_factor>],
                                     [clamp, [mload, 96], [sub, [mload, 320 <epoch>], 1], [mload, 64]]]],
                                 [with,
                                   l,
                                   [with,
                                     _l,
-                                    [sload, 8 <self.total_prevdyn_deposits>],
+                                    [sload, 7 <self.total_prevdyn_deposits>],
                                     [with,
                                       _r,
-                                      [sload, 7 <self.total_curdyn_deposits>],
+                                      [sload, 6 <self.total_curdyn_deposits>],
                                       [if, [slt, _l, _r], _r, _l]]],
                                   [with,
                                     ans,
@@ -754,16 +759,16 @@
                               r,
                               [sload,
                                 [add,
-                                  [sha3_32, 13 <self.deposit_scale_factor>],
+                                  [sha3_32, 12 <self.deposit_scale_factor>],
                                   [clamp, [mload, 96], [sub, [mload, 320 <epoch>], 1], [mload, 64]]]],
                               [with,
                                 l,
                                 [with,
                                   _l,
-                                  [sload, 8 <self.total_prevdyn_deposits>],
+                                  [sload, 7 <self.total_prevdyn_deposits>],
                                   [with,
                                     _r,
-                                    [sload, 7 <self.total_curdyn_deposits>],
+                                    [sload, 6 <self.total_curdyn_deposits>],
                                     [if, [slt, _l, _r], _r, _l]]],
                                 [with,
                                   ans,
@@ -785,7 +790,7 @@
                   [mul, [mload, 352 <ether_deposited_as_number>], 100000000000000000000],
                   20000000000],
                 [mload, 128]]],
-            # Line 253
+            # Line 240
             [repeat,
               416,
               0,
@@ -809,12 +814,12 @@
                         [mload, 128]],
                       2],
                     [mload, 128]]]]],
-            # Line 255
+            # Line 242
             [mstore, 0, [mload, 384 <sqrt>]],
             [return, 0, 32],
-            # Line 247
+            # Line 234
             stop]],
-        # Line 260
+        # Line 247
         [if,
           [eq, [mload, 0], 1573911575 <initialize_epoch>],
           [seq,
@@ -828,13 +833,13 @@
             [mstore,
               352,
               [if,
-                # Line 263
+                # Line 250
                 [slt,
                   [clamp,
                     [mload, 160],
                     [sdiv,
                       [mul, number, 10000000000],
-                      [clamp_nonzero, [sload, 16 <self.epoch_length>]]],
+                      [clamp_nonzero, [sload, 20 <self.epoch_length>]]],
                     [mload, 128]],
                   0],
                 [sdiv,
@@ -843,7 +848,7 @@
                       [mload, 160],
                       [sdiv,
                         [mul, number, 10000000000],
-                        [clamp_nonzero, [sload, 16 <self.epoch_length>]]],
+                        [clamp_nonzero, [sload, 20 <self.epoch_length>]]],
                       [mload, 128]],
                     9999999999],
                   10000000000],
@@ -852,70 +857,61 @@
                     [mload, 160],
                     [sdiv,
                       [mul, number, 10000000000],
-                      [clamp_nonzero, [sload, 16 <self.epoch_length>]]],
+                      [clamp_nonzero, [sload, 20 <self.epoch_length>]]],
                     [mload, 128]],
                   10000000000]]],
-            # Line 264
+            # Line 251
             [assert,
               [and,
                 [sle, [mload, 320 <epoch>], [mload, 352 <computed_current_epoch>]],
                 [eq,
                   [mload, 320 <epoch>],
-                  [clamp, [mload, 96], [add, [sload, 18 <self.current_epoch>], 1], [mload, 64]]]]],
-            # Line 267
-            [sstore, 18 <self.current_epoch>, [mload, 320 <epoch>]],
-            # Line 270
+                  [clamp, [mload, 96], [add, [sload, 15 <self.current_epoch>], 1], [mload, 64]]]]],
+            # Line 254
+            [sstore, 15 <self.current_epoch>, [mload, 320 <epoch>]],
+            # Line 256
             [sstore,
-              14 <self.last_nonvoter_rescale>,
+              14 <self.last_voter_rescale>,
               [clamp,
                 [mload, 160],
-                [sub,
-                  [clamp,
-                    [mload, 160],
-                    [add,
-                      10000000000,
-                      [mload,
-                        /* Internal Call: collective_reward */ 
-                        [seq,
-                          [assert, [call, gas, address, 0, [seq, [mstore, 384, 2898663875], 412], 4, 480, 32]],
-                          480]]],
-                    [mload, 128]],
-                  [sload, 26 <self.reward_factor>]],
+                [add,
+                  10000000000,
+                  [mload,
+                    /* Internal Call: collective_reward */ 
+                    [seq,
+                      [assert, [call, gas, address, 0, [seq, [mstore, 384, 2898663875], 412], 4, 480, 32]],
+                      480]]],
                 [mload, 128]]],
-            # Line 271
+            # Line 257
             [sstore,
-              15 <self.last_voter_rescale>,
+              13 <self.last_nonvoter_rescale>,
               [clamp,
                 [mload, 160],
                 [with,
-                  r,
-                  [clamp,
-                    [mload, 160],
-                    [add, 10000000000, [sload, 26 <self.reward_factor>]],
-                    [mload, 128]],
+                  l,
+                  [sload, 14 <self.last_voter_rescale>],
                   [with,
-                    l,
-                    [sload, 14 <self.last_nonvoter_rescale>],
-                    [with,
-                      ans,
-                      [mul, l, r],
-                      [seq,
-                        [assert, [or, [eq, [sdiv, ans, l], r], [not, l]]],
-                        [sdiv, ans, 10000000000]]]]],
+                    r,
+                    [clamp_nonzero,
+                      [clamp,
+                        [mload, 160],
+                        [add, 10000000000, [sload, 26 <self.reward_factor>]],
+                        [mload, 128]]],
+                    [sdiv, [mul, l, 10000000000], r]]],
                 [mload, 128]]],
-            # Line 272
+            # Line 258
             [sstore,
-              [add, [sha3_32, 13 <self.deposit_scale_factor>], [mload, 320 <epoch>]],
+              [add, [sha3_32, 12 <self.deposit_scale_factor>], [mload, 320 <epoch>]],
               [clamp,
                 [mload, 160],
                 [with,
                   r,
-                  [sload, 14 <self.last_nonvoter_rescale>],
+                  [sload, 13 <self.last_nonvoter_rescale>],
                   [with,
                     l,
                     [sload,
                       [add,
-                        [sha3_32, 13 <self.deposit_scale_factor>],
+                        [sha3_32, 12 <self.deposit_scale_factor>],
                         [clamp, [mload, 96], [sub, [mload, 320 <epoch>], 1], [mload, 64]]]],
                     [with,
                       ans,
@@ -924,14 +920,14 @@
                         [assert, [or, [eq, [sdiv, ans, l], r], [not, l]]],
                         [sdiv, ans, 10000000000]]]]],
                 [mload, 128]]],
-            # Line 274
+            # Line 260
             [if,
               [mload,
                 /* Internal Call: deposit_exists */ 
                 [seq,
                   [assert, [call, gas, address, 0, [seq, [mstore, 608, 3732904309], 636], 4, 704, 32]],
                   704]],
-              # Line 276
+              # Line 262
               [seq,
                 [mstore,
                   736,
@@ -950,7 +946,7 @@
                               864]]],
                         [sdiv, [mul, l, 10000000000], r]]],
                     [mload, 128]]],
-                # Line 277
+                # Line 263
                 [sstore,
                   26 <self.reward_factor>,
                   [clamp,
@@ -975,16 +971,16 @@
                               [seq, [assert, [or, [eq, [sdiv, ans, l], r], [not, l]]], ans]]]],
                         [mload, 128]]],
                     [mload, 128]]],
-                # Line 279
+                # Line 265
                 [assert, [sgt, [sload, 26 <self.reward_factor>], 0]]],
-              # Line 281
+              # Line 268
               [seq,
                 /* Internal Call: insta_finalize */ [assert, [call, gas, address, 0, [seq, [mstore, 512, 1697049970], 540], 4, 0, 0]],
-                # Line 282
+                # Line 269
                 [sstore, 26 <self.reward_factor>, 0]]],
-            # Line 285
+            # Line 272
             /* Internal Call: increment_dynasty */ [assert, [call, gas, address, 0, [seq, [mstore, 1024, 3532045186], 1052], 4, 0, 0]],
-            # Line 288
+            # Line 275
             [sstore,
               [add, [sha3_32, 1 <self.checkpoint_hashes>], [mload, 320 <epoch>]],
               [mload,
@@ -992,7 +988,7 @@
                 [seq,
                   [assert, [call, gas, address, 0, [seq, [mstore, 1120, 2237609772], 1148], 4, 1216, 32]],
                   1216]]],
-            # Line 290
+            # Line 277
             [mstore, 1312, 0],
             [mstore, 1344, 0],
             [mstore, 1248, 64],
@@ -1004,26 +1000,26 @@
               47607052476070037250388038725579733243894556830711209046796940177296459501753,
               [mload, 320 <epoch>],
               [sload, [add, [sha3_32, 1 <self.checkpoint_hashes>], [mload, 320 <epoch>]]]],
-            # Line 260
+            # Line 247
             stop]],
-        # Line 293
+        # Line 279
         [if,
           [eq, [mload, 0], 4183858952 <deposit>],
           [seq,
             [calldatacopy, 320, 4, 64],
             /* checking address input */ [uclamplt, [calldataload, 4], [mload, 32]],
             /* checking address input */ [uclamplt, [calldataload, 36], [mload, 32]],
-            # Line 296
+            # Line 282
             [assert,
               [eq,
-                [sload, 18 <self.current_epoch>],
+                [sload, 15 <self.current_epoch>],
                 [if,
                   [slt,
                     [clamp,
                       [mload, 160],
                       [sdiv,
                         [mul, number, 10000000000],
-                        [clamp_nonzero, [sload, 16 <self.epoch_length>]]],
+                        [clamp_nonzero, [sload, 20 <self.epoch_length>]]],
                       [mload, 128]],
                     0],
                   [sdiv,
@@ -1032,7 +1028,7 @@
                         [mload, 160],
                         [sdiv,
                           [mul, number, 10000000000],
-                          [clamp_nonzero, [sload, 16 <self.epoch_length>]]],
+                          [clamp_nonzero, [sload, 20 <self.epoch_length>]]],
                         [mload, 128]],
                       9999999999],
                     10000000000],
@@ -1041,10 +1037,10 @@
                       [mload, 160],
                       [sdiv,
                         [mul, number, 10000000000],
-                        [clamp_nonzero, [sload, 16 <self.epoch_length>]]],
+                        [clamp_nonzero, [sload, 20 <self.epoch_length>]]],
                       [mload, 128]],
                     10000000000]]]],
-            # Line 297
+            # Line 283
             [assert,
               [ne,
                 /* extracting 32 bytes */ 
@@ -1097,67 +1093,59 @@
                       _sub,
                       [add, 32, [mul, 32, [div, [clample, 0, [sub, [mload, _sub], 32]], 32]]]]]],
                 0]],
-            # Line 298
+            # Line 284
             [assert, [iszero, [sload, [add, [sha3_32, 3 <self.validator_indexes>], [mload, 352 <withdrawal_addr>]]]]],
-            # Line 299
+            # Line 285
             [assert, [sge, callvalue, [sload, 29 <self.min_deposit_size>]]],
-            # Line 300
+            # Line 279
+            [mstore,
+              832,
+              [clamp, [mload, 96], [add, [sload, 4 <self.dynasty>], 2], [mload, 64]]],
+            [mstore,
+              864,
+              [clamp,
+                [mload, 160],
+                [sdiv,
+                  [mul, callvalue, 100000000000000000000],
+                  [clamp_nonzero,
+                    [sload,
+                      [add,
+                        [sha3_32, 12 <self.deposit_scale_factor>],
+                        [sload, 15 <self.current_epoch>]]]]],
+                [mload, 128]]],
+            # Line 288
             [with,
               _L,
-              [sha3_32, [add, [sha3_32, 0 <self.validators>], [sload, 2 <self.nextValidatorIndex>]]],
+              [sha3_32, [add, [sha3_32, 0 <self.validators>], [sload, 2 <self.next_validator_index>]]],
               [seq,
                 [sstore, _L, [mload, 320 <validation_addr>]],
-                [sstore,
-                  [add, _L, 1 <deposit>],
-                  [clamp,
-                    [mload, 160],
-                    [sdiv,
-                      [mul, callvalue, 100000000000000000000],
-                      [clamp_nonzero,
-                        [sload,
-                          [add,
-                            [sha3_32, 13 <self.deposit_scale_factor>],
-                            [sload, 18 <self.current_epoch>]]]]],
-                    [mload, 128]]],
-                [sstore, [add, _L, 2 <end_dynasty>], 1000000000000000000000000000000],
-                [sstore,
-                  [add, _L, 3 <start_dynasty>],
-                  [clamp, [mload, 96], [add, [sload, 4 <self.dynasty>], 2], [mload, 64]]],
+                [sstore, [add, _L, 1 <deposit>], [mload, 864 <scaled_deposit>]],
+                [sstore, [add, _L, 2 <end_dynasty>], [sload, 30 <self.default_end_dynasty>]],
+                [sstore, [add, _L, 3 <start_dynasty>], [mload, 832 <start_dynasty>]],
                 [sstore, [add, _L, 4 <withdrawal_addr>], [mload, 352 <withdrawal_addr>]]]],
-            # Line 307
+            # Line 295
             [sstore,
               [add, [sha3_32, 3 <self.validator_indexes>], [mload, 352 <withdrawal_addr>]],
-              [sload, 2 <self.nextValidatorIndex>]],
-            # Line 308
+              [sload, 2 <self.next_validator_index>]],
+            # Line 296
             [with,
               _stloc,
-              2 <self.nextValidatorIndex>,
+              2 <self.next_validator_index>,
               [sstore, _stloc, [clamp, [mload, 96], [add, [sload, _stloc], 1], [mload, 64]]]],
-            # Line 309
+            # Line 297
             [with,
               _stloc,
-              6 <self.second_next_dynasty_wei_delta>,
+              [add, [sha3_32, 5 <self.dynasty_wei_delta>], [mload, 832 <start_dynasty>]],
               [sstore,
                 _stloc,
                 [clamp,
                   [mload, 160],
-                  [add,
-                    [sload, _stloc],
-                    [clamp,
-                      [mload, 160],
-                      [sdiv,
-                        [mul, callvalue, 100000000000000000000],
-                        [clamp_nonzero,
-                          [sload,
-                            [add,
-                              [sha3_32, 13 <self.deposit_scale_factor>],
-                              [sload, 18 <self.current_epoch>]]]]],
-                      [mload, 128]]],
+                  [add, [sload, _stloc], [mload, 864 <scaled_deposit>]],
                   [mload, 128]]]],
-            # Line 311
-            [mstore, 896, [mload, 320 <validation_addr>]],
+            # Line 299
+            [mstore, 960, [mload, 320 <validation_addr>]],
             [mstore,
-              928,
+              992,
               [sload,
                 [add,
                   [sha3_32,
@@ -1165,11 +1153,11 @@
                       [sha3_32, 0 <self.validators>],
                       [sload, [add, [sha3_32, 3 <self.validator_indexes>], [mload, 352 <withdrawal_addr>]]]]],
                   3 <start_dynasty>]]],
-            [mstore, 960, callvalue],
-            [mstore, 832, 96],
-            [mstore, 896, [mload, 320 <validation_addr>]],
+            [mstore, 1024, callvalue],
+            [mstore, 896, 96],
+            [mstore, 960, [mload, 320 <validation_addr>]],
             [mstore,
-              928,
+              992,
               [sload,
                 [add,
                   [sha3_32,
@@ -1177,16 +1165,16 @@
                       [sha3_32, 0 <self.validators>],
                       [sload, [add, [sha3_32, 3 <self.validator_indexes>], [mload, 352 <withdrawal_addr>]]]]],
                   3 <start_dynasty>]]],
-            [mstore, 960, callvalue],
+            [mstore, 1024, callvalue],
             [log3,
-              896,
-              [mload, 832],
+              960,
+              [mload, 896],
               90949975742088645118838927626811719332981332970196685580485995401136711114977,
               [mload, 352 <withdrawal_addr>],
               [sload, [add, [sha3_32, 3 <self.validator_indexes>], [mload, 352 <withdrawal_addr>]]]],
-            # Line 293
+            # Line 279
             stop]],
-        # Line 316
+        # Line 301
         [if,
           [eq, [mload, 0], 1110510642 <logout>],
           [seq,
@@ -1194,17 +1182,17 @@
             [assert, [iszero, callvalue]],
             [calldatacopy, 352, [add, 4, [calldataload, 4]], 1056],
             [assert, [le, [calldataload, [add, 4, [calldataload, 4]]], 1024]],
-            # Line 318
+            # Line 303
             [assert,
               [eq,
-                [sload, 18 <self.current_epoch>],
+                [sload, 15 <self.current_epoch>],
                 [if,
                   [slt,
                     [clamp,
                       [mload, 160],
                       [sdiv,
                         [mul, number, 10000000000],
-                        [clamp_nonzero, [sload, 16 <self.epoch_length>]]],
+                        [clamp_nonzero, [sload, 20 <self.epoch_length>]]],
                       [mload, 128]],
                     0],
                   [sdiv,
@@ -1213,7 +1201,7 @@
                         [mload, 160],
                         [sdiv,
                           [mul, number, 10000000000],
-                          [clamp_nonzero, [sload, 16 <self.epoch_length>]]],
+                          [clamp_nonzero, [sload, 20 <self.epoch_length>]]],
                         [mload, 128]],
                       9999999999],
                     10000000000],
@@ -1222,10 +1210,10 @@
                       [mload, 160],
                       [sdiv,
                         [mul, number, 10000000000],
-                        [clamp_nonzero, [sload, 16 <self.epoch_length>]]],
+                        [clamp_nonzero, [sload, 20 <self.epoch_length>]]],
                       [mload, 128]],
                     10000000000]]]],
-            # Line 316
+            # Line 301
             [mstore,
               1440,
               [with,
@@ -1245,7 +1233,7 @@
                   [add,
                     _sub,
                     [add, 32, [mul, 32, [div, [clample, 0, [sub, [mload, _sub], 32]], 32]]]]]]],
-            # Line 323
+            # Line 308
             [with,
               _L,
               4096 <values>,
@@ -1300,7 +1288,7 @@
                     _sz,
                     [add, 32, [mload, _source]],
                     [assert, [call, [add, 18, [div, _sz, 10]], 4, 0, _source, _sz, [add, 64, _L], _sz]]]]]],
-            # Line 316
+            # Line 301
             [mstore, 5248, [mload, 4096 <0+values>]],
             [mstore, 5280, [mload, 4128 <32+values>]],
             [with,
@@ -1310,9 +1298,9 @@
                 _sz,
                 [add, 32, [mload, _source]],
                 [assert, [call, [add, 18, [div, _sz, 10]], 4, 0, _source, _sz, 5312, _sz]]]],
-            # Line 327
-            [assert, [sge, [sload, 18 <self.current_epoch>], [mload, 5280 <epoch>]]],
-            # Line 329
+            # Line 312
+            [assert, [sge, [sload, 15 <self.current_epoch>], [mload, 5280 <epoch>]]],
+            # Line 314
             [assert,
               [eq,
                 /* extracting 32 bytes */ 
@@ -1360,24 +1348,31 @@
                       _sub,
                       [add, 32, [mul, 32, [div, [clample, 0, [sub, [mload, _sub], 32]], 32]]]]]],
                 1]],
-            # Line 331
+            # Line 301
+            [mstore,
+              8736,
+              [clamp,
+                [mload, 96],
+                [add, [sload, 4 <self.dynasty>], [sload, 22 <self.dynasty_logout_delay>]],
+                [mload, 64]]],
+            # Line 317
             [assert,
               [sgt,
                 [sload,
                   [add,
                     [sha3_32, [add, [sha3_32, 0 <self.validators>], [mload, 5248 <validator_index>]]],
                     2 <end_dynasty>]],
-                [clamp, [mload, 96], [add, [sload, 4 <self.dynasty>], 2], [mload, 64]]]],
-            # Line 333
+                [mload, 8736 <end_dynasty>]]],
+            # Line 319
             [sstore,
               [add,
                 [sha3_32, [add, [sha3_32, 0 <self.validators>], [mload, 5248 <validator_index>]]],
                 2 <end_dynasty>],
-              [clamp, [mload, 96], [add, [sload, 4 <self.dynasty>], 2], [mload, 64]]],
-            # Line 334
+              [mload, 8736 <end_dynasty>]],
+            # Line 320
             [with,
               _stloc,
-              6 <self.second_next_dynasty_wei_delta>,
+              [add, [sha3_32, 5 <self.dynasty_wei_delta>], [mload, 8736 <end_dynasty>]],
               [sstore,
                 _stloc,
                 [clamp,
@@ -1389,32 +1384,32 @@
                         [sha3_32, [add, [sha3_32, 0 <self.validators>], [mload, 5248 <validator_index>]]],
                         1 <deposit>]]],
                   [mload, 128]]]],
-            # Line 336
+            # Line 322
             [mstore,
-              8800,
+              8832,
               [sload,
                 [add,
                   [sha3_32, [add, [sha3_32, 0 <self.validators>], [mload, 5248 <validator_index>]]],
                   2 <end_dynasty>]]],
-            [mstore, 8736, 32],
+            [mstore, 8768, 32],
             [mstore,
-              8800,
+              8832,
               [sload,
                 [add,
                   [sha3_32, [add, [sha3_32, 0 <self.validators>], [mload, 5248 <validator_index>]]],
                   2 <end_dynasty>]]],
             [log3,
-              8800,
-              [mload, 8736],
+              8832,
+              [mload, 8768],
               79992322569564756438802956933278762037139331561819380271719625643188950772399,
               [sload,
                 [add,
                   [sha3_32, [add, [sha3_32, 0 <self.validators>], [mload, 5248 <validator_index>]]],
                   4 <withdrawal_addr>]],
               [mload, 5248 <validator_index>]],
-            # Line 316
+            # Line 301
             stop]],
-        # Line 339
+        # Line 325
         [if,
           [eq, [mload, 0], 28815128 <delete_validator>],
           [seq,
@@ -1426,31 +1421,7 @@
               [mload, 96],
               [calldataload, 4],
               [mload, 64]],
-            # Line 341
-            [if,
-              [sgt,
-                [sload,
-                  [add,
-                    [sha3_32, [add, [sha3_32, 0 <self.validators>], [mload, 320 <validator_index>]]],
-                    2 <end_dynasty>]],
-                [clamp, [mload, 96], [add, [sload, 4 <self.dynasty>], 2], [mload, 64]]],
-              # Line 342
-              [seq,
-                [with,
-                  _stloc,
-                  5 <self.next_dynasty_wei_delta>,
-                  [sstore,
-                    _stloc,
-                    [clamp,
-                      [mload, 160],
-                      [sub,
-                        [sload, _stloc],
-                        [sload,
-                          [add,
-                            [sha3_32, [add, [sha3_32, 0 <self.validators>], [mload, 320 <validator_index>]]],
-                            1 <deposit>]]],
-                      [mload, 128]]]]]],
-            # Line 343
+            # Line 327
             [sstore,
               [add,
                 [sha3_32, 3 <self.validator_indexes>],
@@ -1459,7 +1430,7 @@
                     [sha3_32, [add, [sha3_32, 0 <self.validators>], [mload, 320 <validator_index>]]],
                     4 <withdrawal_addr>]]],
               0],
-            # Line 344
+            # Line 328
             [with,
               _L,
               [sha3_32, [add, [sha3_32, 0 <self.validators>], [mload, 320 <validator_index>]]],
@@ -1469,9 +1440,9 @@
                 [sstore, [add, _L, 2 <end_dynasty>], 0],
                 [sstore, [add, _L, 3 <start_dynasty>], 0],
                 [sstore, [add, _L, 4 <withdrawal_addr>], 0]]],
-            # Line 339
+            # Line 325
             stop]],
-        # Line 353
+        # Line 337
         [if,
           [eq, [mload, 0], 3991540864 <withdraw>],
           [seq,
@@ -1482,7 +1453,7 @@
               [mload, 96],
               [calldataload, 4],
               [mload, 64]],
-            # Line 356
+            # Line 340
             [assert,
               [sge,
                 [sload, 4 <self.dynasty>],
@@ -1495,12 +1466,12 @@
                         2 <end_dynasty>]],
                     1],
                   [mload, 64]]]],
-            # Line 353
+            # Line 337
             [mstore,
               352,
               [sload,
                 [add,
-                  [sha3_32, 9 <self.dynasty_start_epoch>],
+                  [sha3_32, 8 <self.dynasty_start_epoch>],
                   [clamp,
                     [mload, 96],
                     [add,
@@ -1510,25 +1481,25 @@
                           2 <end_dynasty>]],
                       1],
                     [mload, 64]]]]],
-            # Line 358
+            # Line 342
             [assert,
               [sge,
-                [sload, 18 <self.current_epoch>],
+                [sload, 15 <self.current_epoch>],
                 [clamp,
                   [mload, 96],
-                  [add, [mload, 352 <end_epoch>], [sload, 17 <self.withdrawal_delay>]],
+                  [add, [mload, 352 <end_epoch>], [sload, 21 <self.withdrawal_delay>]],
                   [mload, 64]]]],
-            # Line 353
+            # Line 337
             [mstore,
               384,
               [if,
-                # Line 360
+                # Line 344
                 [slt,
                   [clamp,
                     [mload, 160],
                     [with,
                       r,
-                      [sload, [add, [sha3_32, 13 <self.deposit_scale_factor>], [mload, 352 <end_epoch>]]],
+                      [sload, [add, [sha3_32, 12 <self.deposit_scale_factor>], [mload, 352 <end_epoch>]]],
                       [with,
                         l,
                         [sload,
@@ -1549,7 +1520,7 @@
                       [mload, 160],
                       [with,
                         r,
-                        [sload, [add, [sha3_32, 13 <self.deposit_scale_factor>], [mload, 352 <end_epoch>]]],
+                        [sload, [add, [sha3_32, 12 <self.deposit_scale_factor>], [mload, 352 <end_epoch>]]],
                         [with,
                           l,
                           [sload,
@@ -1570,7 +1541,7 @@
                     [mload, 160],
                     [with,
                       r,
-                      [sload, [add, [sha3_32, 13 <self.deposit_scale_factor>], [mload, 352 <end_epoch>]]],
+                      [sload, [add, [sha3_32, 12 <self.deposit_scale_factor>], [mload, 352 <end_epoch>]]],
                       [with,
                         l,
                         [sload,
@@ -1585,7 +1556,7 @@
                             [sdiv, ans, 10000000000]]]]],
                     [mload, 128]],
                   10000000000]]],
-            # Line 361
+            # Line 345
             [assert,
               [call,
                 0,
@@ -1598,7 +1569,7 @@
                 0,
                 0,
                 0]],
-            # Line 363
+            # Line 347
             [mstore, 480, [mload, 384 <withdraw_amount>]],
             [mstore, 416, 32],
             [mstore, 480, [mload, 384 <withdraw_amount>]],
@@ -1611,7 +1582,7 @@
                   [sha3_32, [add, [sha3_32, 0 <self.validators>], [mload, 320 <validator_index>]]],
                   4 <withdrawal_addr>]],
               [mload, 320 <validator_index>]],
-            # Line 364
+            # Line 348
             /* Internal Call: delete_validator */ 
             [assert,
               [call,
@@ -1625,9 +1596,9 @@
                 36,
                 0,
                 0]],
-            # Line 353
+            # Line 337
             stop]],
-        # Line 367
+        # Line 351
         [if,
           [eq, [mload, 0], 1470052530 <proc_reward>],
           [seq,
@@ -1644,16 +1615,7 @@
               [mload, 96],
               [calldataload, 36],
               [mload, 64]],
-            [mstore,
-              384,
-              [sload,
-                [add,
-                  [sha3_32, 9 <self.dynasty_start_epoch>],
-                  [sload,
-                    [add,
-                      [sha3_32, [add, [sha3_32, 0 <self.validators>], [mload, 320 <validator_index>]]],
-                      3 <start_dynasty>]]]]],
-            # Line 370
+            # Line 354
             [with,
               _stloc,
               [add,
@@ -1665,88 +1627,70 @@
                   [mload, 160],
                   [add, [sload, _stloc], [mul, [mload, 352 <reward>], 10000000000]],
                   [mload, 128]]]],
-            # Line 367
+            # Line 351
             [mstore,
-              416,
+              384,
               [sload,
                 [add,
                   [sha3_32, [add, [sha3_32, 0 <self.validators>], [mload, 320 <validator_index>]]],
                   3 <start_dynasty>]]],
             [mstore,
-              448,
+              416,
               [sload,
                 [add,
                   [sha3_32, [add, [sha3_32, 0 <self.validators>], [mload, 320 <validator_index>]]],
                   2 <end_dynasty>]]],
-            [mstore, 480, [sload, 4 <self.dynasty>]],
+            [mstore, 448, [sload, 4 <self.dynasty>]],
             [mstore,
-              512,
-              [clamp, [mload, 96], [sub, [mload, 480 <current_dynasty>], 1], [mload, 64]]],
-            # Line 375
+              480,
+              [clamp, [mload, 96], [sub, [mload, 448 <current_dynasty>], 1], [mload, 64]]],
+            # Line 359
             [if,
               [and,
-                [sle, [mload, 416 <start_dynasty>], [mload, 480 <current_dynasty>]],
-                [slt, [mload, 480 <current_dynasty>], [mload, 448 <end_dynasty>]]],
-              # Line 376
+                [sle, [mload, 384 <start_dynasty>], [mload, 448 <current_dynasty>]],
+                [slt, [mload, 448 <current_dynasty>], [mload, 416 <end_dynasty>]]],
+              # Line 360
               [seq,
                 [with,
                   _stloc,
-                  7 <self.total_curdyn_deposits>,
+                  6 <self.total_curdyn_deposits>,
                   [sstore,
                     _stloc,
                     [clamp,
                       [mload, 160],
                       [add, [sload, _stloc], [mul, [mload, 352 <reward>], 10000000000]],
                       [mload, 128]]]]]],
-            # Line 377
+            # Line 361
             [if,
               [and,
-                [sle, [mload, 416 <start_dynasty>], [mload, 512 <past_dynasty>]],
-                [slt, [mload, 512 <past_dynasty>], [mload, 448 <end_dynasty>]]],
-              # Line 378
+                [sle, [mload, 384 <start_dynasty>], [mload, 480 <past_dynasty>]],
+                [slt, [mload, 480 <past_dynasty>], [mload, 416 <end_dynasty>]]],
+              # Line 362
               [seq,
                 [with,
                   _stloc,
-                  8 <self.total_prevdyn_deposits>,
+                  7 <self.total_prevdyn_deposits>,
                   [sstore,
                     _stloc,
                     [clamp,
                       [mload, 160],
                       [add, [sload, _stloc], [mul, [mload, 352 <reward>], 10000000000]],
                       [mload, 128]]]]]],
-            # Line 379
+            # Line 363
             [if,
-              [eq,
-                [mload, 480 <current_dynasty>],
-                [clamp, [mload, 96], [sub, [mload, 448 <end_dynasty>], 1], [mload, 64]]],
-              # Line 380
+              [slt, [mload, 416 <end_dynasty>], [sload, 30 <self.default_end_dynasty>]],
+              # Line 364
               [seq,
                 [with,
                   _stloc,
-                  5 <self.next_dynasty_wei_delta>,
+                  [add, [sha3_32, 5 <self.dynasty_wei_delta>], [mload, 416 <end_dynasty>]],
                   [sstore,
                     _stloc,
                     [clamp,
                       [mload, 160],
                       [sub, [sload, _stloc], [mul, [mload, 352 <reward>], 10000000000]],
                       [mload, 128]]]]]],
-            # Line 381
-            [if,
-              [eq,
-                [mload, 480 <current_dynasty>],
-                [clamp, [mload, 96], [sub, [mload, 448 <end_dynasty>], 2], [mload, 64]]],
-              # Line 382
-              [seq,
-                [with,
-                  _stloc,
-                  6 <self.second_next_dynasty_wei_delta>,
-                  [sstore,
-                    _stloc,
-                    [clamp,
-                      [mload, 160],
-                      [sub, [sload, _stloc], [mul, [mload, 352 <reward>], 10000000000]],
-                      [mload, 128]]]]]],
-            # Line 383
+            # Line 366
             [assert,
               [call,
                 0,
@@ -1762,8 +1706,8 @@
                             r,
                             [sload,
                               [add,
-                                [sha3_32, 13 <self.deposit_scale_factor>],
-                                [sload, 18 <self.current_epoch>]]],
+                                [sha3_32, 12 <self.deposit_scale_factor>],
+                                [sload, 15 <self.current_epoch>]]],
                             [with,
                               l,
                               [mload, 352 <reward>],
@@ -1786,8 +1730,8 @@
                               r,
                               [sload,
                                 [add,
-                                  [sha3_32, 13 <self.deposit_scale_factor>],
-                                  [sload, 18 <self.current_epoch>]]],
+                                  [sha3_32, 12 <self.deposit_scale_factor>],
+                                  [sload, 15 <self.current_epoch>]]],
                               [with,
                                 l,
                                 [mload, 352 <reward>],
@@ -1810,8 +1754,8 @@
                             r,
                             [sload,
                               [add,
-                                [sha3_32, 13 <self.deposit_scale_factor>],
-                                [sload, 18 <self.current_epoch>]]],
+                                [sha3_32, 12 <self.deposit_scale_factor>],
+                                [sload, 15 <self.current_epoch>]]],
                             [with,
                               l,
                               [mload, 352 <reward>],
@@ -1827,9 +1771,9 @@
                 0,
                 0,
                 0]],
-            # Line 367
+            # Line 351
             stop]],
-        # Line 386
+        # Line 369
         [if,
           [eq, [mload, 0], 3635640109 <vote>],
           [seq,
@@ -1850,191 +1794,57 @@
               [mload, 96],
               [calldataload, 100],
               [mload, 64]],
-            # Line 402
-            [assert,
-              [iszero,
-                [and,
-                  [sload,
-                    [add,
-                      [sha3_32,
-                        [add,
-                          [sha3_32,
-                            [add,
-                              [sha3_32, [add, [sha3_32, 11 <self.votes>], [mload, 384 <target_epoch>]]],
-                              4 <vote_bitmap>]],
-                          [mload, 352 <target_hash>]]],
-                      [if,
-                        # Line 402
-                        [slt,
-                          [clamp,
-                            [mload, 160],
-                            [sdiv, [mul, [mload, 320 <validator_index>], 10000000000], 256],
-                            [mload, 128]],
-                          0],
-                        [sdiv,
-                          [sub,
-                            [clamp,
-                              [mload, 160],
-                              [sdiv, [mul, [mload, 320 <validator_index>], 10000000000], 256],
-                              [mload, 128]],
-                            9999999999],
-                          10000000000],
-                        [sdiv,
-                          [clamp,
-                            [mload, 160],
-                            [sdiv, [mul, [mload, 320 <validator_index>], 10000000000], 256],
-                            [mload, 128]],
-                          10000000000]]]],
-                  [with,
-                    _v,
-                    1,
-                    [with,
-                      _s,
-                      [clamp, [mload, 96], [smod, [mload, 320 <validator_index>], 256], [mload, 64]],
-                      [if, [sle, _s, 0], [div, _v, [exp, 2, [sub, 0, _s]]], [mul, _v, [exp, 2, _s]]]]]]]],
-            # Line 405
-            [assert,
-              [eq,
-                [mload, 352 <target_hash>],
-                [mload,
-                  /* Internal Call: recommended_target_hash */ 
-                  [seq,
-                    [assert, [call, gas, address, 0, [seq, [mstore, 448, 2237609772], 476], 4, 544, 32]],
-                    544]]]],
-            # Line 406
-            [assert, [eq, [mload, 384 <target_epoch>], [sload, 18 <self.current_epoch>]]],
-            # Line 408
-            [assert,
-              [sload,
-                [add,
-                  [sha3_32, [add, [sha3_32, 11 <self.votes>], [mload, 416 <source_epoch>]]],
-                  2 <is_justified>]]],
-            # Line 386
             [mstore,
-              576,
+              448,
               [sload,
                 [add,
                   [sha3_32, [add, [sha3_32, 0 <self.validators>], [mload, 320 <validator_index>]]],
                   3 <start_dynasty>]]],
             [mstore,
-              608,
+              480,
               [sload,
                 [add,
                   [sha3_32, [add, [sha3_32, 0 <self.validators>], [mload, 320 <validator_index>]]],
                   2 <end_dynasty>]]],
             [mstore,
+              512,
+              [sload, [add, [sha3_32, 9 <self.dynasty_in_epoch>], [mload, 384 <target_epoch>]]]],
+            [mstore,
+              544,
+              [clamp, [mload, 96], [sub, [mload, 512 <current_dynasty>], 1], [mload, 64]]],
+            [mstore,
+              576,
+              [and,
+                [sle, [mload, 448 <start_dynasty>], [mload, 512 <current_dynasty>]],
+                [slt, [mload, 512 <current_dynasty>], [mload, 480 <end_dynasty>]]]],
+            [mstore,
+              608,
+              [and,
+                [sle, [mload, 448 <start_dynasty>], [mload, 544 <past_dynasty>]],
+                [slt, [mload, 544 <past_dynasty>], [mload, 480 <end_dynasty>]]]],
+            [mstore,
               640,
-              [sload, [add, [sha3_32, 10 <self.dynasty_in_epoch>], [mload, 384 <target_epoch>]]]],
-            [mstore,
-              672,
-              [clamp, [mload, 96], [sub, [mload, 640 <current_dynasty>], 1], [mload, 64]]],
-            [mstore,
-              704,
-              [and,
-                [sle, [mload, 576 <start_dynasty>], [mload, 640 <current_dynasty>]],
-                [slt, [mload, 640 <current_dynasty>], [mload, 608 <end_dynasty>]]]],
-            [mstore,
-              736,
-              [and,
-                [sle, [mload, 576 <start_dynasty>], [mload, 672 <past_dynasty>]],
-                [slt, [mload, 672 <past_dynasty>], [mload, 608 <end_dynasty>]]]],
-            # Line 418
-            [assert, [or, [mload, 704 <in_current_dynasty>], [mload, 736 <in_prev_dynasty>]]],
-            # Line 420
-            [sstore,
-              [add,
-                [sha3_32,
-                  [add,
-                    [sha3_32,
-                      [add,
-                        [sha3_32, [add, [sha3_32, 11 <self.votes>], [mload, 384 <target_epoch>]]],
-                        4 <vote_bitmap>]],
-                    [mload, 352 <target_hash>]]],
-                [if,
-                  # Line 420
-                  [slt,
-                    [clamp,
-                      [mload, 160],
-                      [sdiv, [mul, [mload, 320 <validator_index>], 10000000000], 256],
-                      [mload, 128]],
-                    0],
-                  [sdiv,
-                    [sub,
-                      [clamp,
-                        [mload, 160],
-                        [sdiv, [mul, [mload, 320 <validator_index>], 10000000000], 256],
-                        [mload, 128]],
-                      9999999999],
-                    10000000000],
-                  [sdiv,
-                    [clamp,
-                      [mload, 160],
-                      [sdiv, [mul, [mload, 320 <validator_index>], 10000000000], 256],
-                      [mload, 128]],
-                    10000000000]]],
-              [or,
-                [sload,
-                  [add,
-                    [sha3_32,
-                      [add,
-                        [sha3_32,
-                          [add,
-                            [sha3_32, [add, [sha3_32, 11 <self.votes>], [mload, 384 <target_epoch>]]],
-                            4 <vote_bitmap>]],
-                        [mload, 352 <target_hash>]]],
-                    [if,
-                      # Line 421
-                      [slt,
-                        [clamp,
-                          [mload, 160],
-                          [sdiv, [mul, [mload, 320 <validator_index>], 10000000000], 256],
-                          [mload, 128]],
-                        0],
-                      [sdiv,
-                        [sub,
-                          [clamp,
-                            [mload, 160],
-                            [sdiv, [mul, [mload, 320 <validator_index>], 10000000000], 256],
-                            [mload, 128]],
-                          9999999999],
-                        10000000000],
-                      [sdiv,
-                        [clamp,
-                          [mload, 160],
-                          [sdiv, [mul, [mload, 320 <validator_index>], 10000000000], 256],
-                          [mload, 128]],
-                        10000000000]]]],
-                [with,
-                  _v,
-                  1,
-                  [with,
-                    _s,
-                    [clamp, [mload, 96], [smod, [mload, 320 <validator_index>], 256], [mload, 64]],
-                    [if, [sle, _s, 0], [div, _v, [exp, 2, [sub, 0, _s]]], [mul, _v, [exp, 2, _s]]]]]]],
-            # Line 386
-            [mstore,
-              768,
               [sload,
                 [add,
-                  [sha3_32, [sha3_32, [add, [sha3_32, 11 <self.votes>], [mload, 384 <target_epoch>]]]],
+                  [sha3_32, [sha3_32, [add, [sha3_32, 10 <self.votes>], [mload, 384 <target_epoch>]]]],
                   [mload, 416 <source_epoch>]]]],
             [mstore,
-              800,
+              672,
               [sload,
                 [add,
                   [sha3_32,
                     [add,
-                      [sha3_32, [add, [sha3_32, 11 <self.votes>], [mload, 384 <target_epoch>]]],
+                      [sha3_32, [add, [sha3_32, 10 <self.votes>], [mload, 384 <target_epoch>]]],
                       3 <prev_dyn_votes>]],
                   [mload, 416 <source_epoch>]]]],
-            # Line 426
+            # Line 409
             [if,
-              [mload, 704 <in_current_dynasty>],
-              # Line 427
+              [mload, 576 <in_current_dynasty>],
+              # Line 410
               [seq,
                 [with,
                   _mloc,
-                  768 <current_dynasty_votes>,
+                  640 <current_dynasty_votes>,
                   [mstore,
                     _mloc,
                     [clamp,
@@ -2046,20 +1856,20 @@
                             [sha3_32, [add, [sha3_32, 0 <self.validators>], [mload, 320 <validator_index>]]],
                             1 <deposit>]]],
                       [mload, 128]]]],
-                # Line 428
+                # Line 411
                 [sstore,
                   [add,
-                    [sha3_32, [sha3_32, [add, [sha3_32, 11 <self.votes>], [mload, 384 <target_epoch>]]]],
+                    [sha3_32, [sha3_32, [add, [sha3_32, 10 <self.votes>], [mload, 384 <target_epoch>]]]],
                     [mload, 416 <source_epoch>]],
-                  [mload, 768 <current_dynasty_votes>]]]],
-            # Line 429
+                  [mload, 640 <current_dynasty_votes>]]]],
+            # Line 412
             [if,
-              [mload, 736 <in_prev_dynasty>],
-              # Line 430
+              [mload, 608 <in_prev_dynasty>],
+              # Line 413
               [seq,
                 [with,
                   _mloc,
-                  800 <previous_dynasty_votes>,
+                  672 <previous_dynasty_votes>,
                   [mstore,
                     _mloc,
                     [clamp,
@@ -2071,21 +1881,21 @@
                             [sha3_32, [add, [sha3_32, 0 <self.validators>], [mload, 320 <validator_index>]]],
                             1 <deposit>]]],
                       [mload, 128]]]],
-                # Line 431
+                # Line 414
                 [sstore,
                   [add,
                     [sha3_32,
                       [add,
-                        [sha3_32, [add, [sha3_32, 11 <self.votes>], [mload, 384 <target_epoch>]]],
+                        [sha3_32, [add, [sha3_32, 10 <self.votes>], [mload, 384 <target_epoch>]]],
                         3 <prev_dyn_votes>]],
                     [mload, 416 <source_epoch>]],
-                  [mload, 800 <previous_dynasty_votes>]]]],
-            # Line 439
+                  [mload, 672 <previous_dynasty_votes>]]]],
+            # Line 422
             [if,
               [and,
                 [and,
                   [sge,
-                    [mload, 768 <current_dynasty_votes>],
+                    [mload, 640 <current_dynasty_votes>],
                     [clamp,
                       [mload, 160],
                       [sdiv,
@@ -2096,7 +1906,7 @@
                             2,
                             [with,
                               l,
-                              [sload, 7 <self.total_curdyn_deposits>],
+                              [sload, 6 <self.total_curdyn_deposits>],
                               [with,
                                 ans,
                                 [mul, l, r],
@@ -2105,7 +1915,7 @@
                         3],
                       [mload, 128]]],
                   [sge,
-                    [mload, 800 <previous_dynasty_votes>],
+                    [mload, 672 <previous_dynasty_votes>],
                     [clamp,
                       [mload, 160],
                       [sdiv,
@@ -2116,7 +1926,7 @@
                             2,
                             [with,
                               l,
-                              [sload, 8 <self.total_prevdyn_deposits>],
+                              [sload, 7 <self.total_prevdyn_deposits>],
                               [with,
                                 ans,
                                 [mul, l, r],
@@ -2127,66 +1937,66 @@
                 [iszero,
                   [sload,
                     [add,
-                      [sha3_32, [add, [sha3_32, 11 <self.votes>], [mload, 384 <target_epoch>]]],
+                      [sha3_32, [add, [sha3_32, 10 <self.votes>], [mload, 384 <target_epoch>]]],
                       2 <is_justified>]]]],
-              # Line 442
+              # Line 425
               [seq,
                 [sstore,
                   [add,
-                    [sha3_32, [add, [sha3_32, 11 <self.votes>], [mload, 384 <target_epoch>]]],
+                    [sha3_32, [add, [sha3_32, 10 <self.votes>], [mload, 384 <target_epoch>]]],
                     2 <is_justified>],
                   1],
-                # Line 443
-                [sstore, 20 <self.last_justified_epoch>, [mload, 384 <target_epoch>]],
-                # Line 444
-                [sstore, 12 <self.main_hash_justified>, 1],
-                # Line 447
-                [mstore, 896, 1],
-                [mstore, 928, 0],
-                [mstore, 832, 64],
-                [mstore, 896, 1],
-                [mstore, 928, 0],
+                # Line 426
+                [sstore, 17 <self.last_justified_epoch>, [mload, 384 <target_epoch>]],
+                # Line 427
+                [sstore, 11 <self.main_hash_justified>, 1],
+                # Line 430
+                [mstore, 768, 1],
+                [mstore, 800, 0],
+                [mstore, 704, 64],
+                [mstore, 768, 1],
+                [mstore, 800, 0],
                 [log3,
-                  896,
-                  [mload, 832],
+                  768,
+                  [mload, 704],
                   47607052476070037250388038725579733243894556830711209046796940177296459501753,
                   [mload, 384 <target_epoch>],
                   [sload, [add, [sha3_32, 1 <self.checkpoint_hashes>], [mload, 384 <target_epoch>]]]],
-                # Line 451
+                # Line 434
                 [if,
                   [eq,
                     [mload, 384 <target_epoch>],
                     [clamp, [mload, 96], [add, [mload, 416 <source_epoch>], 1], [mload, 64]]],
-                  # Line 452
+                  # Line 435
                   [seq,
                     [sstore,
                       [add,
-                        [sha3_32, [add, [sha3_32, 11 <self.votes>], [mload, 416 <source_epoch>]]],
+                        [sha3_32, [add, [sha3_32, 10 <self.votes>], [mload, 416 <source_epoch>]]],
                         1 <is_finalized>],
                       1],
-                    # Line 453
-                    [sstore, 19 <self.last_finalized_epoch>, [mload, 416 <source_epoch>]],
-                    # Line 455
-                    [mstore, 1024, 1],
-                    [mstore, 1056, 1],
-                    [mstore, 960, 64],
-                    [mstore, 1024, 1],
-                    [mstore, 1056, 1],
+                    # Line 436
+                    [sstore, 16 <self.last_finalized_epoch>, [mload, 416 <source_epoch>]],
+                    # Line 438
+                    [mstore, 896, 1],
+                    [mstore, 928, 1],
+                    [mstore, 832, 64],
+                    [mstore, 896, 1],
+                    [mstore, 928, 1],
                     [log3,
-                      1024,
-                      [mload, 960],
+                      896,
+                      [mload, 832],
                       47607052476070037250388038725579733243894556830711209046796940177296459501753,
                       [mload, 416 <source_epoch>],
                       [sload, [add, [sha3_32, 1 <self.checkpoint_hashes>], [mload, 416 <source_epoch>]]]]]]]],
-            # Line 457
-            [mstore, 1152, [mload, 384 <target_epoch>]],
-            [mstore, 1184, [mload, 416 <source_epoch>]],
-            [mstore, 1088, 64],
-            [mstore, 1152, [mload, 384 <target_epoch>]],
-            [mstore, 1184, [mload, 416 <source_epoch>]],
+            # Line 440
+            [mstore, 1024, [mload, 384 <target_epoch>]],
+            [mstore, 1056, [mload, 416 <source_epoch>]],
+            [mstore, 960, 64],
+            [mstore, 1024, [mload, 384 <target_epoch>]],
+            [mstore, 1056, [mload, 416 <source_epoch>]],
             [log4,
-              1152,
-              [mload, 1088],
+              1024,
+              [mload, 960],
               7081665583020273161205225158852481246505534847476758391289152486542138437399,
               [sload,
                 [add,
@@ -2194,9 +2004,9 @@
                   4 <withdrawal_addr>]],
               [mload, 320 <validator_index>],
               [mload, 352 <target_hash>]],
-            # Line 386
+            # Line 369
             stop]],
-        # Line 460
+        # Line 443
         [if,
           [eq, [mload, 0], 3424711019 <slash>],
           [seq,
@@ -2225,7 +2035,7 @@
                   [add,
                     _sub,
                     [add, 32, [mul, 32, [div, [clample, 0, [sub, [mload, _sub], 32]], 32]]]]]]],
-            # Line 464
+            # Line 447
             [with,
               _L,
               5408 <values_1>,
@@ -2299,7 +2109,7 @@
                     _sz,
                     [add, 32, [mload, _source]],
                     [assert, [call, [add, 18, [div, _sz, 10]], 4, 0, _source, _sz, [add, 128, _L], _sz]]]]]],
-            # Line 460
+            # Line 443
             [mstore, 6624, [mload, 5408 <0+values_1>]],
             [mstore, 6656, [mload, 5472 <64+values_1>]],
             [mstore, 6688, [mload, 5504 <96+values_1>]],
@@ -2310,7 +2120,7 @@
                 _sz,
                 [add, 32, [mload, _source]],
                 [assert, [call, [add, 18, [div, _sz, 10]], 4, 0, _source, _sz, 6720, _sz]]]],
-            # Line 470
+            # Line 453
             [assert,
               [eq,
                 /* extracting 32 bytes */ 
@@ -2358,7 +2168,7 @@
                       _sub,
                       [add, 32, [mul, 32, [div, [clample, 0, [sub, [mload, _sub], 32]], 32]]]]]],
                 1]],
-            # Line 460
+            # Line 443
             [mstore,
               10144,
               [with,
@@ -2386,7 +2196,7 @@
                   [add,
                     _sub,
                     [add, 32, [mul, 32, [div, [clample, 0, [sub, [mload, _sub], 32]], 32]]]]]]],
-            # Line 473
+            # Line 456
             [with,
               _L,
               12992 <values_2>,
@@ -2460,7 +2270,7 @@
                     _sz,
                     [add, 32, [mload, _source]],
                     [assert, [call, [add, 18, [div, _sz, 10]], 4, 0, _source, _sz, [add, 128, _L], _sz]]]]]],
-            # Line 460
+            # Line 443
             [mstore, 14208, [mload, 12992 <0+values_2>]],
             [mstore, 14240, [mload, 13056 <64+values_2>]],
             [mstore, 14272, [mload, 13088 <96+values_2>]],
@@ -2471,7 +2281,7 @@
                 _sz,
                 [add, 32, [mload, _source]],
                 [assert, [call, [add, 18, [div, _sz, 10]], 4, 0, _source, _sz, 14304, _sz]]]],
-            # Line 479
+            # Line 462
             [assert,
               [eq,
                 /* extracting 32 bytes */ 
@@ -2519,18 +2329,18 @@
                       _sub,
                       [add, 32, [mul, 32, [div, [clample, 0, [sub, [mload, _sub], 32]], 32]]]]]],
                 1]],
-            # Line 481
+            # Line 464
             [assert, [eq, [mload, 6624 <validator_index_1>], [mload, 14208 <validator_index_2>]]],
-            # Line 483
+            # Line 466
             [assert, [ne, [mload, 2560 <sighash_1>], [mload, 10144 <sighash_2>]]],
-            # Line 460
+            # Line 443
             [mstore, 17728, 0],
-            # Line 486
+            # Line 469
             [if,
               [eq, [mload, 6656 <target_epoch_1>], [mload, 14240 <target_epoch_2>]],
-              # Line 488
+              # Line 471
               [seq, [mstore, 17728 <slashing_condition_detected>, 1]],
-              # Line 489
+              # Line 472
               [seq,
                 [if,
                   [or,
@@ -2540,11 +2350,11 @@
                     [and,
                       [sgt, [mload, 14240 <target_epoch_2>], [mload, 6656 <target_epoch_1>]],
                       [slt, [mload, 14272 <source_epoch_2>], [mload, 6688 <source_epoch_1>]]]],
-                  # Line 492
+                  # Line 475
                   [seq, [mstore, 17728 <slashing_condition_detected>, 1]]]]],
-            # Line 493
+            # Line 476
             [assert, [mload, 17728 <slashing_condition_detected>]],
-            # Line 460
+            # Line 443
             [mstore,
               17760,
               [mload,
@@ -2566,7 +2376,7 @@
             [mstore,
               17952,
               [if,
-                # Line 496
+                # Line 479
                 [slt,
                   [clamp,
                     [mload, 160],
@@ -2593,17 +2403,17 @@
                 [mload, 96],
                 [sub, [mload, 17760 <validator_deposit>], [mload, 17952 <slashing_bounty>]],
                 [mload, 64]]],
-            # Line 498
+            # Line 481
             [with,
               _stloc,
-              23 <self.total_destroyed>,
+              19 <self.total_destroyed>,
               [sstore,
                 _stloc,
                 [clamp,
                   [mload, 96],
                   [add, [sload, _stloc], [mload, 17984 <deposit_destroyed>]],
                   [mload, 64]]]],
-            # Line 500
+            # Line 483
             [mstore, 18080, [mload, 17952 <slashing_bounty>]],
             [mstore, 18112, [mload, 17984 <deposit_destroyed>]],
             [mstore, 18016, 64],
@@ -2619,7 +2429,50 @@
                   [sha3_32, [add, [sha3_32, 0 <self.validators>], [mload, 6624 <validator_index_1>]]],
                   4 <withdrawal_addr>]],
               [mload, 6624 <validator_index_1>]],
-            # Line 501
+            # Line 443
+            [mstore,
+              18144,
+              [sload,
+                [add,
+                  [sha3_32, [add, [sha3_32, 0 <self.validators>], [mload, 6624 <validator_index_1>]]],
+                  1 <deposit>]]],
+            # Line 486
+            [with,
+              _stloc,
+              [add,
+                [sha3_32, 5 <self.dynasty_wei_delta>],
+                [clamp, [mload, 96], [add, [sload, 4 <self.dynasty>], 1], [mload, 64]]],
+              [sstore,
+                _stloc,
+                [clamp,
+                  [mload, 160],
+                  [sub, [sload, _stloc], [mload, 18144 <deposit>]],
+                  [mload, 128]]]],
+            # Line 490
+            [if,
+              [slt,
+                [sload,
+                  [add,
+                    [sha3_32, [add, [sha3_32, 0 <self.validators>], [mload, 6624 <validator_index_1>]]],
+                    2 <end_dynasty>]],
+                [sload, 30 <self.default_end_dynasty>]],
+              # Line 491
+              [seq,
+                [with,
+                  _stloc,
+                  [add,
+                    [sha3_32, 5 <self.dynasty_wei_delta>],
+                    [sload,
+                      [add,
+                        [sha3_32, [add, [sha3_32, 0 <self.validators>], [mload, 6624 <validator_index_1>]]],
+                        2 <end_dynasty>]]],
+                  [sstore,
+                    _stloc,
+                    [clamp,
+                      [mload, 160],
+                      [add, [sload, _stloc], [mload, 18144 <deposit>]],
+                      [mload, 128]]]]]],
+            # Line 493
             /* Internal Call: delete_validator */ 
             [assert,
               [call,
@@ -2627,50 +2480,50 @@
                 address,
                 0,
                 [seq,
-                  [mstore, 18144, 28815128],
-                  [mstore, 18176, [mload, 6624 <validator_index_1>]],
-                  18172],
+                  [mstore, 18176, 28815128],
+                  [mstore, 18208, [mload, 6624 <validator_index_1>]],
+                  18204],
                 36,
                 0,
                 0]],
-            # Line 502
+            # Line 494
             [assert, [call, 0, caller, [mload, 17952 <slashing_bounty>], 0, 0, 0, 0]],
-            # Line 460
+            # Line 443
             stop]],
-        # Line 505
+        # Line 497
         [if,
           [eq, [mload, 0], 888093169 <owner_withdraw>],
           [seq,
             [assert, [iszero, callvalue]],
-            # Line 507
+            # Line 499
             [assert,
               [call,
                 0,
-                [sload, 22 <self.owner>],
-                [sload, 23 <self.total_destroyed>],
+                [sload, 23 <self.owner>],
+                [sload, 19 <self.total_destroyed>],
                 0,
                 0,
                 0,
                 0]],
-            # Line 508
-            [sstore, 23 <self.total_destroyed>, 0],
-            # Line 505
+            # Line 500
+            [sstore, 19 <self.total_destroyed>, 0],
+            # Line 497
             stop]],
-        # Line 511
+        # Line 503
         [if,
           [eq, [mload, 0], 624724948 <change_owner>],
           [seq,
             [calldatacopy, 320, 4, 32],
             [assert, [iszero, callvalue]],
             /* checking address input */ [uclamplt, [calldataload, 4], [mload, 32]],
-            # Line 513
+            # Line 505
             [if,
-              [eq, [sload, 22 <self.owner>], caller],
-              # Line 514
-              [seq, [sstore, 22 <self.owner>, [mload, 320 <new_owner>]]]],
-            # Line 511
+              [eq, [sload, 23 <self.owner>], caller],
+              # Line 506
+              [seq, [sstore, 23 <self.owner>, [mload, 320 <new_owner>]]]],
+            # Line 503
             stop]],
-        # Line 11
+        # Line 13
         [if,
           [eq, [mload, 0], 3166981529 <validators__deposit>],
           [seq,
@@ -2681,7 +2534,7 @@
               [mload, 96],
               [calldataload, 4],
               [mload, 64]],
-            # Line 13
+            # Line 15
             [mstore,
               0,
               [sload,
@@ -2689,7 +2542,7 @@
                   [sha3_32, [add, [sha3_32, 0 <self.validators>], [mload, 320 <arg0>]]],
                   1 <deposit>]]],
             [return, 0, 32],
-            # Line 11
+            # Line 13
             stop]],
         [if,
           [eq, [mload, 0], 4210640122 <validators__start_dynasty>],
@@ -2701,7 +2554,7 @@
               [mload, 96],
               [calldataload, 4],
               [mload, 64]],
-            # Line 13
+            # Line 15
             [mstore,
               0,
               [sload,
@@ -2709,7 +2562,7 @@
                   [sha3_32, [add, [sha3_32, 0 <self.validators>], [mload, 320 <arg0>]]],
                   3 <start_dynasty>]]],
             [return, 0, 32],
-            # Line 11
+            # Line 13
             stop]],
         [if,
           [eq, [mload, 0], 3260268353 <validators__end_dynasty>],
@@ -2721,7 +2574,7 @@
               [mload, 96],
               [calldataload, 4],
               [mload, 64]],
-            # Line 13
+            # Line 15
             [mstore,
               0,
               [sload,
@@ -2729,7 +2582,7 @@
                   [sha3_32, [add, [sha3_32, 0 <self.validators>], [mload, 320 <arg0>]]],
                   2 <end_dynasty>]]],
             [return, 0, 32],
-            # Line 11
+            # Line 13
             stop]],
         [if,
           [eq, [mload, 0], 3137410544 <validators__addr>],
@@ -2741,12 +2594,12 @@
               [mload, 96],
               [calldataload, 4],
               [mload, 64]],
-            # Line 13
+            # Line 15
             [mstore,
               0,
               [sload, [sha3_32, [add, [sha3_32, 0 <self.validators>], [mload, 320 <arg0>]]]]],
             [return, 0, 32],
-            # Line 11
+            # Line 13
             stop]],
         [if,
           [eq, [mload, 0], 1572852174 <validators__withdrawal_addr>],
@@ -2758,7 +2611,7 @@
               [mload, 96],
               [calldataload, 4],
               [mload, 64]],
-            # Line 13
+            # Line 15
             [mstore,
               0,
               [sload,
@@ -2766,9 +2619,9 @@
                   [sha3_32, [add, [sha3_32, 0 <self.validators>], [mload, 320 <arg0>]]],
                   4 <withdrawal_addr>]]],
             [return, 0, 32],
-            # Line 11
+            # Line 13
             stop]],
-        # Line 26
+        # Line 28
         [if,
           [eq, [mload, 0], 2181609589 <checkpoint_hashes>],
           [seq,
@@ -2779,68 +2632,66 @@
               [mload, 96],
               [calldataload, 4],
               [mload, 64]],
-            # Line 28
+            # Line 30
             [mstore,
               0,
               [sload, [add, [sha3_32, 1 <self.checkpoint_hashes>], [mload, 320 <arg0>]]]],
             [return, 0, 32],
-            # Line 26
+            # Line 28
             stop]],
-        # Line 29
+        # Line 31
         [if,
-          [eq, [mload, 0], 3429371323 <nextValidatorIndex>],
+          [eq, [mload, 0], 2104083929 <next_validator_index>],
           [seq,
             [assert, [iszero, callvalue]],
-            # Line 31
-            [mstore, 0, [sload, 2 <self.nextValidatorIndex>]],
+            # Line 33
+            [mstore, 0, [sload, 2 <self.next_validator_index>]],
             [return, 0, 32],
-            # Line 29
+            # Line 31
             stop]],
-        # Line 32
+        # Line 34
         [if,
           [eq, [mload, 0], 3693107635 <validator_indexes>],
           [seq,
             [calldatacopy, 320, 4, 32],
             [assert, [iszero, callvalue]],
             /* checking address input */ [uclamplt, [calldataload, 4], [mload, 32]],
-            # Line 34
+            # Line 36
             [mstore,
               0,
               [sload, [add, [sha3_32, 3 <self.validator_indexes>], [mload, 320 <arg0>]]]],
             [return, 0, 32],
-            # Line 32
+            # Line 34
             stop]],
-        # Line 35
+        # Line 37
         [if,
           [eq, [mload, 0], 1885341005 <dynasty>],
           [seq,
             [assert, [iszero, callvalue]],
-            # Line 37
+            # Line 39
             [mstore, 0, [sload, 4 <self.dynasty>]],
             [return, 0, 32],
-            # Line 35
+            # Line 37
             stop]],
-        # Line 38
+        # Line 40
         [if,
-          [eq, [mload, 0], 25327653 <next_dynasty_wei_delta>],
+          [eq, [mload, 0], 3293431385 <dynasty_wei_delta>],
           [seq,
+            [calldatacopy, 320, 4, 32],
             [assert, [iszero, callvalue]],
+            /* checking int128 input */ 
+            [clamp,
+              [mload, 96],
+              [calldataload, 4],
+              [mload, 64]],
+            # Line 42
+            [mstore,
+              0,
+              [sload, [add, [sha3_32, 5 <self.dynasty_wei_delta>], [mload, 320 <arg0>]]]],
+            [return, 0, 32],
             # Line 40
-            [mstore, 0, [sload, 5 <self.next_dynasty_wei_delta>]],
-            [return, 0, 32],
-            # Line 38
             stop]],
-        # Line 41
-        [if,
-          [eq, [mload, 0], 1201833159 <second_next_dynasty_wei_delta>],
-          [seq,
-            [assert, [iszero, callvalue]],
-            # Line 43
-            [mstore, 0, [sload, 6 <self.second_next_dynasty_wei_delta>]],
-            [return, 0, 32],
-            # Line 41
-            stop]],
-        # Line 50
+        # Line 49
         [if,
           [eq, [mload, 0], 2724400046 <dynasty_start_epoch>],
           [seq,
@@ -2851,14 +2702,14 @@
               [mload, 96],
               [calldataload, 4],
               [mload, 64]],
-            # Line 52
+            # Line 51
             [mstore,
               0,
-              [sload, [add, [sha3_32, 9 <self.dynasty_start_epoch>], [mload, 320 <arg0>]]]],
+              [sload, [add, [sha3_32, 8 <self.dynasty_start_epoch>], [mload, 320 <arg0>]]]],
             [return, 0, 32],
-            # Line 50
+            # Line 49
             stop]],
-        # Line 53
+        # Line 52
         [if,
           [eq, [mload, 0], 1707770086 <dynasty_in_epoch>],
           [seq,
@@ -2869,14 +2720,14 @@
               [mload, 96],
               [calldataload, 4],
               [mload, 64]],
-            # Line 55
+            # Line 54
             [mstore,
               0,
-              [sload, [add, [sha3_32, 10 <self.dynasty_in_epoch>], [mload, 320 <arg0>]]]],
+              [sload, [add, [sha3_32, 9 <self.dynasty_in_epoch>], [mload, 320 <arg0>]]]],
             [return, 0, 32],
-            # Line 53
+            # Line 52
             stop]],
-        # Line 56
+        # Line 54
         [if,
           [eq, [mload, 0], 4253544349 <votes__cur_dyn_votes>],
           [seq,
@@ -2892,15 +2743,15 @@
               [mload, 96],
               [calldataload, 36],
               [mload, 64]],
-            # Line 58
+            # Line 56
             [mstore,
               0,
               [sload,
                 [add,
-                  [sha3_32, [sha3_32, [add, [sha3_32, 11 <self.votes>], [mload, 320 <arg0>]]]],
+                  [sha3_32, [sha3_32, [add, [sha3_32, 10 <self.votes>], [mload, 320 <arg0>]]]],
                   [mload, 352 <arg1>]]]],
             [return, 0, 32],
-            # Line 56
+            # Line 54
             stop]],
         [if,
           [eq, [mload, 0], 1254577867 <votes__prev_dyn_votes>],
@@ -2917,18 +2768,18 @@
               [mload, 96],
               [calldataload, 36],
               [mload, 64]],
-            # Line 58
+            # Line 56
             [mstore,
               0,
               [sload,
                 [add,
                   [sha3_32,
                     [add,
-                      [sha3_32, [add, [sha3_32, 11 <self.votes>], [mload, 320 <arg0>]]],
+                      [sha3_32, [add, [sha3_32, 10 <self.votes>], [mload, 320 <arg0>]]],
                       3 <prev_dyn_votes>]],
                   [mload, 352 <arg1>]]]],
             [return, 0, 32],
-            # Line 56
+            # Line 54
             stop]],
         [if,
           [eq, [mload, 0], 3948329628 <votes__vote_bitmap>],
@@ -2945,7 +2796,7 @@
               [mload, 96],
               [calldataload, 68],
               [mload, 64]],
-            # Line 58
+            # Line 56
             [mstore,
               0,
               [sload,
@@ -2954,12 +2805,12 @@
                     [add,
                       [sha3_32,
                         [add,
-                          [sha3_32, [add, [sha3_32, 11 <self.votes>], [mload, 320 <arg0>]]],
+                          [sha3_32, [add, [sha3_32, 10 <self.votes>], [mload, 320 <arg0>]]],
                           4 <vote_bitmap>]],
                       [mload, 352 <arg1>]]],
                   [mload, 384 <arg2>]]]],
             [return, 0, 32],
-            # Line 56
+            # Line 54
             stop]],
         [if,
           [eq, [mload, 0], 3437464997 <votes__is_justified>],
@@ -2971,15 +2822,15 @@
               [mload, 96],
               [calldataload, 4],
               [mload, 64]],
-            # Line 58
+            # Line 56
             [mstore,
               0,
               [sload,
                 [add,
-                  [sha3_32, [add, [sha3_32, 11 <self.votes>], [mload, 320 <arg0>]]],
+                  [sha3_32, [add, [sha3_32, 10 <self.votes>], [mload, 320 <arg0>]]],
                   2 <is_justified>]]],
             [return, 0, 32],
-            # Line 56
+            # Line 54
             stop]],
         [if,
           [eq, [mload, 0], 1666130386 <votes__is_finalized>],
@@ -2991,27 +2842,27 @@
               [mload, 96],
               [calldataload, 4],
               [mload, 64]],
-            # Line 58
+            # Line 56
             [mstore,
               0,
               [sload,
                 [add,
-                  [sha3_32, [add, [sha3_32, 11 <self.votes>], [mload, 320 <arg0>]]],
+                  [sha3_32, [add, [sha3_32, 10 <self.votes>], [mload, 320 <arg0>]]],
                   1 <is_finalized>]]],
             [return, 0, 32],
-            # Line 56
+            # Line 54
             stop]],
-        # Line 70
+        # Line 68
         [if,
           [eq, [mload, 0], 2574809798 <main_hash_justified>],
           [seq,
             [assert, [iszero, callvalue]],
-            # Line 72
-            [mstore, 0, [sload, 12 <self.main_hash_justified>]],
-            [return, 0, 32],
             # Line 70
+            [mstore, 0, [sload, 11 <self.main_hash_justified>]],
+            [return, 0, 32],
+            # Line 68
             stop]],
-        # Line 73
+        # Line 71
         [if,
           [eq, [mload, 0], 3828381055 <deposit_scale_factor>],
           [seq,
@@ -3022,121 +2873,131 @@
               [mload, 96],
               [calldataload, 4],
               [mload, 64]],
-            # Line 75
+            # Line 73
             [mstore,
               0,
-              [sload, [add, [sha3_32, 13 <self.deposit_scale_factor>], [mload, 320 <arg0>]]]],
+              [sload, [add, [sha3_32, 12 <self.deposit_scale_factor>], [mload, 320 <arg0>]]]],
             [return, 0, 32],
-            # Line 73
+            # Line 71
             stop]],
-        # Line 77
+        # Line 73
         [if,
           [eq, [mload, 0], 2319991815 <last_nonvoter_rescale>],
           [seq,
             [assert, [iszero, callvalue]],
+            # Line 75
+            [mstore, 0, [sload, 13 <self.last_nonvoter_rescale>]],
+            [return, 0, 32],
+            # Line 73
+            stop]],
+        # Line 74
+        [if,
+          [eq, [mload, 0], 3870651238 <last_voter_rescale>],
+          [seq,
+            [assert, [iszero, callvalue]],
+            # Line 76
+            [mstore, 0, [sload, 14 <self.last_voter_rescale>]],
+            [return, 0, 32],
+            # Line 74
+            stop]],
+        # Line 76
+        [if,
+          [eq, [mload, 0], 2473768164 <current_epoch>],
+          [seq,
+            [assert, [iszero, callvalue]],
+            # Line 78
+            [mstore, 0, [sload, 15 <self.current_epoch>]],
+            [return, 0, 32],
+            # Line 76
+            stop]],
+        # Line 77
+        [if,
+          [eq, [mload, 0], 788498265 <last_finalized_epoch>],
+          [seq,
+            [assert, [iszero, callvalue]],
             # Line 79
-            [mstore, 0, [sload, 14 <self.last_nonvoter_rescale>]],
+            [mstore, 0, [sload, 16 <self.last_finalized_epoch>]],
             [return, 0, 32],
             # Line 77
             stop]],
         # Line 78
         [if,
-          [eq, [mload, 0], 3870651238 <last_voter_rescale>],
+          [eq, [mload, 0], 1600198224 <last_justified_epoch>],
           [seq,
             [assert, [iszero, callvalue]],
             # Line 80
-            [mstore, 0, [sload, 15 <self.last_voter_rescale>]],
+            [mstore, 0, [sload, 17 <self.last_justified_epoch>]],
             [return, 0, 32],
             # Line 78
             stop]],
         # Line 81
         [if,
-          [eq, [mload, 0], 1110556641 <epoch_length>],
+          [eq, [mload, 0], 1526944842 <expected_source_epoch>],
           [seq,
             [assert, [iszero, callvalue]],
             # Line 83
-            [mstore, 0, [sload, 16 <self.epoch_length>]],
+            [mstore, 0, [sload, 18 <self.expected_source_epoch>]],
             [return, 0, 32],
             # Line 81
             stop]],
-        # Line 84
-        [if,
-          [eq, [mload, 0], 3936513807 <withdrawal_delay>],
-          [seq,
-            [assert, [iszero, callvalue]],
-            # Line 86
-            [mstore, 0, [sload, 17 <self.withdrawal_delay>]],
-            [return, 0, 32],
-            # Line 84
-            stop]],
-        # Line 87
-        [if,
-          [eq, [mload, 0], 2473768164 <current_epoch>],
-          [seq,
-            [assert, [iszero, callvalue]],
-            # Line 89
-            [mstore, 0, [sload, 18 <self.current_epoch>]],
-            [return, 0, 32],
-            # Line 87
-            stop]],
         # Line 90
         [if,
-          [eq, [mload, 0], 788498265 <last_finalized_epoch>],
+          [eq, [mload, 0], 1110556641 <epoch_length>],
           [seq,
             [assert, [iszero, callvalue]],
             # Line 92
-            [mstore, 0, [sload, 19 <self.last_finalized_epoch>]],
+            [mstore, 0, [sload, 20 <self.epoch_length>]],
             [return, 0, 32],
             # Line 90
             stop]],
         # Line 93
         [if,
-          [eq, [mload, 0], 1600198224 <last_justified_epoch>],
+          [eq, [mload, 0], 3936513807 <withdrawal_delay>],
           [seq,
             [assert, [iszero, callvalue]],
             # Line 95
-            [mstore, 0, [sload, 20 <self.last_justified_epoch>]],
+            [mstore, 0, [sload, 21 <self.withdrawal_delay>]],
             [return, 0, 32],
             # Line 93
             stop]],
         # Line 96
         [if,
-          [eq, [mload, 0], 1526944842 <expected_source_epoch>],
+          [eq, [mload, 0], 2836709096 <dynasty_logout_delay>],
           [seq,
             [assert, [iszero, callvalue]],
             # Line 98
-            [mstore, 0, [sload, 21 <self.expected_source_epoch>]],
+            [mstore, 0, [sload, 22 <self.dynasty_logout_delay>]],
             [return, 0, 32],
             # Line 96
             stop]],
-        # Line 111
+        # Line 108
         [if,
           [eq, [mload, 0], 131920987 <reward_factor>],
           [seq,
             [assert, [iszero, callvalue]],
-            # Line 113
+            # Line 110
             [mstore, 0, [sload, 26 <self.reward_factor>]],
             [return, 0, 32],
-            # Line 111
+            # Line 108
             stop]],
-        # Line 114
+        # Line 110
         [if,
           [eq, [mload, 0], 4272915133 <base_interest_factor>],
           [seq,
             [assert, [iszero, callvalue]],
-            # Line 116
+            # Line 112
             [mstore, 0, [sload, 27 <self.base_interest_factor>]],
             [return, 0, 32],
-            # Line 114
+            # Line 110
             stop]],
-        # Line 117
+        # Line 111
         [if,
           [eq, [mload, 0], 257475096 <base_penalty_factor>],
           [seq,
             [assert, [iszero, callvalue]],
-            # Line 119
+            # Line 113
             [mstore, 0, [sload, 28 <self.base_penalty_factor>]],
             [return, 0, 32],
-            # Line 117
+            # Line 111
             stop]]],
       0]]]
