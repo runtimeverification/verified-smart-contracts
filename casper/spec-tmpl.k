@@ -46,7 +46,7 @@
 
         <previousHash> _ </previousHash>
         <ommersHash> _ </ommersHash>
-        <coinbase> COINBASE_ID </coinbase>
+        <coinbase> COINBASE_ACCT_ID </coinbase>
         <stateRoot> _ </stateRoot>
         <transactionsRoot> _ </transactionsRoot>
         <receiptsRoot> _ </receiptsRoot>
@@ -65,7 +65,7 @@
       </evm>
 
       <network>
-        <activeAccounts> SetItem(CASPER_ACCT_ID) _:Set </activeAccounts>
+        <activeAccounts> {ACTIVEACCOUNTS} </activeAccounts>
 
         <accounts>
 
@@ -79,13 +79,9 @@
             <nonce> _ </nonce>
           </account>
 
-          <account>
-            <acctID> COINBASE_ACCT_ID </acctID>
-            <balance> COINBASE_BAL </balance>
-            <code> _ </code>
-            <storage> _ </storage>
-            <nonce> _ </nonce>
-          </account>
+{ACCOUNTS}
+
+          ...
 
         </accounts>
 
@@ -94,14 +90,14 @@
         <messages> _ </messages>
       </network>
     </ethereum>
-    requires 0 <=Int CASPER_ACCT_ID andBool CASPER_ACCT_ID <=Int maxUInt160
+    requires 0 <=Int CASPER_ACCT_ID   andBool CASPER_ACCT_ID   <=Int maxUInt160
      andBool (notBool CASPER_ACCT_ID in #precompiledAccounts(BYZANTIUM))
-     andBool 0 <=Int CALLER_ID   andBool CALLER_ID   <=Int maxUInt160
-     andBool 0 <=Int ORIGIN_ID   andBool ORIGIN_ID   <=Int maxUInt160
-     andBool 0 <=Int COINBASE_ID andBool COINBASE_ID <=Int maxUInt160
-     andBool 0 <=Int BLOCK_NUM   andBool BLOCK_NUM   <=Int maxSInt128
-     andBool 0 <=Int NOW         andBool NOW         <=Int maxUInt256
-     andBool 0 <=Int CASPER_BAL  andBool CASPER_BAL  <=Int maxUInt256
+     andBool 0 <=Int CALLER_ID        andBool CALLER_ID        <=Int maxUInt160
+     andBool 0 <=Int ORIGIN_ID        andBool ORIGIN_ID        <=Int maxUInt160
+     andBool 0 <=Int COINBASE_ACCT_ID andBool COINBASE_ACCT_ID <=Int maxUInt160
+     andBool 0 <=Int BLOCK_NUM        andBool BLOCK_NUM        <=Int maxSInt128
+     andBool 0 <=Int NOW              andBool NOW              <=Int maxUInt256
+     andBool 0 <=Int CASPER_BAL       andBool CASPER_BAL       <=Int maxUInt256
 {REQUIRES}
 {ENSURES}
 {ATTRIBUTE}
