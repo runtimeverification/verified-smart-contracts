@@ -8,8 +8,8 @@
 
     <ethereum>
       <evm>
-        <output> _ => {OUTPUT} </output>
-        <statusCode> _ => {STATUSCODE} </statusCode>
+        <output> {OUTPUT} </output>
+        <statusCode> {STATUSCODE} </statusCode>
         <callStack> _ </callStack>
         <interimStates> _ </interimStates>
         <touchedAccounts> _ => _ </touchedAccounts>
