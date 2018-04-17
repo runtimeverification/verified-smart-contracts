@@ -25,7 +25,7 @@
 
           <callValue> 0 </callValue>
           <wordStack> .WordStack => _ </wordStack>
-          <localMem> .Map => {LOCALMEM} </localMem>
+          <localMem> .Map => _ </localMem>
           <pc> 0 => _ </pc>
           <gas> {GAS} </gas>
           <memoryUsed> 0 => _ </memoryUsed>
