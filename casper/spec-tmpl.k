@@ -11,7 +11,6 @@
         <output> {OUTPUT} </output>
         <callStack> {CALLSTACK} </callStack>
         <interimStates> _ </interimStates>
-        <callLog> .Set </callLog> // for vmtest only
         <touchedAccounts> _ => _ </touchedAccounts>
 
         <callState>
@@ -23,7 +22,7 @@
 
           <callData> {CALLDATA} </callData>
 
-          <callValue> 0 </callValue>
+          <callValue> {CALLVALUE} </callValue>
           <wordStack> {WORDSTACK} </wordStack>
           <localMem> {LOCALMEM} </localMem>
           <pc> {PC} </pc>
@@ -46,7 +45,7 @@
 
         <previousHash> _ </previousHash>
         <ommersHash> _ </ommersHash>
-        <coinbase> COINBASE_ACCT_ID </coinbase>
+        <coinbase> {COINBASE} </coinbase>
         <stateRoot> _ </stateRoot>
         <transactionsRoot> _ </transactionsRoot>
         <receiptsRoot> _ </receiptsRoot>
@@ -71,7 +70,7 @@
 
           <account>
             <acctID> CASPER_ACCT_ID </acctID>
-            <balance> CASPER_BAL </balance>
+            <balance> {CASPERBALANCE} </balance>
             <code> #parseByteStack({CODE}) </code>
             <storage>
 {STORAGE}
@@ -90,14 +89,12 @@
         <messages> _ </messages>
       </network>
     </ethereum>
-    requires 0 <=Int CASPER_ACCT_ID   andBool CASPER_ACCT_ID   <=Int maxUInt160
+    requires 0  <Int CASPER_ACCT_ID   andBool CASPER_ACCT_ID   <=Int maxUInt160
      andBool (notBool CASPER_ACCT_ID in #precompiledAccounts(BYZANTIUM))
      andBool 0 <=Int CALLER_ID        andBool CALLER_ID        <=Int maxUInt160
      andBool 0 <=Int ORIGIN_ID        andBool ORIGIN_ID        <=Int maxUInt160
-     andBool 0 <=Int COINBASE_ACCT_ID andBool COINBASE_ACCT_ID <=Int maxUInt160
      andBool 0 <=Int BLOCK_NUM        andBool BLOCK_NUM        <=Int maxSInt128
      andBool 0 <=Int NOW              andBool NOW              <=Int maxUInt256
-     andBool 0 <=Int CASPER_BAL       andBool CASPER_BAL       <=Int maxUInt256
 {REQUIRES}
 {ENSURES}
 {ATTRIBUTE}

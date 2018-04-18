@@ -5,19 +5,13 @@ module VERIFICATION
     imports EDSL
     imports LEMMAS
 
-    rule N -Int N => 0
-
     rule 0 <=Int (X modInt Y) => true
 
     rule (X modInt Y) <Int Y  => true
 
-    rule 2 ^%Int X pow256 => 2 ^Int X  requires 0 <=Int X andBool X <Int 256
-
     rule 0 <=Int 2 ^Int X => true
 
     rule 2 ^Int X <Int pow256 => true  requires X <Int 256
-
-    rule ((X *Int Y) /Int Z) /Int Y => X /Int Z
 
     rule 0 <=Int X &Int Y => true  requires 0 <=Int X andBool X <Int pow256
                                     andBool 0 <=Int Y andBool Y <Int pow256
@@ -31,8 +25,6 @@ module VERIFICATION
     rule X |Int Y <Int pow256 => true  requires 0 <=Int X andBool X <Int pow256
                                         andBool 0 <=Int Y andBool Y <Int pow256
 
-    rule X modInt Y => X requires 0 <=Int X andBool X <Int Y
-
     rule 0 <=Int (A -Word B) => true
 
     rule (A -Word B) <Int pow256 => true
@@ -40,10 +32,6 @@ module VERIFICATION
     rule (0 <=Int #blockhash(_, _, _, _)) => true
 
     rule (#blockhash(_, _, _, _) <Int pow256) => true
-
-    // (A *Int B /Int A ==Int B or A ==Int 0)
-    rule chop(bool2Word((A *Int B) /Word A ==K B) |Int chop(A xorInt maxUInt256)) => 1
-      requires A *Int B <=Int maxUInt256
 
     syntax Int ::= symkeccak ( Int ) [function, smtlib(smt_symkeccak)]
  // -------------------------------------------------------------------
@@ -54,23 +42,62 @@ module VERIFICATION
     rule symkeccak(N) <Int pow256 => true
 
 
-    syntax Int ::= "minInt128_2s" [function]
-                 | "maxDecimal"   [function]
+///////////////////////////////////////////////////////////////////////////////
+// Arithmetic
+///////////////////////////////////////////////////////////////////////////////
+
+
+    rule N -Int N => 0
+
+    rule 2 ^%Int X pow256 => 2 ^Int X  requires 0 <=Int X andBool X <Int 256
+
+    rule ((X *Int Y) /Int Z) /Int Y => X /Int Z
+
+    rule X modInt Y => X requires 0 <=Int X andBool X <Int Y
+
+    syntax Int ::= "minInt128_2s"  [function]
+                 | "minDecimal"    [function]
+                 | "minDecimal_2s" [function]
+                 | "maxDecimal"    [function]
  // ----------------------------------------
-    rule minInt128_2s => 115792089237316195423570985008687907853099843482180094807725896704197245534208  [macro]  /* pow256 - 2^127 */
-    rule maxDecimal   => 1701411834604692317316873037158841057270000000000  [macro]  /* (2^127 - 1) * 10^10 */
+    rule minInt128_2s  => 115792089237316195423570985008687907853099843482180094807725896704197245534208  [macro]  /* pow256 - 2^127 */
+    rule minDecimal    => -1701411834604692317316873037158841057280000000000  [macro]  /* (-2^127) * 10^10 */
+    rule minDecimal_2s => 115792089237316195423570985006986496018665292348323691002298742950633129639936  [macro] /* pow256 - (2^127 * 10^10) */
+    rule maxDecimal    => 1701411834604692317316873037158841057270000000000   [macro]  /* (2^127 - 1) * 10^10 */
 
 
-    rule A s<Word (B -Word C) => 0  requires 0 <=Int A andBool A <=Int maxSInt128
-                                     andBool 0 <=Int B andBool B <=Int maxSInt128
-                                     andBool 0 <=Int C andBool C <=Int maxSInt128
-                                     andBool B -Int C <=Int A
+    // FIXME:(A *Int B /Int A ==Int B or A ==Int 0)
+    rule chop(bool2Word((A *Int B) /Word A ==K B) |Int chop(A xorInt maxUInt256)) => 1
+    //  requires A *Int B <=Int maxUInt256
 
-    rule maxSInt128 s<Word (A -Word B) => 0  requires 0 <=Int A andBool A <=Int maxSInt128
-                                              andBool 0 <=Int B andBool B <=Int maxSInt128
+    // FIXME:(A *Int B /Int A ==Int B or A ==Int 0)
+    rule chop(bool2Word((A *Int B) /Int A ==K B) |Int chop(A xorInt maxUInt256)) => 1
+    //  requires A *Int B <=Int maxUInt256
+
+    rule C s<Word (A -Word B) => 0  requires 0 <=Int A andBool A <=Int maxSInt256
+                                     andBool 0 <=Int B andBool B <=Int maxSInt256
+                                     andBool 0 <=Int C andBool C <=Int maxSInt256
+                                     andBool (A -Int B) <=Int C
+
+//    rule maxSInt128 s<Word (A -Word B) => 0  requires 0 <=Int A andBool A <=Int maxSInt128
+//                                              andBool 0 <=Int B andBool B <=Int maxSInt128
+
 
     rule (A -Word B) s<Word minInt128_2s => 0  requires 0 <=Int A andBool A <=Int maxSInt128
                                                 andBool 0 <=Int B andBool B <=Int maxSInt128
+
+
+    rule (#signed(A) -Word B) => #signed(A -Int B)  requires minSInt256 <=Int A andBool A <=Int maxSInt256
+                                                     andBool          0 <=Int B andBool B <=Int maxSInt256
+                                                     andBool minSInt256 <=Int (A -Int B)
+                                                     andBool (A -Int B) <=Int maxSInt256
+
+    rule C s<Word #signed(A -Int B) => 0  requires 0 <=Int C andBool C <=Int maxSInt256
+                                           andBool minSInt256 <=Int (A -Int B)
+                                           andBool (A -Int B) <=Int C
+
+    rule #signed(A -Int B) s<Word minDecimal_2s => 0  requires minDecimal <=Int (A -Int B)
+                                                       andBool (A -Int B) <=Int maxSInt256
 
 
 ///////////////////////////////////////////////////////////////////////////////
