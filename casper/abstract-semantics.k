@@ -14,7 +14,7 @@ module ABSTRACT-SEMANTICS
 
   rule <k> #gasExec(SCHED, SSTORE INDEX VALUE) => Gsstoreset < SCHED > ... </k> [trusted]
 
-  rule <k> Ccallgas(SCHED, ISEMPTY:Bool, GCAP, GAVAIL, 0) => Cgascap(SCHED, GCAP, GAVAIL, Cextra(SCHED, VALUE, ISEMPTY)) ... </k> [trusted]
+  rule <k> Ccallgas(SCHED, ISEMPTY:Bool, GCAP, GAVAIL, 0) => Cgascap(SCHED, GCAP, GAVAIL, Cextra(SCHED, 0, ISEMPTY)) ... </k> [trusted]
 
   rule <k> Ccallgas(SCHED, ISEMPTY:Bool, GCAP, GAVAIL, VALUE)
           => Cgascap(SCHED, GCAP, GAVAIL, Cextra(SCHED, VALUE, ISEMPTY)) +Int Gcallstipend < SCHED > ... </k>
