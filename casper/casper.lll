@@ -1,4 +1,4 @@
-commit b00004a
+commit b2a1189 (without RLP)
 
 [seq,
   [mstore, 28, [calldataload, 0]],
@@ -7,7 +7,7 @@ commit b00004a
   [mstore, 96, -170141183460469231731687303715884105728],
   [mstore, 128, 1701411834604692317316873037158841057270000000000],
   [mstore, 160, -1701411834604692317316873037158841057280000000000],
-  # Line 119
+  # Line 120
   [codecopy, 320, ~codelen, 288],
   [assert, [iszero, callvalue]],
   /* checking int128 input */ 
@@ -42,41 +42,41 @@ commit b00004a
     [mload, 96],
     [codeload, [add, ~codelen, 256]],
     [mload, 64]],
-  # Line 126
-  [sstore, 20 <self.epoch_length>, [mload, 320 <_epoch_length>]],
   # Line 127
-  [sstore, 21 <self.withdrawal_delay>, [mload, 352 <_withdrawal_delay>]],
+  [sstore, 21 <self.EPOCH_LENGTH>, [mload, 320 <epoch_length>]],
   # Line 128
-  [sstore, 22 <self.dynasty_logout_delay>, [mload, 384 <_dynasty_logout_delay>]],
+  [sstore, 22 <self.WITHDRAWAL_DELAY>, [mload, 352 <withdrawal_delay>]],
   # Line 129
-  [sstore, 23 <self.owner>, [mload, 416 <_owner>]],
+  [sstore, 23 <self.DYNASTY_LOGOUT_DELAY>, [mload, 384 <dynasty_logout_delay>]],
   # Line 130
-  [sstore, 27 <self.base_interest_factor>, [mload, 512 <_base_interest_factor>]],
+  [sstore, 24 <self.OWNER>, [mload, 416 <owner>]],
   # Line 131
-  [sstore, 28 <self.base_penalty_factor>, [mload, 544 <_base_penalty_factor>]],
+  [sstore, 27 <self.BASE_INTEREST_FACTOR>, [mload, 512 <base_interest_factor>]],
   # Line 132
-  [sstore, 29 <self.min_deposit_size>, [mload, 576 <_min_deposit_size>]],
-  # Line 135
-  [sstore, 24 <self.sighasher>, [mload, 448 <_sighasher>]],
+  [sstore, 28 <self.BASE_PENALTY_FACTOR>, [mload, 544 <base_penalty_factor>]],
+  # Line 133
+  [sstore, 29 <self.MIN_DEPOSIT_SIZE>, [mload, 576 <min_deposit_size>]],
   # Line 136
-  [sstore, 25 <self.purity_checker>, [mload, 480 <_purity_checker>]],
-  # Line 139
+  [sstore, 25 <self.SIGHASHER>, [mload, 448 <sighasher>]],
+  # Line 137
+  [sstore, 26 <self.PURITY_CHECKER>, [mload, 480 <purity_checker>]],
+  # Line 140
   [sstore, 2 <self.next_validator_index>, 1],
-  # Line 141
-  [sstore, [sha3_32, 12 <self.deposit_scale_factor>], 100000000000000000000],
   # Line 142
-  [sstore, 4 <self.dynasty>, 0],
+  [sstore, [sha3_32, 12 <self.deposit_scale_factor>], 100000000000000000000],
   # Line 143
+  [sstore, 4 <self.dynasty>, 0],
+  # Line 144
   [sstore,
     15 <self.current_epoch>,
     [if,
-      # Line 143
+      # Line 144
       [slt,
         [clamp,
           [mload, 160],
           [sdiv,
             [mul, number, 10000000000],
-            [clamp_nonzero, [sload, 20 <self.epoch_length>]]],
+            [clamp_nonzero, [sload, 21 <self.EPOCH_LENGTH>]]],
           [mload, 128]],
         0],
       [sdiv,
@@ -85,7 +85,7 @@ commit b00004a
             [mload, 160],
             [sdiv,
               [mul, number, 10000000000],
-              [clamp_nonzero, [sload, 20 <self.epoch_length>]]],
+              [clamp_nonzero, [sload, 21 <self.EPOCH_LENGTH>]]],
             [mload, 128]],
           9999999999],
         10000000000],
@@ -94,15 +94,15 @@ commit b00004a
           [mload, 160],
           [sdiv,
             [mul, number, 10000000000],
-            [clamp_nonzero, [sload, 20 <self.epoch_length>]]],
+            [clamp_nonzero, [sload, 21 <self.EPOCH_LENGTH>]]],
           [mload, 128]],
         10000000000]]],
-  # Line 144
-  [sstore, 6 <self.total_curdyn_deposits>, 0],
   # Line 145
-  [sstore, 7 <self.total_prevdyn_deposits>, 0],
+  [sstore, 6 <self.total_curdyn_deposits>, 0],
   # Line 146
-  [sstore, 30 <self.default_end_dynasty>, 1000000000000000000000000000000],
+  [sstore, 7 <self.total_prevdyn_deposits>, 0],
+  # Line 147
+  [sstore, 30 <self.DEFAULT_END_DYNASTY>, 1000000000000000000000000000000],
   [return,
     0,
     [lll,
@@ -113,12 +113,12 @@ commit b00004a
         [mstore, 96, -170141183460469231731687303715884105728],
         [mstore, 128, 1701411834604692317316873037158841057270000000000],
         [mstore, 160, -1701411834604692317316873037158841057280000000000],
-        # Line 149
+        # Line 151
         [if,
           [eq, [mload, 0], 937364392 <main_hash_voted_frac>],
           [seq,
             [assert, [iszero, callvalue]],
-            # Line 152
+            # Line 154
             [mstore,
               0,
               [with,
@@ -130,7 +130,7 @@ commit b00004a
                     [sload,
                       [add,
                         [sha3_32, [sha3_32, [add, [sha3_32, 10 <self.votes>], [sload, 15 <self.current_epoch>]]]],
-                        [sload, 18 <self.expected_source_epoch>]]],
+                        [sload, 19 <self.expected_source_epoch>]]],
                     [with,
                       r,
                       [clamp_nonzero, [sload, 6 <self.total_curdyn_deposits>]],
@@ -148,7 +148,7 @@ commit b00004a
                             [add,
                               [sha3_32, [add, [sha3_32, 10 <self.votes>], [sload, 15 <self.current_epoch>]]],
                               3 <prev_dyn_votes>]],
-                          [sload, 18 <self.expected_source_epoch>]]],
+                          [sload, 19 <self.expected_source_epoch>]]],
                       [with,
                         r,
                         [clamp_nonzero, [sload, 7 <self.total_prevdyn_deposits>]],
@@ -156,9 +156,9 @@ commit b00004a
                     [mload, 128]],
                   [if, [sgt, _l, _r], _r, _l]]]],
             [return, 0, 32],
-            # Line 149
+            # Line 151
             stop]],
-        # Line 155
+        # Line 158
         [if,
           [eq, [mload, 0], 2583387884 <deposit_size>],
           [seq,
@@ -169,7 +169,7 @@ commit b00004a
               [mload, 96],
               [calldataload, 4],
               [mload, 64]],
-            # Line 158
+            # Line 161
             [mstore,
               0,
               [if,
@@ -245,14 +245,14 @@ commit b00004a
                     [mload, 128]],
                   10000000000]]],
             [return, 0, 32],
-            # Line 155
+            # Line 158
             stop]],
-        # Line 160
+        # Line 164
         [if,
           [eq, [mload, 0], 2396075952 <total_curdyn_deposits_scaled>],
           [seq,
             [assert, [iszero, callvalue]],
-            # Line 163
+            # Line 167
             [mstore,
               0,
               [if,
@@ -319,14 +319,14 @@ commit b00004a
                     [mload, 128]],
                   10000000000]]],
             [return, 0, 32],
-            # Line 160
+            # Line 164
             stop]],
-        # Line 165
+        # Line 170
         [if,
           [eq, [mload, 0], 2247379592 <total_prevdyn_deposits_scaled>],
           [seq,
             [assert, [iszero, callvalue]],
-            # Line 168
+            # Line 173
             [mstore,
               0,
               [if,
@@ -393,24 +393,24 @@ commit b00004a
                     [mload, 128]],
                   10000000000]]],
             [return, 0, 32],
-            # Line 165
+            # Line 170
             stop]],
-        # Line 171
+        # Line 177
         [if,
           [eq, [mload, 0], 284313141 <recommended_source_epoch>],
           [seq,
             [assert, [iszero, callvalue]],
-            # Line 174
-            [mstore, 0, [sload, 18 <self.expected_source_epoch>]],
+            # Line 180
+            [mstore, 0, [sload, 19 <self.expected_source_epoch>]],
             [return, 0, 32],
-            # Line 171
+            # Line 177
             stop]],
-        # Line 176
+        # Line 183
         [if,
           [eq, [mload, 0], 2237609772 <recommended_target_hash>],
           [seq,
             [assert, [iszero, callvalue]],
-            # Line 179
+            # Line 186
             [mstore,
               0,
               [blockhash,
@@ -421,38 +421,38 @@ commit b00004a
                       [sub,
                         [clamp,
                           [mload, 96],
-                          [mul, [sload, 15 <self.current_epoch>], [sload, 20 <self.epoch_length>]],
+                          [mul, [sload, 15 <self.current_epoch>], [sload, 21 <self.EPOCH_LENGTH>]],
                           [mload, 64]],
                         1],
                       [mload, 64]],
                     [sub, number, 256]],
                   number]]],
             [return, 0, 32],
-            # Line 176
+            # Line 183
             stop]],
-        # Line 181
+        # Line 189
         [if,
           [eq, [mload, 0], 3732904309 <deposit_exists>],
           [seq,
             [assert, [iszero, callvalue]],
             [assert, [eq, caller, address]],
-            # Line 184
+            # Line 192
             [mstore,
               0,
               [and,
                 [sgt, [sload, 6 <self.total_curdyn_deposits>], 0],
                 [sgt, [sload, 7 <self.total_prevdyn_deposits>], 0]]],
             [return, 0, 32],
-            # Line 181
+            # Line 189
             stop]],
-        # Line 190
+        # Line 199
         [if,
           [eq, [mload, 0], 3532045186 <increment_dynasty>],
           [seq,
             [assert, [iszero, callvalue]],
             [assert, [eq, caller, address]],
             [mstore, 320, [sload, 15 <self.current_epoch>]],
-            # Line 194
+            # Line 203
             [if,
               [sload,
                 [add,
@@ -461,17 +461,17 @@ commit b00004a
                       [sha3_32, 10 <self.votes>],
                       [clamp, [mload, 96], [sub, [mload, 320 <epoch>], 2], [mload, 64]]]],
                   1 <is_finalized>]],
-              # Line 195
+              # Line 204
               [seq,
                 [with,
                   _stloc,
                   4 <self.dynasty>,
                   [sstore, _stloc, [clamp, [mload, 96], [add, [sload, _stloc], 1], [mload, 64]]]],
-                # Line 196
+                # Line 205
                 [sstore,
                   7 <self.total_prevdyn_deposits>,
                   [sload, 6 <self.total_curdyn_deposits>]],
-                # Line 197
+                # Line 206
                 [with,
                   _stloc,
                   6 <self.total_curdyn_deposits>,
@@ -483,33 +483,33 @@ commit b00004a
                         [sload, _stloc],
                         [sload, [add, [sha3_32, 5 <self.dynasty_wei_delta>], [sload, 4 <self.dynasty>]]]],
                       [mload, 128]]]],
-                # Line 198
+                # Line 207
                 [sstore,
                   [add, [sha3_32, 8 <self.dynasty_start_epoch>], [sload, 4 <self.dynasty>]],
                   [mload, 320 <epoch>]]]],
-            # Line 199
+            # Line 208
             [sstore,
               [add, [sha3_32, 9 <self.dynasty_in_epoch>], [mload, 320 <epoch>]],
               [sload, 4 <self.dynasty>]],
-            # Line 200
+            # Line 209
             [if,
               [sload, 11 <self.main_hash_justified>],
-              # Line 201
+              # Line 210
               [seq,
                 [sstore,
-                  18 <self.expected_source_epoch>,
+                  19 <self.expected_source_epoch>,
                   [clamp, [mload, 96], [sub, [mload, 320 <epoch>], 1], [mload, 64]]]]],
-            # Line 202
+            # Line 211
             [sstore, 11 <self.main_hash_justified>, 0],
-            # Line 190
+            # Line 199
             stop]],
-        # Line 205
+        # Line 215
         [if,
           [eq, [mload, 0], 2593057911 <esf>],
           [seq,
             [assert, [iszero, callvalue]],
             [assert, [eq, caller, address]],
-            # Line 207
+            # Line 217
             [mstore,
               0,
               [clamp,
@@ -519,9 +519,9 @@ commit b00004a
                   [sload, 16 <self.last_finalized_epoch>]],
                 [mload, 64]]],
             [return, 0, 32],
-            # Line 205
+            # Line 215
             stop]],
-        # Line 210
+        # Line 221
         [if,
           [eq, [mload, 0], 2898663875 <collective_reward>],
           [seq,
@@ -537,7 +537,7 @@ commit b00004a
                     [assert, [call, gas, address, 0, [seq, [mstore, 384, 2593057911], 412], 4, 480, 32]],
                     480]],
                 2]],
-            # Line 214
+            # Line 225
             [if,
               [or,
                 [iszero,
@@ -547,9 +547,9 @@ commit b00004a
                       [assert, [call, gas, address, 0, [seq, [mstore, 512, 3732904309], 540], 4, 608, 32]],
                       608]]],
                 [iszero, [mload, 352 <live>]]],
-              # Line 215
+              # Line 226
               [seq, [mstore, 0, 0], [return, 0, 32]]],
-            # Line 210
+            # Line 221
             [mstore,
               640,
               [clamp,
@@ -563,7 +563,7 @@ commit b00004a
                           [add,
                             [sha3_32, 10 <self.votes>],
                             [clamp, [mload, 96], [sub, [mload, 320 <epoch>], 1], [mload, 64]]]]],
-                      [sload, 18 <self.expected_source_epoch>]]],
+                      [sload, 19 <self.expected_source_epoch>]]],
                   [with,
                     r,
                     [clamp_nonzero, [sload, 6 <self.total_curdyn_deposits>]],
@@ -584,7 +584,7 @@ commit b00004a
                               [sha3_32, 10 <self.votes>],
                               [clamp, [mload, 96], [sub, [mload, 320 <epoch>], 1], [mload, 64]]]],
                           3 <prev_dyn_votes>]],
-                      [sload, 18 <self.expected_source_epoch>]]],
+                      [sload, 19 <self.expected_source_epoch>]]],
                   [with,
                     r,
                     [clamp_nonzero, [sload, 7 <self.total_prevdyn_deposits>]],
@@ -596,7 +596,7 @@ commit b00004a
                 _l,
                 [mload, 640 <cur_vote_frac>],
                 [with, _r, [mload, 672 <prev_vote_frac>], [if, [sgt, _l, _r], _r, _l]]]],
-            # Line 220
+            # Line 231
             [mstore,
               0,
               [clamp,
@@ -606,7 +606,7 @@ commit b00004a
                     [mload, 160],
                     [with,
                       r,
-                      [sload, 26 <self.reward_factor>],
+                      [sload, 18 <self.reward_factor>],
                       [with,
                         l,
                         [mload, 704 <vote_frac>],
@@ -620,18 +620,18 @@ commit b00004a
                   2],
                 [mload, 128]]],
             [return, 0, 32],
-            # Line 210
+            # Line 221
             stop]],
-        # Line 222
+        # Line 234
         [if,
           [eq, [mload, 0], 1697049970 <insta_finalize>],
           [seq,
             [assert, [iszero, callvalue]],
             [assert, [eq, caller, address]],
             [mstore, 320, [sload, 15 <self.current_epoch>]],
-            # Line 225
+            # Line 237
             [sstore, 11 <self.main_hash_justified>, 1],
-            # Line 226
+            # Line 238
             [sstore,
               [add,
                 [sha3_32,
@@ -640,7 +640,7 @@ commit b00004a
                     [clamp, [mload, 96], [sub, [mload, 320 <epoch>], 1], [mload, 64]]]],
                 2 <is_justified>],
               1],
-            # Line 227
+            # Line 239
             [sstore,
               [add,
                 [sha3_32,
@@ -649,32 +649,29 @@ commit b00004a
                     [clamp, [mload, 96], [sub, [mload, 320 <epoch>], 1], [mload, 64]]]],
                 1 <is_finalized>],
               1],
-            # Line 228
+            # Line 240
             [sstore,
               17 <self.last_justified_epoch>,
               [clamp, [mload, 96], [sub, [mload, 320 <epoch>], 1], [mload, 64]]],
-            # Line 229
+            # Line 241
             [sstore,
               16 <self.last_finalized_epoch>,
               [clamp, [mload, 96], [sub, [mload, 320 <epoch>], 1], [mload, 64]]],
-            # Line 231
-            [mstore, 416, 1],
-            [mstore, 448, 1],
-            [mstore, 352, 64],
-            [mstore, 416, 1],
-            [mstore, 448, 1],
+            # Line 243
+            [mstore, 352, 1],
+            [mstore, 384, 1],
             [log3,
-              416,
-              [mload, 352],
+              352,
+              64,
               47607052476070037250388038725579733243894556830711209046796940177296459501753,
               [clamp, [mload, 96], [sub, [mload, 320 <epoch>], 1], [mload, 64]],
               [sload,
                 [add,
                   [sha3_32, 1 <self.checkpoint_hashes>],
                   [clamp, [mload, 96], [sub, [mload, 320 <epoch>], 1], [mload, 64]]]]],
-            # Line 222
+            # Line 234
             stop]],
-        # Line 234
+        # Line 247
         [if,
           [eq, [mload, 0], 3676565216 <sqrt_of_total_deposits>],
           [seq,
@@ -792,7 +789,7 @@ commit b00004a
                   [mul, [mload, 352 <ether_deposited_as_number>], 100000000000000000000],
                   20000000000],
                 [mload, 128]]],
-            # Line 240
+            # Line 253
             [repeat,
               416,
               0,
@@ -816,12 +813,12 @@ commit b00004a
                         [mload, 128]],
                       2],
                     [mload, 128]]]]],
-            # Line 242
+            # Line 255
             [mstore, 0, [mload, 384 <sqrt>]],
             [return, 0, 32],
-            # Line 234
+            # Line 247
             stop]],
-        # Line 247
+        # Line 261
         [if,
           [eq, [mload, 0], 1573911575 <initialize_epoch>],
           [seq,
@@ -835,13 +832,13 @@ commit b00004a
             [mstore,
               352,
               [if,
-                # Line 250
+                # Line 264
                 [slt,
                   [clamp,
                     [mload, 160],
                     [sdiv,
                       [mul, number, 10000000000],
-                      [clamp_nonzero, [sload, 20 <self.epoch_length>]]],
+                      [clamp_nonzero, [sload, 21 <self.EPOCH_LENGTH>]]],
                     [mload, 128]],
                   0],
                 [sdiv,
@@ -850,7 +847,7 @@ commit b00004a
                       [mload, 160],
                       [sdiv,
                         [mul, number, 10000000000],
-                        [clamp_nonzero, [sload, 20 <self.epoch_length>]]],
+                        [clamp_nonzero, [sload, 21 <self.EPOCH_LENGTH>]]],
                       [mload, 128]],
                     9999999999],
                   10000000000],
@@ -859,19 +856,19 @@ commit b00004a
                     [mload, 160],
                     [sdiv,
                       [mul, number, 10000000000],
-                      [clamp_nonzero, [sload, 20 <self.epoch_length>]]],
+                      [clamp_nonzero, [sload, 21 <self.EPOCH_LENGTH>]]],
                     [mload, 128]],
                   10000000000]]],
-            # Line 251
+            # Line 265
             [assert,
               [and,
                 [sle, [mload, 320 <epoch>], [mload, 352 <computed_current_epoch>]],
                 [eq,
                   [mload, 320 <epoch>],
                   [clamp, [mload, 96], [add, [sload, 15 <self.current_epoch>], 1], [mload, 64]]]]],
-            # Line 254
+            # Line 268
             [sstore, 15 <self.current_epoch>, [mload, 320 <epoch>]],
-            # Line 256
+            # Line 270
             [sstore,
               14 <self.last_voter_rescale>,
               [clamp,
@@ -884,7 +881,7 @@ commit b00004a
                       [assert, [call, gas, address, 0, [seq, [mstore, 384, 2898663875], 412], 4, 480, 32]],
                       480]]],
                 [mload, 128]]],
-            # Line 257
+            # Line 271
             [sstore,
               13 <self.last_nonvoter_rescale>,
               [clamp,
@@ -897,11 +894,11 @@ commit b00004a
                     [clamp_nonzero,
                       [clamp,
                         [mload, 160],
-                        [add, 10000000000, [sload, 26 <self.reward_factor>]],
+                        [add, 10000000000, [sload, 18 <self.reward_factor>]],
                         [mload, 128]]],
                     [sdiv, [mul, l, 10000000000], r]]],
                 [mload, 128]]],
-            # Line 258
+            # Line 272
             [sstore,
               [add, [sha3_32, 12 <self.deposit_scale_factor>], [mload, 320 <epoch>]],
               [clamp,
@@ -922,14 +919,14 @@ commit b00004a
                         [assert, [or, [eq, [sdiv, ans, l], r], [not, l]]],
                         [sdiv, ans, 10000000000]]]]],
                 [mload, 128]]],
-            # Line 260
+            # Line 274
             [if,
               [mload,
                 /* Internal Call: deposit_exists */ 
                 [seq,
                   [assert, [call, gas, address, 0, [seq, [mstore, 608, 3732904309], 636], 4, 704, 32]],
                   704]],
-              # Line 262
+              # Line 276
               [seq,
                 [mstore,
                   736,
@@ -937,7 +934,7 @@ commit b00004a
                     [mload, 160],
                     [with,
                       l,
-                      [sload, 27 <self.base_interest_factor>],
+                      [sload, 27 <self.BASE_INTEREST_FACTOR>],
                       [with,
                         r,
                         [clamp_nonzero,
@@ -948,9 +945,9 @@ commit b00004a
                               864]]],
                         [sdiv, [mul, l, 10000000000], r]]],
                     [mload, 128]]],
-                # Line 263
+                # Line 277
                 [sstore,
-                  26 <self.reward_factor>,
+                  18 <self.reward_factor>,
                   [clamp,
                     [mload, 160],
                     [add,
@@ -959,30 +956,35 @@ commit b00004a
                         [mload, 160],
                         [with,
                           r,
-                          [mload,
-                            /* Internal Call: esf */ 
-                            [seq,
-                              [assert, [call, gas, address, 0, [seq, [mstore, 896, 2593057911], 924], 4, 992, 32]],
-                              992]],
+                          [clamp,
+                            [mload, 96],
+                            [sub,
+                              [mload,
+                                /* Internal Call: esf */ 
+                                [seq,
+                                  [assert, [call, gas, address, 0, [seq, [mstore, 896, 2593057911], 924], 4, 992, 32]],
+                                  992]],
+                              2],
+                            [mload, 64]],
                           [with,
                             l,
-                            [sload, 28 <self.base_penalty_factor>],
+                            [sload, 28 <self.BASE_PENALTY_FACTOR>],
                             [with,
                               ans,
                               [mul, l, r],
                               [seq, [assert, [or, [eq, [sdiv, ans, l], r], [not, l]]], ans]]]],
                         [mload, 128]]],
                     [mload, 128]]],
-                # Line 265
-                [assert, [sgt, [sload, 26 <self.reward_factor>], 0]]],
-              # Line 268
+                # Line 279
+                [assert, [sgt, [sload, 18 <self.reward_factor>], 0]]],
+              # Line 282
               [seq,
                 /* Internal Call: insta_finalize */ [assert, [call, gas, address, 0, [seq, [mstore, 512, 1697049970], 540], 4, 0, 0]],
-                # Line 269
-                [sstore, 26 <self.reward_factor>, 0]]],
-            # Line 272
+                # Line 283
+                [sstore, 18 <self.reward_factor>, 0]]],
+            # Line 286
             /* Internal Call: increment_dynasty */ [assert, [call, gas, address, 0, [seq, [mstore, 1024, 3532045186], 1052], 4, 0, 0]],
-            # Line 275
+            # Line 289
             [sstore,
               [add, [sha3_32, 1 <self.checkpoint_hashes>], [mload, 320 <epoch>]],
               [mload,
@@ -990,28 +992,25 @@ commit b00004a
                 [seq,
                   [assert, [call, gas, address, 0, [seq, [mstore, 1120, 2237609772], 1148], 4, 1216, 32]],
                   1216]]],
-            # Line 277
-            [mstore, 1312, 0],
-            [mstore, 1344, 0],
-            [mstore, 1248, 64],
-            [mstore, 1312, 0],
-            [mstore, 1344, 0],
+            # Line 291
+            [mstore, 1248, 0],
+            [mstore, 1280, 0],
             [log3,
-              1312,
-              [mload, 1248],
+              1248,
+              64,
               47607052476070037250388038725579733243894556830711209046796940177296459501753,
               [mload, 320 <epoch>],
               [sload, [add, [sha3_32, 1 <self.checkpoint_hashes>], [mload, 320 <epoch>]]]],
-            # Line 247
+            # Line 261
             stop]],
-        # Line 279
+        # Line 294
         [if,
           [eq, [mload, 0], 4183858952 <deposit>],
           [seq,
             [calldatacopy, 320, 4, 64],
             /* checking address input */ [uclamplt, [calldataload, 4], [mload, 32]],
             /* checking address input */ [uclamplt, [calldataload, 36], [mload, 32]],
-            # Line 282
+            # Line 297
             [assert,
               [eq,
                 [sload, 15 <self.current_epoch>],
@@ -1021,7 +1020,7 @@ commit b00004a
                       [mload, 160],
                       [sdiv,
                         [mul, number, 10000000000],
-                        [clamp_nonzero, [sload, 20 <self.epoch_length>]]],
+                        [clamp_nonzero, [sload, 21 <self.EPOCH_LENGTH>]]],
                       [mload, 128]],
                     0],
                   [sdiv,
@@ -1030,7 +1029,7 @@ commit b00004a
                         [mload, 160],
                         [sdiv,
                           [mul, number, 10000000000],
-                          [clamp_nonzero, [sload, 20 <self.epoch_length>]]],
+                          [clamp_nonzero, [sload, 21 <self.EPOCH_LENGTH>]]],
                         [mload, 128]],
                       9999999999],
                     10000000000],
@@ -1039,10 +1038,10 @@ commit b00004a
                       [mload, 160],
                       [sdiv,
                         [mul, number, 10000000000],
-                        [clamp_nonzero, [sload, 20 <self.epoch_length>]]],
+                        [clamp_nonzero, [sload, 21 <self.EPOCH_LENGTH>]]],
                       [mload, 128]],
                     10000000000]]]],
-            # Line 283
+            # Line 298
             [assert,
               [ne,
                 /* extracting 32 bytes */ 
@@ -1058,6 +1057,7 @@ commit b00004a
                         [seq,
                           [with,
                             _arg,
+                            /* Create ByteArray: b'\xa1\x90>\xab' */ 
                             [seq,
                               [mstore, 384, 4],
                               [mstore,
@@ -1082,7 +1082,7 @@ commit b00004a
                     [assert,
                       [call,
                         500000,
-                        [sload, 25 <self.purity_checker>],
+                        [sload, 26 <self.PURITY_CHECKER>],
                         0,
                         640,
                         [mload, 608],
@@ -1095,11 +1095,11 @@ commit b00004a
                       _sub,
                       [add, 32, [mul, 32, [div, [clample, 0, [sub, [mload, _sub], 32]], 32]]]]]],
                 0]],
-            # Line 284
+            # Line 299
             [assert, [iszero, [sload, [add, [sha3_32, 3 <self.validator_indexes>], [mload, 352 <withdrawal_addr>]]]]],
-            # Line 285
-            [assert, [sge, callvalue, [sload, 29 <self.min_deposit_size>]]],
-            # Line 279
+            # Line 300
+            [assert, [sge, callvalue, [sload, 29 <self.MIN_DEPOSIT_SIZE>]]],
+            # Line 294
             [mstore,
               832,
               [clamp, [mload, 96], [add, [sload, 4 <self.dynasty>], 2], [mload, 64]]],
@@ -1115,26 +1115,26 @@ commit b00004a
                         [sha3_32, 12 <self.deposit_scale_factor>],
                         [sload, 15 <self.current_epoch>]]]]],
                 [mload, 128]]],
-            # Line 288
+            # Line 303
             [with,
               _L,
               [sha3_32, [add, [sha3_32, 0 <self.validators>], [sload, 2 <self.next_validator_index>]]],
               [seq,
                 [sstore, _L, [mload, 320 <validation_addr>]],
                 [sstore, [add, _L, 1 <deposit>], [mload, 864 <scaled_deposit>]],
-                [sstore, [add, _L, 2 <end_dynasty>], [sload, 30 <self.default_end_dynasty>]],
+                [sstore, [add, _L, 2 <end_dynasty>], [sload, 30 <self.DEFAULT_END_DYNASTY>]],
                 [sstore, [add, _L, 3 <start_dynasty>], [mload, 832 <start_dynasty>]],
                 [sstore, [add, _L, 4 <withdrawal_addr>], [mload, 352 <withdrawal_addr>]]]],
-            # Line 295
+            # Line 310
             [sstore,
               [add, [sha3_32, 3 <self.validator_indexes>], [mload, 352 <withdrawal_addr>]],
               [sload, 2 <self.next_validator_index>]],
-            # Line 296
+            # Line 311
             [with,
               _stloc,
               2 <self.next_validator_index>,
               [sstore, _stloc, [clamp, [mload, 96], [add, [sload, _stloc], 1], [mload, 64]]]],
-            # Line 297
+            # Line 312
             [with,
               _stloc,
               [add, [sha3_32, 5 <self.dynasty_wei_delta>], [mload, 832 <start_dynasty>]],
@@ -1144,10 +1144,10 @@ commit b00004a
                   [mload, 160],
                   [add, [sload, _stloc], [mload, 864 <scaled_deposit>]],
                   [mload, 128]]]],
-            # Line 299
-            [mstore, 960, [mload, 320 <validation_addr>]],
+            # Line 314
+            [mstore, 896, [mload, 320 <validation_addr>]],
             [mstore,
-              992,
+              928,
               [sload,
                 [add,
                   [sha3_32,
@@ -1155,28 +1155,16 @@ commit b00004a
                       [sha3_32, 0 <self.validators>],
                       [sload, [add, [sha3_32, 3 <self.validator_indexes>], [mload, 352 <withdrawal_addr>]]]]],
                   3 <start_dynasty>]]],
-            [mstore, 1024, callvalue],
-            [mstore, 896, 96],
-            [mstore, 960, [mload, 320 <validation_addr>]],
-            [mstore,
-              992,
-              [sload,
-                [add,
-                  [sha3_32,
-                    [add,
-                      [sha3_32, 0 <self.validators>],
-                      [sload, [add, [sha3_32, 3 <self.validator_indexes>], [mload, 352 <withdrawal_addr>]]]]],
-                  3 <start_dynasty>]]],
-            [mstore, 1024, callvalue],
+            [mstore, 960, callvalue],
             [log3,
-              960,
-              [mload, 896],
+              896,
+              96,
               90949975742088645118838927626811719332981332970196685580485995401136711114977,
               [mload, 352 <withdrawal_addr>],
               [sload, [add, [sha3_32, 3 <self.validator_indexes>], [mload, 352 <withdrawal_addr>]]]],
-            # Line 279
+            # Line 294
             stop]],
-        # Line 301
+        # Line 317
         [if,
           [eq, [mload, 0], 1110510642 <logout>],
           [seq,
@@ -1184,7 +1172,7 @@ commit b00004a
             [assert, [iszero, callvalue]],
             [calldatacopy, 352, [add, 4, [calldataload, 4]], 1056],
             [assert, [le, [calldataload, [add, 4, [calldataload, 4]]], 1024]],
-            # Line 303
+            # Line 319
             [assert,
               [eq,
                 [sload, 15 <self.current_epoch>],
@@ -1194,7 +1182,7 @@ commit b00004a
                       [mload, 160],
                       [sdiv,
                         [mul, number, 10000000000],
-                        [clamp_nonzero, [sload, 20 <self.epoch_length>]]],
+                        [clamp_nonzero, [sload, 21 <self.EPOCH_LENGTH>]]],
                       [mload, 128]],
                     0],
                   [sdiv,
@@ -1203,7 +1191,7 @@ commit b00004a
                         [mload, 160],
                         [sdiv,
                           [mul, number, 10000000000],
-                          [clamp_nonzero, [sload, 20 <self.epoch_length>]]],
+                          [clamp_nonzero, [sload, 21 <self.EPOCH_LENGTH>]]],
                         [mload, 128]],
                       9999999999],
                     10000000000],
@@ -1212,10 +1200,10 @@ commit b00004a
                       [mload, 160],
                       [sdiv,
                         [mul, number, 10000000000],
-                        [clamp_nonzero, [sload, 20 <self.epoch_length>]]],
+                        [clamp_nonzero, [sload, 21 <self.EPOCH_LENGTH>]]],
                       [mload, 128]],
                     10000000000]]]],
-            # Line 301
+            # Line 317
             [mstore,
               1440,
               [with,
@@ -1228,14 +1216,14 @@ commit b00004a
                       _sz,
                       [add, 32, [mload, _source]],
                       [assert, [call, [add, 18, [div, _sz, 10]], 4, 0, _source, _sz, 1472, _sz]]]],
-                  [assert, [call, 200000, [sload, 24 <self.sighasher>], 0, 1504, [mload, 1472], 2592, 32]],
+                  [assert, [call, 200000, [sload, 25 <self.SIGHASHER>], 0, 1504, [mload, 1472], 2592, 32]],
                   [mstore, 2560, 32],
                   2560],
                 [mload,
                   [add,
                     _sub,
                     [add, 32, [mul, 32, [div, [clample, 0, [sub, [mload, _sub], 32]], 32]]]]]]],
-            # Line 308
+            # Line 324
             [with,
               _L,
               4096 <values>,
@@ -1256,7 +1244,7 @@ commit b00004a
                           2656,
                           1376]]],
                     [assert, [eq, [mload, 2656], 128]],
-                    /* bytearray to number, verify no leading zbytes */ 
+                    /* bytearray to number (int128) */ 
                     [with,
                       _sub,
                       /* getting and checking int128 */ [add, 2656, [mload, 2656]],
@@ -1266,9 +1254,7 @@ commit b00004a
                         [with,
                           _len,
                           [clamp, 0, [mload, _sub], 32],
-                          [seq,
-                            [assert, [or, [iszero, _len], [div, _el1, [exp, 256, 31]]]],
-                            [clamp, [mload, 96], [div, _el1, [exp, 256, [sub, 32, _len]]], [mload, 64]]]]]]]],
+                          [clamp, [mload, 96], [div, _el1, [exp, 256, [sub, 32, _len]]], [mload, 64]]]]]]],
                 [mstore,
                   [add, 32, _L],
                   [with,
@@ -1280,9 +1266,7 @@ commit b00004a
                       [with,
                         _len,
                         [clamp, 0, [mload, _sub], 32],
-                        [seq,
-                          [assert, [or, [iszero, _len], [div, _el1, [exp, 256, 31]]]],
-                          [clamp, [mload, 96], [div, _el1, [exp, 256, [sub, 32, _len]]], [mload, 64]]]]]]],
+                        [clamp, [mload, 96], [div, _el1, [exp, 256, [sub, 32, _len]]], [mload, 64]]]]]],
                 [with,
                   _source,
                   /* getting byte array */ [add, 2656, [mload, 2720]],
@@ -1290,7 +1274,7 @@ commit b00004a
                     _sz,
                     [add, 32, [mload, _source]],
                     [assert, [call, [add, 18, [div, _sz, 10]], 4, 0, _source, _sz, [add, 64, _L], _sz]]]]]],
-            # Line 301
+            # Line 317
             [mstore, 5248, [mload, 4096 <0+values>]],
             [mstore, 5280, [mload, 4128 <32+values>]],
             [with,
@@ -1300,9 +1284,9 @@ commit b00004a
                 _sz,
                 [add, 32, [mload, _source]],
                 [assert, [call, [add, 18, [div, _sz, 10]], 4, 0, _source, _sz, 5312, _sz]]]],
-            # Line 312
+            # Line 328
             [assert, [sge, [sload, 15 <self.current_epoch>], [mload, 5280 <epoch>]]],
-            # Line 314
+            # Line 330
             [assert,
               [eq,
                 /* extracting 32 bytes */ 
@@ -1350,14 +1334,14 @@ commit b00004a
                       _sub,
                       [add, 32, [mul, 32, [div, [clample, 0, [sub, [mload, _sub], 32]], 32]]]]]],
                 1]],
-            # Line 301
+            # Line 317
             [mstore,
               8736,
               [clamp,
                 [mload, 96],
-                [add, [sload, 4 <self.dynasty>], [sload, 22 <self.dynasty_logout_delay>]],
+                [add, [sload, 4 <self.dynasty>], [sload, 23 <self.DYNASTY_LOGOUT_DELAY>]],
                 [mload, 64]]],
-            # Line 317
+            # Line 333
             [assert,
               [sgt,
                 [sload,
@@ -1365,13 +1349,13 @@ commit b00004a
                     [sha3_32, [add, [sha3_32, 0 <self.validators>], [mload, 5248 <validator_index>]]],
                     2 <end_dynasty>]],
                 [mload, 8736 <end_dynasty>]]],
-            # Line 319
+            # Line 335
             [sstore,
               [add,
                 [sha3_32, [add, [sha3_32, 0 <self.validators>], [mload, 5248 <validator_index>]]],
                 2 <end_dynasty>],
               [mload, 8736 <end_dynasty>]],
-            # Line 320
+            # Line 336
             [with,
               _stloc,
               [add, [sha3_32, 5 <self.dynasty_wei_delta>], [mload, 8736 <end_dynasty>]],
@@ -1386,32 +1370,25 @@ commit b00004a
                         [sha3_32, [add, [sha3_32, 0 <self.validators>], [mload, 5248 <validator_index>]]],
                         1 <deposit>]]],
                   [mload, 128]]]],
-            # Line 322
+            # Line 338
             [mstore,
-              8832,
-              [sload,
-                [add,
-                  [sha3_32, [add, [sha3_32, 0 <self.validators>], [mload, 5248 <validator_index>]]],
-                  2 <end_dynasty>]]],
-            [mstore, 8768, 32],
-            [mstore,
-              8832,
+              8768,
               [sload,
                 [add,
                   [sha3_32, [add, [sha3_32, 0 <self.validators>], [mload, 5248 <validator_index>]]],
                   2 <end_dynasty>]]],
             [log3,
-              8832,
-              [mload, 8768],
+              8768,
+              32,
               79992322569564756438802956933278762037139331561819380271719625643188950772399,
               [sload,
                 [add,
                   [sha3_32, [add, [sha3_32, 0 <self.validators>], [mload, 5248 <validator_index>]]],
                   4 <withdrawal_addr>]],
               [mload, 5248 <validator_index>]],
-            # Line 301
+            # Line 317
             stop]],
-        # Line 325
+        # Line 342
         [if,
           [eq, [mload, 0], 28815128 <delete_validator>],
           [seq,
@@ -1423,7 +1400,7 @@ commit b00004a
               [mload, 96],
               [calldataload, 4],
               [mload, 64]],
-            # Line 327
+            # Line 344
             [sstore,
               [add,
                 [sha3_32, 3 <self.validator_indexes>],
@@ -1432,7 +1409,7 @@ commit b00004a
                     [sha3_32, [add, [sha3_32, 0 <self.validators>], [mload, 320 <validator_index>]]],
                     4 <withdrawal_addr>]]],
               0],
-            # Line 328
+            # Line 345
             [with,
               _L,
               [sha3_32, [add, [sha3_32, 0 <self.validators>], [mload, 320 <validator_index>]]],
@@ -1442,9 +1419,9 @@ commit b00004a
                 [sstore, [add, _L, 2 <end_dynasty>], 0],
                 [sstore, [add, _L, 3 <start_dynasty>], 0],
                 [sstore, [add, _L, 4 <withdrawal_addr>], 0]]],
-            # Line 325
+            # Line 342
             stop]],
-        # Line 337
+        # Line 355
         [if,
           [eq, [mload, 0], 3991540864 <withdraw>],
           [seq,
@@ -1455,7 +1432,7 @@ commit b00004a
               [mload, 96],
               [calldataload, 4],
               [mload, 64]],
-            # Line 340
+            # Line 358
             [assert,
               [sge,
                 [sload, 4 <self.dynasty>],
@@ -1468,7 +1445,7 @@ commit b00004a
                         2 <end_dynasty>]],
                     1],
                   [mload, 64]]]],
-            # Line 337
+            # Line 355
             [mstore,
               352,
               [sload,
@@ -1483,19 +1460,19 @@ commit b00004a
                           2 <end_dynasty>]],
                       1],
                     [mload, 64]]]]],
-            # Line 342
+            # Line 360
             [assert,
               [sge,
                 [sload, 15 <self.current_epoch>],
                 [clamp,
                   [mload, 96],
-                  [add, [mload, 352 <end_epoch>], [sload, 21 <self.withdrawal_delay>]],
+                  [add, [mload, 352 <end_epoch>], [sload, 22 <self.WITHDRAWAL_DELAY>]],
                   [mload, 64]]]],
-            # Line 337
+            # Line 355
             [mstore,
               384,
               [if,
-                # Line 344
+                # Line 362
                 [slt,
                   [clamp,
                     [mload, 160],
@@ -1558,7 +1535,7 @@ commit b00004a
                             [sdiv, ans, 10000000000]]]]],
                     [mload, 128]],
                   10000000000]]],
-            # Line 345
+            # Line 363
             [assert,
               [call,
                 0,
@@ -1571,20 +1548,18 @@ commit b00004a
                 0,
                 0,
                 0]],
-            # Line 347
-            [mstore, 480, [mload, 384 <withdraw_amount>]],
-            [mstore, 416, 32],
-            [mstore, 480, [mload, 384 <withdraw_amount>]],
+            # Line 365
+            [mstore, 416, [mload, 384 <withdraw_amount>]],
             [log3,
-              480,
-              [mload, 416],
+              416,
+              32,
               33293802015154410171544671299146599957819108364514727449747913441386833120839,
               [sload,
                 [add,
                   [sha3_32, [add, [sha3_32, 0 <self.validators>], [mload, 320 <validator_index>]]],
                   4 <withdrawal_addr>]],
               [mload, 320 <validator_index>]],
-            # Line 348
+            # Line 366
             /* Internal Call: delete_validator */ 
             [assert,
               [call,
@@ -1592,15 +1567,15 @@ commit b00004a
                 address,
                 0,
                 [seq,
-                  [mstore, 512, 28815128],
-                  [mstore, 544, [mload, 320 <validator_index>]],
-                  540],
+                  [mstore, 448, 28815128],
+                  [mstore, 480, [mload, 320 <validator_index>]],
+                  476],
                 36,
                 0,
                 0]],
-            # Line 337
+            # Line 355
             stop]],
-        # Line 351
+        # Line 370
         [if,
           [eq, [mload, 0], 1470052530 <proc_reward>],
           [seq,
@@ -1617,7 +1592,7 @@ commit b00004a
               [mload, 96],
               [calldataload, 36],
               [mload, 64]],
-            # Line 354
+            # Line 373
             [with,
               _stloc,
               [add,
@@ -1629,7 +1604,7 @@ commit b00004a
                   [mload, 160],
                   [add, [sload, _stloc], [mul, [mload, 352 <reward>], 10000000000]],
                   [mload, 128]]]],
-            # Line 351
+            # Line 370
             [mstore,
               384,
               [sload,
@@ -1646,12 +1621,12 @@ commit b00004a
             [mstore,
               480,
               [clamp, [mload, 96], [sub, [mload, 448 <current_dynasty>], 1], [mload, 64]]],
-            # Line 359
+            # Line 378
             [if,
               [and,
                 [sle, [mload, 384 <start_dynasty>], [mload, 448 <current_dynasty>]],
                 [slt, [mload, 448 <current_dynasty>], [mload, 416 <end_dynasty>]]],
-              # Line 360
+              # Line 379
               [seq,
                 [with,
                   _stloc,
@@ -1662,12 +1637,12 @@ commit b00004a
                       [mload, 160],
                       [add, [sload, _stloc], [mul, [mload, 352 <reward>], 10000000000]],
                       [mload, 128]]]]]],
-            # Line 361
+            # Line 380
             [if,
               [and,
                 [sle, [mload, 384 <start_dynasty>], [mload, 480 <past_dynasty>]],
                 [slt, [mload, 480 <past_dynasty>], [mload, 416 <end_dynasty>]]],
-              # Line 362
+              # Line 381
               [seq,
                 [with,
                   _stloc,
@@ -1678,10 +1653,10 @@ commit b00004a
                       [mload, 160],
                       [add, [sload, _stloc], [mul, [mload, 352 <reward>], 10000000000]],
                       [mload, 128]]]]]],
-            # Line 363
+            # Line 382
             [if,
-              [slt, [mload, 416 <end_dynasty>], [sload, 30 <self.default_end_dynasty>]],
-              # Line 364
+              [slt, [mload, 416 <end_dynasty>], [sload, 30 <self.DEFAULT_END_DYNASTY>]],
+              # Line 383
               [seq,
                 [with,
                   _stloc,
@@ -1692,7 +1667,7 @@ commit b00004a
                       [mload, 160],
                       [sub, [sload, _stloc], [mul, [mload, 352 <reward>], 10000000000]],
                       [mload, 128]]]]]],
-            # Line 366
+            # Line 385
             [assert,
               [call,
                 0,
@@ -1773,9 +1748,9 @@ commit b00004a
                 0,
                 0,
                 0]],
-            # Line 351
+            # Line 370
             stop]],
-        # Line 369
+        # Line 389
         [if,
           [eq, [mload, 0], 3635640109 <vote>],
           [seq,
@@ -1796,42 +1771,165 @@ commit b00004a
               [mload, 96],
               [calldataload, 100],
               [mload, 64]],
+            # Line 406
+            [assert,
+              [iszero,
+                [and,
+                  [sload,
+                    [add,
+                      [sha3_32,
+                        [add,
+                          [sha3_32, [add, [sha3_32, 10 <self.votes>], [mload, 384 <target_epoch>]]],
+                          4 <vote_bitmap>]],
+                      [if,
+                        # Line 406
+                        [slt,
+                          [clamp,
+                            [mload, 160],
+                            [sdiv, [mul, [mload, 320 <validator_index>], 10000000000], 256],
+                            [mload, 128]],
+                          0],
+                        [sdiv,
+                          [sub,
+                            [clamp,
+                              [mload, 160],
+                              [sdiv, [mul, [mload, 320 <validator_index>], 10000000000], 256],
+                              [mload, 128]],
+                            9999999999],
+                          10000000000],
+                        [sdiv,
+                          [clamp,
+                            [mload, 160],
+                            [sdiv, [mul, [mload, 320 <validator_index>], 10000000000], 256],
+                            [mload, 128]],
+                          10000000000]]]],
+                  [with,
+                    _v,
+                    1,
+                    [with,
+                      _s,
+                      [clamp, [mload, 96], [smod, [mload, 320 <validator_index>], 256], [mload, 64]],
+                      [if, [sle, _s, 0], [div, _v, [exp, 2, [sub, 0, _s]]], [mul, _v, [exp, 2, _s]]]]]]]],
+            # Line 409
+            [assert,
+              [eq,
+                [mload, 352 <target_hash>],
+                [mload,
+                  /* Internal Call: recommended_target_hash */ 
+                  [seq,
+                    [assert, [call, gas, address, 0, [seq, [mstore, 448, 2237609772], 476], 4, 544, 32]],
+                    544]]]],
+            # Line 410
+            [assert, [eq, [mload, 384 <target_epoch>], [sload, 15 <self.current_epoch>]]],
+            # Line 412
+            [assert,
+              [sload,
+                [add,
+                  [sha3_32, [add, [sha3_32, 10 <self.votes>], [mload, 416 <source_epoch>]]],
+                  2 <is_justified>]]],
+            # Line 389
             [mstore,
-              448,
+              576,
               [sload,
                 [add,
                   [sha3_32, [add, [sha3_32, 0 <self.validators>], [mload, 320 <validator_index>]]],
                   3 <start_dynasty>]]],
             [mstore,
-              480,
+              608,
               [sload,
                 [add,
                   [sha3_32, [add, [sha3_32, 0 <self.validators>], [mload, 320 <validator_index>]]],
                   2 <end_dynasty>]]],
+            [mstore, 640, [sload, 4 <self.dynasty>]],
             [mstore,
-              512,
-              [sload, [add, [sha3_32, 9 <self.dynasty_in_epoch>], [mload, 384 <target_epoch>]]]],
+              672,
+              [clamp, [mload, 96], [sub, [mload, 640 <current_dynasty>], 1], [mload, 64]]],
             [mstore,
-              544,
-              [clamp, [mload, 96], [sub, [mload, 512 <current_dynasty>], 1], [mload, 64]]],
-            [mstore,
-              576,
+              704,
               [and,
-                [sle, [mload, 448 <start_dynasty>], [mload, 512 <current_dynasty>]],
-                [slt, [mload, 512 <current_dynasty>], [mload, 480 <end_dynasty>]]]],
+                [sle, [mload, 576 <start_dynasty>], [mload, 640 <current_dynasty>]],
+                [slt, [mload, 640 <current_dynasty>], [mload, 608 <end_dynasty>]]]],
             [mstore,
-              608,
+              736,
               [and,
-                [sle, [mload, 448 <start_dynasty>], [mload, 544 <past_dynasty>]],
-                [slt, [mload, 544 <past_dynasty>], [mload, 480 <end_dynasty>]]]],
+                [sle, [mload, 576 <start_dynasty>], [mload, 672 <past_dynasty>]],
+                [slt, [mload, 672 <past_dynasty>], [mload, 608 <end_dynasty>]]]],
+            # Line 421
+            [assert, [or, [mload, 704 <in_current_dynasty>], [mload, 736 <in_prev_dynasty>]]],
+            # Line 424
+            [sstore,
+              [add,
+                [sha3_32,
+                  [add,
+                    [sha3_32, [add, [sha3_32, 10 <self.votes>], [mload, 384 <target_epoch>]]],
+                    4 <vote_bitmap>]],
+                [if,
+                  # Line 424
+                  [slt,
+                    [clamp,
+                      [mload, 160],
+                      [sdiv, [mul, [mload, 320 <validator_index>], 10000000000], 256],
+                      [mload, 128]],
+                    0],
+                  [sdiv,
+                    [sub,
+                      [clamp,
+                        [mload, 160],
+                        [sdiv, [mul, [mload, 320 <validator_index>], 10000000000], 256],
+                        [mload, 128]],
+                      9999999999],
+                    10000000000],
+                  [sdiv,
+                    [clamp,
+                      [mload, 160],
+                      [sdiv, [mul, [mload, 320 <validator_index>], 10000000000], 256],
+                      [mload, 128]],
+                    10000000000]]],
+              [or,
+                [sload,
+                  [add,
+                    [sha3_32,
+                      [add,
+                        [sha3_32, [add, [sha3_32, 10 <self.votes>], [mload, 384 <target_epoch>]]],
+                        4 <vote_bitmap>]],
+                    [if,
+                      # Line 425
+                      [slt,
+                        [clamp,
+                          [mload, 160],
+                          [sdiv, [mul, [mload, 320 <validator_index>], 10000000000], 256],
+                          [mload, 128]],
+                        0],
+                      [sdiv,
+                        [sub,
+                          [clamp,
+                            [mload, 160],
+                            [sdiv, [mul, [mload, 320 <validator_index>], 10000000000], 256],
+                            [mload, 128]],
+                          9999999999],
+                        10000000000],
+                      [sdiv,
+                        [clamp,
+                          [mload, 160],
+                          [sdiv, [mul, [mload, 320 <validator_index>], 10000000000], 256],
+                          [mload, 128]],
+                        10000000000]]]],
+                [with,
+                  _v,
+                  1,
+                  [with,
+                    _s,
+                    [clamp, [mload, 96], [smod, [mload, 320 <validator_index>], 256], [mload, 64]],
+                    [if, [sle, _s, 0], [div, _v, [exp, 2, [sub, 0, _s]]], [mul, _v, [exp, 2, _s]]]]]]],
+            # Line 389
             [mstore,
-              640,
+              768,
               [sload,
                 [add,
                   [sha3_32, [sha3_32, [add, [sha3_32, 10 <self.votes>], [mload, 384 <target_epoch>]]]],
                   [mload, 416 <source_epoch>]]]],
             [mstore,
-              672,
+              800,
               [sload,
                 [add,
                   [sha3_32,
@@ -1839,14 +1937,14 @@ commit b00004a
                       [sha3_32, [add, [sha3_32, 10 <self.votes>], [mload, 384 <target_epoch>]]],
                       3 <prev_dyn_votes>]],
                   [mload, 416 <source_epoch>]]]],
-            # Line 409
+            # Line 431
             [if,
-              [mload, 576 <in_current_dynasty>],
-              # Line 410
+              [mload, 704 <in_current_dynasty>],
+              # Line 432
               [seq,
                 [with,
                   _mloc,
-                  640 <current_dynasty_votes>,
+                  768 <current_dynasty_votes>,
                   [mstore,
                     _mloc,
                     [clamp,
@@ -1858,20 +1956,20 @@ commit b00004a
                             [sha3_32, [add, [sha3_32, 0 <self.validators>], [mload, 320 <validator_index>]]],
                             1 <deposit>]]],
                       [mload, 128]]]],
-                # Line 411
+                # Line 433
                 [sstore,
                   [add,
                     [sha3_32, [sha3_32, [add, [sha3_32, 10 <self.votes>], [mload, 384 <target_epoch>]]]],
                     [mload, 416 <source_epoch>]],
-                  [mload, 640 <current_dynasty_votes>]]]],
-            # Line 412
+                  [mload, 768 <current_dynasty_votes>]]]],
+            # Line 434
             [if,
-              [mload, 608 <in_prev_dynasty>],
-              # Line 413
+              [mload, 736 <in_prev_dynasty>],
+              # Line 435
               [seq,
                 [with,
                   _mloc,
-                  672 <previous_dynasty_votes>,
+                  800 <previous_dynasty_votes>,
                   [mstore,
                     _mloc,
                     [clamp,
@@ -1883,7 +1981,7 @@ commit b00004a
                             [sha3_32, [add, [sha3_32, 0 <self.validators>], [mload, 320 <validator_index>]]],
                             1 <deposit>]]],
                       [mload, 128]]]],
-                # Line 414
+                # Line 436
                 [sstore,
                   [add,
                     [sha3_32,
@@ -1891,13 +1989,13 @@ commit b00004a
                         [sha3_32, [add, [sha3_32, 10 <self.votes>], [mload, 384 <target_epoch>]]],
                         3 <prev_dyn_votes>]],
                     [mload, 416 <source_epoch>]],
-                  [mload, 672 <previous_dynasty_votes>]]]],
-            # Line 422
+                  [mload, 800 <previous_dynasty_votes>]]]],
+            # Line 446
             [if,
               [and,
                 [and,
                   [sge,
-                    [mload, 640 <current_dynasty_votes>],
+                    [mload, 768 <current_dynasty_votes>],
                     [clamp,
                       [mload, 160],
                       [sdiv,
@@ -1917,7 +2015,7 @@ commit b00004a
                         3],
                       [mload, 128]]],
                   [sge,
-                    [mload, 672 <previous_dynasty_votes>],
+                    [mload, 800 <previous_dynasty_votes>],
                     [clamp,
                       [mload, 160],
                       [sdiv,
@@ -1941,64 +2039,55 @@ commit b00004a
                     [add,
                       [sha3_32, [add, [sha3_32, 10 <self.votes>], [mload, 384 <target_epoch>]]],
                       2 <is_justified>]]]],
-              # Line 425
+              # Line 449
               [seq,
                 [sstore,
                   [add,
                     [sha3_32, [add, [sha3_32, 10 <self.votes>], [mload, 384 <target_epoch>]]],
                     2 <is_justified>],
                   1],
-                # Line 426
+                # Line 450
                 [sstore, 17 <self.last_justified_epoch>, [mload, 384 <target_epoch>]],
-                # Line 427
+                # Line 451
                 [sstore, 11 <self.main_hash_justified>, 1],
-                # Line 430
-                [mstore, 768, 1],
-                [mstore, 800, 0],
-                [mstore, 704, 64],
-                [mstore, 768, 1],
-                [mstore, 800, 0],
+                # Line 454
+                [mstore, 832, 1],
+                [mstore, 864, 0],
                 [log3,
-                  768,
-                  [mload, 704],
+                  832,
+                  64,
                   47607052476070037250388038725579733243894556830711209046796940177296459501753,
                   [mload, 384 <target_epoch>],
                   [sload, [add, [sha3_32, 1 <self.checkpoint_hashes>], [mload, 384 <target_epoch>]]]],
-                # Line 434
+                # Line 458
                 [if,
                   [eq,
                     [mload, 384 <target_epoch>],
                     [clamp, [mload, 96], [add, [mload, 416 <source_epoch>], 1], [mload, 64]]],
-                  # Line 435
+                  # Line 459
                   [seq,
                     [sstore,
                       [add,
                         [sha3_32, [add, [sha3_32, 10 <self.votes>], [mload, 416 <source_epoch>]]],
                         1 <is_finalized>],
                       1],
-                    # Line 436
+                    # Line 460
                     [sstore, 16 <self.last_finalized_epoch>, [mload, 416 <source_epoch>]],
-                    # Line 438
-                    [mstore, 896, 1],
-                    [mstore, 928, 1],
-                    [mstore, 832, 64],
+                    # Line 462
                     [mstore, 896, 1],
                     [mstore, 928, 1],
                     [log3,
                       896,
-                      [mload, 832],
+                      64,
                       47607052476070037250388038725579733243894556830711209046796940177296459501753,
                       [mload, 416 <source_epoch>],
                       [sload, [add, [sha3_32, 1 <self.checkpoint_hashes>], [mload, 416 <source_epoch>]]]]]]]],
-            # Line 440
-            [mstore, 1024, [mload, 384 <target_epoch>]],
-            [mstore, 1056, [mload, 416 <source_epoch>]],
-            [mstore, 960, 64],
-            [mstore, 1024, [mload, 384 <target_epoch>]],
-            [mstore, 1056, [mload, 416 <source_epoch>]],
+            # Line 465
+            [mstore, 960, [mload, 384 <target_epoch>]],
+            [mstore, 992, [mload, 416 <source_epoch>]],
             [log4,
-              1024,
-              [mload, 960],
+              960,
+              64,
               7081665583020273161205225158852481246505534847476758391289152486542138437399,
               [sload,
                 [add,
@@ -2006,9 +2095,9 @@ commit b00004a
                   4 <withdrawal_addr>]],
               [mload, 320 <validator_index>],
               [mload, 352 <target_hash>]],
-            # Line 369
+            # Line 389
             stop]],
-        # Line 443
+        # Line 469
         [if,
           [eq, [mload, 0], 3424711019 <slash>],
           [seq,
@@ -2030,14 +2119,14 @@ commit b00004a
                       _sz,
                       [add, 32, [mload, _source]],
                       [assert, [call, [add, 18, [div, _sz, 10]], 4, 0, _source, _sz, 2592, _sz]]]],
-                  [assert, [call, 200000, [sload, 24 <self.sighasher>], 0, 2624, [mload, 2592], 3712, 32]],
+                  [assert, [call, 200000, [sload, 25 <self.SIGHASHER>], 0, 2624, [mload, 2592], 3712, 32]],
                   [mstore, 3680, 32],
                   3680],
                 [mload,
                   [add,
                     _sub,
                     [add, 32, [mul, 32, [div, [clample, 0, [sub, [mload, _sub], 32]], 32]]]]]]],
-            # Line 447
+            # Line 473
             [with,
               _L,
               5408 <values_1>,
@@ -2058,7 +2147,7 @@ commit b00004a
                           3776,
                           1568]]],
                     [assert, [eq, [mload, 3776], 192]],
-                    /* bytearray to number, verify no leading zbytes */ 
+                    /* bytearray to number (int128) */ 
                     [with,
                       _sub,
                       /* getting and checking int128 */ [add, 3776, [mload, 3776]],
@@ -2068,9 +2157,7 @@ commit b00004a
                         [with,
                           _len,
                           [clamp, 0, [mload, _sub], 32],
-                          [seq,
-                            [assert, [or, [iszero, _len], [div, _el1, [exp, 256, 31]]]],
-                            [clamp, [mload, 96], [div, _el1, [exp, 256, [sub, 32, _len]]], [mload, 64]]]]]]]],
+                          [clamp, [mload, 96], [div, _el1, [exp, 256, [sub, 32, _len]]], [mload, 64]]]]]]],
                 [mstore,
                   [add, 32, _L],
                   [seq,
@@ -2087,9 +2174,7 @@ commit b00004a
                       [with,
                         _len,
                         [clamp, 0, [mload, _sub], 32],
-                        [seq,
-                          [assert, [or, [iszero, _len], [div, _el1, [exp, 256, 31]]]],
-                          [clamp, [mload, 96], [div, _el1, [exp, 256, [sub, 32, _len]]], [mload, 64]]]]]]],
+                        [clamp, [mload, 96], [div, _el1, [exp, 256, [sub, 32, _len]]], [mload, 64]]]]]],
                 [mstore,
                   [add, 96, _L],
                   [with,
@@ -2101,9 +2186,7 @@ commit b00004a
                       [with,
                         _len,
                         [clamp, 0, [mload, _sub], 32],
-                        [seq,
-                          [assert, [or, [iszero, _len], [div, _el1, [exp, 256, 31]]]],
-                          [clamp, [mload, 96], [div, _el1, [exp, 256, [sub, 32, _len]]], [mload, 64]]]]]]],
+                        [clamp, [mload, 96], [div, _el1, [exp, 256, [sub, 32, _len]]], [mload, 64]]]]]],
                 [with,
                   _source,
                   /* getting byte array */ [add, 3776, [mload, 3904]],
@@ -2111,7 +2194,7 @@ commit b00004a
                     _sz,
                     [add, 32, [mload, _source]],
                     [assert, [call, [add, 18, [div, _sz, 10]], 4, 0, _source, _sz, [add, 128, _L], _sz]]]]]],
-            # Line 443
+            # Line 469
             [mstore, 6624, [mload, 5408 <0+values_1>]],
             [mstore, 6656, [mload, 5472 <64+values_1>]],
             [mstore, 6688, [mload, 5504 <96+values_1>]],
@@ -2122,7 +2205,7 @@ commit b00004a
                 _sz,
                 [add, 32, [mload, _source]],
                 [assert, [call, [add, 18, [div, _sz, 10]], 4, 0, _source, _sz, 6720, _sz]]]],
-            # Line 453
+            # Line 479
             [assert,
               [eq,
                 /* extracting 32 bytes */ 
@@ -2170,7 +2253,7 @@ commit b00004a
                       _sub,
                       [add, 32, [mul, 32, [div, [clample, 0, [sub, [mload, _sub], 32]], 32]]]]]],
                 1]],
-            # Line 443
+            # Line 469
             [mstore,
               10144,
               [with,
@@ -2186,7 +2269,7 @@ commit b00004a
                   [assert,
                     [call,
                       200000,
-                      [sload, 24 <self.sighasher>],
+                      [sload, 25 <self.SIGHASHER>],
                       0,
                       10208,
                       [mload, 10176],
@@ -2198,7 +2281,7 @@ commit b00004a
                   [add,
                     _sub,
                     [add, 32, [mul, 32, [div, [clample, 0, [sub, [mload, _sub], 32]], 32]]]]]]],
-            # Line 456
+            # Line 482
             [with,
               _L,
               12992 <values_2>,
@@ -2219,7 +2302,7 @@ commit b00004a
                           11360,
                           1568]]],
                     [assert, [eq, [mload, 11360], 192]],
-                    /* bytearray to number, verify no leading zbytes */ 
+                    /* bytearray to number (int128) */ 
                     [with,
                       _sub,
                       /* getting and checking int128 */ [add, 11360, [mload, 11360]],
@@ -2229,9 +2312,7 @@ commit b00004a
                         [with,
                           _len,
                           [clamp, 0, [mload, _sub], 32],
-                          [seq,
-                            [assert, [or, [iszero, _len], [div, _el1, [exp, 256, 31]]]],
-                            [clamp, [mload, 96], [div, _el1, [exp, 256, [sub, 32, _len]]], [mload, 64]]]]]]]],
+                          [clamp, [mload, 96], [div, _el1, [exp, 256, [sub, 32, _len]]], [mload, 64]]]]]]],
                 [mstore,
                   [add, 32, _L],
                   [seq,
@@ -2248,9 +2329,7 @@ commit b00004a
                       [with,
                         _len,
                         [clamp, 0, [mload, _sub], 32],
-                        [seq,
-                          [assert, [or, [iszero, _len], [div, _el1, [exp, 256, 31]]]],
-                          [clamp, [mload, 96], [div, _el1, [exp, 256, [sub, 32, _len]]], [mload, 64]]]]]]],
+                        [clamp, [mload, 96], [div, _el1, [exp, 256, [sub, 32, _len]]], [mload, 64]]]]]],
                 [mstore,
                   [add, 96, _L],
                   [with,
@@ -2262,9 +2341,7 @@ commit b00004a
                       [with,
                         _len,
                         [clamp, 0, [mload, _sub], 32],
-                        [seq,
-                          [assert, [or, [iszero, _len], [div, _el1, [exp, 256, 31]]]],
-                          [clamp, [mload, 96], [div, _el1, [exp, 256, [sub, 32, _len]]], [mload, 64]]]]]]],
+                        [clamp, [mload, 96], [div, _el1, [exp, 256, [sub, 32, _len]]], [mload, 64]]]]]],
                 [with,
                   _source,
                   /* getting byte array */ [add, 11360, [mload, 11488]],
@@ -2272,7 +2349,7 @@ commit b00004a
                     _sz,
                     [add, 32, [mload, _source]],
                     [assert, [call, [add, 18, [div, _sz, 10]], 4, 0, _source, _sz, [add, 128, _L], _sz]]]]]],
-            # Line 443
+            # Line 469
             [mstore, 14208, [mload, 12992 <0+values_2>]],
             [mstore, 14240, [mload, 13056 <64+values_2>]],
             [mstore, 14272, [mload, 13088 <96+values_2>]],
@@ -2283,7 +2360,7 @@ commit b00004a
                 _sz,
                 [add, 32, [mload, _source]],
                 [assert, [call, [add, 18, [div, _sz, 10]], 4, 0, _source, _sz, 14304, _sz]]]],
-            # Line 462
+            # Line 488
             [assert,
               [eq,
                 /* extracting 32 bytes */ 
@@ -2331,18 +2408,18 @@ commit b00004a
                       _sub,
                       [add, 32, [mul, 32, [div, [clample, 0, [sub, [mload, _sub], 32]], 32]]]]]],
                 1]],
-            # Line 464
+            # Line 490
             [assert, [eq, [mload, 6624 <validator_index_1>], [mload, 14208 <validator_index_2>]]],
-            # Line 466
+            # Line 492
             [assert, [ne, [mload, 2560 <sighash_1>], [mload, 10144 <sighash_2>]]],
-            # Line 443
-            [mstore, 17728, 0],
             # Line 469
+            [mstore, 17728, 0],
+            # Line 495
             [if,
               [eq, [mload, 6656 <target_epoch_1>], [mload, 14240 <target_epoch_2>]],
-              # Line 471
+              # Line 497
               [seq, [mstore, 17728 <slashing_condition_detected>, 1]],
-              # Line 472
+              # Line 498
               [seq,
                 [if,
                   [or,
@@ -2352,11 +2429,11 @@ commit b00004a
                     [and,
                       [sgt, [mload, 14240 <target_epoch_2>], [mload, 6656 <target_epoch_1>]],
                       [slt, [mload, 14272 <source_epoch_2>], [mload, 6688 <source_epoch_1>]]]],
-                  # Line 475
+                  # Line 501
                   [seq, [mstore, 17728 <slashing_condition_detected>, 1]]]]],
-            # Line 476
+            # Line 502
             [assert, [mload, 17728 <slashing_condition_detected>]],
-            # Line 443
+            # Line 469
             [mstore,
               17760,
               [mload,
@@ -2378,7 +2455,7 @@ commit b00004a
             [mstore,
               17952,
               [if,
-                # Line 479
+                # Line 505
                 [slt,
                   [clamp,
                     [mload, 160],
@@ -2405,25 +2482,22 @@ commit b00004a
                 [mload, 96],
                 [sub, [mload, 17760 <validator_deposit>], [mload, 17952 <slashing_bounty>]],
                 [mload, 64]]],
-            # Line 481
+            # Line 507
             [with,
               _stloc,
-              19 <self.total_destroyed>,
+              20 <self.total_destroyed>,
               [sstore,
                 _stloc,
                 [clamp,
                   [mload, 96],
                   [add, [sload, _stloc], [mload, 17984 <deposit_destroyed>]],
                   [mload, 64]]]],
-            # Line 483
-            [mstore, 18080, [mload, 17952 <slashing_bounty>]],
-            [mstore, 18112, [mload, 17984 <deposit_destroyed>]],
-            [mstore, 18016, 64],
-            [mstore, 18080, [mload, 17952 <slashing_bounty>]],
-            [mstore, 18112, [mload, 17984 <deposit_destroyed>]],
+            # Line 509
+            [mstore, 18016, [mload, 17952 <slashing_bounty>]],
+            [mstore, 18048, [mload, 17984 <deposit_destroyed>]],
             [log4,
-              18080,
-              [mload, 18016],
+              18016,
+              64,
               82426427645528108535180603888980199209367473484102836287184910813581241622746,
               caller,
               [sload,
@@ -2431,50 +2505,51 @@ commit b00004a
                   [sha3_32, [add, [sha3_32, 0 <self.validators>], [mload, 6624 <validator_index_1>]]],
                   4 <withdrawal_addr>]],
               [mload, 6624 <validator_index_1>]],
-            # Line 443
+            # Line 469
             [mstore,
-              18144,
+              18080,
               [sload,
                 [add,
                   [sha3_32, [add, [sha3_32, 0 <self.validators>], [mload, 6624 <validator_index_1>]]],
-                  1 <deposit>]]],
-            # Line 486
-            [with,
-              _stloc,
-              [add,
-                [sha3_32, 5 <self.dynasty_wei_delta>],
-                [clamp, [mload, 96], [add, [sload, 4 <self.dynasty>], 1], [mload, 64]]],
-              [sstore,
-                _stloc,
-                [clamp,
-                  [mload, 160],
-                  [sub, [sload, _stloc], [mload, 18144 <deposit>]],
-                  [mload, 128]]]],
-            # Line 490
+                  2 <end_dynasty>]]],
+            # Line 513
             [if,
-              [slt,
-                [sload,
-                  [add,
-                    [sha3_32, [add, [sha3_32, 0 <self.validators>], [mload, 6624 <validator_index_1>]]],
-                    2 <end_dynasty>]],
-                [sload, 30 <self.default_end_dynasty>]],
-              # Line 491
+              [slt, [sload, 4 <self.dynasty>], [mload, 18080 <end_dynasty>]],
+              # Line 514
               [seq,
+                [mstore,
+                  18112,
+                  [sload,
+                    [add,
+                      [sha3_32, [add, [sha3_32, 0 <self.validators>], [mload, 6624 <validator_index_1>]]],
+                      1 <deposit>]]],
+                # Line 515
                 [with,
                   _stloc,
                   [add,
                     [sha3_32, 5 <self.dynasty_wei_delta>],
-                    [sload,
-                      [add,
-                        [sha3_32, [add, [sha3_32, 0 <self.validators>], [mload, 6624 <validator_index_1>]]],
-                        2 <end_dynasty>]]],
+                    [clamp, [mload, 96], [add, [sload, 4 <self.dynasty>], 1], [mload, 64]]],
                   [sstore,
                     _stloc,
                     [clamp,
                       [mload, 160],
-                      [add, [sload, _stloc], [mload, 18144 <deposit>]],
-                      [mload, 128]]]]]],
-            # Line 493
+                      [sub, [sload, _stloc], [mload, 18112 <deposit>]],
+                      [mload, 128]]]],
+                # Line 519
+                [if,
+                  [slt, [mload, 18080 <end_dynasty>], [sload, 30 <self.DEFAULT_END_DYNASTY>]],
+                  # Line 520
+                  [seq,
+                    [with,
+                      _stloc,
+                      [add, [sha3_32, 5 <self.dynasty_wei_delta>], [mload, 18080 <end_dynasty>]],
+                      [sstore,
+                        _stloc,
+                        [clamp,
+                          [mload, 160],
+                          [add, [sload, _stloc], [mload, 18112 <deposit>]],
+                          [mload, 128]]]]]]]],
+            # Line 522
             /* Internal Call: delete_validator */ 
             [assert,
               [call,
@@ -2482,48 +2557,48 @@ commit b00004a
                 address,
                 0,
                 [seq,
-                  [mstore, 18176, 28815128],
-                  [mstore, 18208, [mload, 6624 <validator_index_1>]],
-                  18204],
+                  [mstore, 18144, 28815128],
+                  [mstore, 18176, [mload, 6624 <validator_index_1>]],
+                  18172],
                 36,
                 0,
                 0]],
-            # Line 494
+            # Line 523
             [assert, [call, 0, caller, [mload, 17952 <slashing_bounty>], 0, 0, 0, 0]],
-            # Line 443
+            # Line 469
             stop]],
-        # Line 497
+        # Line 527
         [if,
           [eq, [mload, 0], 888093169 <owner_withdraw>],
           [seq,
             [assert, [iszero, callvalue]],
-            # Line 499
+            # Line 529
             [assert,
               [call,
                 0,
-                [sload, 23 <self.owner>],
-                [sload, 19 <self.total_destroyed>],
+                [sload, 24 <self.OWNER>],
+                [sload, 20 <self.total_destroyed>],
                 0,
                 0,
                 0,
                 0]],
-            # Line 500
-            [sstore, 19 <self.total_destroyed>, 0],
-            # Line 497
+            # Line 530
+            [sstore, 20 <self.total_destroyed>, 0],
+            # Line 527
             stop]],
-        # Line 503
+        # Line 534
         [if,
           [eq, [mload, 0], 624724948 <change_owner>],
           [seq,
             [calldatacopy, 320, 4, 32],
             [assert, [iszero, callvalue]],
             /* checking address input */ [uclamplt, [calldataload, 4], [mload, 32]],
-            # Line 505
+            # Line 536
             [if,
-              [eq, [sload, 23 <self.owner>], caller],
-              # Line 506
-              [seq, [sstore, 23 <self.owner>, [mload, 320 <new_owner>]]]],
-            # Line 503
+              [eq, [sload, 24 <self.OWNER>], caller],
+              # Line 537
+              [seq, [sstore, 24 <self.OWNER>, [mload, 320 <new_owner>]]]],
+            # Line 534
             stop]],
         # Line 13
         [if,
@@ -2784,9 +2859,9 @@ commit b00004a
             # Line 54
             stop]],
         [if,
-          [eq, [mload, 0], 3948329628 <votes__vote_bitmap>],
+          [eq, [mload, 0], 1711020061 <votes__vote_bitmap>],
           [seq,
-            [calldatacopy, 320, 4, 96],
+            [calldatacopy, 320, 4, 64],
             [assert, [iszero, callvalue]],
             /* checking int128 input */ 
             [clamp,
@@ -2796,7 +2871,7 @@ commit b00004a
             /* checking int128 input */ 
             [clamp,
               [mload, 96],
-              [calldataload, 68],
+              [calldataload, 36],
               [mload, 64]],
             # Line 56
             [mstore,
@@ -2805,12 +2880,9 @@ commit b00004a
                 [add,
                   [sha3_32,
                     [add,
-                      [sha3_32,
-                        [add,
-                          [sha3_32, [add, [sha3_32, 10 <self.votes>], [mload, 320 <arg0>]]],
-                          4 <vote_bitmap>]],
-                      [mload, 352 <arg1>]]],
-                  [mload, 384 <arg2>]]]],
+                      [sha3_32, [add, [sha3_32, 10 <self.votes>], [mload, 320 <arg0>]]],
+                      4 <vote_bitmap>]],
+                  [mload, 352 <arg1>]]]],
             [return, 0, 32],
             # Line 54
             stop]],
@@ -2934,71 +3006,71 @@ commit b00004a
             stop]],
         # Line 81
         [if,
-          [eq, [mload, 0], 1526944842 <expected_source_epoch>],
+          [eq, [mload, 0], 131920987 <reward_factor>],
           [seq,
             [assert, [iszero, callvalue]],
             # Line 83
-            [mstore, 0, [sload, 18 <self.expected_source_epoch>]],
+            [mstore, 0, [sload, 18 <self.reward_factor>]],
             [return, 0, 32],
             # Line 81
             stop]],
-        # Line 90
+        # Line 84
         [if,
-          [eq, [mload, 0], 1110556641 <epoch_length>],
+          [eq, [mload, 0], 1526944842 <expected_source_epoch>],
           [seq,
             [assert, [iszero, callvalue]],
-            # Line 92
-            [mstore, 0, [sload, 20 <self.epoch_length>]],
+            # Line 86
+            [mstore, 0, [sload, 19 <self.expected_source_epoch>]],
             [return, 0, 32],
-            # Line 90
+            # Line 84
             stop]],
         # Line 93
         [if,
-          [eq, [mload, 0], 3936513807 <withdrawal_delay>],
+          [eq, [mload, 0], 2890352299 <EPOCH_LENGTH>],
           [seq,
             [assert, [iszero, callvalue]],
             # Line 95
-            [mstore, 0, [sload, 21 <self.withdrawal_delay>]],
+            [mstore, 0, [sload, 21 <self.EPOCH_LENGTH>]],
             [return, 0, 32],
             # Line 93
             stop]],
         # Line 96
         [if,
-          [eq, [mload, 0], 2836709096 <dynasty_logout_delay>],
+          [eq, [mload, 0], 247142186 <WITHDRAWAL_DELAY>],
           [seq,
             [assert, [iszero, callvalue]],
             # Line 98
-            [mstore, 0, [sload, 22 <self.dynasty_logout_delay>]],
+            [mstore, 0, [sload, 22 <self.WITHDRAWAL_DELAY>]],
             [return, 0, 32],
             # Line 96
             stop]],
-        # Line 108
+        # Line 99
         [if,
-          [eq, [mload, 0], 131920987 <reward_factor>],
+          [eq, [mload, 0], 1330502494 <DYNASTY_LOGOUT_DELAY>],
           [seq,
             [assert, [iszero, callvalue]],
-            # Line 110
-            [mstore, 0, [sload, 26 <self.reward_factor>]],
+            # Line 101
+            [mstore, 0, [sload, 23 <self.DYNASTY_LOGOUT_DELAY>]],
             [return, 0, 32],
-            # Line 108
+            # Line 99
             stop]],
         # Line 110
         [if,
-          [eq, [mload, 0], 4272915133 <base_interest_factor>],
+          [eq, [mload, 0], 1066029070 <BASE_INTEREST_FACTOR>],
           [seq,
             [assert, [iszero, callvalue]],
             # Line 112
-            [mstore, 0, [sload, 27 <self.base_interest_factor>]],
+            [mstore, 0, [sload, 27 <self.BASE_INTEREST_FACTOR>]],
             [return, 0, 32],
             # Line 110
             stop]],
         # Line 111
         [if,
-          [eq, [mload, 0], 257475096 <base_penalty_factor>],
+          [eq, [mload, 0], 1627864712 <BASE_PENALTY_FACTOR>],
           [seq,
             [assert, [iszero, callvalue]],
             # Line 113
-            [mstore, 0, [sload, 28 <self.base_penalty_factor>]],
+            [mstore, 0, [sload, 28 <self.BASE_PENALTY_FACTOR>]],
             [return, 0, 32],
             # Line 111
             stop]]],
