@@ -90,7 +90,7 @@ Due to its deviation from [ERC20-K], we could not verify the (fixed) MyKidsEduca
 * To capture the false return value, we changed the `k` and `localMem` parameters of the `transfer-failure` section, from:
 
     ```
-    k: #execute => #exception
+    k: #execute => #halt
     localMem: .Map => _:Map
     ```
 
