@@ -9,9 +9,9 @@
     <ethereum>
       <evm>
         <output> {OUTPUT} </output>
+        <statusCode> {STATUSCODE} </statusCode>
         <callStack> _ => _ </callStack>
         <interimStates> _ </interimStates>
-        <callLog> .Set </callLog> // for vmtest only
         <touchedAccounts> _ => _ </touchedAccounts>
 
         <callState>
