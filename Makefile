@@ -69,6 +69,21 @@ erc20_files:=totalSupply-spec.k \
              transferFrom-failure-1-spec.k \
              transferFrom-failure-2-spec.k
 
+zeppelin_erc20_files:=totalSupply-spec.k \
+             balanceOf-spec.k \
+             allowance-spec.k \
+             approve-spec.k \
+             transfer-success-1-spec.k \
+             transfer-success-2-spec.k \
+             transfer-failure-1-a-spec.k \
+             transfer-failure-1-b-spec.k \
+             transfer-failure-2-spec.k \
+             transferFrom-success-1-spec.k \
+             transferFrom-success-2-spec.k \
+             transferFrom-failure-1-a-spec.k \
+             transferFrom-failure-1-b-spec.k \
+             transferFrom-failure-2-spec.k
+
 hobby_erc20_files:=totalSupply-spec.k \
                    balanceOf-spec.k \
                    allowance-spec.k \
@@ -122,7 +137,7 @@ bihu: $(patsubst %, $(specs_dir)/bihu/%, $(bihu_collectToken_file)) $(patsubst %
 
 vyper-erc20: $(patsubst %, $(specs_dir)/vyper-erc20/%, $(erc20_files)) $(specs_dir)/lemmas.k
 
-zeppelin-erc20: $(patsubst %, $(specs_dir)/zeppelin-erc20/%, $(erc20_files)) $(specs_dir)/lemmas.k
+zeppelin-erc20: $(patsubst %, $(specs_dir)/zeppelin-erc20/%, $(zeppelin_erc20_files)) $(specs_dir)/lemmas.k
 
 hkg-erc20: $(patsubst %, $(specs_dir)/hkg-erc20/%, $(erc20_files)) $(specs_dir)/lemmas.k
 

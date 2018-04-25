@@ -9,6 +9,7 @@
     <ethereum>
       <evm>
         <output> {OUTPUT} </output>
+        <statusCode> {STATUSCODE} </statusCode>
         <callStack> {CALLSTACK} </callStack>
         <interimStates> _ </interimStates>
         <touchedAccounts> _ => _ </touchedAccounts>

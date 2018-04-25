@@ -8,14 +8,14 @@
 
     <ethereum>
       <evm>
-        <output> _ </output>
-        <callStack> _ => _ </callStack>
+        <output> {OUTPUT} </output>
+        <statusCode> {STATUSCODE} </statusCode>
+        <callStack> _ </callStack>
         <interimStates> _ </interimStates>
-        <callLog> .Set </callLog> // for vmtest only
         <touchedAccounts> _ => _ </touchedAccounts>
 
         <callState>
-          <program> #asMapOpCodes(#dasmOpCodes(#parseByteStack({CODE}), DEFAULT)) </program> // TODO: change to BYZANTIUM
+          <program> #asMapOpCodes(#dasmOpCodes(#parseByteStack({CODE}), BYZANTIUM)) </program>
           <programBytes> #parseByteStack({CODE}) </programBytes>
 
           <id> ACCT_ID </id> // contract owner
@@ -25,7 +25,7 @@
 
           <callValue> 0 </callValue>
           <wordStack> .WordStack => _ </wordStack>
-          <localMem> {LOCALMEM} </localMem>
+          <localMem> .Map => _ </localMem>
           <pc> 0 => _ </pc>
           <gas> {GAS} </gas>
           <memoryUsed> 0 => _ </memoryUsed>
