@@ -153,4 +153,8 @@ module VERIFICATION
     rule #isJustified(CURDYNVOTES, CURDYNDEPOSITS, PREVDYNVOTES, PREVDYNDEPOSITS)
         => (CURDYNVOTES >=Int CURDYNDEPOSITS *Int 2 /Int 3) andBool (PREVDYNVOTES >=Int PREVDYNDEPOSITS *Int 2 /Int 3)
 
+    syntax Int ::= "VYPER_DEC_MULTIPLIER"   [function]
+ // ------------------------------------------------------------------------------
+    rule VYPER_DEC_MULTIPLIER => 10000000000 [macro]
+
 endmodule
