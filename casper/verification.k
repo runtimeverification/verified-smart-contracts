@@ -41,6 +41,9 @@ module VERIFICATION
 
     rule symkeccak(N) <Int pow256 => true
 
+    rule   #signed(X) ==K   #signed(Y) => X ==K Y requires #rangeUInt(256,X) orBool #rangeUInt(256,Y)
+    rule #unsigned(X) ==K #unsigned(Y) => X ==K Y requires #rangeSInt(256,X) orBool #rangeSInt(256,Y)
+
 
 ///////////////////////////////////////////////////////////////////////////////
 // Arithmetic
