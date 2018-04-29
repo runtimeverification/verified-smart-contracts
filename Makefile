@@ -227,7 +227,7 @@ $(specs_dir)/casper/proc_reward-spec.k: $(casper_tmpls) casper/casper-spec.ini
 $(specs_dir)/casper/vote-spec.k: $(casper_tmpls) casper/casper-spec.ini
 	@echo >&2 "==  gen-spec: $@"
 	mkdir -p $(dir $@)
-	python3 resources/gen-spec.py $^ vote recommended_target_hash vote > $@
+	python3 resources/gen-spec.py $^ vote recommended_target_hash proc_reward vote > $@
 	cp casper/abstract-semantics.k $(dir $@)
 	cp casper/verification.k $(dir $@)
 

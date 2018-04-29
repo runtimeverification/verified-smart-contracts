@@ -77,6 +77,8 @@ module VERIFICATION
     rule chop(bool2Word((A *Int B) /Int A ==K B) |Int chop(A xorInt maxUInt256)) => 1
     //  requires A *Int B <=Int maxUInt256
 
+    rule 1 |Int chop(A xorInt maxUInt256) => 1
+
     rule C s<Word (A -Word B) => 0  requires 0 <=Int A andBool A <=Int maxSInt256
                                      andBool 0 <=Int B andBool B <=Int maxSInt256
                                      andBool 0 <=Int C andBool C <=Int maxSInt256
@@ -90,17 +92,17 @@ module VERIFICATION
                                                 andBool 0 <=Int B andBool B <=Int maxSInt128
 
 
-    rule (#signed(A) -Word B) => #signed(A -Int B)  requires minSInt256 <=Int A andBool A <=Int maxSInt256
-                                                     andBool          0 <=Int B andBool B <=Int maxSInt256
-                                                     andBool minSInt256 <=Int (A -Int B)
-                                                     andBool (A -Int B) <=Int maxSInt256
+    rule (#unsigned(A) -Word B) => #unsigned(A -Int B)  requires minSInt256 <=Int A andBool A <=Int maxSInt256
+                                                         andBool          0 <=Int B andBool B <=Int maxSInt256
+                                                         andBool minSInt256 <=Int (A -Int B)
+                                                         andBool (A -Int B) <=Int maxSInt256
 
-    rule C s<Word #signed(A -Int B) => 0  requires 0 <=Int C andBool C <=Int maxSInt256
-                                           andBool minSInt256 <=Int (A -Int B)
-                                           andBool (A -Int B) <=Int C
+    rule C s<Word #unsigned(A -Int B) => 0  requires 0 <=Int C andBool C <=Int maxSInt256
+                                             andBool minSInt256 <=Int (A -Int B)
+                                             andBool (A -Int B) <=Int C
 
-    rule #signed(A -Int B) s<Word minDecimal_2s => 0  requires minDecimal <=Int (A -Int B)
-                                                       andBool (A -Int B) <=Int maxSInt256
+    rule #unsigned(A -Int B) s<Word minDecimal_2s => 0  requires minDecimal <=Int (A -Int B)
+                                                         andBool (A -Int B) <=Int maxSInt256
 
 
 ///////////////////////////////////////////////////////////////////////////////

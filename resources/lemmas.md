@@ -20,7 +20,7 @@ The term `nthbyteof(v, i, n)` represents the i-th byte of the two's complement r
 
 ```k
     syntax Int ::= nthbyteof ( Int , Int , Int ) [function, smtlib(smt_nthbyteof), proj]
- // ------------------------------------------------------------------------------
+ // ------------------------------------------------------------------------------------
     rule nthbyteof(V, I, N) => nthbyteof(V /Int 256, I, N -Int 1) when N  >Int (I +Int 1) [concrete]
     rule nthbyteof(V, I, N) =>           V modInt 256             when N ==Int (I +Int 1) [concrete]
 ```
