@@ -127,7 +127,9 @@ casper_files:=recommended_target_hash-spec.k \
               main_hash_voted_frac-success-1-spec.k \
               main_hash_voted_frac-success-2-spec.k \
               main_hash_voted_frac-failure-spec.k \
-              total_curdyn_deposits_scaled-spec.k
+              total_curdyn_deposits_scaled-success-spec.k \
+              total_curdyn_deposits_scaled-failure-1-spec.k \
+              total_curdyn_deposits_scaled-failure-2-spec.k
 
 proof_tests:= bihu vyper-erc20 zeppelin-erc20 hkg-erc20 hobby-erc20 sum-to-n ds-token-erc20 casper
 
