@@ -249,3 +249,19 @@ In practice, one should set a reasonable amount of the gas limit to see if the p
 
 [ERC20-EVM]: </resources/erc20-evm.md>
 [balanceOf-spec.k]: </resources/balanceOf-spec.k>
+
+## Specification Generation
+
+The specification can be automatically generated from the `.ini` file and the specification templates using the `gen-spec.py` script under the `resources` directory. 
+```
+$ python3 gen-spec.py <path-to-module-tmpl> <path-to-spec-tmpl> <path-to-spec-ini> <spec-name> <list-of-rule-names>
+```
+For example, the following command can be used to generate the specification file for the `collectToken` function under the `bihu` directory.
+```
+# under the verified-smart-contracts directory
+$ python3 resources/gen-spec.py bihu/module-tmpl.k bihu/spec-tmpl.k bihu/collectToken-spec.ini collectToken collectToken loop ds-math-mul
+```
+* The first `collectToken` is the name of the specification.
+* In order to prove the `collectToken` funciton, we need the specification rules for the top-level function, the loop and the multiplication. `collectToken loop ds-math-mul` is the list of section names in the `.ini` file corresponding to those three specifications.
+
+The generated specification file has a module named `collectToken` and the module contains three specification rules as listed above.
