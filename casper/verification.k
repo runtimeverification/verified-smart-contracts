@@ -69,13 +69,30 @@ module VERIFICATION
     rule maxDecimal    => 1701411834604692317316873037158841057270000000000   [macro]  /* (2^127 - 1) * 10^10 */
 
 
+    //Multiplication overflow check - success case
     // FIXME:(A *Int B /Int A ==Int B or A ==Int 0)
     rule chop(bool2Word((A *Int B) /Word A ==K B) |Int chop(A xorInt maxUInt256)) => 1
-    //  requires A *Int B <=Int maxUInt256
+      requires A *Int B <=Int maxSInt256
 
-    // FIXME:(A *Int B /Int A ==Int B or A ==Int 0)
-    rule chop(bool2Word((A *Int B) /Int A ==K B) |Int chop(A xorInt maxUInt256)) => 1
-    //  requires A *Int B <=Int maxUInt256
+    rule chop(A *Int B) /Int A ==K B => true
+      requires A >=Int 0 andBool B >=Int 0 andBool A =/=Int 0 andBool A *Int B <=Int maxSInt256
+
+    rule A >Int maxUInt256 => true
+      requires A >Int maxSInt256 andBool chop(A) <=Int maxSInt256
+
+    rule chop(A *Int B) /Int A ==K B => false
+      requires A *Int B >Int maxUInt256
+
+    rule 0 -Word ((pow256 -Int chop( A *Int B )) /Int A) ==K B => false
+      requires A >=Int 0 andBool B >=Int 0 andBool chop(A *Int B) >Int maxSInt256
+
+    //FIXME incorrect temp lemmas until Vyper compiler gets fixed.
+    rule chop(A xorInt maxUInt256) => 1
+      requires A ==Int 0
+
+    rule chop(A xorInt maxUInt256) => 0
+      requires A =/=Int 0
+    // End of multiplication overflow lemmas
 
     rule 1 |Int chop(A xorInt maxUInt256) => 1
 
