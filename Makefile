@@ -134,7 +134,11 @@ casper_files:=recommended_target_hash-spec.k \
               total_prevdyn_deposits_scaled-success-spec.k \
               total_prevdyn_deposits_scaled-failure-1-spec.k \
               total_prevdyn_deposits_scaled-failure-21-spec.k \
-              total_prevdyn_deposits_scaled-failure-22-spec.k
+              total_prevdyn_deposits_scaled-failure-22-spec.k \
+              deposit_size-success-spec.k \
+              deposit_size-failure-1-spec.k \
+              deposit_size-failure-21-spec.k \
+              deposit_size-failure-22-spec.k
 
 proof_tests:= bihu vyper-erc20 zeppelin-erc20 hkg-erc20 hobby-erc20 sum-to-n ds-token-erc20 casper
 
