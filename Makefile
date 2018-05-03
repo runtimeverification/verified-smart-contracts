@@ -138,7 +138,11 @@ casper_files:=recommended_target_hash-spec.k \
               deposit_size-success-spec.k \
               deposit_size-failure-1-spec.k \
               deposit_size-failure-21-spec.k \
-              deposit_size-failure-22-spec.k
+              deposit_size-failure-22-spec.k \
+              increment_dynasty-is_finalized-justified-spec.k \
+              increment_dynasty-is_finalized-not-justified-spec.k \
+              increment_dynasty-not-is_finalized-justified-spec.k \
+              increment_dynasty-not-is_finalized-not-justified-spec.k
 
 proof_tests:= bihu vyper-erc20 zeppelin-erc20 hkg-erc20 hobby-erc20 sum-to-n ds-token-erc20 casper
 
