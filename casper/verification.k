@@ -67,21 +67,42 @@ module VERIFICATION
 
 
     //Multiplication overflow check - success case
-    // FIXME:(A *Int B /Int A ==Int B or A ==Int 0)
-    rule chop(bool2Word((A *Int B) /Word A ==K B) |Int chop(A xorInt maxUInt256)) => 1
-      requires A *Int B <=Int maxSInt256
-
     rule chop(A *Int B) /Int A ==K B => true
       requires A >=Int 0 andBool B >=Int 0 andBool A =/=Int 0 andBool A *Int B <=Int maxSInt256
 
     rule A >Int maxUInt256 => true
       requires A >Int maxSInt256 andBool chop(A) <=Int maxSInt256
 
+    /* Proof: If A*B results in overflow, A and B being non-negative, then
+        A != 0 and B != 0, also:
+        chop(A*B) != A*B   =>  chop(A*B)/A != A*B/A   =>   chop(A*B)/A != B.
+    */
     rule chop(A *Int B) /Int A ==K B => false
-      requires A *Int B >Int maxUInt256
+      requires #range(0 <= A < maxSInt256) andBool #range(0 <= B < maxSInt256)
+               andBool A *Int B >Int maxUInt256
 
+    /* Proof:
+        A>0 and B>0 and chop( A *Int B ) > maxSInt256
+            => A *Int B > maxSInt256
+            => [pow256 -Int chop( A *Int B ) <= maxSInt256] and [pow256 -Int chop( A *Int B ) != A * B]
+        => [(pow256 -Int chop( A *Int B )) / A <= maxSInt256] and [(pow256 -Int chop( A *Int B )) / A != B]
+            also [(pow256 -Int chop( A *Int B )) / A] >= 0, because all operations above produce non-negatives
+            from non-negatives.
+            Let's use: W1 = (pow256 -Int chop( A *Int B )) / A (for consistency with evm rules for -Word)
+
+        next, 0 -Word (W1 <= maxSInt256) will evaluate into either:
+            chop( pow256 -Int W1 ), when W1 > 0.
+            0, when W1 == 0.
+        Case W1 >0:
+            W1 <= maxSInt256 => chop( pow256 -Int W1 ) > maxSInt256
+            together with B < maxSInt256    => chop( pow256 -Int W1 ) != B. q.e.d.
+        Case W1 == 0:
+            suppose lemma is false. Then B = 0, but this is impossible because chop(A *Int B) >Int maxSInt256
+            q.e.d.
+    */
     rule 0 -Word ((pow256 -Int chop( A *Int B )) /Int A) ==K B => false
-      requires A >=Int 0 andBool B >=Int 0 andBool chop(A *Int B) >Int maxSInt256
+      requires #range(0 <= A < maxSInt256) andBool #range(0 <= B < maxSInt256)
+               andBool chop(A *Int B) >Int maxSInt256
 
     //FIXME incorrect temp lemmas until Vyper compiler gets fixed.
     rule chop(A xorInt maxUInt256) => 1
