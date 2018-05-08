@@ -115,6 +115,16 @@ module VERIFICATION
       requires A =/=Int 0
     // End of multiplication overflow lemmas
 
+    // Required to solve -Word expressions, when subtraction result may be either positive or negative.
+    rule maxDecimal s<Word (A -Word B) => bool2Word(false)
+      requires #rangeSFixed(128, 10, A) andBool B >=Int 0
+
+    rule maxSInt256 s<Word (A -Word B) => bool2Word(false)
+      requires #rangeSInt(128, A) andBool B >=Int 0
+
+    rule (A -Word B) s<Word pow256 => bool2Word(true)
+    //end of -Word lemmas
+
     rule 1 |Int chop(A xorInt maxUInt256) => 1
 
     rule C s<Word (A -Word B) => 0  requires 0 <=Int A andBool A <=Int maxSInt256

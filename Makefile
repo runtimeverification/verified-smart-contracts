@@ -143,7 +143,14 @@ casper_files:=recommended_target_hash-spec.k \
               increment_dynasty-is_finalized-not-justified-spec.k \
               increment_dynasty-not-is_finalized-justified-spec.k \
               increment_dynasty-not-is_finalized-not-justified-spec.k \
-              logout-failure-1-spec.k
+              logout-failure-1-spec.k \
+              logout-failure-2-spec.k \
+              logout-12-failure-3-spec.k \
+              logout-12-failure-4-spec.k \
+              logout-12-34-failure-5-spec.k \
+              logout-12-34-5-success-pos-spec.k \
+              logout-12-34-5-success-neg-spec.k \
+              logout-12-34-5-success-spec.k
 
 proof_tests:= bihu vyper-erc20 zeppelin-erc20 hkg-erc20 hobby-erc20 sum-to-n ds-token-erc20 casper
 
