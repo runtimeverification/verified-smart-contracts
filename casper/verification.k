@@ -70,6 +70,14 @@ module VERIFICATION
 
 
     //Multiplication overflow check - success case
+    // FIXME:(A *Int B /Int A ==Int B or A ==Int 0)
+    rule chop(bool2Word((A *Int B) /Word A ==K B) |Int chop(A xorInt maxUInt256)) => 1
+    //  requires A *Int B <=Int maxUInt256
+
+    // FIXME:(A *Int B /Int A ==Int B or A ==Int 0)
+    rule chop(bool2Word((A *Int B) /Int A ==K B) |Int chop(A xorInt maxUInt256)) => 1
+    //  requires A *Int B <=Int maxUInt256
+
     rule chop(A *Int B) /Int A ==K B => true
       requires A >=Int 0 andBool B >=Int 0 andBool A =/=Int 0 andBool A *Int B <=Int maxSInt256
 
