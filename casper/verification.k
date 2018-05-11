@@ -115,6 +115,10 @@ module VERIFICATION
       requires #range(0 <= A < maxSInt256) andBool #range(0 <= B < maxSInt256)
                andBool chop(A *Int B) >Int maxSInt256
 
+    //Reduntant 2 lemmas, but without them z3 does not finish when proving decimal multiplication failure-1 case.
+    rule A *Int B /Int A ==K B => true
+      requires A =/=Int 0
+
     //FIXME incorrect temp lemmas until Vyper compiler gets fixed.
     rule chop(A xorInt maxUInt256) => 1
       requires A ==Int 0
