@@ -125,12 +125,16 @@ module VERIFICATION
 
     // Required to solve -Word expressions, when subtraction result may be either positive or negative.
     rule maxDecimal s<Word (A -Word B) => bool2Word(false)
-      requires #rangeSFixed(128, 10, A) andBool B >=Int 0
+      requires  #rangeSFixed(128, 10, A -Int B)
 
     rule maxSInt256 s<Word (A -Word B) => bool2Word(false)
-      requires #rangeSInt(128, A) andBool B >=Int 0
+      requires  #rangeSInt(128, A -Int B)
 
-    rule (A -Word B) s<Word pow256 => bool2Word(true)
+    rule (A -Word B) s<Word minDecimal_2s => bool2Word(false)
+      requires  #rangeSFixed(128, 10, A -Int B)
+
+    rule (A -Word B) s<Word minInt128_2s => bool2Word(false)
+      requires  #rangeSInt(128, A -Int B)
     //end of -Word lemmas
 
     rule 1 |Int chop(A xorInt maxUInt256) => 1
