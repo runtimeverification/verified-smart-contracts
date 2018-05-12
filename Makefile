@@ -121,6 +121,7 @@ ds_token_erc20_files:=totalSupply-spec.k \
                    transferFrom-failure-2-c-spec.k
 
 casper_files:=recommended_target_hash-spec.k \
+              sqrt_of_total_deposits-spec.k \
               proc_reward-spec.k \
               vote-spec.k \
               delete_validator-spec.k
@@ -214,6 +215,13 @@ $(specs_dir)/casper/recommended_target_hash-spec.k: $(casper_tmpls) casper/caspe
 	@echo >&2 "==  gen-spec: $@"
 	mkdir -p $(dir $@)
 	python3 resources/gen-spec.py $^ recommended_target_hash recommended_target_hash > $@
+	cp casper/abstract-semantics.k $(dir $@)
+	cp casper/verification.k $(dir $@)
+
+$(specs_dir)/casper/sqrt_of_total_deposits-spec.k: $(casper_tmpls) casper/casper-spec.ini
+	@echo >&2 "==  gen-spec: $@"
+	mkdir -p $(dir $@)
+	python3 resources/gen-spec.py $^ sqrt_of_total_deposits sqrt_of_total_deposits_loop sqrt_of_total_deposits > $@
 	cp casper/abstract-semantics.k $(dir $@)
 	cp casper/verification.k $(dir $@)
 

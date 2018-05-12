@@ -105,6 +105,83 @@ module VERIFICATION
                                                          andBool (A -Int B) <=Int maxSInt256
 
 
+    // quadOverLinearLowerBound = floor((sqrt(p) - 1) * 10000000000)
+    syntax Int ::= #quadOverLinearLowerBound(Int) [function]
+ // --------------------------------------------------------
+
+    // Xn = #quadOverLinear(X0, P, n) where Xn = (Xn-1 + P // Xn-1) // 2 and #quadOverLinear(X0, P, 0) = X0
+    // Xn is decimal and P is int128
+    syntax Int ::= #quadOverLinear(Int, Int, Int) [function, smtlib(smt_quadoverlinear)]
+ // ------------------------------------------------------------------------------------
+    rule (X +Int P *Int 100000000000000000000 /Int X) /Int 2 => #quadOverLinear(X, P, 1)  requires 0 <Int X andBool 0 <=Int P
+
+    rule #quadOverLinear(#quadOverLinear(X, P, N), P, M)
+        => #quadOverLinear(X, P, N +Int M)  requires 0 <Int X andBool 0 <=Int P andBool 0 <=Int N andBool 0 <=Int M
+
+    rule minDecimal <=Int #quadOverLinear(X, P, N) => true requires 0 <=Int P
+                                                            andBool 0 <=Int X
+
+    // Xn = sqrt(P) - 1, (Xn + P / Xn) / 2 < P / 2,  when P >= 6
+    rule 0 <Int #quadOverLinear(X, P, N) => true  requires #quadOverLinearLowerBound(P) <=Int X
+                                                    andBool X <=Int (P *Int 100000000000000000000) /Int 20000000000
+                                                    andBool 6 <=Int P andBool P <=Int maxSInt128
+                                                    andBool 0 <=Int N
+
+    rule maxDecimal <Int #quadOverLinear(X, P, N) => false  requires #quadOverLinearLowerBound(P) <=Int X
+                                                             andBool X <=Int (P *Int 100000000000000000000) /Int 20000000000
+                                                             andBool 6 <=Int P andBool P <=Int maxSInt128
+                                                             andBool 0 <=Int N
+
+    rule #quadOverLinear(X, P, N) <=Int maxDecimal => true  requires #quadOverLinearLowerBound(P) <=Int X
+                                                             andBool X <=Int (P *Int 100000000000000000000) /Int 20000000000
+                                                             andBool 6 <=Int P andBool P <=Int maxSInt128
+                                                             andBool 0 <=Int N
+
+    rule #quadOverLinear(X, P, N) <Int pow255 => true  requires #quadOverLinearLowerBound(P) <=Int X
+                                                        andBool X <=Int (P *Int 100000000000000000000) /Int 20000000000
+                                                        andBool 6 <=Int P andBool P <=Int maxSInt128
+                                                        andBool 0 <=Int N
+
+    rule #quadOverLinear(X, P, N) <Int pow256 => true  requires #quadOverLinearLowerBound(P) <=Int X
+                                                        andBool X <=Int (P *Int 100000000000000000000) /Int 20000000000
+                                                        andBool 6 <=Int P andBool P <=Int maxSInt128
+                                                        andBool 0 <=Int N
+
+    rule #quadOverLinearLowerBound(P) <=Int #quadOverLinear(X, P, N)  => true  requires #quadOverLinearLowerBound(P) <=Int X
+                                                                                andBool X <=Int (P *Int 100000000000000000000) /Int 20000000000
+                                                                                andBool 6 <=Int P andBool P <=Int maxSInt128
+                                                                                andBool 0 <=Int N
+
+    rule #quadOverLinear(X, P, N) <=Int (P *Int 100000000000000000000) /Int 20000000000 => true  requires #quadOverLinearLowerBound(P) <=Int X
+                                                                                                  andBool X <=Int (P *Int 100000000000000000000) /Int 20000000000
+                                                                                                  andBool 6 <=Int P andBool P <=Int maxSInt128
+                                                                                                  andBool 0 <=Int N
+
+    rule maxDecimal <Int (X +Int P *Int 100000000000000000000 /Int X) => false  requires #quadOverLinearLowerBound(P) <=Int X
+                                                                                 andBool X <=Int (P *Int 100000000000000000000) /Int 20000000000
+                                                                                 andBool 6 <=Int P andBool P <=Int maxSInt128
+
+    rule (X +Int P *Int 100000000000000000000 /Int X) <Int pow255 => true  requires #quadOverLinearLowerBound(P) <=Int X
+                                                                            andBool X <=Int (P *Int 100000000000000000000) /Int 20000000000
+                                                                            andBool 6 <=Int P andBool P <=Int maxSInt128
+
+    rule (X +Int P *Int 100000000000000000000 /Int X) <Int pow256 => true  requires #quadOverLinearLowerBound(P) <=Int X
+                                                                            andBool X <=Int (P *Int 100000000000000000000) /Int 20000000000
+                                                                            andBool 6 <=Int P andBool P <=Int maxSInt128
+
+    rule maxDecimal <Int P *Int 100000000000000000000 /Int X => false  requires #quadOverLinearLowerBound(P) <=Int X
+                                                                        andBool X <=Int (P *Int 100000000000000000000) /Int 20000000000
+                                                                        andBool 6 <=Int P andBool P <=Int maxSInt128
+
+    rule X /Int 2 <Int Y => true  requires X <Int Y andBool Y >Int 0
+
+    rule Y <Int X /Int 2 => false  requires notBool(Y <Int X) andBool Y >Int 0
+
+    rule 0 <=Int X => true  requires 0 <Int X
+
+    rule 0 <=Int A -Int B => true  requires B <Int A
+
+
 ///////////////////////////////////////////////////////////////////////////////
 // Macros
 ///////////////////////////////////////////////////////////////////////////////
@@ -125,6 +202,11 @@ module VERIFICATION
  // ------------------------------------------------------------
     rule #setVoteBit(BITVECTOR, VID) => BITVECTOR |Int (2 ^Int (VID modInt 256))
 
+
+    syntax Int ::= "#etherDeposit" "(" Int "," Int ")"  [function]
+ // --------------------------------------------------------------
+    rule #etherDeposit(DEPOSIT, SCALEFACTOR)
+        => ((((DEPOSIT *Int SCALEFACTOR) /Int 10000000000) /Int 1000000000000000000) /Int 10000000000) +Int 1
 
 
 ///////////////////////////////////////////////////////////////////////////////
