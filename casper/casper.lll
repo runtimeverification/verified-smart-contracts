@@ -1,5 +1,3 @@
-commit b2a1189 (without RLP)
-
 [seq,
   [mstore, 28, [calldataload, 0]],
   [mstore, 32, 1461501637330902918203684832716283019655932542976],
@@ -10,34 +8,34 @@ commit b2a1189 (without RLP)
   # Line 120
   [codecopy, 320, ~codelen, 288],
   [assert, [iszero, callvalue]],
-  /* checking int128 input */ 
+  /* checking int128 input */
   [clamp,
     [mload, 96],
     [codeload, ~codelen],
     [mload, 64]],
-  /* checking int128 input */ 
+  /* checking int128 input */
   [clamp,
     [mload, 96],
     [codeload, [add, ~codelen, 32]],
     [mload, 64]],
-  /* checking int128 input */ 
+  /* checking int128 input */
   [clamp,
     [mload, 96],
     [codeload, [add, ~codelen, 64]],
     [mload, 64]],
-  /* checking address input */ 
+  /* checking address input */
   [uclamplt,
     [codeload, [add, ~codelen, 96]],
     [mload, 32]],
-  /* checking address input */ 
+  /* checking address input */
   [uclamplt,
     [codeload, [add, ~codelen, 128]],
     [mload, 32]],
-  /* checking address input */ 
+  /* checking address input */
   [uclamplt,
     [codeload, [add, ~codelen, 160]],
     [mload, 32]],
-  /* checking int128 input */ 
+  /* checking int128 input */
   [clamp,
     [mload, 96],
     [codeload, [add, ~codelen, 256]],
@@ -164,7 +162,7 @@ commit b2a1189 (without RLP)
           [seq,
             [calldatacopy, 320, 4, 32],
             [assert, [iszero, callvalue]],
-            /* checking int128 input */ 
+            /* checking int128 input */
             [clamp,
               [mload, 96],
               [calldataload, 4],
@@ -532,7 +530,7 @@ commit b2a1189 (without RLP)
               352,
               [sle,
                 [mload,
-                  /* Internal Call: esf */ 
+                  /* Internal Call: esf */
                   [seq,
                     [assert, [call, gas, address, 0, [seq, [mstore, 384, 2593057911], 412], 4, 480, 32]],
                     480]],
@@ -542,7 +540,7 @@ commit b2a1189 (without RLP)
               [or,
                 [iszero,
                   [mload,
-                    /* Internal Call: deposit_exists */ 
+                    /* Internal Call: deposit_exists */
                     [seq,
                       [assert, [call, gas, address, 0, [seq, [mstore, 512, 3732904309], 540], 4, 608, 32]],
                       608]]],
@@ -824,7 +822,7 @@ commit b2a1189 (without RLP)
           [seq,
             [calldatacopy, 320, 4, 32],
             [assert, [iszero, callvalue]],
-            /* checking int128 input */ 
+            /* checking int128 input */
             [clamp,
               [mload, 96],
               [calldataload, 4],
@@ -876,7 +874,7 @@ commit b2a1189 (without RLP)
                 [add,
                   10000000000,
                   [mload,
-                    /* Internal Call: collective_reward */ 
+                    /* Internal Call: collective_reward */
                     [seq,
                       [assert, [call, gas, address, 0, [seq, [mstore, 384, 2898663875], 412], 4, 480, 32]],
                       480]]],
@@ -922,7 +920,7 @@ commit b2a1189 (without RLP)
             # Line 274
             [if,
               [mload,
-                /* Internal Call: deposit_exists */ 
+                /* Internal Call: deposit_exists */
                 [seq,
                   [assert, [call, gas, address, 0, [seq, [mstore, 608, 3732904309], 636], 4, 704, 32]],
                   704]],
@@ -939,7 +937,7 @@ commit b2a1189 (without RLP)
                         r,
                         [clamp_nonzero,
                           [mload,
-                            /* Internal Call: sqrt_of_total_deposits */ 
+                            /* Internal Call: sqrt_of_total_deposits */
                             [seq,
                               [assert, [call, gas, address, 0, [seq, [mstore, 768, 3676565216], 796], 4, 864, 32]],
                               864]]],
@@ -960,7 +958,7 @@ commit b2a1189 (without RLP)
                             [mload, 96],
                             [sub,
                               [mload,
-                                /* Internal Call: esf */ 
+                                /* Internal Call: esf */
                                 [seq,
                                   [assert, [call, gas, address, 0, [seq, [mstore, 896, 2593057911], 924], 4, 992, 32]],
                                   992]],
@@ -988,7 +986,7 @@ commit b2a1189 (without RLP)
             [sstore,
               [add, [sha3_32, 1 <self.checkpoint_hashes>], [mload, 320 <epoch>]],
               [mload,
-                /* Internal Call: recommended_target_hash */ 
+                /* Internal Call: recommended_target_hash */
                 [seq,
                   [assert, [call, gas, address, 0, [seq, [mstore, 1120, 2237609772], 1148], 4, 1216, 32]],
                   1216]]],
@@ -1044,20 +1042,20 @@ commit b2a1189 (without RLP)
             # Line 298
             [assert,
               [ne,
-                /* extracting 32 bytes */ 
+                /* extracting 32 bytes */
                 [with,
                   _sub,
                   [seq,
                     [with,
                       _source,
-                      /* concat */ 
+                      /* concat */
                       [with,
                         _poz,
                         0,
                         [seq,
                           [with,
                             _arg,
-                            /* Create ByteArray: b'\xa1\x90>\xab' */ 
+                            /* Create ByteArray: b'\xa1\x90>\xab' */
                             [seq,
                               [mstore, 384, 4],
                               [mstore,
@@ -1065,7 +1063,7 @@ commit b2a1189 (without RLP)
                                 73077227117658356969279410473650150870559631135483570926313946830681982107648],
                               384],
                             [seq,
-                              /* copy byte slice */ 
+                              /* copy byte slice */
                               [with,
                                 _l,
                                 4,
@@ -1166,12 +1164,20 @@ commit b2a1189 (without RLP)
             stop]],
         # Line 317
         [if,
-          [eq, [mload, 0], 1110510642 <logout>],
+          [eq, [mload, 0], 38117084 <logout>],
           [seq,
-            [calldatacopy, 320, 4, 32],
+            [calldatacopy, 320, 4, 64],
             [assert, [iszero, callvalue]],
-            [calldatacopy, 352, [add, 4, [calldataload, 4]], 1056],
-            [assert, [le, [calldataload, [add, 4, [calldataload, 4]]], 1024]],
+            /* checking int128 input */
+            [clamp,
+              [mload, 96],
+              [calldataload, 4],
+              [mload, 64]],
+            /* checking int128 input */
+            [clamp,
+              [mload, 96],
+              [calldataload, 36],
+              [mload, 64]],
             # Line 319
             [assert,
               [eq,
@@ -1203,140 +1209,11 @@ commit b2a1189 (without RLP)
                         [clamp_nonzero, [sload, 21 <self.EPOCH_LENGTH>]]],
                       [mload, 128]],
                     10000000000]]]],
-            # Line 317
-            [mstore,
-              1440,
-              [with,
-                _sub,
-                [seq,
-                  [with,
-                    _source,
-                    352 <logout_msg>,
-                    [with,
-                      _sz,
-                      [add, 32, [mload, _source]],
-                      [assert, [call, [add, 18, [div, _sz, 10]], 4, 0, _source, _sz, 1472, _sz]]]],
-                  [assert, [call, 200000, [sload, 25 <self.SIGHASHER>], 0, 1504, [mload, 1472], 2592, 32]],
-                  [mstore, 2560, 32],
-                  2560],
-                [mload,
-                  [add,
-                    _sub,
-                    [add, 32, [mul, 32, [div, [clample, 0, [sub, [mload, _sub], 32]], 32]]]]]]],
-            # Line 324
-            [with,
-              _L,
-              4096 <values>,
-              [seq,
-                [mstore,
-                  _L,
-                  [seq,
-                    [with,
-                      _sub,
-                      352 <logout_msg>,
-                      [pop,
-                        [call,
-                          2720,
-                          465412500301844688126265256059331081527636616969 <RLP decoder>,
-                          0,
-                          [add, _sub, 32],
-                          [mload, _sub],
-                          2656,
-                          1376]]],
-                    [assert, [eq, [mload, 2656], 128]],
-                    /* bytearray to number (int128) */ 
-                    [with,
-                      _sub,
-                      /* getting and checking int128 */ [add, 2656, [mload, 2656]],
-                      [with,
-                        _el1,
-                        [mload, [add, 32, _sub]],
-                        [with,
-                          _len,
-                          [clamp, 0, [mload, _sub], 32],
-                          [clamp, [mload, 96], [div, _el1, [exp, 256, [sub, 32, _len]]], [mload, 64]]]]]]],
-                [mstore,
-                  [add, 32, _L],
-                  [with,
-                    _sub,
-                    /* getting and checking int128 */ [add, 2656, [mload, 2688]],
-                    [with,
-                      _el1,
-                      [mload, [add, 32, _sub]],
-                      [with,
-                        _len,
-                        [clamp, 0, [mload, _sub], 32],
-                        [clamp, [mload, 96], [div, _el1, [exp, 256, [sub, 32, _len]]], [mload, 64]]]]]],
-                [with,
-                  _source,
-                  /* getting byte array */ [add, 2656, [mload, 2720]],
-                  [with,
-                    _sz,
-                    [add, 32, [mload, _source]],
-                    [assert, [call, [add, 18, [div, _sz, 10]], 4, 0, _source, _sz, [add, 64, _L], _sz]]]]]],
-            # Line 317
-            [mstore, 5248, [mload, 4096 <0+values>]],
-            [mstore, 5280, [mload, 4128 <32+values>]],
-            [with,
-              _source,
-              4160 <64+values>,
-              [with,
-                _sz,
-                [add, 32, [mload, _source]],
-                [assert, [call, [add, 18, [div, _sz, 10]], 4, 0, _source, _sz, 5312, _sz]]]],
             # Line 328
-            [assert, [sge, [sload, 15 <self.current_epoch>], [mload, 5280 <epoch>]]],
-            # Line 330
-            [assert,
-              [eq,
-                /* extracting 32 bytes */ 
-                [with,
-                  _sub,
-                  [seq,
-                    [with,
-                      _source,
-                      /* concat */ 
-                      [with,
-                        _poz,
-                        0,
-                        [seq,
-                          [mstore, [add, [add, 6400, _poz], 32], [mload, 1440 <sighash>]],
-                          [set, _poz, [add, _poz, 32]],
-                          [with,
-                            _arg,
-                            5312 <sig>,
-                            [seq,
-                              /* copy byte slice */ 
-                              [with,
-                                _l,
-                                1024,
-                                [pop, [call, 120, 4, 0, [add, _arg, 32], _l, [add, [add, 6400, _poz], 32], _l]]],
-                              [set, _poz, [add, _poz, [mload, _arg]]]]],
-                          [mstore, 6400, _poz],
-                          6400]],
-                      [with,
-                        _sz,
-                        [add, 32, [mload, _source]],
-                        [assert, [call, [add, 18, [div, _sz, 10]], 4, 0, _source, _sz, 7520, _sz]]]],
-                    [assert,
-                      [call,
-                        500000,
-                        [sload, [sha3_32, [add, [sha3_32, 0 <self.validators>], [mload, 5248 <validator_index>]]]],
-                        0,
-                        7552,
-                        [mload, 7520],
-                        8672,
-                        32]],
-                    [mstore, 8640, 32],
-                    8640],
-                  [mload,
-                    [add,
-                      _sub,
-                      [add, 32, [mul, 32, [div, [clample, 0, [sub, [mload, _sub], 32]], 32]]]]]],
-                1]],
+            [assert, [sge, [sload, 15 <self.current_epoch>], [mload, 352 <epoch>]]],
             # Line 317
             [mstore,
-              8736,
+              384,
               [clamp,
                 [mload, 96],
                 [add, [sload, 4 <self.dynasty>], [sload, 23 <self.DYNASTY_LOGOUT_DELAY>]],
@@ -1346,19 +1223,19 @@ commit b2a1189 (without RLP)
               [sgt,
                 [sload,
                   [add,
-                    [sha3_32, [add, [sha3_32, 0 <self.validators>], [mload, 5248 <validator_index>]]],
+                    [sha3_32, [add, [sha3_32, 0 <self.validators>], [mload, 320 <validator_index>]]],
                     2 <end_dynasty>]],
-                [mload, 8736 <end_dynasty>]]],
+                [mload, 384 <end_dynasty>]]],
             # Line 335
             [sstore,
               [add,
-                [sha3_32, [add, [sha3_32, 0 <self.validators>], [mload, 5248 <validator_index>]]],
+                [sha3_32, [add, [sha3_32, 0 <self.validators>], [mload, 320 <validator_index>]]],
                 2 <end_dynasty>],
-              [mload, 8736 <end_dynasty>]],
+              [mload, 384 <end_dynasty>]],
             # Line 336
             [with,
               _stloc,
-              [add, [sha3_32, 5 <self.dynasty_wei_delta>], [mload, 8736 <end_dynasty>]],
+              [add, [sha3_32, 5 <self.dynasty_wei_delta>], [mload, 384 <end_dynasty>]],
               [sstore,
                 _stloc,
                 [clamp,
@@ -1367,25 +1244,25 @@ commit b2a1189 (without RLP)
                     [sload, _stloc],
                     [sload,
                       [add,
-                        [sha3_32, [add, [sha3_32, 0 <self.validators>], [mload, 5248 <validator_index>]]],
+                        [sha3_32, [add, [sha3_32, 0 <self.validators>], [mload, 320 <validator_index>]]],
                         1 <deposit>]]],
                   [mload, 128]]]],
             # Line 338
             [mstore,
-              8768,
+              416,
               [sload,
                 [add,
-                  [sha3_32, [add, [sha3_32, 0 <self.validators>], [mload, 5248 <validator_index>]]],
+                  [sha3_32, [add, [sha3_32, 0 <self.validators>], [mload, 320 <validator_index>]]],
                   2 <end_dynasty>]]],
             [log3,
-              8768,
+              416,
               32,
               79992322569564756438802956933278762037139331561819380271719625643188950772399,
               [sload,
                 [add,
-                  [sha3_32, [add, [sha3_32, 0 <self.validators>], [mload, 5248 <validator_index>]]],
+                  [sha3_32, [add, [sha3_32, 0 <self.validators>], [mload, 320 <validator_index>]]],
                   4 <withdrawal_addr>]],
-              [mload, 5248 <validator_index>]],
+              [mload, 320 <validator_index>]],
             # Line 317
             stop]],
         # Line 342
@@ -1395,7 +1272,7 @@ commit b2a1189 (without RLP)
             [calldatacopy, 320, 4, 32],
             [assert, [iszero, callvalue]],
             [assert, [eq, caller, address]],
-            /* checking int128 input */ 
+            /* checking int128 input */
             [clamp,
               [mload, 96],
               [calldataload, 4],
@@ -1427,7 +1304,7 @@ commit b2a1189 (without RLP)
           [seq,
             [calldatacopy, 320, 4, 32],
             [assert, [iszero, callvalue]],
-            /* checking int128 input */ 
+            /* checking int128 input */
             [clamp,
               [mload, 96],
               [calldataload, 4],
@@ -1560,7 +1437,7 @@ commit b2a1189 (without RLP)
                   4 <withdrawal_addr>]],
               [mload, 320 <validator_index>]],
             # Line 366
-            /* Internal Call: delete_validator */ 
+            /* Internal Call: delete_validator */
             [assert,
               [call,
                 gas,
@@ -1582,12 +1459,12 @@ commit b2a1189 (without RLP)
             [calldatacopy, 320, 4, 64],
             [assert, [iszero, callvalue]],
             [assert, [eq, caller, address]],
-            /* checking int128 input */ 
+            /* checking int128 input */
             [clamp,
               [mload, 96],
               [calldataload, 4],
               [mload, 64]],
-            /* checking int128 input */ 
+            /* checking int128 input */
             [clamp,
               [mload, 96],
               [calldataload, 36],
@@ -1756,17 +1633,17 @@ commit b2a1189 (without RLP)
           [seq,
             [calldatacopy, 320, 4, 128],
             [assert, [iszero, callvalue]],
-            /* checking int128 input */ 
+            /* checking int128 input */
             [clamp,
               [mload, 96],
               [calldataload, 4],
               [mload, 64]],
-            /* checking int128 input */ 
+            /* checking int128 input */
             [clamp,
               [mload, 96],
               [calldataload, 68],
               [mload, 64]],
-            /* checking int128 input */ 
+            /* checking int128 input */
             [clamp,
               [mload, 96],
               [calldataload, 100],
@@ -1815,7 +1692,7 @@ commit b2a1189 (without RLP)
               [eq,
                 [mload, 352 <target_hash>],
                 [mload,
-                  /* Internal Call: recommended_target_hash */ 
+                  /* Internal Call: recommended_target_hash */
                   [seq,
                     [assert, [call, gas, address, 0, [seq, [mstore, 448, 2237609772], 476], 4, 544, 32]],
                     544]]]],
@@ -1990,6 +1867,92 @@ commit b2a1189 (without RLP)
                         3 <prev_dyn_votes>]],
                     [mload, 416 <source_epoch>]],
                   [mload, 800 <previous_dynasty_votes>]]]],
+            # Line 440
+            [if,
+              [eq, [sload, 19 <self.expected_source_epoch>], [mload, 416 <source_epoch>]],
+              # Line 441
+              [seq,
+                [mstore,
+                  832,
+                  [if,
+                    # Line 441
+                    [slt,
+                      [clamp,
+                        [mload, 160],
+                        [with,
+                          r,
+                          [sload, 18 <self.reward_factor>],
+                          [with,
+                            l,
+                            [sload,
+                              [add,
+                                [sha3_32, [add, [sha3_32, 0 <self.validators>], [mload, 320 <validator_index>]]],
+                                1 <deposit>]],
+                            [with,
+                              ans,
+                              [mul, l, r],
+                              [seq,
+                                [assert, [or, [eq, [sdiv, ans, l], r], [not, l]]],
+                                [sdiv, ans, 10000000000]]]]],
+                        [mload, 128]],
+                      0],
+                    [sdiv,
+                      [sub,
+                        [clamp,
+                          [mload, 160],
+                          [with,
+                            r,
+                            [sload, 18 <self.reward_factor>],
+                            [with,
+                              l,
+                              [sload,
+                                [add,
+                                  [sha3_32, [add, [sha3_32, 0 <self.validators>], [mload, 320 <validator_index>]]],
+                                  1 <deposit>]],
+                              [with,
+                                ans,
+                                [mul, l, r],
+                                [seq,
+                                  [assert, [or, [eq, [sdiv, ans, l], r], [not, l]]],
+                                  [sdiv, ans, 10000000000]]]]],
+                          [mload, 128]],
+                        9999999999],
+                      10000000000],
+                    [sdiv,
+                      [clamp,
+                        [mload, 160],
+                        [with,
+                          r,
+                          [sload, 18 <self.reward_factor>],
+                          [with,
+                            l,
+                            [sload,
+                              [add,
+                                [sha3_32, [add, [sha3_32, 0 <self.validators>], [mload, 320 <validator_index>]]],
+                                1 <deposit>]],
+                            [with,
+                              ans,
+                              [mul, l, r],
+                              [seq,
+                                [assert, [or, [eq, [sdiv, ans, l], r], [not, l]]],
+                                [sdiv, ans, 10000000000]]]]],
+                        [mload, 128]],
+                      10000000000]]],
+                # Line 442
+                /* Internal Call: proc_reward */
+                [assert,
+                  [call,
+                    gas,
+                    address,
+                    0,
+                    [seq,
+                      [mstore, 864, 1470052530],
+                      [mstore, 896, [mload, 320 <validator_index>]],
+                      [mstore, 928, [mload, 832 <reward>]],
+                      892],
+                    68,
+                    0,
+                    0]]]],
             # Line 446
             [if,
               [and,
@@ -2051,10 +2014,10 @@ commit b2a1189 (without RLP)
                 # Line 451
                 [sstore, 11 <self.main_hash_justified>, 1],
                 # Line 454
-                [mstore, 832, 1],
-                [mstore, 864, 0],
+                [mstore, 1024, 1],
+                [mstore, 1056, 0],
                 [log3,
-                  832,
+                  1024,
                   64,
                   47607052476070037250388038725579733243894556830711209046796940177296459501753,
                   [mload, 384 <target_epoch>],
@@ -2074,19 +2037,19 @@ commit b2a1189 (without RLP)
                     # Line 460
                     [sstore, 16 <self.last_finalized_epoch>, [mload, 416 <source_epoch>]],
                     # Line 462
-                    [mstore, 896, 1],
-                    [mstore, 928, 1],
+                    [mstore, 1088, 1],
+                    [mstore, 1120, 1],
                     [log3,
-                      896,
+                      1088,
                       64,
                       47607052476070037250388038725579733243894556830711209046796940177296459501753,
                       [mload, 416 <source_epoch>],
                       [sload, [add, [sha3_32, 1 <self.checkpoint_hashes>], [mload, 416 <source_epoch>]]]]]]]],
             # Line 465
-            [mstore, 960, [mload, 384 <target_epoch>]],
-            [mstore, 992, [mload, 416 <source_epoch>]],
+            [mstore, 1152, [mload, 384 <target_epoch>]],
+            [mstore, 1184, [mload, 416 <source_epoch>]],
             [log4,
-              960,
+              1152,
               64,
               7081665583020273161205225158852481246505534847476758391289152486542138437399,
               [sload,
