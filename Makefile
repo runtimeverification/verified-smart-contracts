@@ -121,9 +121,9 @@ ds_token_erc20_files:=totalSupply-spec.k \
                    transferFrom-failure-2-c-spec.k
 
 casper_files:=recommended_target_hash-success-spec.k \
-			  recommended_target_hash-failure-11-spec.k \
-			  recommended_target_hash-failure-12-spec.k \
-			  recommended_target_hash-failure-2-spec.k \
+              recommended_target_hash-failure-11-spec.k \
+              recommended_target_hash-failure-12-spec.k \
+              recommended_target_hash-failure-2-spec.k \
               proc_reward-spec.k \
               vote-spec.k \
               delete_validator-spec.k \
