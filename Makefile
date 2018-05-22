@@ -123,7 +123,8 @@ ds_token_erc20_files:=totalSupply-spec.k \
 casper_files:=recommended_target_hash-spec.k \
               proc_reward-spec.k \
               vote-spec.k \
-              delete_validator-spec.k \
+              delete_validator-success-spec.k \
+              delete_validator-failure-spec.k \
               main_hash_voted_frac-success-1-spec.k \
               main_hash_voted_frac-success-2-spec.k \
               main_hash_voted_frac-failure-spec.k \
@@ -246,6 +247,20 @@ $(specs_dir)/casper/vote-spec.k: $(casper_tmpls) casper/casper-spec.ini
 	@echo >&2 "==  gen-spec: $@"
 	mkdir -p $(dir $@)
 	python3 resources/gen-spec.py $^ vote recommended_target_hash proc_reward vote > $@
+	cp casper/abstract-semantics.k $(dir $@)
+	cp casper/verification.k $(dir $@)
+
+$(specs_dir)/casper/delete_validator-success-spec.k: $(casper_tmpls) casper/casper-spec.ini
+	@echo >&2 "==  gen-spec: $@"
+	mkdir -p $(dir $@)
+	python3 resources/gen-spec.py $^ delete_validator-success delete_validator-success > $@
+	cp casper/abstract-semantics.k $(dir $@)
+	cp casper/verification.k $(dir $@)
+
+$(specs_dir)/casper/delete_validator-failure-spec.k: $(casper_tmpls) casper/casper-spec.ini
+	@echo >&2 "==  gen-spec: $@"
+	mkdir -p $(dir $@)
+	python3 resources/gen-spec.py $^ delete_validator-failure delete_validator-failure > $@
 	cp casper/abstract-semantics.k $(dir $@)
 	cp casper/verification.k $(dir $@)
 
