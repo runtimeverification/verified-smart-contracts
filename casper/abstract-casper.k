@@ -363,8 +363,7 @@ module ABSTRACT-CASPER
 
   rule <k> Vote(VALIDATOR_INDEX, TARGET_HASH, TARGET_EPOCH, SOURCE_EPOCH, SIG)
         => reward(VALIDATOR_INDEX, SOURCE_EPOCH)
-        ~> justify(TARGET_EPOCH, SOURCE_EPOCH)
-        ~> finalize(TARGET_EPOCH, SOURCE_EPOCH) ... </k>
+        ~> justifyAndFinalize(TARGET_EPOCH, SOURCE_EPOCH) ... </k>
        <currentDynasty> CURRENT_DYNASTY </currentDynasty>
        <currentEpoch> CURRENT_EPOCH </currentEpoch>
        <expectedTargetHash> TARGET_HASH </expectedTargetHash>
@@ -430,9 +429,9 @@ module ABSTRACT-CASPER
        <expectedSourceEpoch> EXPECTED_SOURCE_EPOCH </expectedSourceEpoch>
        requires SOURCE_EPOCH =/=K EXPECTED_SOURCE_EPOCH
 
-  syntax KItem ::= justify(Int, Int)
+  syntax KItem ::= justifyAndFinalize(Int, Int)
 
-  rule <k> justify(TARGET_EPOCH, SOURCE_EPOCH) => . ... </k>
+  rule <k> justifyAndFinalize(TARGET_EPOCH, SOURCE_EPOCH) => finalize(TARGET_EPOCH, SOURCE_EPOCH) ... </k>
        <epoch>
          <id> TARGET_EPOCH </id>
          <currDynVotes> ...  SOURCE_EPOCH |-> CURR_DYNASTY_VOTES ... </currDynVotes>

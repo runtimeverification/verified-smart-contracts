@@ -124,7 +124,32 @@ casper_files:=recommended_target_hash-spec.k \
               proc_reward-spec.k \
               vote-spec.k \
               delete_validator-success-spec.k \
-              delete_validator-failure-spec.k 
+              delete_validator-failure-spec.k \
+              main_hash_voted_frac-success-1-spec.k \
+              main_hash_voted_frac-success-2-spec.k \
+              main_hash_voted_frac-failure-spec.k \
+              total_curdyn_deposits_scaled-success-spec.k \
+              total_curdyn_deposits_scaled-failure-1-spec.k \
+              total_curdyn_deposits_scaled-failure-21-spec.k \
+              total_curdyn_deposits_scaled-failure-22-spec.k \
+              total_prevdyn_deposits_scaled-success-spec.k \
+              total_prevdyn_deposits_scaled-failure-1-spec.k \
+              total_prevdyn_deposits_scaled-failure-21-spec.k \
+              total_prevdyn_deposits_scaled-failure-22-spec.k \
+              deposit_size-success-spec.k \
+              deposit_size-failure-1-spec.k \
+              deposit_size-failure-21-spec.k \
+              deposit_size-failure-22-spec.k \
+              increment_dynasty-is_finalized-justified-spec.k \
+              increment_dynasty-is_finalized-not-justified-spec.k \
+              increment_dynasty-not-is_finalized-justified-spec.k \
+              increment_dynasty-not-is_finalized-not-justified-spec.k \
+              logout-failure-1-spec.k \
+              logout-failure-2-spec.k \
+              logout-12-failure-3-spec.k \
+              logout-12-failure-4-spec.k \
+              logout-12-34-failure-5-spec.k \
+              logout-12-34-5-success-spec.k
 
 proof_tests:= bihu vyper-erc20 zeppelin-erc20 hkg-erc20 hobby-erc20 sum-to-n ds-token-erc20 casper
 
@@ -211,24 +236,17 @@ $(specs_dir)/examples/sum-to-n-spec.k: resources/sum-to-n.md $(TANGLER)
 # Casper
 casper_tmpls:=casper/module-tmpl.k casper/spec-tmpl.k
 
-$(specs_dir)/casper/recommended_target_hash-spec.k: $(casper_tmpls) casper/casper-spec.ini
+$(specs_dir)/casper/%-spec.k: $(casper_tmpls) casper/casper-spec.ini
 	@echo >&2 "==  gen-spec: $@"
 	mkdir -p $(dir $@)
-	python3 resources/gen-spec.py $^ recommended_target_hash recommended_target_hash > $@
-	cp casper/abstract-semantics.k $(dir $@)
-	cp casper/verification.k $(dir $@)
-
-$(specs_dir)/casper/proc_reward-spec.k: $(casper_tmpls) casper/casper-spec.ini
-	@echo >&2 "==  gen-spec: $@"
-	mkdir -p $(dir $@)
-	python3 resources/gen-spec.py $^ proc_reward proc_reward > $@
+	python3 resources/gen-spec.py $^ $* $* > $@
 	cp casper/abstract-semantics.k $(dir $@)
 	cp casper/verification.k $(dir $@)
 
 $(specs_dir)/casper/vote-spec.k: $(casper_tmpls) casper/casper-spec.ini
 	@echo >&2 "==  gen-spec: $@"
 	mkdir -p $(dir $@)
-	python3 resources/gen-spec.py $^ vote recommended_target_hash vote > $@
+	python3 resources/gen-spec.py $^ vote recommended_target_hash proc_reward vote > $@
 	cp casper/abstract-semantics.k $(dir $@)
 	cp casper/verification.k $(dir $@)
 
