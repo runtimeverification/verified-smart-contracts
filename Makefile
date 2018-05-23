@@ -152,7 +152,8 @@ casper_files:=recommended_target_hash-success-spec.k \
               logout-12-failure-4-spec.k \
               logout-12-34-failure-5-spec.k \
               logout-12-34-5-success-spec.k \
-              esf-spec.k
+              esf-spec.k \
+              insta_finalize-spec.k
 
 proof_tests:= bihu vyper-erc20 zeppelin-erc20 hkg-erc20 hobby-erc20 sum-to-n ds-token-erc20 casper
 
