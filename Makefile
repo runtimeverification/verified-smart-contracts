@@ -125,6 +125,9 @@ casper_files:=recommended_source_epoch-spec.k \
               recommended_target_hash-failure-11-spec.k \
               recommended_target_hash-failure-12-spec.k \
               recommended_target_hash-failure-2-spec.k \
+              deposit_exists-true-spec.k \
+              deposit_exists-false-1-spec.k \
+              deposit_exists-false-2-spec.k \
               proc_reward-spec.k \
               vote-spec.k \
               delete_validator-spec.k \
