@@ -9,6 +9,9 @@ module ABSTRACT-SEMANTICS
 
   rule <k> ISZERO W => bool2Word(W  ==Int 0 ) ~> #push ... </k> [trusted]
 
+  rule <k> SLT W0 W1 => W0 s<Word W1 ~> #push ... </k> [trusted]
+  rule <k> SGT W0 W1 => W1 s<Word W0 ~> #push ... </k> [trusted]
+
   rule <k> #gasExec(SCHED, EXP W0 W1) => Gexp < SCHED > +Int (Gexpbyte < SCHED > *Int 32) ... </k>
     requires W1 =/=K 0 [trusted]
 
