@@ -121,9 +121,8 @@ ds_token_erc20_files:=totalSupply-spec.k \
                    transferFrom-failure-2-c-spec.k
 
 casper_files:=recommended_target_hash-spec.k \
-              proc_reward-spec.k \
-              vote-success-1-spec.k \
-              vote-success-2-spec.k \
+              proc_reward-1-spec.k \
+              proc_reward-2-spec.k \
               vote-1-failure-1-spec.k \
               vote-1-failure-2-spec.k \
               vote-1-2-failure-1-spec.k \
