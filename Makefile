@@ -125,9 +125,10 @@ casper_files:=recommended_source_epoch-spec.k \
               recommended_target_hash-failure-11-spec.k \
               recommended_target_hash-failure-12-spec.k \
               recommended_target_hash-failure-2-spec.k \
-              deposit_exists-true-spec.k \
-              deposit_exists-false-1-spec.k \
-              deposit_exists-false-2-spec.k \
+              deposit_exists-success-true-spec.k \
+              deposit_exists-success-false-1-spec.k \
+              deposit_exists-success-false-2-spec.k \
+              deposit_exists-failure-spec.k \
               proc_reward-spec.k \
               vote-spec.k \
               delete_validator-spec.k \
@@ -156,8 +157,10 @@ casper_files:=recommended_source_epoch-spec.k \
               logout-12-failure-4-spec.k \
               logout-12-34-failure-5-spec.k \
               logout-12-34-5-success-spec.k \
-              esf-spec.k \
-              insta_finalize-spec.k
+              esf-success-spec.k \
+              esf-failure-spec.k \
+              insta_finalize-success-spec.k \
+              insta_finalize-failure-spec.k
 
 proof_tests:= bihu vyper-erc20 zeppelin-erc20 hkg-erc20 hobby-erc20 sum-to-n ds-token-erc20 casper
 
@@ -254,7 +257,7 @@ $(specs_dir)/casper/%-spec.k: $(casper_tmpls) casper/casper-spec.ini
 $(specs_dir)/casper/vote-spec.k: $(casper_tmpls) casper/casper-spec.ini
 	@echo >&2 "==  gen-spec: $@"
 	mkdir -p $(dir $@)
-	python3 resources/gen-spec.py $^ vote recommended_target_hash proc_reward vote > $@
+	python3 resources/gen-spec.py $^ vote recommended_target_hash-success proc_reward vote > $@
 	cp casper/abstract-semantics.k $(dir $@)
 	cp casper/verification.k $(dir $@)
 

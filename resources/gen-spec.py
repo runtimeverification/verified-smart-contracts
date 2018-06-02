@@ -28,7 +28,7 @@ def safe_get(config, section):
 
 def inherit_get(config, section):
     if not section:
-        return safe_get(config, 'DEFAULT')
+        return safe_get(config, 'root')
     else:
         parent = inherit_get(config, '-'.join(section.split('-')[:-1]))
         current = safe_get(config, section)
