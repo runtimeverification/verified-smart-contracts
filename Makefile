@@ -128,7 +128,6 @@ casper_files:=recommended_source_epoch-spec.k \
               deposit_exists-success-true-spec.k \
               deposit_exists-success-false-1-spec.k \
               deposit_exists-success-false-2-spec.k \
-              deposit_exists-failure-spec.k \
               proc_reward-spec.k \
               vote-spec.k \
               delete_validator-spec.k \
@@ -158,9 +157,12 @@ casper_files:=recommended_source_epoch-spec.k \
               logout-12-34-failure-5-spec.k \
               logout-12-34-5-success-spec.k \
               esf-success-spec.k \
-              esf-failure-spec.k \
-              insta_finalize-success-spec.k \
-              insta_finalize-failure-spec.k
+              insta_finalize-success-spec.k
+
+# TODO:
+#             deposit_exists-failure-spec.k
+#             esf-failure-spec.k
+#             insta_finalize-failure-spec.k
 
 proof_tests:= bihu vyper-erc20 zeppelin-erc20 hkg-erc20 hobby-erc20 sum-to-n ds-token-erc20 casper
 
