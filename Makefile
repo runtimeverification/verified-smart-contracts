@@ -130,7 +130,8 @@ casper_files:=recommended_source_epoch-spec.k \
               deposit_exists-success-false-2-spec.k \
               proc_reward-spec.k \
               vote-spec.k \
-              delete_validator-spec.k \
+              delete_validator-success-spec.k \
+              delete_validator-failure-spec.k \
               main_hash_voted_frac-success-1-spec.k \
               main_hash_voted_frac-success-2-spec.k \
               main_hash_voted_frac-failure-spec.k \
