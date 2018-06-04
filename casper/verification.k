@@ -27,6 +27,13 @@ module VERIFICATION
          andBool B >=Int 0
          andBool N  >Int 0
 
+    //lemmas for proc_reward.
+    rule C:Bool andBool A <Int B => false
+        requires chop( 1 &Int bool2Word ( A <Int B ) ) ==K 0
+
+    rule C:Bool andBool A <Int B => C
+        requires (chop( 1 &Int bool2Word ( A <Int B ) ) ==K 0) ==K false
+
     rule (X modInt Y) <Int Y  => true
 
     rule 0 <=Int 2 ^Int X => true
