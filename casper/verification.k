@@ -34,6 +34,12 @@ module VERIFICATION
     rule C:Bool andBool A <Int B => C
         requires (chop( 1 &Int bool2Word ( A <Int B ) ) ==K 0) ==K false
 
+    //lemmas for vote
+    rule bool2Word(E) &Int 1 => bool2Word(E)
+    rule 1 &Int bool2Word(E) => bool2Word(E)
+    rule bool2Word(_) |Int 1 => 1
+    rule 1 |Int bool2Word(_) => 1
+
     rule (X modInt Y) <Int Y  => true
 
     rule 0 <=Int 2 ^Int X => true
