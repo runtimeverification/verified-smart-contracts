@@ -164,7 +164,6 @@ casper_files:=recommended_source_epoch-spec.k \
               insta_finalize-failure-spec.k \
               withdraw-failure-1-spec.k \
               withdraw-failure-2-spec.k \
-              withdraw-failure-3-spec.k \
               withdraw-success-spec.k 
 
 proof_tests:= bihu vyper-erc20 zeppelin-erc20 hkg-erc20 hobby-erc20 sum-to-n ds-token-erc20 casper
@@ -279,6 +278,8 @@ $(specs_dir)/casper/withdraw-failure-2-spec.k: $(casper_tmpls) casper/casper-spe
 	python3 resources/gen-spec.py $^ withdraw-failure-2 withdraw-failure-2 > $@
 	cp casper/abstract-semantics.k $(dir $@)
 	cp casper/verification.k $(dir $@)
+
+
 
 $(specs_dir)/casper/withdraw-success-spec.k: $(casper_tmpls) casper/casper-spec.ini
 	@echo >&2 "==  gen-spec: $@"
