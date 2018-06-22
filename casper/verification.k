@@ -22,11 +22,6 @@ module VERIFICATION
     //     andBool ((A &Int (2 ^Int B)) ==K 0) ==K false
     //     andBool (0 ==K B) ==K false
 
-    rule ( A -Word N ) s<Word B => 0
-        requires #rangeSInt(128, A) andBool #rangeSInt(128, B)
-         andBool B >=Int 0
-         andBool N  >Int 0
-
     //lemmas for proc_reward.
     rule C:Bool andBool A <Int B => false
         requires chop( 1 &Int bool2Word ( A <Int B ) ) ==K 0
