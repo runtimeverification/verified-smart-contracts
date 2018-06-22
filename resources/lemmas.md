@@ -89,6 +89,10 @@ It reduces the reasoning efforts of the underlying theorem prover, factoring out
     rule #padToWidth(N, #asByteStack(#asWord(WS))) => WS
       requires #noOverflow(WS) andBool N ==Int #sizeWordStack(WS)
 
+    // storing a symbolic boolean value in memory
+    rule #padToWidth(32, #asByteStack(bool2Word(E)))
+      => #asByteStackInWidthaux(0, 30, 32, nthbyteof(bool2Word(E), 31, 32) : .WordStack)
+
     // for Solidity
     rule #asWord(WS) /Int D => #asWord(#take(#sizeWordStack(WS) -Int log256Int(D), WS))
       requires D modInt 256 ==Int 0 andBool D >=Int 0
@@ -181,6 +185,10 @@ In EVM, no boolean value exist but instead, 1 and 0 are used to represent true a
     rule bool2Word(A) =/=K 1 => notBool(A)
 
     rule chop(bool2Word(B)) => bool2Word(B)
+    
+    rule #asWord(0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 
+                   : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : nthbyteof(bool2Word( E ), I, N) : .WordStack) 
+         => bool2Word( E ) 
 ```
 
 Some lemmas over the comparison operators are also provided.
