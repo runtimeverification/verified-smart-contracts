@@ -121,12 +121,9 @@ ds_token_erc20_files:=totalSupply-spec.k \
                    transferFrom-failure-2-c-spec.k
 
 casper_files:=recommended_target_hash-spec.k \
-              proc_reward-1-spec.k \
-              proc_reward-2-spec.k \
-              vote-1-2-3-4-5-6-success-1-1-spec.k \
-              vote-1-2-3-4-5-6-success-1-2-spec.k \
-              vote-1-2-3-4-5-6-success-2-1-spec.k \
-              vote-1-2-3-4-5-6-success-3-1-spec.k \
+              proc_reward-spec.k \
+              vote-1-2-3-4-5-6-success-1-spec.k \
+              vote-1-2-3-4-5-6-success-2-spec.k \
               vote-1-failure-1-spec.k \
               vote-1-failure-2-spec.k \
               vote-1-2-failure-1-spec.k \
@@ -256,17 +253,11 @@ $(specs_dir)/casper/%-spec.k: $(casper_tmpls) casper/casper-spec.ini
 	cp casper/abstract-semantics.k $(dir $@)
 	cp casper/verification.k $(dir $@)
 
-$(specs_dir)/casper/vote-1-2-3-4-5-6-success-1-1-spec.k: $(casper_tmpls) casper/casper-spec.ini
-	python3 resources/gen-spec.py $^ vote-1-2-3-4-5-6-success-1-1 recommended_target_hash proc_reward-1 proc_reward-2 vote-1-2-3-4-5-6-success-1-1> $@
+$(specs_dir)/casper/vote-1-2-3-4-5-6-success-1-spec.k: $(casper_tmpls) casper/casper-spec.ini
+	python3 resources/gen-spec.py $^ vote-1-2-3-4-5-6-success-1 recommended_target_hash proc_reward vote-1-2-3-4-5-6-success-1> $@
 
-$(specs_dir)/casper/vote-1-2-3-4-5-6-success-1-2-spec.k: $(casper_tmpls) casper/casper-spec.ini
-	python3 resources/gen-spec.py $^ vote-1-2-3-4-5-6-success-1-2 recommended_target_hash proc_reward-1 proc_reward-2 vote-1-2-3-4-5-6-success-1-2 > $@
-
-$(specs_dir)/casper/vote-1-2-3-4-5-6-success-2-1-spec.k: $(casper_tmpls) casper/casper-spec.ini
-	python3 resources/gen-spec.py $^ vote-1-2-3-4-5-6-success-2-1 recommended_target_hash proc_reward-1 proc_reward-2 vote-1-2-3-4-5-6-success-2-1 > $@
-
-$(specs_dir)/casper/vote-1-2-3-4-5-6-success-3-1-spec.k: $(casper_tmpls) casper/casper-spec.ini
-	python3 resources/gen-spec.py $^ vote-1-2-3-4-5-6-success-3-1 recommended_target_hash proc_reward-1 proc_reward-2 vote-1-2-3-4-5-6-success-3-1 > $@
+$(specs_dir)/casper/vote-1-2-3-4-5-6-success-2-spec.k: $(casper_tmpls) casper/casper-spec.ini
+	python3 resources/gen-spec.py $^ vote-1-2-3-4-5-6-success-2 recommended_target_hash proc_reward vote-1-2-3-4-5-6-success-2 > $@
 
 $(specs_dir)/casper/vote-1-failure-1-spec.k: $(casper_tmpls) casper/casper-spec.ini
 	python3 resources/gen-spec.py $^ vote-1-failure-1 recommended_target_hash proc_reward vote-1-failure-1 > $@
