@@ -161,7 +161,13 @@ casper_files:=recommended_source_epoch-spec.k \
               esf-success-spec.k \
               esf-failure-spec.k \
               insta_finalize-success-spec.k \
-              insta_finalize-failure-spec.k
+              insta_finalize-failure-spec.k \
+              withdraw-failure-1-spec.k \
+              withdraw-failure-2-spec.k \
+              withdraw-failure-3-1-spec.k \
+              withdraw-failure-3-2-spec.k \
+              withdraw-failure-3-3-spec.k \
+              withdraw-success-spec.k 
 
 proof_tests:= bihu vyper-erc20 zeppelin-erc20 hkg-erc20 hobby-erc20 sum-to-n ds-token-erc20 casper
 
@@ -259,6 +265,49 @@ $(specs_dir)/casper/vote-spec.k: $(casper_tmpls) casper/casper-spec.ini
 	@echo >&2 "==  gen-spec: $@"
 	mkdir -p $(dir $@)
 	python3 resources/gen-spec.py $^ vote recommended_target_hash-success proc_reward vote > $@
+	cp casper/abstract-semantics.k $(dir $@)
+	cp casper/verification.k $(dir $@)
+
+$(specs_dir)/casper/withdraw-failure-1-spec.k: $(casper_tmpls) casper/casper-spec.ini
+	@echo >&2 "==  gen-spec: $@"
+	mkdir -p $(dir $@)
+	python3 resources/gen-spec.py $^ withdraw-failure-1 withdraw-failure-1 > $@
+	cp casper/abstract-semantics.k $(dir $@)
+	cp casper/verification.k $(dir $@)
+
+$(specs_dir)/casper/withdraw-failure-2-spec.k: $(casper_tmpls) casper/casper-spec.ini
+	@echo >&2 "==  gen-spec: $@"
+	mkdir -p $(dir $@)
+	python3 resources/gen-spec.py $^ withdraw-failure-2 withdraw-failure-2 > $@
+	cp casper/abstract-semantics.k $(dir $@)
+	cp casper/verification.k $(dir $@)
+
+$(specs_dir)/casper/withdraw-failure-3-1-spec.k: $(casper_tmpls) casper/casper-spec.ini
+	@echo >&2 "==  gen-spec: $@"
+	mkdir -p $(dir $@)
+	python3 resources/gen-spec.py $^ withdraw-failure-3-1 withdraw-failure-3-1 > $@
+	cp casper/abstract-semantics.k $(dir $@)
+	cp casper/verification.k $(dir $@)
+
+$(specs_dir)/casper/withdraw-failure-3-2-spec.k: $(casper_tmpls) casper/casper-spec.ini
+	@echo >&2 "==  gen-spec: $@"
+	mkdir -p $(dir $@)
+	python3 resources/gen-spec.py $^ withdraw-failure-3-2 withdraw-failure-3-2 > $@
+	cp casper/abstract-semantics.k $(dir $@)
+	cp casper/verification.k $(dir $@)
+
+$(specs_dir)/casper/withdraw-failure-3-3-spec.k: $(casper_tmpls) casper/casper-spec.ini
+	@echo >&2 "==  gen-spec: $@"
+	mkdir -p $(dir $@)
+	python3 resources/gen-spec.py $^ withdraw-failure-3-3 withdraw-failure-3-3 > $@
+	cp casper/abstract-semantics.k $(dir $@)
+	cp casper/verification.k $(dir $@)
+
+
+$(specs_dir)/casper/withdraw-success-spec.k: $(casper_tmpls) casper/casper-spec.ini
+	@echo >&2 "==  gen-spec: $@"
+	mkdir -p $(dir $@)
+	python3 resources/gen-spec.py $^ withdraw-success delete_validator-success withdraw-success > $@
 	cp casper/abstract-semantics.k $(dir $@)
 	cp casper/verification.k $(dir $@)
 
