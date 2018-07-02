@@ -35,7 +35,7 @@ module VERIFICATION
     rule #sizeOfDynamicTypes(E, Es) => #sizeOfDynamicType(E) +Int #sizeOfDynamicTypes(Es)
     rule #sizeOfDynamicTypes(.TypedArgs) => 0
 
-    rule #enc(#array(_, N, DATA)) => #enc(#uint256(N)) ++ #encodeArgs(DATA) // aww
+    rule #enc(#array(_, N, DATA)) => #enc(#uint256(N)) ++ #encodeArgs(DATA)
 
     syntax TypedArg ::= #uint8 ( Int )
     rule #typeName(#uint8( _ )) => "uint8"
