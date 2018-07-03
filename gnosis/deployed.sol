@@ -193,7 +193,7 @@ contract ModuleManager is SelfAuthorized {
     string public constant VERSION = "0.0.1";
     address public constant SENTINEL_MODULES = address(0x1);
 
-    mapping (address => address) internal modules; // 8
+    mapping (address => address) internal modules; //1
 
     /// @dev Fallback function accepts Ether transactions.
     function ()
