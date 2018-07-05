@@ -163,7 +163,8 @@ casper_files:=recommended_source_epoch-spec.k \
               insta_finalize-success-spec.k \
               insta_finalize-failure-spec.k
 
-gnosis_files:=gnosis-test-spec.k
+gnosis_files:=setup-example-spec.k \
+              execTransactionAndPaySubmitter-example-spec.k
 
 proof_tests:= bihu vyper-erc20 zeppelin-erc20 hkg-erc20 hobby-erc20 sum-to-n ds-token-erc20 casper gnosis
 

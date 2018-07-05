@@ -12,9 +12,6 @@ module VERIFICATION
     rule chop((ADDR &Int maxUInt160) modInt pow160) => ADDR
       requires #rangeAddress(ADDR)
 
-    rule ADDR &Int maxUInt160 => ADDR
-      requires #rangeAddress(ADDR)
-
 /* [[1, 2], [3]] ->
      #array(
         #array(#uint256(_)),
