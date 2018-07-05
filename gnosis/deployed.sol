@@ -14,7 +14,7 @@ contract SelfAuthorized {
 contract MasterCopy is SelfAuthorized {
   // masterCopy always needs to be first declared variable, to ensure that it is at the same location as in the Proxy contract.
   // It should also always be ensured that the address is stored alone (uses a full word)
-    address masterCopy;  // 0
+    address masterCopy; // 0
 
   /// @dev Allows to upgrade the contract. This can only be done via a Safe transaction.
   /// @param _masterCopy New contract address.
@@ -42,7 +42,7 @@ contract OwnerManager is SelfAuthorized {
     /// @dev Setup function sets initial storage of contract.
     /// @param _owners List of Safe owners.
     /// @param _threshold Number of required confirmations for a Safe transaction.
-    function setupOwners(address[] _owners, uint8 _threshold)
+    function setupOwners(address[] _owners, uint256 _threshold)
         internal
     {
         // Threshold can only be 0 at initialization.
@@ -72,7 +72,7 @@ contract OwnerManager is SelfAuthorized {
     ///      This can only be done via a Safe transaction.
     /// @param owner New owner address.
     /// @param _threshold New threshold.
-    function addOwnerWithThreshold(address owner, uint8 _threshold)
+    function addOwnerWithThreshold(address owner, uint256 _threshold)
         public
         authorized
     {
@@ -93,7 +93,7 @@ contract OwnerManager is SelfAuthorized {
     /// @param prevOwner Owner that pointed to the owner to be removed in the linked list
     /// @param owner Owner address to be removed.
     /// @param _threshold New threshold.
-    function removeOwner(address prevOwner, address owner, uint8 _threshold)
+    function removeOwner(address prevOwner, address owner, uint256 _threshold)
         public
         authorized
     {
@@ -134,7 +134,7 @@ contract OwnerManager is SelfAuthorized {
     /// @dev Allows to update the number of required confirmations by Safe owners.
     ///      This can only be done via a Safe transaction.
     /// @param _threshold New threshold.
-    function changeThreshold(uint8 _threshold)
+    function changeThreshold(uint256 _threshold)
         public
         authorized
     {
@@ -148,9 +148,9 @@ contract OwnerManager is SelfAuthorized {
     function getThreshold()
         public
         view
-        returns (uint8)
+        returns (uint256)
     {
-        return uint8(threshold);
+        return threshold;
     }
 
     function isOwner(address owner)
@@ -193,7 +193,7 @@ contract ModuleManager is SelfAuthorized {
     string public constant VERSION = "0.0.1";
     address public constant SENTINEL_MODULES = address(0x1);
 
-    mapping (address => address) internal modules; //1
+    mapping (address => address) internal modules; // 1
 
     /// @dev Fallback function accepts Ether transactions.
     function ()
@@ -331,6 +331,54 @@ contract ModuleManager is SelfAuthorized {
     }
 }
 
+/// @title Gnosis Safe - A multisignature wallet with support for modules and owners. This contract needs to be extented to add functionality to execute transactions.
+/// @author Stefan George - <stefan@gnosis.pm>
+contract GnosisSafe is ModuleManager, OwnerManager {
+
+    /// @dev Setup function sets initial storage of contract.
+    /// @param _owners List of Safe owners.
+    /// @param _threshold Number of required confirmations for a Safe transaction.
+    /// @param to Contract address for optional delegate call.
+    /// @param data Data payload for optional delegate call.
+    function setup(address[] _owners, uint256 _threshold, address to, bytes data)
+        public
+    {
+        setupOwners(_owners, _threshold);
+        // As setupOwners can only be called if the contract has not been initialized we don't need a check for setupModules
+        setupModules(to, data);
+    }
+}
+
+/// @title SecuredTokenTransfer - Secure token transfer
+/// @author Richard Meissner - <richard@gnosis.pm>
+contract SecuredTokenTransfer {
+
+    /// @dev Transfers a token and returns if it was a success
+    /// @param token Token that should be transferred
+    /// @param receiver Receiver to whom the token should be transferred
+    /// @param amount The amount of tokens that should be transferred
+    function transferToken (
+        address token, 
+        address receiver,
+        uint256 amount
+    )
+        internal
+        returns (bool transferred)
+    {
+        bytes memory data = abi.encodeWithSignature("transfer(address,uint256)", receiver, amount);
+        // solium-disable-next-line security/no-inline-assembly
+        assembly {
+            let success := call(sub(gas, 10000), token, 0, add(data, 0x20), mload(data), 0, 0)
+            let ptr := mload(0x40)
+            returndatacopy(ptr, 0, returndatasize)
+            switch returndatasize 
+            case 0 { transferred := success }
+            case 0x20 { transferred := iszero(or(iszero(success), iszero(mload(ptr)))) }
+            default { transferred := 0 }
+        }
+    }
+}
+
 /// @title SignatureValidator - recovers a sender from a signature 
 /// @author Ricardo Guilherme Schmidt (Status Research & Development GmbH) 
 /// @author Richard Meissner - <richard@gnosis.pm>
@@ -346,7 +394,7 @@ contract SignatureValidator {
         uint256 pos
     )
         pure
-        public
+        internal
         returns (address) 
     {
         uint8 v;
@@ -361,7 +409,7 @@ contract SignatureValidator {
     /// @param signatures concatenated rsv signatures
     function signatureSplit(bytes signatures, uint256 pos)
         pure
-        public
+        internal
         returns (uint8 v, bytes32 r, bytes32 s)
     {
         // The signature format is a compact form of:
@@ -382,36 +430,18 @@ contract SignatureValidator {
     }
 }
 
-/// @title Gnosis Safe - A multisignature wallet with support for modules and owners. This contract needs to be extented to add functionality to execute transactions.
-/// @author Stefan George - <stefan@gnosis.pm>
-contract GnosisSafe is ModuleManager, OwnerManager {
-
-    /// @dev Setup function sets initial storage of contract.
-    /// @param _owners List of Safe owners.
-    /// @param _threshold Number of required confirmations for a Safe transaction.
-    /// @param to Contract address for optional delegate call.
-    /// @param data Data payload for optional delegate call.
-    function setup(address[] _owners, uint8 _threshold, address to, bytes data)
-        public
-    {
-        setupOwners(_owners, _threshold);
-        // As setupOwners can only be called if the contract has not been initialized we don't need a check for setupModules
-        setupModules(to, data);
-    }
-}
-
 /// @title Gnosis Safe Personal Edition - A multisignature wallet with support for confirmations using signed messages based on ERC191.
 /// @author Stefan George - <stefan@gnosis.pm>
 /// @author Richard Meissner - <richard@gnosis.pm>
 /// @author Ricardo Guilherme Schmidt - (Status Research & Development GmbH) - Gas Token Payment
-contract GnosisSafePersonalEdition is MasterCopy, GnosisSafe, SignatureValidator {
+contract GnosisSafePersonalEdition is MasterCopy, GnosisSafe, SignatureValidator, SecuredTokenTransfer {
 
     string public constant NAME = "Gnosis Safe Personal Edition";
     string public constant VERSION = "0.0.1";
     
     event ExecutionFailed(bytes32 txHash);
 
-    uint256 public nonce;
+    uint256 public nonce; // 5
 
     /// @dev Allows to execute a Safe transaction confirmed by required number of owners and then pays the account that submitted the transaction.
     ///      Note: The fees are always transfered, even if the user transaction fails. 
@@ -458,7 +488,7 @@ contract GnosisSafePersonalEdition is MasterCopy, GnosisSafe, SignatureValidator
                 require(tx.origin.send(amount), "Could not pay gas costs with ether");
             } else {
                  // solium-disable-next-line security/no-tx-origin
-                require(ERC20Token(gasToken).transfer(tx.origin, amount), "Could not pay gas costs with token");
+                require(transferToken(gasToken, tx.origin, amount), "Could not pay gas costs with token");
             }
         }  
     }
@@ -568,50 +598,51 @@ contract Module is MasterCopy {
     }
 }
 
-// Abstract contract for the full ERC 20 Token standard
-// https://github.com/ethereum/EIPs/issues/20
+/// @title Proxy - Generic proxy contract allows to execute all transactions applying the code of a master contract.
+/// @author Stefan George - <stefan@gnosis.pm>
+contract Proxy {
 
-contract ERC20Token {
-    /* This is a slight change to the ERC20 base standard.
-    function totalSupply() constant returns (uint256 supply);
-    is replaced with:
-    uint256 public totalSupply;
-    This automatically creates a getter function for the totalSupply.
-    This is moved to the base contract since public getter functions are not
-    currently recognised as an implementation of the matching abstract
-    function by the compiler.
-    */
-    /// total amount of tokens
-    uint256 public totalSupply;
+    // masterCopy always needs to be first declared variable, to ensure that it is at the same location in the contracts to which calls are delegated.
+    address masterCopy;
 
-    /// @param _owner The address from which the balance will be retrieved
-    /// @return The balance
-    function balanceOf(address _owner) public constant returns (uint256 balance);
+    /// @dev Constructor function sets address of master copy contract.
+    /// @param _masterCopy Master copy address.
+    constructor(address _masterCopy)
+        public
+    {
+        require(_masterCopy != 0, "Invalid master copy address provided");
+        masterCopy = _masterCopy;
+    }
 
-    /// @notice send `_value` token to `_to` from `msg.sender`
-    /// @param _to The address of the recipient
-    /// @param _value The amount of token to be transferred
-    /// @return Whether the transfer was successful or not
-    function transfer(address _to, uint256 _value) public returns (bool success);
+    /// @dev Fallback function forwards all transactions and returns all received return data.
+    function ()
+        external
+        payable
+    {
+        // solium-disable-next-line security/no-inline-assembly
+        assembly {
+            let masterCopy := and(sload(0), 0xffffffffffffffffffffffffffffffffffffffff)
+            calldatacopy(0, 0, calldatasize())
+            let success := delegatecall(gas, masterCopy, 0, calldatasize(), 0, 0)
+            returndatacopy(0, 0, returndatasize())
+            if eq(success, 0) { revert(0, returndatasize()) }
+            return(0, returndatasize())
+        }
+    }
 
-    /// @notice send `_value` token to `_to` from `_from` on the condition it is approved by `_from`
-    /// @param _from The address of the sender
-    /// @param _to The address of the recipient
-    /// @param _value The amount of token to be transferred
-    /// @return Whether the transfer was successful or not
-    function transferFrom(address _from, address _to, uint256 _value) public returns (bool success);
+    function implementation()
+        public
+        view
+        returns (address)
+    {
+        return masterCopy;
+    }
 
-    /// @notice `msg.sender` approves `_spender` to spend `_value` tokens
-    /// @param _spender The address of the account able to transfer the tokens
-    /// @param _value The amount of tokens to be approved for transfer
-    /// @return Whether the approval was successful or not
-    function approve(address _spender, uint256 _value) public returns (bool success);
-
-    /// @param _owner The address of the account owning tokens
-    /// @param _spender The address of the account able to transfer the tokens
-    /// @return Amount of remaining tokens allowed to spent
-    function allowance(address _owner, address _spender) public constant returns (uint256 remaining);
-
-    event Transfer(address indexed _from, address indexed _to, uint256 _value);
-    event Approval(address indexed _owner, address indexed _spender, uint256 _value);
+    function proxyType()
+        public
+        pure
+        returns (uint256)
+    {
+        return 2;
+    }
 }

@@ -1,0 +1,7976 @@
+======= GnosisSafePersonalEdition.sol:GnosisSafePersonalEdition =======
+EVM assembly:
+    /* "GnosisSafePersonalEdition.sol":483:6386  contract GnosisSafePersonalEdition is MasterCopy, GnosisSafe, SignatureValidator, SecuredTokenTransfer {... */
+  mstore(0x40, 0x80)
+  callvalue
+    /* "--CODEGEN--":8:17   */
+  dup1
+    /* "--CODEGEN--":5:7   */
+  iszero
+  tag_1
+  jumpi
+    /* "--CODEGEN--":30:31   */
+  0x0
+    /* "--CODEGEN--":27:28   */
+  dup1
+    /* "--CODEGEN--":20:32   */
+  revert
+    /* "--CODEGEN--":5:7   */
+tag_1:
+    /* "GnosisSafePersonalEdition.sol":483:6386  contract GnosisSafePersonalEdition is MasterCopy, GnosisSafe, SignatureValidator, SecuredTokenTransfer {... */
+  pop
+  dataSize(sub_0)
+  dup1
+  dataOffset(sub_0)
+  0x0
+  codecopy
+  0x0
+  return
+stop
+
+sub_0: assembly {
+        /* "GnosisSafePersonalEdition.sol":483:6386  contract GnosisSafePersonalEdition is MasterCopy, GnosisSafe, SignatureValidator, SecuredTokenTransfer {... */
+      mstore(0x40, 0x80)
+      jumpi(tag_1, lt(calldatasize, 0x4))
+      calldataload(0x0)
+      0x100000000000000000000000000000000000000000000000000000000
+      swap1
+      div
+      0xffffffff
+      and
+      dup1
+      0x9529334
+      eq
+      tag_2
+      jumpi
+      dup1
+      0xd582f13
+      eq
+      tag_3
+      jumpi
+      dup1
+      0xec78d9e
+      eq
+      tag_4
+      jumpi
+      dup1
+      0x2f54bf6e
+      eq
+      tag_5
+      jumpi
+      dup1
+      0x468721a7
+      eq
+      tag_6
+      jumpi
+      dup1
+      0x610b5925
+      eq
+      tag_7
+      jumpi
+      dup1
+      0x694e80c3
+      eq
+      tag_8
+      jumpi
+      dup1
+      0x7de7edef
+      eq
+      tag_9
+      jumpi
+      dup1
+      0x85e332cd
+      eq
+      tag_10
+      jumpi
+      dup1
+      0x8cff6355
+      eq
+      tag_11
+      jumpi
+      dup1
+      0xa0e67e2b
+      eq
+      tag_12
+      jumpi
+      dup1
+      0xa3f4df7e
+      eq
+      tag_13
+      jumpi
+      dup1
+      0xaffed0e0
+      eq
+      tag_14
+      jumpi
+      dup1
+      0xb2494df3
+      eq
+      tag_15
+      jumpi
+      dup1
+      0xba08ea24
+      eq
+      tag_16
+      jumpi
+      dup1
+      0xc4ca3a9c
+      eq
+      tag_17
+      jumpi
+      dup1
+      0xe009cfde
+      eq
+      tag_18
+      jumpi
+      dup1
+      0xe318b52b
+      eq
+      tag_19
+      jumpi
+      dup1
+      0xe75235b8
+      eq
+      tag_20
+      jumpi
+      dup1
+      0xf8dc5dd9
+      eq
+      tag_21
+      jumpi
+      dup1
+      0xffa1ad74
+      eq
+      tag_22
+      jumpi
+    tag_1:
+      stop
+        /* "GnosisSafePersonalEdition.sol":1677:3222  function execTransactionAndPaySubmitter(... */
+    tag_2:
+      callvalue
+        /* "--CODEGEN--":8:17   */
+      dup1
+        /* "--CODEGEN--":5:7   */
+      iszero
+      tag_25
+      jumpi
+        /* "--CODEGEN--":30:31   */
+      0x0
+        /* "--CODEGEN--":27:28   */
+      dup1
+        /* "--CODEGEN--":20:32   */
+      revert
+        /* "--CODEGEN--":5:7   */
+    tag_25:
+        /* "GnosisSafePersonalEdition.sol":1677:3222  function execTransactionAndPaySubmitter(... */
+      pop
+      tag_26
+      0x4
+      dup1
+      calldatasize
+      sub
+      dup2
+      add
+      swap1
+      dup1
+      dup1
+      calldataload
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      dup1
+      calldataload
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      dup1
+      calldataload
+      swap1
+      0x20
+      add
+      swap1
+      dup3
+      add
+      dup1
+      calldataload
+      swap1
+      0x20
+      add
+      swap1
+      dup1
+      dup1
+      0x1f
+      add
+      0x20
+      dup1
+      swap2
+      div
+      mul
+      0x20
+      add
+      mload(0x40)
+      swap1
+      dup2
+      add
+      0x40
+      mstore
+      dup1
+      swap4
+      swap3
+      swap2
+      swap1
+      dup2
+      dup2
+      mstore
+      0x20
+      add
+      dup4
+      dup4
+      dup1
+      dup3
+      dup5
+      calldatacopy
+      dup3
+      add
+      swap2
+      pop
+      pop
+      pop
+      pop
+      pop
+      pop
+      swap2
+      swap3
+      swap2
+      swap3
+      swap1
+      dup1
+      calldataload
+      0xff
+      and
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      dup1
+      calldataload
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      dup1
+      calldataload
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      dup1
+      calldataload
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      dup1
+      calldataload
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      dup1
+      calldataload
+      swap1
+      0x20
+      add
+      swap1
+      dup3
+      add
+      dup1
+      calldataload
+      swap1
+      0x20
+      add
+      swap1
+      dup1
+      dup1
+      0x1f
+      add
+      0x20
+      dup1
+      swap2
+      div
+      mul
+      0x20
+      add
+      mload(0x40)
+      swap1
+      dup2
+      add
+      0x40
+      mstore
+      dup1
+      swap4
+      swap3
+      swap2
+      swap1
+      dup2
+      dup2
+      mstore
+      0x20
+      add
+      dup4
+      dup4
+      dup1
+      dup3
+      dup5
+      calldatacopy
+      dup3
+      add
+      swap2
+      pop
+      pop
+      pop
+      pop
+      pop
+      pop
+      swap2
+      swap3
+      swap2
+      swap3
+      swap1
+      pop
+      pop
+      pop
+      jump(tag_27)
+    tag_26:
+      mload(0x40)
+      dup1
+      dup3
+      iszero
+      iszero
+      iszero
+      iszero
+      dup2
+      mstore
+      0x20
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      return
+        /* "OwnerManager.sol":2093:2688  function addOwnerWithThreshold(address owner, uint256 _threshold)... */
+    tag_3:
+      callvalue
+        /* "--CODEGEN--":8:17   */
+      dup1
+        /* "--CODEGEN--":5:7   */
+      iszero
+      tag_28
+      jumpi
+        /* "--CODEGEN--":30:31   */
+      0x0
+        /* "--CODEGEN--":27:28   */
+      dup1
+        /* "--CODEGEN--":20:32   */
+      revert
+        /* "--CODEGEN--":5:7   */
+    tag_28:
+        /* "OwnerManager.sol":2093:2688  function addOwnerWithThreshold(address owner, uint256 _threshold)... */
+      pop
+      tag_29
+      0x4
+      dup1
+      calldatasize
+      sub
+      dup2
+      add
+      swap1
+      dup1
+      dup1
+      calldataload
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      dup1
+      calldataload
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      pop
+      pop
+      pop
+      jump(tag_30)
+    tag_29:
+      stop
+        /* "GnosisSafe.sol":693:996  function setup(address[] _owners, uint256 _threshold, address to, bytes data)... */
+    tag_4:
+      callvalue
+        /* "--CODEGEN--":8:17   */
+      dup1
+        /* "--CODEGEN--":5:7   */
+      iszero
+      tag_31
+      jumpi
+        /* "--CODEGEN--":30:31   */
+      0x0
+        /* "--CODEGEN--":27:28   */
+      dup1
+        /* "--CODEGEN--":20:32   */
+      revert
+        /* "--CODEGEN--":5:7   */
+    tag_31:
+        /* "GnosisSafe.sol":693:996  function setup(address[] _owners, uint256 _threshold, address to, bytes data)... */
+      pop
+      tag_32
+      0x4
+      dup1
+      calldatasize
+      sub
+      dup2
+      add
+      swap1
+      dup1
+      dup1
+      calldataload
+      swap1
+      0x20
+      add
+      swap1
+      dup3
+      add
+      dup1
+      calldataload
+      swap1
+      0x20
+      add
+      swap1
+      dup1
+      dup1
+      0x20
+      mul
+      0x20
+      add
+      mload(0x40)
+      swap1
+      dup2
+      add
+      0x40
+      mstore
+      dup1
+      swap4
+      swap3
+      swap2
+      swap1
+      dup2
+      dup2
+      mstore
+      0x20
+      add
+      dup4
+      dup4
+      0x20
+      mul
+      dup1
+      dup3
+      dup5
+      calldatacopy
+      dup3
+      add
+      swap2
+      pop
+      pop
+      pop
+      pop
+      pop
+      pop
+      swap2
+      swap3
+      swap2
+      swap3
+      swap1
+      dup1
+      calldataload
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      dup1
+      calldataload
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      dup1
+      calldataload
+      swap1
+      0x20
+      add
+      swap1
+      dup3
+      add
+      dup1
+      calldataload
+      swap1
+      0x20
+      add
+      swap1
+      dup1
+      dup1
+      0x1f
+      add
+      0x20
+      dup1
+      swap2
+      div
+      mul
+      0x20
+      add
+      mload(0x40)
+      swap1
+      dup2
+      add
+      0x40
+      mstore
+      dup1
+      swap4
+      swap3
+      swap2
+      swap1
+      dup2
+      dup2
+      mstore
+      0x20
+      add
+      dup4
+      dup4
+      dup1
+      dup3
+      dup5
+      calldatacopy
+      dup3
+      add
+      swap2
+      pop
+      pop
+      pop
+      pop
+      pop
+      pop
+      swap2
+      swap3
+      swap2
+      swap3
+      swap1
+      pop
+      pop
+      pop
+      jump(tag_33)
+    tag_32:
+      stop
+        /* "OwnerManager.sol":5613:5742  function isOwner(address owner)... */
+    tag_5:
+      callvalue
+        /* "--CODEGEN--":8:17   */
+      dup1
+        /* "--CODEGEN--":5:7   */
+      iszero
+      tag_34
+      jumpi
+        /* "--CODEGEN--":30:31   */
+      0x0
+        /* "--CODEGEN--":27:28   */
+      dup1
+        /* "--CODEGEN--":20:32   */
+      revert
+        /* "--CODEGEN--":5:7   */
+    tag_34:
+        /* "OwnerManager.sol":5613:5742  function isOwner(address owner)... */
+      pop
+      tag_35
+      0x4
+      dup1
+      calldatasize
+      sub
+      dup2
+      add
+      swap1
+      dup1
+      dup1
+      calldataload
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      pop
+      pop
+      pop
+      jump(tag_36)
+    tag_35:
+      mload(0x40)
+      dup1
+      dup3
+      iszero
+      iszero
+      iszero
+      iszero
+      dup2
+      mstore
+      0x20
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      return
+        /* "ModuleManager.sol":2841:3270  function execTransactionFromModule(address to, uint256 value, bytes data, Enum.Operation operation)... */
+    tag_6:
+      callvalue
+        /* "--CODEGEN--":8:17   */
+      dup1
+        /* "--CODEGEN--":5:7   */
+      iszero
+      tag_37
+      jumpi
+        /* "--CODEGEN--":30:31   */
+      0x0
+        /* "--CODEGEN--":27:28   */
+      dup1
+        /* "--CODEGEN--":20:32   */
+      revert
+        /* "--CODEGEN--":5:7   */
+    tag_37:
+        /* "ModuleManager.sol":2841:3270  function execTransactionFromModule(address to, uint256 value, bytes data, Enum.Operation operation)... */
+      pop
+      tag_38
+      0x4
+      dup1
+      calldatasize
+      sub
+      dup2
+      add
+      swap1
+      dup1
+      dup1
+      calldataload
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      dup1
+      calldataload
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      dup1
+      calldataload
+      swap1
+      0x20
+      add
+      swap1
+      dup3
+      add
+      dup1
+      calldataload
+      swap1
+      0x20
+      add
+      swap1
+      dup1
+      dup1
+      0x1f
+      add
+      0x20
+      dup1
+      swap2
+      div
+      mul
+      0x20
+      add
+      mload(0x40)
+      swap1
+      dup2
+      add
+      0x40
+      mstore
+      dup1
+      swap4
+      swap3
+      swap2
+      swap1
+      dup2
+      dup2
+      mstore
+      0x20
+      add
+      dup4
+      dup4
+      dup1
+      dup3
+      dup5
+      calldatacopy
+      dup3
+      add
+      swap2
+      pop
+      pop
+      pop
+      pop
+      pop
+      pop
+      swap2
+      swap3
+      swap2
+      swap3
+      swap1
+      dup1
+      calldataload
+      0xff
+      and
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      pop
+      pop
+      pop
+      jump(tag_39)
+    tag_38:
+      mload(0x40)
+      dup1
+      dup3
+      iszero
+      iszero
+      iszero
+      iszero
+      dup2
+      mstore
+      0x20
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      return
+        /* "ModuleManager.sol":1311:1770  function enableModule(Module module)... */
+    tag_7:
+      callvalue
+        /* "--CODEGEN--":8:17   */
+      dup1
+        /* "--CODEGEN--":5:7   */
+      iszero
+      tag_40
+      jumpi
+        /* "--CODEGEN--":30:31   */
+      0x0
+        /* "--CODEGEN--":27:28   */
+      dup1
+        /* "--CODEGEN--":20:32   */
+      revert
+        /* "--CODEGEN--":5:7   */
+    tag_40:
+        /* "ModuleManager.sol":1311:1770  function enableModule(Module module)... */
+      pop
+      tag_41
+      0x4
+      dup1
+      calldatasize
+      sub
+      dup2
+      add
+      swap1
+      dup1
+      dup1
+      calldataload
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      pop
+      pop
+      pop
+      jump(tag_42)
+    tag_41:
+      stop
+        /* "OwnerManager.sol":5087:5486  function changeThreshold(uint256 _threshold)... */
+    tag_8:
+      callvalue
+        /* "--CODEGEN--":8:17   */
+      dup1
+        /* "--CODEGEN--":5:7   */
+      iszero
+      tag_43
+      jumpi
+        /* "--CODEGEN--":30:31   */
+      0x0
+        /* "--CODEGEN--":27:28   */
+      dup1
+        /* "--CODEGEN--":20:32   */
+      revert
+        /* "--CODEGEN--":5:7   */
+    tag_43:
+        /* "OwnerManager.sol":5087:5486  function changeThreshold(uint256 _threshold)... */
+      pop
+      tag_44
+      0x4
+      dup1
+      calldatasize
+      sub
+      dup2
+      add
+      swap1
+      dup1
+      dup1
+      calldataload
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      pop
+      pop
+      pop
+      jump(tag_45)
+    tag_44:
+      stop
+        /* "MasterCopy.sol":626:874  function changeMasterCopy(address _masterCopy)... */
+    tag_9:
+      callvalue
+        /* "--CODEGEN--":8:17   */
+      dup1
+        /* "--CODEGEN--":5:7   */
+      iszero
+      tag_46
+      jumpi
+        /* "--CODEGEN--":30:31   */
+      0x0
+        /* "--CODEGEN--":27:28   */
+      dup1
+        /* "--CODEGEN--":20:32   */
+      revert
+        /* "--CODEGEN--":5:7   */
+    tag_46:
+        /* "MasterCopy.sol":626:874  function changeMasterCopy(address _masterCopy)... */
+      pop
+      tag_47
+      0x4
+      dup1
+      calldatasize
+      sub
+      dup2
+      add
+      swap1
+      dup1
+      dup1
+      calldataload
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      pop
+      pop
+      pop
+      jump(tag_48)
+    tag_47:
+      stop
+        /* "ModuleManager.sol":499:554  address public constant SENTINEL_MODULES = address(0x1) */
+    tag_10:
+      callvalue
+        /* "--CODEGEN--":8:17   */
+      dup1
+        /* "--CODEGEN--":5:7   */
+      iszero
+      tag_49
+      jumpi
+        /* "--CODEGEN--":30:31   */
+      0x0
+        /* "--CODEGEN--":27:28   */
+      dup1
+        /* "--CODEGEN--":20:32   */
+      revert
+        /* "--CODEGEN--":5:7   */
+    tag_49:
+        /* "ModuleManager.sol":499:554  address public constant SENTINEL_MODULES = address(0x1) */
+      pop
+      tag_50
+      jump(tag_51)
+    tag_50:
+      mload(0x40)
+      dup1
+      dup3
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      return
+        /* "OwnerManager.sol":287:341  address public constant SENTINEL_OWNERS = address(0x1) */
+    tag_11:
+      callvalue
+        /* "--CODEGEN--":8:17   */
+      dup1
+        /* "--CODEGEN--":5:7   */
+      iszero
+      tag_52
+      jumpi
+        /* "--CODEGEN--":30:31   */
+      0x0
+        /* "--CODEGEN--":27:28   */
+      dup1
+        /* "--CODEGEN--":20:32   */
+      revert
+        /* "--CODEGEN--":5:7   */
+    tag_52:
+        /* "OwnerManager.sol":287:341  address public constant SENTINEL_OWNERS = address(0x1) */
+      pop
+      tag_53
+      jump(tag_54)
+    tag_53:
+      mload(0x40)
+      dup1
+      dup3
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      return
+        /* "OwnerManager.sol":5824:6282  function getOwners()... */
+    tag_12:
+      callvalue
+        /* "--CODEGEN--":8:17   */
+      dup1
+        /* "--CODEGEN--":5:7   */
+      iszero
+      tag_55
+      jumpi
+        /* "--CODEGEN--":30:31   */
+      0x0
+        /* "--CODEGEN--":27:28   */
+      dup1
+        /* "--CODEGEN--":20:32   */
+      revert
+        /* "--CODEGEN--":5:7   */
+    tag_55:
+        /* "OwnerManager.sol":5824:6282  function getOwners()... */
+      pop
+      tag_56
+      jump(tag_57)
+    tag_56:
+      mload(0x40)
+      dup1
+      dup1
+      0x20
+      add
+      dup3
+      dup2
+      sub
+      dup3
+      mstore
+      dup4
+      dup2
+      dup2
+      mload
+      dup2
+      mstore
+      0x20
+      add
+      swap2
+      pop
+      dup1
+      mload
+      swap1
+      0x20
+      add
+      swap1
+      0x20
+      mul
+      dup1
+      dup4
+      dup4
+        /* "--CODEGEN--":23:24   */
+      0x0
+        /* "--CODEGEN--":8:108   */
+    tag_58:
+        /* "--CODEGEN--":33:36   */
+      dup4
+        /* "--CODEGEN--":30:31   */
+      dup2
+        /* "--CODEGEN--":27:37   */
+      lt
+        /* "--CODEGEN--":8:108   */
+      iszero
+      tag_59
+      jumpi
+        /* "--CODEGEN--":99:100   */
+      dup1
+        /* "--CODEGEN--":94:97   */
+      dup3
+        /* "--CODEGEN--":90:101   */
+      add
+        /* "--CODEGEN--":84:102   */
+      mload
+        /* "--CODEGEN--":80:81   */
+      dup2
+        /* "--CODEGEN--":75:78   */
+      dup5
+        /* "--CODEGEN--":71:82   */
+      add
+        /* "--CODEGEN--":64:103   */
+      mstore
+        /* "--CODEGEN--":52:54   */
+      0x20
+        /* "--CODEGEN--":49:50   */
+      dup2
+        /* "--CODEGEN--":45:55   */
+      add
+        /* "--CODEGEN--":40:55   */
+      swap1
+      pop
+        /* "--CODEGEN--":8:108   */
+      jump(tag_58)
+    tag_59:
+        /* "--CODEGEN--":12:26   */
+      pop
+        /* "OwnerManager.sol":5824:6282  function getOwners()... */
+      pop
+      pop
+      pop
+      swap1
+      pop
+      add
+      swap3
+      pop
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      return
+        /* "GnosisSafePersonalEdition.sol":593:653  string public constant NAME = "Gnosis Safe Personal Edition" */
+    tag_13:
+      callvalue
+        /* "--CODEGEN--":8:17   */
+      dup1
+        /* "--CODEGEN--":5:7   */
+      iszero
+      tag_61
+      jumpi
+        /* "--CODEGEN--":30:31   */
+      0x0
+        /* "--CODEGEN--":27:28   */
+      dup1
+        /* "--CODEGEN--":20:32   */
+      revert
+        /* "--CODEGEN--":5:7   */
+    tag_61:
+        /* "GnosisSafePersonalEdition.sol":593:653  string public constant NAME = "Gnosis Safe Personal Edition" */
+      pop
+      tag_62
+      jump(tag_63)
+    tag_62:
+      mload(0x40)
+      dup1
+      dup1
+      0x20
+      add
+      dup3
+      dup2
+      sub
+      dup3
+      mstore
+      dup4
+      dup2
+      dup2
+      mload
+      dup2
+      mstore
+      0x20
+      add
+      swap2
+      pop
+      dup1
+      mload
+      swap1
+      0x20
+      add
+      swap1
+      dup1
+      dup4
+      dup4
+        /* "--CODEGEN--":23:24   */
+      0x0
+        /* "--CODEGEN--":8:108   */
+    tag_64:
+        /* "--CODEGEN--":33:36   */
+      dup4
+        /* "--CODEGEN--":30:31   */
+      dup2
+        /* "--CODEGEN--":27:37   */
+      lt
+        /* "--CODEGEN--":8:108   */
+      iszero
+      tag_65
+      jumpi
+        /* "--CODEGEN--":99:100   */
+      dup1
+        /* "--CODEGEN--":94:97   */
+      dup3
+        /* "--CODEGEN--":90:101   */
+      add
+        /* "--CODEGEN--":84:102   */
+      mload
+        /* "--CODEGEN--":80:81   */
+      dup2
+        /* "--CODEGEN--":75:78   */
+      dup5
+        /* "--CODEGEN--":71:82   */
+      add
+        /* "--CODEGEN--":64:103   */
+      mstore
+        /* "--CODEGEN--":52:54   */
+      0x20
+        /* "--CODEGEN--":49:50   */
+      dup2
+        /* "--CODEGEN--":45:55   */
+      add
+        /* "--CODEGEN--":40:55   */
+      swap1
+      pop
+        /* "--CODEGEN--":8:108   */
+      jump(tag_64)
+    tag_65:
+        /* "--CODEGEN--":12:26   */
+      pop
+        /* "GnosisSafePersonalEdition.sol":593:653  string public constant NAME = "Gnosis Safe Personal Edition" */
+      pop
+      pop
+      pop
+      swap1
+      pop
+      swap1
+      dup2
+      add
+      swap1
+      0x1f
+      and
+      dup1
+      iszero
+      tag_67
+      jumpi
+      dup1
+      dup3
+      sub
+      dup1
+      mload
+      0x1
+      dup4
+      0x20
+      sub
+      0x100
+      exp
+      sub
+      not
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap2
+      pop
+    tag_67:
+      pop
+      swap3
+      pop
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      return
+        /* "GnosisSafePersonalEdition.sol":754:774  uint256 public nonce */
+    tag_14:
+      callvalue
+        /* "--CODEGEN--":8:17   */
+      dup1
+        /* "--CODEGEN--":5:7   */
+      iszero
+      tag_68
+      jumpi
+        /* "--CODEGEN--":30:31   */
+      0x0
+        /* "--CODEGEN--":27:28   */
+      dup1
+        /* "--CODEGEN--":20:32   */
+      revert
+        /* "--CODEGEN--":5:7   */
+    tag_68:
+        /* "GnosisSafePersonalEdition.sol":754:774  uint256 public nonce */
+      pop
+      tag_69
+      jump(tag_70)
+    tag_69:
+      mload(0x40)
+      dup1
+      dup3
+      dup2
+      mstore
+      0x20
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      return
+        /* "ModuleManager.sol":4794:5532  function getModules()... */
+    tag_15:
+      callvalue
+        /* "--CODEGEN--":8:17   */
+      dup1
+        /* "--CODEGEN--":5:7   */
+      iszero
+      tag_71
+      jumpi
+        /* "--CODEGEN--":30:31   */
+      0x0
+        /* "--CODEGEN--":27:28   */
+      dup1
+        /* "--CODEGEN--":20:32   */
+      revert
+        /* "--CODEGEN--":5:7   */
+    tag_71:
+        /* "ModuleManager.sol":4794:5532  function getModules()... */
+      pop
+      tag_72
+      jump(tag_73)
+    tag_72:
+      mload(0x40)
+      dup1
+      dup1
+      0x20
+      add
+      dup3
+      dup2
+      sub
+      dup3
+      mstore
+      dup4
+      dup2
+      dup2
+      mload
+      dup2
+      mstore
+      0x20
+      add
+      swap2
+      pop
+      dup1
+      mload
+      swap1
+      0x20
+      add
+      swap1
+      0x20
+      mul
+      dup1
+      dup4
+      dup4
+        /* "--CODEGEN--":23:24   */
+      0x0
+        /* "--CODEGEN--":8:108   */
+    tag_74:
+        /* "--CODEGEN--":33:36   */
+      dup4
+        /* "--CODEGEN--":30:31   */
+      dup2
+        /* "--CODEGEN--":27:37   */
+      lt
+        /* "--CODEGEN--":8:108   */
+      iszero
+      tag_75
+      jumpi
+        /* "--CODEGEN--":99:100   */
+      dup1
+        /* "--CODEGEN--":94:97   */
+      dup3
+        /* "--CODEGEN--":90:101   */
+      add
+        /* "--CODEGEN--":84:102   */
+      mload
+        /* "--CODEGEN--":80:81   */
+      dup2
+        /* "--CODEGEN--":75:78   */
+      dup5
+        /* "--CODEGEN--":71:82   */
+      add
+        /* "--CODEGEN--":64:103   */
+      mstore
+        /* "--CODEGEN--":52:54   */
+      0x20
+        /* "--CODEGEN--":49:50   */
+      dup2
+        /* "--CODEGEN--":45:55   */
+      add
+        /* "--CODEGEN--":40:55   */
+      swap1
+      pop
+        /* "--CODEGEN--":8:108   */
+      jump(tag_74)
+    tag_75:
+        /* "--CODEGEN--":12:26   */
+      pop
+        /* "ModuleManager.sol":4794:5532  function getModules()... */
+      pop
+      pop
+      pop
+      swap1
+      pop
+      add
+      swap3
+      pop
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      return
+        /* "GnosisSafePersonalEdition.sol":5884:6384  function getTransactionHash(... */
+    tag_16:
+      callvalue
+        /* "--CODEGEN--":8:17   */
+      dup1
+        /* "--CODEGEN--":5:7   */
+      iszero
+      tag_77
+      jumpi
+        /* "--CODEGEN--":30:31   */
+      0x0
+        /* "--CODEGEN--":27:28   */
+      dup1
+        /* "--CODEGEN--":20:32   */
+      revert
+        /* "--CODEGEN--":5:7   */
+    tag_77:
+        /* "GnosisSafePersonalEdition.sol":5884:6384  function getTransactionHash(... */
+      pop
+      tag_78
+      0x4
+      dup1
+      calldatasize
+      sub
+      dup2
+      add
+      swap1
+      dup1
+      dup1
+      calldataload
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      dup1
+      calldataload
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      dup1
+      calldataload
+      swap1
+      0x20
+      add
+      swap1
+      dup3
+      add
+      dup1
+      calldataload
+      swap1
+      0x20
+      add
+      swap1
+      dup1
+      dup1
+      0x1f
+      add
+      0x20
+      dup1
+      swap2
+      div
+      mul
+      0x20
+      add
+      mload(0x40)
+      swap1
+      dup2
+      add
+      0x40
+      mstore
+      dup1
+      swap4
+      swap3
+      swap2
+      swap1
+      dup2
+      dup2
+      mstore
+      0x20
+      add
+      dup4
+      dup4
+      dup1
+      dup3
+      dup5
+      calldatacopy
+      dup3
+      add
+      swap2
+      pop
+      pop
+      pop
+      pop
+      pop
+      pop
+      swap2
+      swap3
+      swap2
+      swap3
+      swap1
+      dup1
+      calldataload
+      0xff
+      and
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      dup1
+      calldataload
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      dup1
+      calldataload
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      dup1
+      calldataload
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      dup1
+      calldataload
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      dup1
+      calldataload
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      pop
+      pop
+      pop
+      jump(tag_79)
+    tag_78:
+      mload(0x40)
+      dup1
+      dup3
+      not(0x0)
+      and
+      not(0x0)
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      return
+        /* "GnosisSafePersonalEdition.sol":4149:4672  function requiredTxGas(address to, uint256 value, bytes data, Enum.Operation operation)... */
+    tag_17:
+      callvalue
+        /* "--CODEGEN--":8:17   */
+      dup1
+        /* "--CODEGEN--":5:7   */
+      iszero
+      tag_80
+      jumpi
+        /* "--CODEGEN--":30:31   */
+      0x0
+        /* "--CODEGEN--":27:28   */
+      dup1
+        /* "--CODEGEN--":20:32   */
+      revert
+        /* "--CODEGEN--":5:7   */
+    tag_80:
+        /* "GnosisSafePersonalEdition.sol":4149:4672  function requiredTxGas(address to, uint256 value, bytes data, Enum.Operation operation)... */
+      pop
+      tag_81
+      0x4
+      dup1
+      calldatasize
+      sub
+      dup2
+      add
+      swap1
+      dup1
+      dup1
+      calldataload
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      dup1
+      calldataload
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      dup1
+      calldataload
+      swap1
+      0x20
+      add
+      swap1
+      dup3
+      add
+      dup1
+      calldataload
+      swap1
+      0x20
+      add
+      swap1
+      dup1
+      dup1
+      0x1f
+      add
+      0x20
+      dup1
+      swap2
+      div
+      mul
+      0x20
+      add
+      mload(0x40)
+      swap1
+      dup2
+      add
+      0x40
+      mstore
+      dup1
+      swap4
+      swap3
+      swap2
+      swap1
+      dup2
+      dup2
+      mstore
+      0x20
+      add
+      dup4
+      dup4
+      dup1
+      dup3
+      dup5
+      calldatacopy
+      dup3
+      add
+      swap2
+      pop
+      pop
+      pop
+      pop
+      pop
+      pop
+      swap2
+      swap3
+      swap2
+      swap3
+      swap1
+      dup1
+      calldataload
+      0xff
+      and
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      pop
+      pop
+      pop
+      jump(tag_82)
+    tag_81:
+      mload(0x40)
+      dup1
+      dup3
+      dup2
+      mstore
+      0x20
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      return
+        /* "ModuleManager.sol":2031:2505  function disableModule(Module prevModule, Module module)... */
+    tag_18:
+      callvalue
+        /* "--CODEGEN--":8:17   */
+      dup1
+        /* "--CODEGEN--":5:7   */
+      iszero
+      tag_83
+      jumpi
+        /* "--CODEGEN--":30:31   */
+      0x0
+        /* "--CODEGEN--":27:28   */
+      dup1
+        /* "--CODEGEN--":20:32   */
+      revert
+        /* "--CODEGEN--":5:7   */
+    tag_83:
+        /* "ModuleManager.sol":2031:2505  function disableModule(Module prevModule, Module module)... */
+      pop
+      tag_84
+      0x4
+      dup1
+      calldatasize
+      sub
+      dup2
+      add
+      swap1
+      dup1
+      dup1
+      calldataload
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      dup1
+      calldataload
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      pop
+      pop
+      pop
+      jump(tag_85)
+    tag_84:
+      stop
+        /* "OwnerManager.sol":4147:4898  function swapOwner(address prevOwner, address oldOwner, address newOwner)... */
+    tag_19:
+      callvalue
+        /* "--CODEGEN--":8:17   */
+      dup1
+        /* "--CODEGEN--":5:7   */
+      iszero
+      tag_86
+      jumpi
+        /* "--CODEGEN--":30:31   */
+      0x0
+        /* "--CODEGEN--":27:28   */
+      dup1
+        /* "--CODEGEN--":20:32   */
+      revert
+        /* "--CODEGEN--":5:7   */
+    tag_86:
+        /* "OwnerManager.sol":4147:4898  function swapOwner(address prevOwner, address oldOwner, address newOwner)... */
+      pop
+      tag_87
+      0x4
+      dup1
+      calldatasize
+      sub
+      dup2
+      add
+      swap1
+      dup1
+      dup1
+      calldataload
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      dup1
+      calldataload
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      dup1
+      calldataload
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      pop
+      pop
+      pop
+      jump(tag_88)
+    tag_87:
+      stop
+        /* "OwnerManager.sol":5492:5607  function getThreshold()... */
+    tag_20:
+      callvalue
+        /* "--CODEGEN--":8:17   */
+      dup1
+        /* "--CODEGEN--":5:7   */
+      iszero
+      tag_89
+      jumpi
+        /* "--CODEGEN--":30:31   */
+      0x0
+        /* "--CODEGEN--":27:28   */
+      dup1
+        /* "--CODEGEN--":20:32   */
+      revert
+        /* "--CODEGEN--":5:7   */
+    tag_89:
+        /* "OwnerManager.sol":5492:5607  function getThreshold()... */
+      pop
+      tag_90
+      jump(tag_91)
+    tag_90:
+      mload(0x40)
+      dup1
+      dup3
+      dup2
+      mstore
+      0x20
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      return
+        /* "OwnerManager.sol":3030:3813  function removeOwner(address prevOwner, address owner, uint256 _threshold)... */
+    tag_21:
+      callvalue
+        /* "--CODEGEN--":8:17   */
+      dup1
+        /* "--CODEGEN--":5:7   */
+      iszero
+      tag_92
+      jumpi
+        /* "--CODEGEN--":30:31   */
+      0x0
+        /* "--CODEGEN--":27:28   */
+      dup1
+        /* "--CODEGEN--":20:32   */
+      revert
+        /* "--CODEGEN--":5:7   */
+    tag_92:
+        /* "OwnerManager.sol":3030:3813  function removeOwner(address prevOwner, address owner, uint256 _threshold)... */
+      pop
+      tag_93
+      0x4
+      dup1
+      calldatasize
+      sub
+      dup2
+      add
+      swap1
+      dup1
+      dup1
+      calldataload
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      dup1
+      calldataload
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      dup1
+      calldataload
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      pop
+      pop
+      pop
+      jump(tag_94)
+    tag_93:
+      stop
+        /* "GnosisSafePersonalEdition.sol":659:699  string public constant VERSION = "0.0.1" */
+    tag_22:
+      callvalue
+        /* "--CODEGEN--":8:17   */
+      dup1
+        /* "--CODEGEN--":5:7   */
+      iszero
+      tag_95
+      jumpi
+        /* "--CODEGEN--":30:31   */
+      0x0
+        /* "--CODEGEN--":27:28   */
+      dup1
+        /* "--CODEGEN--":20:32   */
+      revert
+        /* "--CODEGEN--":5:7   */
+    tag_95:
+        /* "GnosisSafePersonalEdition.sol":659:699  string public constant VERSION = "0.0.1" */
+      pop
+      tag_96
+      jump(tag_97)
+    tag_96:
+      mload(0x40)
+      dup1
+      dup1
+      0x20
+      add
+      dup3
+      dup2
+      sub
+      dup3
+      mstore
+      dup4
+      dup2
+      dup2
+      mload
+      dup2
+      mstore
+      0x20
+      add
+      swap2
+      pop
+      dup1
+      mload
+      swap1
+      0x20
+      add
+      swap1
+      dup1
+      dup4
+      dup4
+        /* "--CODEGEN--":23:24   */
+      0x0
+        /* "--CODEGEN--":8:108   */
+    tag_98:
+        /* "--CODEGEN--":33:36   */
+      dup4
+        /* "--CODEGEN--":30:31   */
+      dup2
+        /* "--CODEGEN--":27:37   */
+      lt
+        /* "--CODEGEN--":8:108   */
+      iszero
+      tag_99
+      jumpi
+        /* "--CODEGEN--":99:100   */
+      dup1
+        /* "--CODEGEN--":94:97   */
+      dup3
+        /* "--CODEGEN--":90:101   */
+      add
+        /* "--CODEGEN--":84:102   */
+      mload
+        /* "--CODEGEN--":80:81   */
+      dup2
+        /* "--CODEGEN--":75:78   */
+      dup5
+        /* "--CODEGEN--":71:82   */
+      add
+        /* "--CODEGEN--":64:103   */
+      mstore
+        /* "--CODEGEN--":52:54   */
+      0x20
+        /* "--CODEGEN--":49:50   */
+      dup2
+        /* "--CODEGEN--":45:55   */
+      add
+        /* "--CODEGEN--":40:55   */
+      swap1
+      pop
+        /* "--CODEGEN--":8:108   */
+      jump(tag_98)
+    tag_99:
+        /* "--CODEGEN--":12:26   */
+      pop
+        /* "GnosisSafePersonalEdition.sol":659:699  string public constant VERSION = "0.0.1" */
+      pop
+      pop
+      pop
+      swap1
+      pop
+      swap1
+      dup2
+      add
+      swap1
+      0x1f
+      and
+      dup1
+      iszero
+      tag_101
+      jumpi
+      dup1
+      dup3
+      sub
+      dup1
+      mload
+      0x1
+      dup4
+      0x20
+      sub
+      0x100
+      exp
+      sub
+      not
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap2
+      pop
+    tag_101:
+      pop
+      swap3
+      pop
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      return
+        /* "GnosisSafePersonalEdition.sol":1677:3222  function execTransactionAndPaySubmitter(... */
+    tag_27:
+        /* "GnosisSafePersonalEdition.sol":1986:1998  bool success */
+      0x0
+        /* "GnosisSafePersonalEdition.sol":2014:2030  uint256 startGas */
+      dup1
+        /* "GnosisSafePersonalEdition.sol":2052:2066  bytes32 txHash */
+      0x0
+        /* "GnosisSafePersonalEdition.sol":2680:2696  uint256 gasCosts */
+      dup1
+        /* "GnosisSafePersonalEdition.sol":2745:2759  uint256 amount */
+      0x0
+        /* "GnosisSafePersonalEdition.sol":2033:2042  gasleft() */
+      gas
+        /* "GnosisSafePersonalEdition.sol":2014:2042  uint256 startGas = gasleft() */
+      swap4
+      pop
+        /* "GnosisSafePersonalEdition.sol":2069:2162  getTransactionHash(to, value, data, operation, safeTxGas, dataGas, gasPrice, gasToken, nonce) */
+      tag_103
+        /* "GnosisSafePersonalEdition.sol":2088:2090  to */
+      dup15
+        /* "GnosisSafePersonalEdition.sol":2092:2097  value */
+      dup15
+        /* "GnosisSafePersonalEdition.sol":2099:2103  data */
+      dup15
+        /* "GnosisSafePersonalEdition.sol":2105:2114  operation */
+      dup15
+        /* "GnosisSafePersonalEdition.sol":2116:2125  safeTxGas */
+      dup15
+        /* "GnosisSafePersonalEdition.sol":2127:2134  dataGas */
+      dup15
+        /* "GnosisSafePersonalEdition.sol":2136:2144  gasPrice */
+      dup15
+        /* "GnosisSafePersonalEdition.sol":2146:2154  gasToken */
+      dup15
+        /* "GnosisSafePersonalEdition.sol":2156:2161  nonce */
+      sload(0x5)
+        /* "GnosisSafePersonalEdition.sol":2069:2087  getTransactionHash */
+      tag_79
+        /* "GnosisSafePersonalEdition.sol":2069:2162  getTransactionHash(to, value, data, operation, safeTxGas, dataGas, gasPrice, gasToken, nonce) */
+      jump	// in
+    tag_103:
+        /* "GnosisSafePersonalEdition.sol":2052:2162  bytes32 txHash = getTransactionHash(to, value, data, operation, safeTxGas, dataGas, gasPrice, gasToken, nonce) */
+      swap3
+      pop
+        /* "GnosisSafePersonalEdition.sol":2172:2201  checkHash(txHash, signatures) */
+      tag_104
+        /* "GnosisSafePersonalEdition.sol":2182:2188  txHash */
+      dup4
+        /* "GnosisSafePersonalEdition.sol":2190:2200  signatures */
+      dup8
+        /* "GnosisSafePersonalEdition.sol":2172:2181  checkHash */
+      tag_105
+        /* "GnosisSafePersonalEdition.sol":2172:2201  checkHash(txHash, signatures) */
+      jump	// in
+    tag_104:
+        /* "GnosisSafePersonalEdition.sol":2262:2267  nonce */
+      0x5
+      0x0
+        /* "GnosisSafePersonalEdition.sol":2262:2269  nonce++ */
+      dup2
+      sload
+      dup1
+      swap3
+      swap2
+      swap1
+      0x1
+      add
+      swap2
+      swap1
+      pop
+      sstore
+      pop
+        /* "GnosisSafePersonalEdition.sol":2300:2309  safeTxGas */
+      dup10
+        /* "GnosisSafePersonalEdition.sol":2287:2296  gasleft() */
+      gas
+        /* "GnosisSafePersonalEdition.sol":2287:2309  gasleft() >= safeTxGas */
+      lt
+      iszero
+        /* "GnosisSafePersonalEdition.sol":2279:2356  require(gasleft() >= safeTxGas, "Not enough gas to execute safe transaction") */
+      iszero
+      iszero
+      tag_106
+      jumpi
+      mload(0x40)
+      0x8c379a000000000000000000000000000000000000000000000000000000000
+      dup2
+      mstore
+      0x4
+      add
+      dup1
+      dup1
+      0x20
+      add
+      dup3
+      dup2
+      sub
+      dup3
+      mstore
+      0x2a
+      dup2
+      mstore
+      0x20
+      add
+      dup1
+      0x4e6f7420656e6f7567682067617320746f206578656375746520736166652074
+      dup2
+      mstore
+      0x20
+      add
+      0x72616e73616374696f6e00000000000000000000000000000000000000000000
+      dup2
+      mstore
+      pop
+      0x40
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      revert
+    tag_106:
+        /* "GnosisSafePersonalEdition.sol":2376:2422  execute(to, value, data, operation, safeTxGas) */
+      tag_107
+        /* "GnosisSafePersonalEdition.sol":2384:2386  to */
+      dup15
+        /* "GnosisSafePersonalEdition.sol":2388:2393  value */
+      dup15
+        /* "GnosisSafePersonalEdition.sol":2395:2399  data */
+      dup15
+        /* "GnosisSafePersonalEdition.sol":2401:2410  operation */
+      dup15
+        /* "GnosisSafePersonalEdition.sol":2412:2421  safeTxGas */
+      dup15
+        /* "GnosisSafePersonalEdition.sol":2376:2383  execute */
+      tag_108
+        /* "GnosisSafePersonalEdition.sol":2376:2422  execute(to, value, data, operation, safeTxGas) */
+      jump	// in
+    tag_107:
+        /* "GnosisSafePersonalEdition.sol":2366:2422  success = execute(to, value, data, operation, safeTxGas) */
+      swap5
+      pop
+        /* "GnosisSafePersonalEdition.sol":2437:2444  success */
+      dup5
+        /* "GnosisSafePersonalEdition.sol":2436:2444  !success */
+      iszero
+        /* "GnosisSafePersonalEdition.sol":2432:2499  if (!success) {... */
+      iszero
+      tag_109
+      jumpi
+        /* "GnosisSafePersonalEdition.sol":2465:2488  ExecutionFailed(txHash) */
+      0xabfd711ecdd15ae3a6b3ad16ff2e9d81aec026a39d16725ee164be4fbf857a7c
+        /* "GnosisSafePersonalEdition.sol":2481:2487  txHash */
+      dup4
+        /* "GnosisSafePersonalEdition.sol":2465:2488  ExecutionFailed(txHash) */
+      mload(0x40)
+      dup1
+      dup3
+      not(0x0)
+      and
+      not(0x0)
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      log1
+        /* "GnosisSafePersonalEdition.sol":2432:2499  if (!success) {... */
+    tag_109:
+        /* "GnosisSafePersonalEdition.sol":2663:2664  0 */
+      0x0
+        /* "GnosisSafePersonalEdition.sol":2652:2660  gasPrice */
+      dup9
+        /* "GnosisSafePersonalEdition.sol":2652:2664  gasPrice > 0 */
+      gt
+        /* "GnosisSafePersonalEdition.sol":2648:3214  if (gasPrice > 0) {... */
+      iszero
+      tag_110
+      jumpi
+        /* "GnosisSafePersonalEdition.sol":2724:2731  dataGas */
+      dup9
+        /* "GnosisSafePersonalEdition.sol":2711:2720  gasleft() */
+      gas
+        /* "GnosisSafePersonalEdition.sol":2700:2708  startGas */
+      dup6
+        /* "GnosisSafePersonalEdition.sol":2700:2720  startGas - gasleft() */
+      sub
+        /* "GnosisSafePersonalEdition.sol":2699:2731  (startGas - gasleft()) + dataGas */
+      add
+        /* "GnosisSafePersonalEdition.sol":2680:2731  uint256 gasCosts = (startGas - gasleft()) + dataGas */
+      swap2
+      pop
+        /* "GnosisSafePersonalEdition.sol":2773:2781  gasPrice */
+      dup8
+        /* "GnosisSafePersonalEdition.sol":2762:2770  gasCosts */
+      dup3
+        /* "GnosisSafePersonalEdition.sol":2762:2781  gasCosts * gasPrice */
+      mul
+        /* "GnosisSafePersonalEdition.sol":2745:2781  uint256 amount = gasCosts * gasPrice */
+      swap1
+      pop
+        /* "GnosisSafePersonalEdition.sol":2819:2820  0 */
+      0x0
+        /* "GnosisSafePersonalEdition.sol":2799:2821  gasToken == address(0) */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+        /* "GnosisSafePersonalEdition.sol":2799:2807  gasToken */
+      dup8
+        /* "GnosisSafePersonalEdition.sol":2799:2821  gasToken == address(0) */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      eq
+        /* "GnosisSafePersonalEdition.sol":2795:3204  if (gasToken == address(0)) {... */
+      iszero
+      tag_111
+      jumpi
+        /* "GnosisSafePersonalEdition.sol":2933:2942  tx.origin */
+      origin
+        /* "GnosisSafePersonalEdition.sol":2933:2947  tx.origin.send */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+        /* "GnosisSafePersonalEdition.sol":2933:2955  tx.origin.send(amount) */
+      0x8fc
+        /* "GnosisSafePersonalEdition.sol":2948:2954  amount */
+      dup3
+        /* "GnosisSafePersonalEdition.sol":2933:2955  tx.origin.send(amount) */
+      swap1
+      dup2
+      iszero
+      mul
+      swap1
+      mload(0x40)
+      0x0
+      mload(0x40)
+      dup1
+      dup4
+      sub
+      dup2
+      dup6
+      dup9
+      dup9
+      call
+      swap4
+      pop
+      pop
+      pop
+      pop
+        /* "GnosisSafePersonalEdition.sol":2925:2994  require(tx.origin.send(amount), "Could not pay gas costs with ether") */
+      iszero
+      iszero
+      tag_112
+      jumpi
+      mload(0x40)
+      0x8c379a000000000000000000000000000000000000000000000000000000000
+      dup2
+      mstore
+      0x4
+      add
+      dup1
+      dup1
+      0x20
+      add
+      dup3
+      dup2
+      sub
+      dup3
+      mstore
+      0x22
+      dup2
+      mstore
+      0x20
+      add
+      dup1
+      0x436f756c64206e6f74207061792067617320636f737473207769746820657468
+      dup2
+      mstore
+      0x20
+      add
+      0x6572000000000000000000000000000000000000000000000000000000000000
+      dup2
+      mstore
+      pop
+      0x40
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      revert
+    tag_112:
+        /* "GnosisSafePersonalEdition.sol":2795:3204  if (gasToken == address(0)) {... */
+      jump(tag_113)
+    tag_111:
+        /* "GnosisSafePersonalEdition.sol":3108:3150  transferToken(gasToken, tx.origin, amount) */
+      tag_114
+        /* "GnosisSafePersonalEdition.sol":3122:3130  gasToken */
+      dup8
+        /* "GnosisSafePersonalEdition.sol":3132:3141  tx.origin */
+      origin
+        /* "GnosisSafePersonalEdition.sol":3143:3149  amount */
+      dup4
+        /* "GnosisSafePersonalEdition.sol":3108:3121  transferToken */
+      tag_115
+        /* "GnosisSafePersonalEdition.sol":3108:3150  transferToken(gasToken, tx.origin, amount) */
+      jump	// in
+    tag_114:
+        /* "GnosisSafePersonalEdition.sol":3100:3189  require(transferToken(gasToken, tx.origin, amount), "Could not pay gas costs with token") */
+      iszero
+      iszero
+      tag_116
+      jumpi
+      mload(0x40)
+      0x8c379a000000000000000000000000000000000000000000000000000000000
+      dup2
+      mstore
+      0x4
+      add
+      dup1
+      dup1
+      0x20
+      add
+      dup3
+      dup2
+      sub
+      dup3
+      mstore
+      0x22
+      dup2
+      mstore
+      0x20
+      add
+      dup1
+      0x436f756c64206e6f74207061792067617320636f737473207769746820746f6b
+      dup2
+      mstore
+      0x20
+      add
+      0x656e000000000000000000000000000000000000000000000000000000000000
+      dup2
+      mstore
+      pop
+      0x40
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      revert
+    tag_116:
+        /* "GnosisSafePersonalEdition.sol":2795:3204  if (gasToken == address(0)) {... */
+    tag_113:
+        /* "GnosisSafePersonalEdition.sol":2648:3214  if (gasPrice > 0) {... */
+    tag_110:
+        /* "GnosisSafePersonalEdition.sol":1677:3222  function execTransactionAndPaySubmitter(... */
+      pop
+      pop
+      pop
+      pop
+      swap10
+      swap9
+      pop
+      pop
+      pop
+      pop
+      pop
+      pop
+      pop
+      pop
+      pop
+      jump	// out
+        /* "OwnerManager.sol":2093:2688  function addOwnerWithThreshold(address owner, uint256 _threshold)... */
+    tag_30:
+        /* "SelfAuthorized.sol":244:248  this */
+      address
+        /* "SelfAuthorized.sol":222:249  msg.sender == address(this) */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+        /* "SelfAuthorized.sol":222:232  msg.sender */
+      caller
+        /* "SelfAuthorized.sol":222:249  msg.sender == address(this) */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      eq
+        /* "SelfAuthorized.sol":214:298  require(msg.sender == address(this), "Method can only be called from this contract") */
+      iszero
+      iszero
+      tag_118
+      jumpi
+      mload(0x40)
+      0x8c379a000000000000000000000000000000000000000000000000000000000
+      dup2
+      mstore
+      0x4
+      add
+      dup1
+      dup1
+      0x20
+      add
+      dup3
+      dup2
+      sub
+      dup3
+      mstore
+      0x2c
+      dup2
+      mstore
+      0x20
+      add
+      dup1
+      0x4d6574686f642063616e206f6e6c792062652063616c6c65642066726f6d2074
+      dup2
+      mstore
+      0x20
+      add
+      0x68697320636f6e74726163740000000000000000000000000000000000000000
+      dup2
+      mstore
+      pop
+      0x40
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      revert
+    tag_118:
+        /* "OwnerManager.sol":2265:2266  0 */
+      0x0
+        /* "OwnerManager.sol":2256:2261  owner */
+      dup3
+        /* "OwnerManager.sol":2256:2266  owner != 0 */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      eq
+      iszero
+        /* "OwnerManager.sol":2256:2294  owner != 0 && owner != SENTINEL_OWNERS */
+      dup1
+      iszero
+      tag_120
+      jumpi
+      pop
+        /* "OwnerManager.sol":337:340  0x1 */
+      0x1
+        /* "OwnerManager.sol":2270:2294  owner != SENTINEL_OWNERS */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+        /* "OwnerManager.sol":2270:2275  owner */
+      dup3
+        /* "OwnerManager.sol":2270:2294  owner != SENTINEL_OWNERS */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      eq
+      iszero
+        /* "OwnerManager.sol":2256:2294  owner != 0 && owner != SENTINEL_OWNERS */
+    tag_120:
+        /* "OwnerManager.sol":2248:2329  require(owner != 0 && owner != SENTINEL_OWNERS, "Invalid owner address provided") */
+      iszero
+      iszero
+      tag_121
+      jumpi
+      mload(0x40)
+      0x8c379a000000000000000000000000000000000000000000000000000000000
+      dup2
+      mstore
+      0x4
+      add
+      dup1
+      dup1
+      0x20
+      add
+      dup3
+      dup2
+      sub
+      dup3
+      mstore
+      0x1e
+      dup2
+      mstore
+      0x20
+      add
+      dup1
+      0x496e76616c6964206f776e657220616464726573732070726f76696465640000
+      dup2
+      mstore
+      pop
+      0x20
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      revert
+    tag_121:
+        /* "OwnerManager.sol":2404:2405  0 */
+      0x0
+        /* "OwnerManager.sol":2387:2393  owners */
+      0x2
+        /* "OwnerManager.sol":2387:2400  owners[owner] */
+      0x0
+        /* "OwnerManager.sol":2394:2399  owner */
+      dup5
+        /* "OwnerManager.sol":2387:2400  owners[owner] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+      0x0
+      swap1
+      sload
+      swap1
+      0x100
+      exp
+      swap1
+      div
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+        /* "OwnerManager.sol":2387:2405  owners[owner] == 0 */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      eq
+        /* "OwnerManager.sol":2379:2437  require(owners[owner] == 0, "Address is already an owner") */
+      iszero
+      iszero
+      tag_122
+      jumpi
+      mload(0x40)
+      0x8c379a000000000000000000000000000000000000000000000000000000000
+      dup2
+      mstore
+      0x4
+      add
+      dup1
+      dup1
+      0x20
+      add
+      dup3
+      dup2
+      sub
+      dup3
+      mstore
+      0x1b
+      dup2
+      mstore
+      0x20
+      add
+      dup1
+      0x4164647265737320697320616c726561647920616e206f776e65720000000000
+      dup2
+      mstore
+      pop
+      0x20
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      revert
+    tag_122:
+        /* "OwnerManager.sol":2463:2469  owners */
+      0x2
+        /* "OwnerManager.sol":2463:2486  owners[SENTINEL_OWNERS] */
+      0x0
+        /* "OwnerManager.sol":337:340  0x1 */
+      0x1
+        /* "OwnerManager.sol":2463:2486  owners[SENTINEL_OWNERS] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+      0x0
+      swap1
+      sload
+      swap1
+      0x100
+      exp
+      swap1
+      div
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+        /* "OwnerManager.sol":2447:2453  owners */
+      0x2
+        /* "OwnerManager.sol":2447:2460  owners[owner] */
+      0x0
+        /* "OwnerManager.sol":2454:2459  owner */
+      dup5
+        /* "OwnerManager.sol":2447:2460  owners[owner] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+      0x0
+        /* "OwnerManager.sol":2447:2486  owners[owner] = owners[SENTINEL_OWNERS] */
+      0x100
+      exp
+      dup2
+      sload
+      dup2
+      0xffffffffffffffffffffffffffffffffffffffff
+      mul
+      not
+      and
+      swap1
+      dup4
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      mul
+      or
+      swap1
+      sstore
+      pop
+        /* "OwnerManager.sol":2522:2527  owner */
+      dup2
+        /* "OwnerManager.sol":2496:2502  owners */
+      0x2
+        /* "OwnerManager.sol":2496:2519  owners[SENTINEL_OWNERS] */
+      0x0
+        /* "OwnerManager.sol":337:340  0x1 */
+      0x1
+        /* "OwnerManager.sol":2496:2519  owners[SENTINEL_OWNERS] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+      0x0
+        /* "OwnerManager.sol":2496:2527  owners[SENTINEL_OWNERS] = owner */
+      0x100
+      exp
+      dup2
+      sload
+      dup2
+      0xffffffffffffffffffffffffffffffffffffffff
+      mul
+      not
+      and
+      swap1
+      dup4
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      mul
+      or
+      swap1
+      sstore
+      pop
+        /* "OwnerManager.sol":2537:2547  ownerCount */
+      0x3
+      0x0
+        /* "OwnerManager.sol":2537:2549  ownerCount++ */
+      dup2
+      sload
+      dup1
+      swap3
+      swap2
+      swap1
+      0x1
+      add
+      swap2
+      swap1
+      pop
+      sstore
+      pop
+        /* "OwnerManager.sol":2630:2640  _threshold */
+      dup1
+        /* "OwnerManager.sol":2617:2626  threshold */
+      sload(0x4)
+        /* "OwnerManager.sol":2617:2640  threshold != _threshold */
+      eq
+      iszero
+        /* "OwnerManager.sol":2613:2681  if (threshold != _threshold)... */
+      iszero
+      tag_123
+      jumpi
+        /* "OwnerManager.sol":2654:2681  changeThreshold(_threshold) */
+      tag_124
+        /* "OwnerManager.sol":2670:2680  _threshold */
+      dup2
+        /* "OwnerManager.sol":2654:2669  changeThreshold */
+      tag_45
+        /* "OwnerManager.sol":2654:2681  changeThreshold(_threshold) */
+      jump	// in
+    tag_124:
+        /* "OwnerManager.sol":2613:2681  if (threshold != _threshold)... */
+    tag_123:
+        /* "OwnerManager.sol":2093:2688  function addOwnerWithThreshold(address owner, uint256 _threshold)... */
+      pop
+      pop
+      jump	// out
+        /* "GnosisSafe.sol":693:996  function setup(address[] _owners, uint256 _threshold, address to, bytes data)... */
+    tag_33:
+        /* "GnosisSafe.sol":800:832  setupOwners(_owners, _threshold) */
+      tag_126
+        /* "GnosisSafe.sol":812:819  _owners */
+      dup5
+        /* "GnosisSafe.sol":821:831  _threshold */
+      dup5
+        /* "GnosisSafe.sol":800:811  setupOwners */
+      tag_127
+        /* "GnosisSafe.sol":800:832  setupOwners(_owners, _threshold) */
+      jump	// in
+    tag_126:
+        /* "GnosisSafe.sol":967:989  setupModules(to, data) */
+      tag_128
+        /* "GnosisSafe.sol":980:982  to */
+      dup3
+        /* "GnosisSafe.sol":984:988  data */
+      dup3
+        /* "GnosisSafe.sol":967:979  setupModules */
+      tag_129
+        /* "GnosisSafe.sol":967:989  setupModules(to, data) */
+      jump	// in
+    tag_128:
+        /* "GnosisSafe.sol":693:996  function setup(address[] _owners, uint256 _threshold, address to, bytes data)... */
+      pop
+      pop
+      pop
+      pop
+      jump	// out
+        /* "OwnerManager.sol":5613:5742  function isOwner(address owner)... */
+    tag_36:
+        /* "OwnerManager.sol":5690:5694  bool */
+      0x0
+        /* "OwnerManager.sol":5734:5735  0 */
+      dup1
+        /* "OwnerManager.sol":5717:5723  owners */
+      0x2
+        /* "OwnerManager.sol":5717:5730  owners[owner] */
+      0x0
+        /* "OwnerManager.sol":5724:5729  owner */
+      dup5
+        /* "OwnerManager.sol":5717:5730  owners[owner] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+      0x0
+      swap1
+      sload
+      swap1
+      0x100
+      exp
+      swap1
+      div
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+        /* "OwnerManager.sol":5717:5735  owners[owner] != 0 */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      eq
+      iszero
+        /* "OwnerManager.sol":5710:5735  return owners[owner] != 0 */
+      swap1
+      pop
+        /* "OwnerManager.sol":5613:5742  function isOwner(address owner)... */
+      swap2
+      swap1
+      pop
+      jump	// out
+        /* "ModuleManager.sol":2841:3270  function execTransactionFromModule(address to, uint256 value, bytes data, Enum.Operation operation)... */
+    tag_39:
+        /* "ModuleManager.sol":2973:2985  bool success */
+      0x0
+        /* "ModuleManager.sol":3081:3082  0 */
+      dup1
+        /* "ModuleManager.sol":3058:3065  modules */
+      0x1
+        /* "ModuleManager.sol":3058:3077  modules[msg.sender] */
+      0x0
+        /* "ModuleManager.sol":3066:3076  msg.sender */
+      caller
+        /* "ModuleManager.sol":3058:3077  modules[msg.sender] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+      0x0
+      swap1
+      sload
+      swap1
+      0x100
+      exp
+      swap1
+      div
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+        /* "ModuleManager.sol":3058:3082  modules[msg.sender] != 0 */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      eq
+      iszero
+        /* "ModuleManager.sol":3050:3135  require(modules[msg.sender] != 0, "Method can only be called from an enabled module") */
+      iszero
+      iszero
+      tag_132
+      jumpi
+      mload(0x40)
+      0x8c379a000000000000000000000000000000000000000000000000000000000
+      dup2
+      mstore
+      0x4
+      add
+      dup1
+      dup1
+      0x20
+      add
+      dup3
+      dup2
+      sub
+      dup3
+      mstore
+      0x30
+      dup2
+      mstore
+      0x20
+      add
+      dup1
+      0x4d6574686f642063616e206f6e6c792062652063616c6c65642066726f6d2061
+      dup2
+      mstore
+      0x20
+      add
+      0x6e20656e61626c6564206d6f64756c6500000000000000000000000000000000
+      dup2
+      mstore
+      pop
+      0x40
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      revert
+    tag_132:
+        /* "ModuleManager.sol":3217:3263  execute(to, value, data, operation, gasleft()) */
+      tag_133
+        /* "ModuleManager.sol":3225:3227  to */
+      dup6
+        /* "ModuleManager.sol":3229:3234  value */
+      dup6
+        /* "ModuleManager.sol":3236:3240  data */
+      dup6
+        /* "ModuleManager.sol":3242:3251  operation */
+      dup6
+        /* "ModuleManager.sol":3253:3262  gasleft() */
+      gas
+        /* "ModuleManager.sol":3217:3224  execute */
+      tag_108
+        /* "ModuleManager.sol":3217:3263  execute(to, value, data, operation, gasleft()) */
+      jump	// in
+    tag_133:
+        /* "ModuleManager.sol":3207:3263  success = execute(to, value, data, operation, gasleft()) */
+      swap1
+      pop
+        /* "ModuleManager.sol":2841:3270  function execTransactionFromModule(address to, uint256 value, bytes data, Enum.Operation operation)... */
+      swap5
+      swap4
+      pop
+      pop
+      pop
+      pop
+      jump	// out
+        /* "ModuleManager.sol":1311:1770  function enableModule(Module module)... */
+    tag_42:
+        /* "SelfAuthorized.sol":244:248  this */
+      address
+        /* "SelfAuthorized.sol":222:249  msg.sender == address(this) */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+        /* "SelfAuthorized.sol":222:232  msg.sender */
+      caller
+        /* "SelfAuthorized.sol":222:249  msg.sender == address(this) */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      eq
+        /* "SelfAuthorized.sol":214:298  require(msg.sender == address(this), "Method can only be called from this contract") */
+      iszero
+      iszero
+      tag_135
+      jumpi
+      mload(0x40)
+      0x8c379a000000000000000000000000000000000000000000000000000000000
+      dup2
+      mstore
+      0x4
+      add
+      dup1
+      dup1
+      0x20
+      add
+      dup3
+      dup2
+      sub
+      dup3
+      mstore
+      0x2c
+      dup2
+      mstore
+      0x20
+      add
+      dup1
+      0x4d6574686f642063616e206f6e6c792062652063616c6c65642066726f6d2074
+      dup2
+      mstore
+      0x20
+      add
+      0x68697320636f6e74726163740000000000000000000000000000000000000000
+      dup2
+      mstore
+      pop
+      0x40
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      revert
+    tag_135:
+        /* "ModuleManager.sol":1477:1478  0 */
+      0x0
+        /* "ModuleManager.sol":1466:1472  module */
+      dup2
+        /* "ModuleManager.sol":1458:1478  address(module) != 0 */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      eq
+      iszero
+        /* "ModuleManager.sol":1458:1517  address(module) != 0 && address(module) != SENTINEL_MODULES */
+      dup1
+      iszero
+      tag_137
+      jumpi
+      pop
+        /* "ModuleManager.sol":550:553  0x1 */
+      0x1
+        /* "ModuleManager.sol":1482:1517  address(module) != SENTINEL_MODULES */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+        /* "ModuleManager.sol":1490:1496  module */
+      dup2
+        /* "ModuleManager.sol":1482:1517  address(module) != SENTINEL_MODULES */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      eq
+      iszero
+        /* "ModuleManager.sol":1458:1517  address(module) != 0 && address(module) != SENTINEL_MODULES */
+    tag_137:
+        /* "ModuleManager.sol":1450:1553  require(address(module) != 0 && address(module) != SENTINEL_MODULES, "Invalid module address provided") */
+      iszero
+      iszero
+      tag_138
+      jumpi
+      mload(0x40)
+      0x8c379a000000000000000000000000000000000000000000000000000000000
+      dup2
+      mstore
+      0x4
+      add
+      dup1
+      dup1
+      0x20
+      add
+      dup3
+      dup2
+      sub
+      dup3
+      mstore
+      0x1f
+      dup2
+      mstore
+      0x20
+      add
+      dup1
+      0x496e76616c6964206d6f64756c6520616464726573732070726f766964656400
+      dup2
+      mstore
+      pop
+      0x20
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      revert
+    tag_138:
+        /* "ModuleManager.sol":1631:1632  0 */
+      0x0
+        /* "ModuleManager.sol":1612:1619  modules */
+      0x1
+        /* "ModuleManager.sol":1612:1627  modules[module] */
+      0x0
+        /* "ModuleManager.sol":1620:1626  module */
+      dup4
+        /* "ModuleManager.sol":1612:1627  modules[module] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+      0x0
+      swap1
+      sload
+      swap1
+      0x100
+      exp
+      swap1
+      div
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+        /* "ModuleManager.sol":1612:1632  modules[module] == 0 */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      eq
+        /* "ModuleManager.sol":1604:1666  require(modules[module] == 0, "Module has already been added") */
+      iszero
+      iszero
+      tag_139
+      jumpi
+      mload(0x40)
+      0x8c379a000000000000000000000000000000000000000000000000000000000
+      dup2
+      mstore
+      0x4
+      add
+      dup1
+      dup1
+      0x20
+      add
+      dup3
+      dup2
+      sub
+      dup3
+      mstore
+      0x1d
+      dup2
+      mstore
+      0x20
+      add
+      dup1
+      0x4d6f64756c652068617320616c7265616479206265656e206164646564000000
+      dup2
+      mstore
+      pop
+      0x20
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      revert
+    tag_139:
+        /* "ModuleManager.sol":1694:1701  modules */
+      0x1
+        /* "ModuleManager.sol":1694:1719  modules[SENTINEL_MODULES] */
+      0x0
+        /* "ModuleManager.sol":550:553  0x1 */
+      0x1
+        /* "ModuleManager.sol":1694:1719  modules[SENTINEL_MODULES] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+      0x0
+      swap1
+      sload
+      swap1
+      0x100
+      exp
+      swap1
+      div
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+        /* "ModuleManager.sol":1676:1683  modules */
+      0x1
+        /* "ModuleManager.sol":1676:1691  modules[module] */
+      0x0
+        /* "ModuleManager.sol":1684:1690  module */
+      dup4
+        /* "ModuleManager.sol":1676:1691  modules[module] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+      0x0
+        /* "ModuleManager.sol":1676:1719  modules[module] = modules[SENTINEL_MODULES] */
+      0x100
+      exp
+      dup2
+      sload
+      dup2
+      0xffffffffffffffffffffffffffffffffffffffff
+      mul
+      not
+      and
+      swap1
+      dup4
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      mul
+      or
+      swap1
+      sstore
+      pop
+        /* "ModuleManager.sol":1757:1763  module */
+      dup1
+        /* "ModuleManager.sol":1729:1736  modules */
+      0x1
+        /* "ModuleManager.sol":1729:1754  modules[SENTINEL_MODULES] */
+      0x0
+        /* "ModuleManager.sol":550:553  0x1 */
+      0x1
+        /* "ModuleManager.sol":1729:1754  modules[SENTINEL_MODULES] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+      0x0
+        /* "ModuleManager.sol":1729:1763  modules[SENTINEL_MODULES] = module */
+      0x100
+      exp
+      dup2
+      sload
+      dup2
+      0xffffffffffffffffffffffffffffffffffffffff
+      mul
+      not
+      and
+      swap1
+      dup4
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      mul
+      or
+      swap1
+      sstore
+      pop
+        /* "ModuleManager.sol":1311:1770  function enableModule(Module module)... */
+      pop
+      jump	// out
+        /* "OwnerManager.sol":5087:5486  function changeThreshold(uint256 _threshold)... */
+    tag_45:
+        /* "SelfAuthorized.sol":244:248  this */
+      address
+        /* "SelfAuthorized.sol":222:249  msg.sender == address(this) */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+        /* "SelfAuthorized.sol":222:232  msg.sender */
+      caller
+        /* "SelfAuthorized.sol":222:249  msg.sender == address(this) */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      eq
+        /* "SelfAuthorized.sol":214:298  require(msg.sender == address(this), "Method can only be called from this contract") */
+      iszero
+      iszero
+      tag_141
+      jumpi
+      mload(0x40)
+      0x8c379a000000000000000000000000000000000000000000000000000000000
+      dup2
+      mstore
+      0x4
+      add
+      dup1
+      dup1
+      0x20
+      add
+      dup3
+      dup2
+      sub
+      dup3
+      mstore
+      0x2c
+      dup2
+      mstore
+      0x20
+      add
+      dup1
+      0x4d6574686f642063616e206f6e6c792062652063616c6c65642066726f6d2074
+      dup2
+      mstore
+      0x20
+      add
+      0x68697320636f6e74726163740000000000000000000000000000000000000000
+      dup2
+      mstore
+      pop
+      0x40
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      revert
+    tag_141:
+        /* "OwnerManager.sol":5271:5281  ownerCount */
+      sload(0x3)
+        /* "OwnerManager.sol":5257:5267  _threshold */
+      dup2
+        /* "OwnerManager.sol":5257:5281  _threshold <= ownerCount */
+      gt
+      iszero
+        /* "OwnerManager.sol":5249:5321  require(_threshold <= ownerCount, "Threshold cannot exceed owner count") */
+      iszero
+      iszero
+      tag_143
+      jumpi
+      mload(0x40)
+      0x8c379a000000000000000000000000000000000000000000000000000000000
+      dup2
+      mstore
+      0x4
+      add
+      dup1
+      dup1
+      0x20
+      add
+      dup3
+      dup2
+      sub
+      dup3
+      mstore
+      0x23
+      dup2
+      mstore
+      0x20
+      add
+      dup1
+      0x5468726573686f6c642063616e6e6f7420657863656564206f776e657220636f
+      dup2
+      mstore
+      0x20
+      add
+      0x756e740000000000000000000000000000000000000000000000000000000000
+      dup2
+      mstore
+      pop
+      0x40
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      revert
+    tag_143:
+        /* "OwnerManager.sol":5405:5406  1 */
+      0x1
+        /* "OwnerManager.sol":5391:5401  _threshold */
+      dup2
+        /* "OwnerManager.sol":5391:5406  _threshold >= 1 */
+      lt
+      iszero
+        /* "OwnerManager.sol":5383:5447  require(_threshold >= 1, "Threshold needs to be greater than 0") */
+      iszero
+      iszero
+      tag_144
+      jumpi
+      mload(0x40)
+      0x8c379a000000000000000000000000000000000000000000000000000000000
+      dup2
+      mstore
+      0x4
+      add
+      dup1
+      dup1
+      0x20
+      add
+      dup3
+      dup2
+      sub
+      dup3
+      mstore
+      0x24
+      dup2
+      mstore
+      0x20
+      add
+      dup1
+      0x5468726573686f6c64206e6565647320746f2062652067726561746572207468
+      dup2
+      mstore
+      0x20
+      add
+      0x616e203000000000000000000000000000000000000000000000000000000000
+      dup2
+      mstore
+      pop
+      0x40
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      revert
+    tag_144:
+        /* "OwnerManager.sol":5469:5479  _threshold */
+      dup1
+        /* "OwnerManager.sol":5457:5466  threshold */
+      0x4
+        /* "OwnerManager.sol":5457:5479  threshold = _threshold */
+      dup2
+      swap1
+      sstore
+      pop
+        /* "OwnerManager.sol":5087:5486  function changeThreshold(uint256 _threshold)... */
+      pop
+      jump	// out
+        /* "MasterCopy.sol":626:874  function changeMasterCopy(address _masterCopy)... */
+    tag_48:
+        /* "SelfAuthorized.sol":244:248  this */
+      address
+        /* "SelfAuthorized.sol":222:249  msg.sender == address(this) */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+        /* "SelfAuthorized.sol":222:232  msg.sender */
+      caller
+        /* "SelfAuthorized.sol":222:249  msg.sender == address(this) */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      eq
+        /* "SelfAuthorized.sol":214:298  require(msg.sender == address(this), "Method can only be called from this contract") */
+      iszero
+      iszero
+      tag_146
+      jumpi
+      mload(0x40)
+      0x8c379a000000000000000000000000000000000000000000000000000000000
+      dup2
+      mstore
+      0x4
+      add
+      dup1
+      dup1
+      0x20
+      add
+      dup3
+      dup2
+      sub
+      dup3
+      mstore
+      0x2c
+      dup2
+      mstore
+      0x20
+      add
+      dup1
+      0x4d6574686f642063616e206f6e6c792062652063616c6c65642066726f6d2074
+      dup2
+      mstore
+      0x20
+      add
+      0x68697320636f6e74726163740000000000000000000000000000000000000000
+      dup2
+      mstore
+      pop
+      0x40
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      revert
+    tag_146:
+        /* "MasterCopy.sol":791:792  0 */
+      0x0
+        /* "MasterCopy.sol":776:787  _masterCopy */
+      dup2
+        /* "MasterCopy.sol":776:792  _masterCopy != 0 */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      eq
+      iszero
+        /* "MasterCopy.sol":768:833  require(_masterCopy != 0, "Invalid master copy address provided") */
+      iszero
+      iszero
+      tag_148
+      jumpi
+      mload(0x40)
+      0x8c379a000000000000000000000000000000000000000000000000000000000
+      dup2
+      mstore
+      0x4
+      add
+      dup1
+      dup1
+      0x20
+      add
+      dup3
+      dup2
+      sub
+      dup3
+      mstore
+      0x24
+      dup2
+      mstore
+      0x20
+      add
+      dup1
+      0x496e76616c6964206d617374657220636f707920616464726573732070726f76
+      dup2
+      mstore
+      0x20
+      add
+      0x6964656400000000000000000000000000000000000000000000000000000000
+      dup2
+      mstore
+      pop
+      0x40
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      revert
+    tag_148:
+        /* "MasterCopy.sol":856:867  _masterCopy */
+      dup1
+        /* "MasterCopy.sol":843:853  masterCopy */
+      0x0
+      dup1
+        /* "MasterCopy.sol":843:867  masterCopy = _masterCopy */
+      0x100
+      exp
+      dup2
+      sload
+      dup2
+      0xffffffffffffffffffffffffffffffffffffffff
+      mul
+      not
+      and
+      swap1
+      dup4
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      mul
+      or
+      swap1
+      sstore
+      pop
+        /* "MasterCopy.sol":626:874  function changeMasterCopy(address _masterCopy)... */
+      pop
+      jump	// out
+        /* "ModuleManager.sol":499:554  address public constant SENTINEL_MODULES = address(0x1) */
+    tag_51:
+        /* "ModuleManager.sol":550:553  0x1 */
+      0x1
+        /* "ModuleManager.sol":499:554  address public constant SENTINEL_MODULES = address(0x1) */
+      dup2
+      jump	// out
+        /* "OwnerManager.sol":287:341  address public constant SENTINEL_OWNERS = address(0x1) */
+    tag_54:
+        /* "OwnerManager.sol":337:340  0x1 */
+      0x1
+        /* "OwnerManager.sol":287:341  address public constant SENTINEL_OWNERS = address(0x1) */
+      dup2
+      jump	// out
+        /* "OwnerManager.sol":5824:6282  function getOwners()... */
+    tag_57:
+        /* "OwnerManager.sol":5890:5899  address[] */
+      0x60
+        /* "OwnerManager.sol":5915:5937  address[] memory array */
+      dup1
+        /* "OwnerManager.sol":6009:6022  uint256 index */
+      0x0
+        /* "OwnerManager.sol":6036:6056  address currentOwner */
+      dup1
+        /* "OwnerManager.sol":5954:5964  ownerCount */
+      sload(0x3)
+        /* "OwnerManager.sol":5940:5965  new address[](ownerCount) */
+      mload(0x40)
+      swap1
+      dup1
+      dup3
+      mstore
+      dup1
+      0x20
+      mul
+      0x20
+      add
+      dup3
+      add
+      0x40
+      mstore
+      dup1
+      iszero
+      tag_150
+      jumpi
+      dup2
+      0x20
+      add
+        /* "--CODEGEN--":29:31   */
+      0x20
+        /* "--CODEGEN--":21:27   */
+      dup3
+        /* "--CODEGEN--":17:32   */
+      mul
+        /* "--CODEGEN--":117:121   */
+      dup1
+        /* "--CODEGEN--":105:115   */
+      codesize
+        /* "--CODEGEN--":97:103   */
+      dup4
+        /* "--CODEGEN--":88:122   */
+      codecopy
+        /* "--CODEGEN--":148:152   */
+      dup1
+        /* "--CODEGEN--":140:146   */
+      dup3
+        /* "--CODEGEN--":136:153   */
+      add
+        /* "--CODEGEN--":126:153   */
+      swap2
+      pop
+        /* "--CODEGEN--":0:157   */
+      pop
+        /* "OwnerManager.sol":5940:5965  new address[](ownerCount) */
+      swap1
+      pop
+    tag_150:
+      pop
+        /* "OwnerManager.sol":5915:5965  address[] memory array = new address[](ownerCount) */
+      swap3
+      pop
+        /* "OwnerManager.sol":6025:6026  0 */
+      0x0
+        /* "OwnerManager.sol":6009:6026  uint256 index = 0 */
+      swap2
+      pop
+        /* "OwnerManager.sol":6059:6065  owners */
+      0x2
+        /* "OwnerManager.sol":6059:6082  owners[SENTINEL_OWNERS] */
+      0x0
+        /* "OwnerManager.sol":337:340  0x1 */
+      0x1
+        /* "OwnerManager.sol":6059:6082  owners[SENTINEL_OWNERS] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+      0x0
+      swap1
+      sload
+      swap1
+      0x100
+      exp
+      swap1
+      div
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+        /* "OwnerManager.sol":6036:6082  address currentOwner = owners[SENTINEL_OWNERS] */
+      swap1
+      pop
+        /* "OwnerManager.sol":6092:6254  while(currentOwner != SENTINEL_OWNERS) {... */
+    tag_151:
+        /* "OwnerManager.sol":337:340  0x1 */
+      0x1
+        /* "OwnerManager.sol":6098:6129  currentOwner != SENTINEL_OWNERS */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+        /* "OwnerManager.sol":6098:6110  currentOwner */
+      dup2
+        /* "OwnerManager.sol":6098:6129  currentOwner != SENTINEL_OWNERS */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      eq
+      iszero
+        /* "OwnerManager.sol":6092:6254  while(currentOwner != SENTINEL_OWNERS) {... */
+      iszero
+      tag_152
+      jumpi
+        /* "OwnerManager.sol":6160:6172  currentOwner */
+      dup1
+        /* "OwnerManager.sol":6145:6150  array */
+      dup4
+        /* "OwnerManager.sol":6151:6156  index */
+      dup4
+        /* "OwnerManager.sol":6145:6157  array[index] */
+      dup2
+      mload
+      dup2
+      lt
+      iszero
+      iszero
+      tag_153
+      jumpi
+      invalid
+    tag_153:
+      swap1
+      0x20
+      add
+      swap1
+      0x20
+      mul
+      add
+        /* "OwnerManager.sol":6145:6172  array[index] = currentOwner */
+      swap1
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      swap1
+      dup2
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      pop
+      pop
+        /* "OwnerManager.sol":6201:6207  owners */
+      0x2
+        /* "OwnerManager.sol":6201:6221  owners[currentOwner] */
+      0x0
+        /* "OwnerManager.sol":6208:6220  currentOwner */
+      dup3
+        /* "OwnerManager.sol":6201:6221  owners[currentOwner] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+      0x0
+      swap1
+      sload
+      swap1
+      0x100
+      exp
+      swap1
+      div
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+        /* "OwnerManager.sol":6186:6221  currentOwner = owners[currentOwner] */
+      swap1
+      pop
+        /* "OwnerManager.sol":6235:6243  index ++ */
+      dup2
+      dup1
+      0x1
+      add
+      swap3
+      pop
+      pop
+        /* "OwnerManager.sol":6092:6254  while(currentOwner != SENTINEL_OWNERS) {... */
+      jump(tag_151)
+    tag_152:
+        /* "OwnerManager.sol":6270:6275  array */
+      dup3
+        /* "OwnerManager.sol":6263:6275  return array */
+      swap4
+      pop
+        /* "OwnerManager.sol":5824:6282  function getOwners()... */
+      pop
+      pop
+      pop
+      swap1
+      jump	// out
+        /* "GnosisSafePersonalEdition.sol":593:653  string public constant NAME = "Gnosis Safe Personal Edition" */
+    tag_63:
+      0x40
+      dup1
+      mload
+      swap1
+      dup2
+      add
+      0x40
+      mstore
+      dup1
+      0x1c
+      dup2
+      mstore
+      0x20
+      add
+      0x476e6f736973205361666520506572736f6e616c2045646974696f6e00000000
+      dup2
+      mstore
+      pop
+      dup2
+      jump	// out
+        /* "GnosisSafePersonalEdition.sol":754:774  uint256 public nonce */
+    tag_70:
+      sload(0x5)
+      dup2
+      jump	// out
+        /* "ModuleManager.sol":4794:5532  function getModules()... */
+    tag_73:
+        /* "ModuleManager.sol":4861:4870  address[] */
+      0x60
+        /* "ModuleManager.sol":4920:4939  uint256 moduleCount */
+      0x0
+        /* "ModuleManager.sol":4953:4974  address currentModule */
+      dup1
+        /* "ModuleManager.sol":5153:5175  address[] memory array */
+      0x60
+        /* "ModuleManager.sol":4942:4943  0 */
+      0x0
+        /* "ModuleManager.sol":4920:4943  uint256 moduleCount = 0 */
+      swap3
+      pop
+        /* "ModuleManager.sol":4977:4984  modules */
+      0x1
+        /* "ModuleManager.sol":4977:5002  modules[SENTINEL_MODULES] */
+      0x0
+        /* "ModuleManager.sol":550:553  0x1 */
+      0x1
+        /* "ModuleManager.sol":4977:5002  modules[SENTINEL_MODULES] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+      0x0
+      swap1
+      sload
+      swap1
+      0x100
+      exp
+      swap1
+      div
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+        /* "ModuleManager.sol":4953:5002  address currentModule = modules[SENTINEL_MODULES] */
+      swap2
+      pop
+        /* "ModuleManager.sol":5012:5144  while(currentModule != SENTINEL_MODULES) {... */
+    tag_155:
+        /* "ModuleManager.sol":550:553  0x1 */
+      0x1
+        /* "ModuleManager.sol":5018:5051  currentModule != SENTINEL_MODULES */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+        /* "ModuleManager.sol":5018:5031  currentModule */
+      dup3
+        /* "ModuleManager.sol":5018:5051  currentModule != SENTINEL_MODULES */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      eq
+      iszero
+        /* "ModuleManager.sol":5012:5144  while(currentModule != SENTINEL_MODULES) {... */
+      iszero
+      tag_156
+      jumpi
+        /* "ModuleManager.sol":5083:5090  modules */
+      0x1
+        /* "ModuleManager.sol":5083:5105  modules[currentModule] */
+      0x0
+        /* "ModuleManager.sol":5091:5104  currentModule */
+      dup4
+        /* "ModuleManager.sol":5083:5105  modules[currentModule] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+      0x0
+      swap1
+      sload
+      swap1
+      0x100
+      exp
+      swap1
+      div
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+        /* "ModuleManager.sol":5067:5105  currentModule = modules[currentModule] */
+      swap2
+      pop
+        /* "ModuleManager.sol":5119:5133  moduleCount ++ */
+      dup3
+      dup1
+      0x1
+      add
+      swap4
+      pop
+      pop
+        /* "ModuleManager.sol":5012:5144  while(currentModule != SENTINEL_MODULES) {... */
+      jump(tag_155)
+    tag_156:
+        /* "ModuleManager.sol":5192:5203  moduleCount */
+      dup3
+        /* "ModuleManager.sol":5178:5204  new address[](moduleCount) */
+      mload(0x40)
+      swap1
+      dup1
+      dup3
+      mstore
+      dup1
+      0x20
+      mul
+      0x20
+      add
+      dup3
+      add
+      0x40
+      mstore
+      dup1
+      iszero
+      tag_157
+      jumpi
+      dup2
+      0x20
+      add
+        /* "--CODEGEN--":29:31   */
+      0x20
+        /* "--CODEGEN--":21:27   */
+      dup3
+        /* "--CODEGEN--":17:32   */
+      mul
+        /* "--CODEGEN--":117:121   */
+      dup1
+        /* "--CODEGEN--":105:115   */
+      codesize
+        /* "--CODEGEN--":97:103   */
+      dup4
+        /* "--CODEGEN--":88:122   */
+      codecopy
+        /* "--CODEGEN--":148:152   */
+      dup1
+        /* "--CODEGEN--":140:146   */
+      dup3
+        /* "--CODEGEN--":136:153   */
+      add
+        /* "--CODEGEN--":126:153   */
+      swap2
+      pop
+        /* "--CODEGEN--":0:157   */
+      pop
+        /* "ModuleManager.sol":5178:5204  new address[](moduleCount) */
+      swap1
+      pop
+    tag_157:
+      pop
+        /* "ModuleManager.sol":5153:5204  address[] memory array = new address[](moduleCount) */
+      swap1
+      pop
+        /* "ModuleManager.sol":5262:5263  0 */
+      0x0
+        /* "ModuleManager.sol":5248:5263  moduleCount = 0 */
+      swap3
+      pop
+        /* "ModuleManager.sol":5289:5296  modules */
+      0x1
+        /* "ModuleManager.sol":5289:5314  modules[SENTINEL_MODULES] */
+      0x0
+        /* "ModuleManager.sol":550:553  0x1 */
+      0x1
+        /* "ModuleManager.sol":5289:5314  modules[SENTINEL_MODULES] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+      0x0
+      swap1
+      sload
+      swap1
+      0x100
+      exp
+      swap1
+      div
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+        /* "ModuleManager.sol":5273:5314  currentModule = modules[SENTINEL_MODULES] */
+      swap2
+      pop
+        /* "ModuleManager.sol":5324:5504  while(currentModule != SENTINEL_MODULES) {... */
+    tag_158:
+        /* "ModuleManager.sol":550:553  0x1 */
+      0x1
+        /* "ModuleManager.sol":5330:5363  currentModule != SENTINEL_MODULES */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+        /* "ModuleManager.sol":5330:5343  currentModule */
+      dup3
+        /* "ModuleManager.sol":5330:5363  currentModule != SENTINEL_MODULES */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      eq
+      iszero
+        /* "ModuleManager.sol":5324:5504  while(currentModule != SENTINEL_MODULES) {... */
+      iszero
+      tag_159
+      jumpi
+        /* "ModuleManager.sol":5400:5413  currentModule */
+      dup2
+        /* "ModuleManager.sol":5379:5384  array */
+      dup2
+        /* "ModuleManager.sol":5385:5396  moduleCount */
+      dup5
+        /* "ModuleManager.sol":5379:5397  array[moduleCount] */
+      dup2
+      mload
+      dup2
+      lt
+      iszero
+      iszero
+      tag_160
+      jumpi
+      invalid
+    tag_160:
+      swap1
+      0x20
+      add
+      swap1
+      0x20
+      mul
+      add
+        /* "ModuleManager.sol":5379:5413  array[moduleCount] = currentModule */
+      swap1
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      swap1
+      dup2
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      pop
+      pop
+        /* "ModuleManager.sol":5443:5450  modules */
+      0x1
+        /* "ModuleManager.sol":5443:5465  modules[currentModule] */
+      0x0
+        /* "ModuleManager.sol":5451:5464  currentModule */
+      dup4
+        /* "ModuleManager.sol":5443:5465  modules[currentModule] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+      0x0
+      swap1
+      sload
+      swap1
+      0x100
+      exp
+      swap1
+      div
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+        /* "ModuleManager.sol":5427:5465  currentModule = modules[currentModule] */
+      swap2
+      pop
+        /* "ModuleManager.sol":5479:5493  moduleCount ++ */
+      dup3
+      dup1
+      0x1
+      add
+      swap4
+      pop
+      pop
+        /* "ModuleManager.sol":5324:5504  while(currentModule != SENTINEL_MODULES) {... */
+      jump(tag_158)
+    tag_159:
+        /* "ModuleManager.sol":5520:5525  array */
+      dup1
+        /* "ModuleManager.sol":5513:5525  return array */
+      swap4
+      pop
+        /* "ModuleManager.sol":4794:5532  function getModules()... */
+      pop
+      pop
+      pop
+      swap1
+      jump	// out
+        /* "GnosisSafePersonalEdition.sol":5884:6384  function getTransactionHash(... */
+    tag_79:
+        /* "GnosisSafePersonalEdition.sol":6195:6202  bytes32 */
+      0x0
+        /* "GnosisSafePersonalEdition.sol":6270:6274  0x19 */
+      0x19
+        /* "GnosisSafePersonalEdition.sol":6265:6275  byte(0x19) */
+      0x100000000000000000000000000000000000000000000000000000000000000
+      mul
+        /* "GnosisSafePersonalEdition.sol":6282:6283  0 */
+      0x0
+        /* "GnosisSafePersonalEdition.sol":6277:6284  byte(0) */
+      0x100000000000000000000000000000000000000000000000000000000000000
+      mul
+        /* "GnosisSafePersonalEdition.sol":6286:6290  this */
+      address
+        /* "GnosisSafePersonalEdition.sol":6292:6294  to */
+      dup13
+        /* "GnosisSafePersonalEdition.sol":6296:6301  value */
+      dup13
+        /* "GnosisSafePersonalEdition.sol":6303:6307  data */
+      dup13
+        /* "GnosisSafePersonalEdition.sol":6309:6318  operation */
+      dup13
+        /* "GnosisSafePersonalEdition.sol":6320:6329  safeTxGas */
+      dup13
+        /* "GnosisSafePersonalEdition.sol":6331:6338  dataGas */
+      dup13
+        /* "GnosisSafePersonalEdition.sol":6340:6348  gasPrice */
+      dup13
+        /* "GnosisSafePersonalEdition.sol":6350:6358  gasToken */
+      dup13
+        /* "GnosisSafePersonalEdition.sol":6360:6366  _nonce */
+      dup13
+        /* "GnosisSafePersonalEdition.sol":6248:6367  abi.encodePacked(byte(0x19), byte(0), this, to, value, data, operation, safeTxGas, dataGas, gasPrice, gasToken, _nonce) */
+      add(0x20, mload(0x40))
+      dup1
+      dup14
+      not(0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff)
+      and
+      not(0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff)
+      and
+      dup2
+      mstore
+      0x1
+      add
+      dup13
+      not(0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff)
+      and
+      not(0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff)
+      and
+      dup2
+      mstore
+      0x1
+      add
+      dup12
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0x1000000000000000000000000
+      mul
+      dup2
+      mstore
+      0x14
+      add
+      dup11
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0x1000000000000000000000000
+      mul
+      dup2
+      mstore
+      0x14
+      add
+      dup10
+      dup2
+      mstore
+      0x20
+      add
+      dup9
+      dup1
+      mload
+      swap1
+      0x20
+      add
+      swap1
+      dup1
+      dup4
+      dup4
+        /* "--CODEGEN--":36:189   */
+    tag_162:
+        /* "--CODEGEN--":66:68   */
+      0x20
+        /* "--CODEGEN--":61:64   */
+      dup4
+        /* "--CODEGEN--":58:69   */
+      lt
+        /* "--CODEGEN--":51:70   */
+      iszero
+        /* "--CODEGEN--":36:189   */
+      iszero
+      tag_163
+      jumpi
+        /* "--CODEGEN--":182:185   */
+      dup1
+        /* "--CODEGEN--":176:186   */
+      mload
+        /* "--CODEGEN--":171:174   */
+      dup3
+        /* "--CODEGEN--":164:187   */
+      mstore
+        /* "--CODEGEN--":98:100   */
+      0x20
+        /* "--CODEGEN--":93:96   */
+      dup3
+        /* "--CODEGEN--":89:101   */
+      add
+        /* "--CODEGEN--":82:101   */
+      swap2
+      pop
+        /* "--CODEGEN--":123:125   */
+      0x20
+        /* "--CODEGEN--":118:121   */
+      dup2
+        /* "--CODEGEN--":114:126   */
+      add
+        /* "--CODEGEN--":107:126   */
+      swap1
+      pop
+        /* "--CODEGEN--":148:150   */
+      0x20
+        /* "--CODEGEN--":143:146   */
+      dup4
+        /* "--CODEGEN--":139:151   */
+      sub
+        /* "--CODEGEN--":132:151   */
+      swap3
+      pop
+        /* "--CODEGEN--":36:189   */
+      jump(tag_162)
+    tag_163:
+        /* "--CODEGEN--":274:275   */
+      0x1
+        /* "--CODEGEN--":267:270   */
+      dup4
+        /* "--CODEGEN--":263:265   */
+      0x20
+        /* "--CODEGEN--":259:271   */
+      sub
+        /* "--CODEGEN--":254:257   */
+      0x100
+        /* "--CODEGEN--":250:272   */
+      exp
+        /* "--CODEGEN--":246:276   */
+      sub
+        /* "--CODEGEN--":315:319   */
+      dup1
+        /* "--CODEGEN--":311:320   */
+      not
+        /* "--CODEGEN--":305:308   */
+      dup3
+        /* "--CODEGEN--":299:309   */
+      mload
+        /* "--CODEGEN--":295:321   */
+      and
+        /* "--CODEGEN--":356:360   */
+      dup2
+        /* "--CODEGEN--":350:353   */
+      dup5
+        /* "--CODEGEN--":344:354   */
+      mload
+        /* "--CODEGEN--":340:361   */
+      and
+        /* "--CODEGEN--":389:396   */
+      dup1
+        /* "--CODEGEN--":380:387   */
+      dup3
+        /* "--CODEGEN--":377:397   */
+      or
+        /* "--CODEGEN--":372:375   */
+      dup6
+        /* "--CODEGEN--":365:398   */
+      mstore
+        /* "--CODEGEN--":3:402   */
+      pop
+      pop
+      pop
+        /* "GnosisSafePersonalEdition.sol":6248:6367  abi.encodePacked(byte(0x19), byte(0), this, to, value, data, operation, safeTxGas, dataGas, gasPrice, gasToken, _nonce) */
+      pop
+      pop
+      pop
+      swap1
+      pop
+      add
+      dup8
+      0x2
+      dup2
+      gt
+      iszero
+      tag_165
+      jumpi
+      invalid
+    tag_165:
+      0xff
+      and
+      0x100000000000000000000000000000000000000000000000000000000000000
+      mul
+      dup2
+      mstore
+      0x1
+      add
+      dup7
+      dup2
+      mstore
+      0x20
+      add
+      dup6
+      dup2
+      mstore
+      0x20
+      add
+      dup5
+      dup2
+      mstore
+      0x20
+      add
+      dup4
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0x1000000000000000000000000
+      mul
+      dup2
+      mstore
+      0x14
+      add
+      dup3
+      dup2
+      mstore
+      0x20
+      add
+      swap13
+      pop
+      pop
+      pop
+      pop
+      pop
+      pop
+      pop
+      pop
+      pop
+      pop
+      pop
+      pop
+      pop
+      mload(0x40)
+        /* "--CODEGEN--":49:53   */
+      0x20
+        /* "--CODEGEN--":39:46   */
+      dup2
+        /* "--CODEGEN--":30:37   */
+      dup4
+        /* "--CODEGEN--":26:47   */
+      sub
+        /* "--CODEGEN--":22:54   */
+      sub
+        /* "--CODEGEN--":13:20   */
+      dup2
+        /* "--CODEGEN--":6:55   */
+      mstore
+        /* "GnosisSafePersonalEdition.sol":6248:6367  abi.encodePacked(byte(0x19), byte(0), this, to, value, data, operation, safeTxGas, dataGas, gasPrice, gasToken, _nonce) */
+      swap1
+      0x40
+      mstore
+        /* "GnosisSafePersonalEdition.sol":6225:6377  keccak256(... */
+      mload(0x40)
+      dup1
+      dup3
+      dup1
+      mload
+      swap1
+      0x20
+      add
+      swap1
+      dup1
+      dup4
+      dup4
+        /* "--CODEGEN--":36:189   */
+    tag_166:
+        /* "--CODEGEN--":66:68   */
+      0x20
+        /* "--CODEGEN--":61:64   */
+      dup4
+        /* "--CODEGEN--":58:69   */
+      lt
+        /* "--CODEGEN--":51:70   */
+      iszero
+        /* "--CODEGEN--":36:189   */
+      iszero
+      tag_167
+      jumpi
+        /* "--CODEGEN--":182:185   */
+      dup1
+        /* "--CODEGEN--":176:186   */
+      mload
+        /* "--CODEGEN--":171:174   */
+      dup3
+        /* "--CODEGEN--":164:187   */
+      mstore
+        /* "--CODEGEN--":98:100   */
+      0x20
+        /* "--CODEGEN--":93:96   */
+      dup3
+        /* "--CODEGEN--":89:101   */
+      add
+        /* "--CODEGEN--":82:101   */
+      swap2
+      pop
+        /* "--CODEGEN--":123:125   */
+      0x20
+        /* "--CODEGEN--":118:121   */
+      dup2
+        /* "--CODEGEN--":114:126   */
+      add
+        /* "--CODEGEN--":107:126   */
+      swap1
+      pop
+        /* "--CODEGEN--":148:150   */
+      0x20
+        /* "--CODEGEN--":143:146   */
+      dup4
+        /* "--CODEGEN--":139:151   */
+      sub
+        /* "--CODEGEN--":132:151   */
+      swap3
+      pop
+        /* "--CODEGEN--":36:189   */
+      jump(tag_166)
+    tag_167:
+        /* "--CODEGEN--":274:275   */
+      0x1
+        /* "--CODEGEN--":267:270   */
+      dup4
+        /* "--CODEGEN--":263:265   */
+      0x20
+        /* "--CODEGEN--":259:271   */
+      sub
+        /* "--CODEGEN--":254:257   */
+      0x100
+        /* "--CODEGEN--":250:272   */
+      exp
+        /* "--CODEGEN--":246:276   */
+      sub
+        /* "--CODEGEN--":315:319   */
+      dup1
+        /* "--CODEGEN--":311:320   */
+      not
+        /* "--CODEGEN--":305:308   */
+      dup3
+        /* "--CODEGEN--":299:309   */
+      mload
+        /* "--CODEGEN--":295:321   */
+      and
+        /* "--CODEGEN--":356:360   */
+      dup2
+        /* "--CODEGEN--":350:353   */
+      dup5
+        /* "--CODEGEN--":344:354   */
+      mload
+        /* "--CODEGEN--":340:361   */
+      and
+        /* "--CODEGEN--":389:396   */
+      dup1
+        /* "--CODEGEN--":380:387   */
+      dup3
+        /* "--CODEGEN--":377:397   */
+      or
+        /* "--CODEGEN--":372:375   */
+      dup6
+        /* "--CODEGEN--":365:398   */
+      mstore
+        /* "--CODEGEN--":3:402   */
+      pop
+      pop
+      pop
+        /* "GnosisSafePersonalEdition.sol":6225:6377  keccak256(... */
+      pop
+      pop
+      pop
+      swap1
+      pop
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      keccak256
+        /* "GnosisSafePersonalEdition.sol":6218:6377  return keccak256(... */
+      swap1
+      pop
+        /* "GnosisSafePersonalEdition.sol":5884:6384  function getTransactionHash(... */
+      swap10
+      swap9
+      pop
+      pop
+      pop
+      pop
+      pop
+      pop
+      pop
+      pop
+      pop
+      jump	// out
+        /* "GnosisSafePersonalEdition.sol":4149:4672  function requiredTxGas(address to, uint256 value, bytes data, Enum.Operation operation)... */
+    tag_82:
+        /* "GnosisSafePersonalEdition.sol":4288:4295  uint256 */
+      0x0
+        /* "GnosisSafePersonalEdition.sol":4311:4327  uint256 startGas */
+      dup1
+        /* "GnosisSafePersonalEdition.sol":4501:4520  uint256 requiredGas */
+      0x0
+        /* "SelfAuthorized.sol":244:248  this */
+      address
+        /* "SelfAuthorized.sol":222:249  msg.sender == address(this) */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+        /* "SelfAuthorized.sol":222:232  msg.sender */
+      caller
+        /* "SelfAuthorized.sol":222:249  msg.sender == address(this) */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      eq
+        /* "SelfAuthorized.sol":214:298  require(msg.sender == address(this), "Method can only be called from this contract") */
+      iszero
+      iszero
+      tag_170
+      jumpi
+      mload(0x40)
+      0x8c379a000000000000000000000000000000000000000000000000000000000
+      dup2
+      mstore
+      0x4
+      add
+      dup1
+      dup1
+      0x20
+      add
+      dup3
+      dup2
+      sub
+      dup3
+      mstore
+      0x2c
+      dup2
+      mstore
+      0x20
+      add
+      dup1
+      0x4d6574686f642063616e206f6e6c792062652063616c6c65642066726f6d2074
+      dup2
+      mstore
+      0x20
+      add
+      0x68697320636f6e74726163740000000000000000000000000000000000000000
+      dup2
+      mstore
+      pop
+      0x40
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      revert
+    tag_170:
+        /* "GnosisSafePersonalEdition.sol":4330:4339  gasleft() */
+      gas
+        /* "GnosisSafePersonalEdition.sol":4311:4339  uint256 startGas = gasleft() */
+      swap2
+      pop
+        /* "GnosisSafePersonalEdition.sol":4444:4490  execute(to, value, data, operation, gasleft()) */
+      tag_172
+        /* "GnosisSafePersonalEdition.sol":4452:4454  to */
+      dup8
+        /* "GnosisSafePersonalEdition.sol":4456:4461  value */
+      dup8
+        /* "GnosisSafePersonalEdition.sol":4463:4467  data */
+      dup8
+        /* "GnosisSafePersonalEdition.sol":4469:4478  operation */
+      dup8
+        /* "GnosisSafePersonalEdition.sol":4480:4489  gasleft() */
+      gas
+        /* "GnosisSafePersonalEdition.sol":4444:4451  execute */
+      tag_108
+        /* "GnosisSafePersonalEdition.sol":4444:4490  execute(to, value, data, operation, gasleft()) */
+      jump	// in
+    tag_172:
+        /* "GnosisSafePersonalEdition.sol":4436:4491  require(execute(to, value, data, operation, gasleft())) */
+      iszero
+      iszero
+      tag_173
+      jumpi
+      0x0
+      dup1
+      revert
+    tag_173:
+        /* "GnosisSafePersonalEdition.sol":4534:4543  gasleft() */
+      gas
+        /* "GnosisSafePersonalEdition.sol":4523:4531  startGas */
+      dup3
+        /* "GnosisSafePersonalEdition.sol":4523:4543  startGas - gasleft() */
+      sub
+        /* "GnosisSafePersonalEdition.sol":4501:4543  uint256 requiredGas = startGas - gasleft() */
+      swap1
+      pop
+        /* "GnosisSafePersonalEdition.sol":4651:4662  requiredGas */
+      dup1
+        /* "GnosisSafePersonalEdition.sol":4634:4663  abi.encodePacked(requiredGas) */
+      add(0x20, mload(0x40))
+      dup1
+      dup3
+      dup2
+      mstore
+      0x20
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+        /* "--CODEGEN--":49:53   */
+      0x20
+        /* "--CODEGEN--":39:46   */
+      dup2
+        /* "--CODEGEN--":30:37   */
+      dup4
+        /* "--CODEGEN--":26:47   */
+      sub
+        /* "--CODEGEN--":22:54   */
+      sub
+        /* "--CODEGEN--":13:20   */
+      dup2
+        /* "--CODEGEN--":6:55   */
+      mstore
+        /* "GnosisSafePersonalEdition.sol":4634:4663  abi.encodePacked(requiredGas) */
+      swap1
+      0x40
+      mstore
+        /* "GnosisSafePersonalEdition.sol":4620:4665  revert(string(abi.encodePacked(requiredGas))) */
+      mload(0x40)
+      0x8c379a000000000000000000000000000000000000000000000000000000000
+      dup2
+      mstore
+      0x4
+      add
+      dup1
+      dup1
+      0x20
+      add
+      dup3
+      dup2
+      sub
+      dup3
+      mstore
+      dup4
+      dup2
+      dup2
+      mload
+      dup2
+      mstore
+      0x20
+      add
+      swap2
+      pop
+      dup1
+      mload
+      swap1
+      0x20
+      add
+      swap1
+      dup1
+      dup4
+      dup4
+        /* "--CODEGEN--":23:24   */
+      0x0
+        /* "--CODEGEN--":8:108   */
+    tag_174:
+        /* "--CODEGEN--":33:36   */
+      dup4
+        /* "--CODEGEN--":30:31   */
+      dup2
+        /* "--CODEGEN--":27:37   */
+      lt
+        /* "--CODEGEN--":8:108   */
+      iszero
+      tag_175
+      jumpi
+        /* "--CODEGEN--":99:100   */
+      dup1
+        /* "--CODEGEN--":94:97   */
+      dup3
+        /* "--CODEGEN--":90:101   */
+      add
+        /* "--CODEGEN--":84:102   */
+      mload
+        /* "--CODEGEN--":80:81   */
+      dup2
+        /* "--CODEGEN--":75:78   */
+      dup5
+        /* "--CODEGEN--":71:82   */
+      add
+        /* "--CODEGEN--":64:103   */
+      mstore
+        /* "--CODEGEN--":52:54   */
+      0x20
+        /* "--CODEGEN--":49:50   */
+      dup2
+        /* "--CODEGEN--":45:55   */
+      add
+        /* "--CODEGEN--":40:55   */
+      swap1
+      pop
+        /* "--CODEGEN--":8:108   */
+      jump(tag_174)
+    tag_175:
+        /* "--CODEGEN--":12:26   */
+      pop
+        /* "GnosisSafePersonalEdition.sol":4620:4665  revert(string(abi.encodePacked(requiredGas))) */
+      pop
+      pop
+      pop
+      swap1
+      pop
+      swap1
+      dup2
+      add
+      swap1
+      0x1f
+      and
+      dup1
+      iszero
+      tag_177
+      jumpi
+      dup1
+      dup3
+      sub
+      dup1
+      mload
+      0x1
+      dup4
+      0x20
+      sub
+      0x100
+      exp
+      sub
+      not
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap2
+      pop
+    tag_177:
+      pop
+      swap3
+      pop
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      revert
+        /* "ModuleManager.sol":2031:2505  function disableModule(Module prevModule, Module module)... */
+    tag_85:
+        /* "SelfAuthorized.sol":244:248  this */
+      address
+        /* "SelfAuthorized.sol":222:249  msg.sender == address(this) */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+        /* "SelfAuthorized.sol":222:232  msg.sender */
+      caller
+        /* "SelfAuthorized.sol":222:249  msg.sender == address(this) */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      eq
+        /* "SelfAuthorized.sol":214:298  require(msg.sender == address(this), "Method can only be called from this contract") */
+      iszero
+      iszero
+      tag_179
+      jumpi
+      mload(0x40)
+      0x8c379a000000000000000000000000000000000000000000000000000000000
+      dup2
+      mstore
+      0x4
+      add
+      dup1
+      dup1
+      0x20
+      add
+      dup3
+      dup2
+      sub
+      dup3
+      mstore
+      0x2c
+      dup2
+      mstore
+      0x20
+      add
+      dup1
+      0x4d6574686f642063616e206f6e6c792062652063616c6c65642066726f6d2074
+      dup2
+      mstore
+      0x20
+      add
+      0x68697320636f6e74726163740000000000000000000000000000000000000000
+      dup2
+      mstore
+      pop
+      0x40
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      revert
+    tag_179:
+        /* "ModuleManager.sol":2245:2246  0 */
+      0x0
+        /* "ModuleManager.sol":2234:2240  module */
+      dup2
+        /* "ModuleManager.sol":2226:2246  address(module) != 0 */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      eq
+      iszero
+        /* "ModuleManager.sol":2226:2285  address(module) != 0 && address(module) != SENTINEL_MODULES */
+      dup1
+      iszero
+      tag_181
+      jumpi
+      pop
+        /* "ModuleManager.sol":550:553  0x1 */
+      0x1
+        /* "ModuleManager.sol":2250:2285  address(module) != SENTINEL_MODULES */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+        /* "ModuleManager.sol":2258:2264  module */
+      dup2
+        /* "ModuleManager.sol":2250:2285  address(module) != SENTINEL_MODULES */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      eq
+      iszero
+        /* "ModuleManager.sol":2226:2285  address(module) != 0 && address(module) != SENTINEL_MODULES */
+    tag_181:
+        /* "ModuleManager.sol":2218:2321  require(address(module) != 0 && address(module) != SENTINEL_MODULES, "Invalid module address provided") */
+      iszero
+      iszero
+      tag_182
+      jumpi
+      mload(0x40)
+      0x8c379a000000000000000000000000000000000000000000000000000000000
+      dup2
+      mstore
+      0x4
+      add
+      dup1
+      dup1
+      0x20
+      add
+      dup3
+      dup2
+      sub
+      dup3
+      mstore
+      0x1f
+      dup2
+      mstore
+      0x20
+      add
+      dup1
+      0x496e76616c6964206d6f64756c6520616464726573732070726f766964656400
+      dup2
+      mstore
+      pop
+      0x20
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      revert
+    tag_182:
+        /* "ModuleManager.sol":2370:2376  module */
+      dup1
+        /* "ModuleManager.sol":2339:2377  modules[prevModule] == address(module) */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+        /* "ModuleManager.sol":2339:2346  modules */
+      0x1
+        /* "ModuleManager.sol":2339:2358  modules[prevModule] */
+      0x0
+        /* "ModuleManager.sol":2347:2357  prevModule */
+      dup5
+        /* "ModuleManager.sol":2339:2358  modules[prevModule] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+      0x0
+      swap1
+      sload
+      swap1
+      0x100
+      exp
+      swap1
+      div
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+        /* "ModuleManager.sol":2339:2377  modules[prevModule] == address(module) */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      eq
+        /* "ModuleManager.sol":2331:2422  require(modules[prevModule] == address(module), "Invalid prevModule, module pair provided") */
+      iszero
+      iszero
+      tag_183
+      jumpi
+      mload(0x40)
+      0x8c379a000000000000000000000000000000000000000000000000000000000
+      dup2
+      mstore
+      0x4
+      add
+      dup1
+      dup1
+      0x20
+      add
+      dup3
+      dup2
+      sub
+      dup3
+      mstore
+      0x28
+      dup2
+      mstore
+      0x20
+      add
+      dup1
+      0x496e76616c696420707265764d6f64756c652c206d6f64756c65207061697220
+      dup2
+      mstore
+      0x20
+      add
+      0x70726f7669646564000000000000000000000000000000000000000000000000
+      dup2
+      mstore
+      pop
+      0x40
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      revert
+    tag_183:
+        /* "ModuleManager.sol":2454:2461  modules */
+      0x1
+        /* "ModuleManager.sol":2454:2469  modules[module] */
+      0x0
+        /* "ModuleManager.sol":2462:2468  module */
+      dup3
+        /* "ModuleManager.sol":2454:2469  modules[module] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+      0x0
+      swap1
+      sload
+      swap1
+      0x100
+      exp
+      swap1
+      div
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+        /* "ModuleManager.sol":2432:2439  modules */
+      0x1
+        /* "ModuleManager.sol":2432:2451  modules[prevModule] */
+      0x0
+        /* "ModuleManager.sol":2440:2450  prevModule */
+      dup5
+        /* "ModuleManager.sol":2432:2451  modules[prevModule] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+      0x0
+        /* "ModuleManager.sol":2432:2469  modules[prevModule] = modules[module] */
+      0x100
+      exp
+      dup2
+      sload
+      dup2
+      0xffffffffffffffffffffffffffffffffffffffff
+      mul
+      not
+      and
+      swap1
+      dup4
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      mul
+      or
+      swap1
+      sstore
+      pop
+        /* "ModuleManager.sol":2497:2498  0 */
+      0x0
+        /* "ModuleManager.sol":2479:2486  modules */
+      0x1
+        /* "ModuleManager.sol":2479:2494  modules[module] */
+      0x0
+        /* "ModuleManager.sol":2487:2493  module */
+      dup4
+        /* "ModuleManager.sol":2479:2494  modules[module] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+      0x0
+        /* "ModuleManager.sol":2479:2498  modules[module] = 0 */
+      0x100
+      exp
+      dup2
+      sload
+      dup2
+      0xffffffffffffffffffffffffffffffffffffffff
+      mul
+      not
+      and
+      swap1
+      dup4
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      mul
+      or
+      swap1
+      sstore
+      pop
+        /* "ModuleManager.sol":2031:2505  function disableModule(Module prevModule, Module module)... */
+      pop
+      pop
+      jump	// out
+        /* "OwnerManager.sol":4147:4898  function swapOwner(address prevOwner, address oldOwner, address newOwner)... */
+    tag_88:
+        /* "SelfAuthorized.sol":244:248  this */
+      address
+        /* "SelfAuthorized.sol":222:249  msg.sender == address(this) */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+        /* "SelfAuthorized.sol":222:232  msg.sender */
+      caller
+        /* "SelfAuthorized.sol":222:249  msg.sender == address(this) */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      eq
+        /* "SelfAuthorized.sol":214:298  require(msg.sender == address(this), "Method can only be called from this contract") */
+      iszero
+      iszero
+      tag_185
+      jumpi
+      mload(0x40)
+      0x8c379a000000000000000000000000000000000000000000000000000000000
+      dup2
+      mstore
+      0x4
+      add
+      dup1
+      dup1
+      0x20
+      add
+      dup3
+      dup2
+      sub
+      dup3
+      mstore
+      0x2c
+      dup2
+      mstore
+      0x20
+      add
+      dup1
+      0x4d6574686f642063616e206f6e6c792062652063616c6c65642066726f6d2074
+      dup2
+      mstore
+      0x20
+      add
+      0x68697320636f6e74726163740000000000000000000000000000000000000000
+      dup2
+      mstore
+      pop
+      0x40
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      revert
+    tag_185:
+        /* "OwnerManager.sol":4330:4331  0 */
+      0x0
+        /* "OwnerManager.sol":4318:4326  newOwner */
+      dup2
+        /* "OwnerManager.sol":4318:4331  newOwner != 0 */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      eq
+      iszero
+        /* "OwnerManager.sol":4318:4362  newOwner != 0 && newOwner != SENTINEL_OWNERS */
+      dup1
+      iszero
+      tag_187
+      jumpi
+      pop
+        /* "OwnerManager.sol":337:340  0x1 */
+      0x1
+        /* "OwnerManager.sol":4335:4362  newOwner != SENTINEL_OWNERS */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+        /* "OwnerManager.sol":4335:4343  newOwner */
+      dup2
+        /* "OwnerManager.sol":4335:4362  newOwner != SENTINEL_OWNERS */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      eq
+      iszero
+        /* "OwnerManager.sol":4318:4362  newOwner != 0 && newOwner != SENTINEL_OWNERS */
+    tag_187:
+        /* "OwnerManager.sol":4310:4397  require(newOwner != 0 && newOwner != SENTINEL_OWNERS, "Invalid owner address provided") */
+      iszero
+      iszero
+      tag_188
+      jumpi
+      mload(0x40)
+      0x8c379a000000000000000000000000000000000000000000000000000000000
+      dup2
+      mstore
+      0x4
+      add
+      dup1
+      dup1
+      0x20
+      add
+      dup3
+      dup2
+      sub
+      dup3
+      mstore
+      0x1e
+      dup2
+      mstore
+      0x20
+      add
+      dup1
+      0x496e76616c6964206f776e657220616464726573732070726f76696465640000
+      dup2
+      mstore
+      pop
+      0x20
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      revert
+    tag_188:
+        /* "OwnerManager.sol":4475:4476  0 */
+      0x0
+        /* "OwnerManager.sol":4455:4461  owners */
+      0x2
+        /* "OwnerManager.sol":4455:4471  owners[newOwner] */
+      0x0
+        /* "OwnerManager.sol":4462:4470  newOwner */
+      dup4
+        /* "OwnerManager.sol":4455:4471  owners[newOwner] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+      0x0
+      swap1
+      sload
+      swap1
+      0x100
+      exp
+      swap1
+      div
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+        /* "OwnerManager.sol":4455:4476  owners[newOwner] == 0 */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      eq
+        /* "OwnerManager.sol":4447:4508  require(owners[newOwner] == 0, "Address is already an owner") */
+      iszero
+      iszero
+      tag_189
+      jumpi
+      mload(0x40)
+      0x8c379a000000000000000000000000000000000000000000000000000000000
+      dup2
+      mstore
+      0x4
+      add
+      dup1
+      dup1
+      0x20
+      add
+      dup3
+      dup2
+      sub
+      dup3
+      mstore
+      0x1b
+      dup2
+      mstore
+      0x20
+      add
+      dup1
+      0x4164647265737320697320616c726561647920616e206f776e65720000000000
+      dup2
+      mstore
+      pop
+      0x20
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      revert
+    tag_189:
+        /* "OwnerManager.sol":4621:4622  0 */
+      0x0
+        /* "OwnerManager.sol":4609:4617  oldOwner */
+      dup3
+        /* "OwnerManager.sol":4609:4622  oldOwner != 0 */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      eq
+      iszero
+        /* "OwnerManager.sol":4609:4653  oldOwner != 0 && oldOwner != SENTINEL_OWNERS */
+      dup1
+      iszero
+      tag_190
+      jumpi
+      pop
+        /* "OwnerManager.sol":337:340  0x1 */
+      0x1
+        /* "OwnerManager.sol":4626:4653  oldOwner != SENTINEL_OWNERS */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+        /* "OwnerManager.sol":4626:4634  oldOwner */
+      dup3
+        /* "OwnerManager.sol":4626:4653  oldOwner != SENTINEL_OWNERS */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      eq
+      iszero
+        /* "OwnerManager.sol":4609:4653  oldOwner != 0 && oldOwner != SENTINEL_OWNERS */
+    tag_190:
+        /* "OwnerManager.sol":4601:4688  require(oldOwner != 0 && oldOwner != SENTINEL_OWNERS, "Invalid owner address provided") */
+      iszero
+      iszero
+      tag_191
+      jumpi
+      mload(0x40)
+      0x8c379a000000000000000000000000000000000000000000000000000000000
+      dup2
+      mstore
+      0x4
+      add
+      dup1
+      dup1
+      0x20
+      add
+      dup3
+      dup2
+      sub
+      dup3
+      mstore
+      0x1e
+      dup2
+      mstore
+      0x20
+      add
+      dup1
+      0x496e76616c6964206f776e657220616464726573732070726f76696465640000
+      dup2
+      mstore
+      pop
+      0x20
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      revert
+    tag_191:
+        /* "OwnerManager.sol":4727:4735  oldOwner */
+      dup2
+        /* "OwnerManager.sol":4706:4735  owners[prevOwner] == oldOwner */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+        /* "OwnerManager.sol":4706:4712  owners */
+      0x2
+        /* "OwnerManager.sol":4706:4723  owners[prevOwner] */
+      0x0
+        /* "OwnerManager.sol":4713:4722  prevOwner */
+      dup6
+        /* "OwnerManager.sol":4706:4723  owners[prevOwner] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+      0x0
+      swap1
+      sload
+      swap1
+      0x100
+      exp
+      swap1
+      div
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+        /* "OwnerManager.sol":4706:4735  owners[prevOwner] == oldOwner */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      eq
+        /* "OwnerManager.sol":4698:4778  require(owners[prevOwner] == oldOwner, "Invalid prevOwner, owner pair provided") */
+      iszero
+      iszero
+      tag_192
+      jumpi
+      mload(0x40)
+      0x8c379a000000000000000000000000000000000000000000000000000000000
+      dup2
+      mstore
+      0x4
+      add
+      dup1
+      dup1
+      0x20
+      add
+      dup3
+      dup2
+      sub
+      dup3
+      mstore
+      0x26
+      dup2
+      mstore
+      0x20
+      add
+      dup1
+      0x496e76616c696420707265764f776e65722c206f776e65722070616972207072
+      dup2
+      mstore
+      0x20
+      add
+      0x6f76696465640000000000000000000000000000000000000000000000000000
+      dup2
+      mstore
+      pop
+      0x40
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      revert
+    tag_192:
+        /* "OwnerManager.sol":4807:4813  owners */
+      0x2
+        /* "OwnerManager.sol":4807:4823  owners[oldOwner] */
+      0x0
+        /* "OwnerManager.sol":4814:4822  oldOwner */
+      dup4
+        /* "OwnerManager.sol":4807:4823  owners[oldOwner] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+      0x0
+      swap1
+      sload
+      swap1
+      0x100
+      exp
+      swap1
+      div
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+        /* "OwnerManager.sol":4788:4794  owners */
+      0x2
+        /* "OwnerManager.sol":4788:4804  owners[newOwner] */
+      0x0
+        /* "OwnerManager.sol":4795:4803  newOwner */
+      dup4
+        /* "OwnerManager.sol":4788:4804  owners[newOwner] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+      0x0
+        /* "OwnerManager.sol":4788:4823  owners[newOwner] = owners[oldOwner] */
+      0x100
+      exp
+      dup2
+      sload
+      dup2
+      0xffffffffffffffffffffffffffffffffffffffff
+      mul
+      not
+      and
+      swap1
+      dup4
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      mul
+      or
+      swap1
+      sstore
+      pop
+        /* "OwnerManager.sol":4853:4861  newOwner */
+      dup1
+        /* "OwnerManager.sol":4833:4839  owners */
+      0x2
+        /* "OwnerManager.sol":4833:4850  owners[prevOwner] */
+      0x0
+        /* "OwnerManager.sol":4840:4849  prevOwner */
+      dup6
+        /* "OwnerManager.sol":4833:4850  owners[prevOwner] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+      0x0
+        /* "OwnerManager.sol":4833:4861  owners[prevOwner] = newOwner */
+      0x100
+      exp
+      dup2
+      sload
+      dup2
+      0xffffffffffffffffffffffffffffffffffffffff
+      mul
+      not
+      and
+      swap1
+      dup4
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      mul
+      or
+      swap1
+      sstore
+      pop
+        /* "OwnerManager.sol":4890:4891  0 */
+      0x0
+        /* "OwnerManager.sol":4871:4877  owners */
+      0x2
+        /* "OwnerManager.sol":4871:4887  owners[oldOwner] */
+      0x0
+        /* "OwnerManager.sol":4878:4886  oldOwner */
+      dup5
+        /* "OwnerManager.sol":4871:4887  owners[oldOwner] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+      0x0
+        /* "OwnerManager.sol":4871:4891  owners[oldOwner] = 0 */
+      0x100
+      exp
+      dup2
+      sload
+      dup2
+      0xffffffffffffffffffffffffffffffffffffffff
+      mul
+      not
+      and
+      swap1
+      dup4
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      mul
+      or
+      swap1
+      sstore
+      pop
+        /* "OwnerManager.sol":4147:4898  function swapOwner(address prevOwner, address oldOwner, address newOwner)... */
+      pop
+      pop
+      pop
+      jump	// out
+        /* "OwnerManager.sol":5492:5607  function getThreshold()... */
+    tag_91:
+        /* "OwnerManager.sol":5561:5568  uint256 */
+      0x0
+        /* "OwnerManager.sol":5591:5600  threshold */
+      sload(0x4)
+        /* "OwnerManager.sol":5584:5600  return threshold */
+      swap1
+      pop
+        /* "OwnerManager.sol":5492:5607  function getThreshold()... */
+      swap1
+      jump	// out
+        /* "OwnerManager.sol":3030:3813  function removeOwner(address prevOwner, address owner, uint256 _threshold)... */
+    tag_94:
+        /* "SelfAuthorized.sol":244:248  this */
+      address
+        /* "SelfAuthorized.sol":222:249  msg.sender == address(this) */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+        /* "SelfAuthorized.sol":222:232  msg.sender */
+      caller
+        /* "SelfAuthorized.sol":222:249  msg.sender == address(this) */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      eq
+        /* "SelfAuthorized.sol":214:298  require(msg.sender == address(this), "Method can only be called from this contract") */
+      iszero
+      iszero
+      tag_195
+      jumpi
+      mload(0x40)
+      0x8c379a000000000000000000000000000000000000000000000000000000000
+      dup2
+      mstore
+      0x4
+      add
+      dup1
+      dup1
+      0x20
+      add
+      dup3
+      dup2
+      sub
+      dup3
+      mstore
+      0x2c
+      dup2
+      mstore
+      0x20
+      add
+      dup1
+      0x4d6574686f642063616e206f6e6c792062652063616c6c65642066726f6d2074
+      dup2
+      mstore
+      0x20
+      add
+      0x68697320636f6e74726163740000000000000000000000000000000000000000
+      dup2
+      mstore
+      pop
+      0x40
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      revert
+    tag_195:
+        /* "OwnerManager.sol":3256:3266  _threshold */
+      dup1
+        /* "OwnerManager.sol":3251:3252  1 */
+      0x1
+        /* "OwnerManager.sol":3238:3248  ownerCount */
+      sload(0x3)
+        /* "OwnerManager.sol":3238:3252  ownerCount - 1 */
+      sub
+        /* "OwnerManager.sol":3238:3266  ownerCount - 1 >= _threshold */
+      lt
+      iszero
+        /* "OwnerManager.sol":3230:3324  require(ownerCount - 1 >= _threshold, "New owner count needs to be larger than new threshold") */
+      iszero
+      iszero
+      tag_197
+      jumpi
+      mload(0x40)
+      0x8c379a000000000000000000000000000000000000000000000000000000000
+      dup2
+      mstore
+      0x4
+      add
+      dup1
+      dup1
+      0x20
+      add
+      dup3
+      dup2
+      sub
+      dup3
+      mstore
+      0x35
+      dup2
+      mstore
+      0x20
+      add
+      dup1
+      0x4e6577206f776e657220636f756e74206e6565647320746f206265206c617267
+      dup2
+      mstore
+      0x20
+      add
+      0x6572207468616e206e6577207468726573686f6c640000000000000000000000
+      dup2
+      mstore
+      pop
+      0x40
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      revert
+    tag_197:
+        /* "OwnerManager.sol":3431:3432  0 */
+      0x0
+        /* "OwnerManager.sol":3422:3427  owner */
+      dup3
+        /* "OwnerManager.sol":3422:3432  owner != 0 */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      eq
+      iszero
+        /* "OwnerManager.sol":3422:3460  owner != 0 && owner != SENTINEL_OWNERS */
+      dup1
+      iszero
+      tag_198
+      jumpi
+      pop
+        /* "OwnerManager.sol":337:340  0x1 */
+      0x1
+        /* "OwnerManager.sol":3436:3460  owner != SENTINEL_OWNERS */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+        /* "OwnerManager.sol":3436:3441  owner */
+      dup3
+        /* "OwnerManager.sol":3436:3460  owner != SENTINEL_OWNERS */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      eq
+      iszero
+        /* "OwnerManager.sol":3422:3460  owner != 0 && owner != SENTINEL_OWNERS */
+    tag_198:
+        /* "OwnerManager.sol":3414:3495  require(owner != 0 && owner != SENTINEL_OWNERS, "Invalid owner address provided") */
+      iszero
+      iszero
+      tag_199
+      jumpi
+      mload(0x40)
+      0x8c379a000000000000000000000000000000000000000000000000000000000
+      dup2
+      mstore
+      0x4
+      add
+      dup1
+      dup1
+      0x20
+      add
+      dup3
+      dup2
+      sub
+      dup3
+      mstore
+      0x1e
+      dup2
+      mstore
+      0x20
+      add
+      dup1
+      0x496e76616c6964206f776e657220616464726573732070726f76696465640000
+      dup2
+      mstore
+      pop
+      0x20
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      revert
+    tag_199:
+        /* "OwnerManager.sol":3534:3539  owner */
+      dup2
+        /* "OwnerManager.sol":3513:3539  owners[prevOwner] == owner */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+        /* "OwnerManager.sol":3513:3519  owners */
+      0x2
+        /* "OwnerManager.sol":3513:3530  owners[prevOwner] */
+      0x0
+        /* "OwnerManager.sol":3520:3529  prevOwner */
+      dup6
+        /* "OwnerManager.sol":3513:3530  owners[prevOwner] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+      0x0
+      swap1
+      sload
+      swap1
+      0x100
+      exp
+      swap1
+      div
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+        /* "OwnerManager.sol":3513:3539  owners[prevOwner] == owner */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      eq
+        /* "OwnerManager.sol":3505:3582  require(owners[prevOwner] == owner, "Invalid prevOwner, owner pair provided") */
+      iszero
+      iszero
+      tag_200
+      jumpi
+      mload(0x40)
+      0x8c379a000000000000000000000000000000000000000000000000000000000
+      dup2
+      mstore
+      0x4
+      add
+      dup1
+      dup1
+      0x20
+      add
+      dup3
+      dup2
+      sub
+      dup3
+      mstore
+      0x26
+      dup2
+      mstore
+      0x20
+      add
+      dup1
+      0x496e76616c696420707265764f776e65722c206f776e65722070616972207072
+      dup2
+      mstore
+      0x20
+      add
+      0x6f76696465640000000000000000000000000000000000000000000000000000
+      dup2
+      mstore
+      pop
+      0x40
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      revert
+    tag_200:
+        /* "OwnerManager.sol":3612:3618  owners */
+      0x2
+        /* "OwnerManager.sol":3612:3625  owners[owner] */
+      0x0
+        /* "OwnerManager.sol":3619:3624  owner */
+      dup4
+        /* "OwnerManager.sol":3612:3625  owners[owner] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+      0x0
+      swap1
+      sload
+      swap1
+      0x100
+      exp
+      swap1
+      div
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+        /* "OwnerManager.sol":3592:3598  owners */
+      0x2
+        /* "OwnerManager.sol":3592:3609  owners[prevOwner] */
+      0x0
+        /* "OwnerManager.sol":3599:3608  prevOwner */
+      dup6
+        /* "OwnerManager.sol":3592:3609  owners[prevOwner] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+      0x0
+        /* "OwnerManager.sol":3592:3625  owners[prevOwner] = owners[owner] */
+      0x100
+      exp
+      dup2
+      sload
+      dup2
+      0xffffffffffffffffffffffffffffffffffffffff
+      mul
+      not
+      and
+      swap1
+      dup4
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      mul
+      or
+      swap1
+      sstore
+      pop
+        /* "OwnerManager.sol":3651:3652  0 */
+      0x0
+        /* "OwnerManager.sol":3635:3641  owners */
+      0x2
+        /* "OwnerManager.sol":3635:3648  owners[owner] */
+      0x0
+        /* "OwnerManager.sol":3642:3647  owner */
+      dup5
+        /* "OwnerManager.sol":3635:3648  owners[owner] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+      0x0
+        /* "OwnerManager.sol":3635:3652  owners[owner] = 0 */
+      0x100
+      exp
+      dup2
+      sload
+      dup2
+      0xffffffffffffffffffffffffffffffffffffffff
+      mul
+      not
+      and
+      swap1
+      dup4
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      mul
+      or
+      swap1
+      sstore
+      pop
+        /* "OwnerManager.sol":3662:3672  ownerCount */
+      0x3
+      0x0
+        /* "OwnerManager.sol":3662:3674  ownerCount-- */
+      dup2
+      sload
+      dup1
+      swap3
+      swap2
+      swap1
+      0x1
+      swap1
+      sub
+      swap2
+      swap1
+      pop
+      sstore
+      pop
+        /* "OwnerManager.sol":3755:3765  _threshold */
+      dup1
+        /* "OwnerManager.sol":3742:3751  threshold */
+      sload(0x4)
+        /* "OwnerManager.sol":3742:3765  threshold != _threshold */
+      eq
+      iszero
+        /* "OwnerManager.sol":3738:3806  if (threshold != _threshold)... */
+      iszero
+      tag_201
+      jumpi
+        /* "OwnerManager.sol":3779:3806  changeThreshold(_threshold) */
+      tag_202
+        /* "OwnerManager.sol":3795:3805  _threshold */
+      dup2
+        /* "OwnerManager.sol":3779:3794  changeThreshold */
+      tag_45
+        /* "OwnerManager.sol":3779:3806  changeThreshold(_threshold) */
+      jump	// in
+    tag_202:
+        /* "OwnerManager.sol":3738:3806  if (threshold != _threshold)... */
+    tag_201:
+        /* "OwnerManager.sol":3030:3813  function removeOwner(address prevOwner, address owner, uint256 _threshold)... */
+      pop
+      pop
+      pop
+      jump	// out
+        /* "GnosisSafePersonalEdition.sol":659:699  string public constant VERSION = "0.0.1" */
+    tag_97:
+      0x40
+      dup1
+      mload
+      swap1
+      dup2
+      add
+      0x40
+      mstore
+      dup1
+      0x5
+      dup2
+      mstore
+      0x20
+      add
+      0x302e302e31000000000000000000000000000000000000000000000000000000
+      dup2
+      mstore
+      pop
+      dup2
+      jump	// out
+        /* "GnosisSafePersonalEdition.sol":4678:5284  function checkHash(bytes32 txHash, bytes signatures)... */
+    tag_105:
+        /* "GnosisSafePersonalEdition.sol":4827:4844  address lastOwner */
+      0x0
+        /* "GnosisSafePersonalEdition.sol":4867:4887  address currentOwner */
+      dup1
+        /* "GnosisSafePersonalEdition.sol":4897:4906  uint256 i */
+      0x0
+        /* "GnosisSafePersonalEdition.sol":4855:4856  0 */
+      dup1
+        /* "GnosisSafePersonalEdition.sol":4827:4857  address lastOwner = address(0) */
+      swap3
+      pop
+        /* "GnosisSafePersonalEdition.sol":4967:4968  0 */
+      0x0
+        /* "GnosisSafePersonalEdition.sol":4963:4968  i = 0 */
+      swap1
+      pop
+        /* "GnosisSafePersonalEdition.sol":4958:5278  for (i = 0; i < threshold; i++) {... */
+    tag_204:
+        /* "GnosisSafePersonalEdition.sol":4974:4983  threshold */
+      sload(0x4)
+        /* "GnosisSafePersonalEdition.sol":4970:4971  i */
+      dup2
+        /* "GnosisSafePersonalEdition.sol":4970:4983  i < threshold */
+      lt
+        /* "GnosisSafePersonalEdition.sol":4958:5278  for (i = 0; i < threshold; i++) {... */
+      iszero
+      tag_205
+      jumpi
+        /* "GnosisSafePersonalEdition.sol":5019:5052  recoverKey(txHash, signatures, i) */
+      tag_207
+        /* "GnosisSafePersonalEdition.sol":5030:5036  txHash */
+      dup6
+        /* "GnosisSafePersonalEdition.sol":5038:5048  signatures */
+      dup6
+        /* "GnosisSafePersonalEdition.sol":5050:5051  i */
+      dup4
+        /* "GnosisSafePersonalEdition.sol":5019:5029  recoverKey */
+      tag_208
+        /* "GnosisSafePersonalEdition.sol":5019:5052  recoverKey(txHash, signatures, i) */
+      jump	// in
+    tag_207:
+        /* "GnosisSafePersonalEdition.sol":5004:5052  currentOwner = recoverKey(txHash, signatures, i) */
+      swap2
+      pop
+        /* "GnosisSafePersonalEdition.sol":5098:5099  0 */
+      0x0
+        /* "GnosisSafePersonalEdition.sol":5074:5080  owners */
+      0x2
+        /* "GnosisSafePersonalEdition.sol":5074:5094  owners[currentOwner] */
+      0x0
+        /* "GnosisSafePersonalEdition.sol":5081:5093  currentOwner */
+      dup5
+        /* "GnosisSafePersonalEdition.sol":5074:5094  owners[currentOwner] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+      0x0
+      swap1
+      sload
+      swap1
+      0x100
+      exp
+      swap1
+      div
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+        /* "GnosisSafePersonalEdition.sol":5074:5099  owners[currentOwner] != 0 */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      eq
+      iszero
+        /* "GnosisSafePersonalEdition.sol":5066:5135  require(owners[currentOwner] != 0, "Signature not provided by owner") */
+      iszero
+      iszero
+      tag_209
+      jumpi
+      mload(0x40)
+      0x8c379a000000000000000000000000000000000000000000000000000000000
+      dup2
+      mstore
+      0x4
+      add
+      dup1
+      dup1
+      0x20
+      add
+      dup3
+      dup2
+      sub
+      dup3
+      mstore
+      0x1f
+      dup2
+      mstore
+      0x20
+      add
+      dup1
+      0x5369676e6174757265206e6f742070726f7669646564206279206f776e657200
+      dup2
+      mstore
+      pop
+      0x20
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      revert
+    tag_209:
+        /* "GnosisSafePersonalEdition.sol":5172:5181  lastOwner */
+      dup3
+        /* "GnosisSafePersonalEdition.sol":5157:5181  currentOwner > lastOwner */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+        /* "GnosisSafePersonalEdition.sol":5157:5169  currentOwner */
+      dup3
+        /* "GnosisSafePersonalEdition.sol":5157:5181  currentOwner > lastOwner */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      gt
+        /* "GnosisSafePersonalEdition.sol":5149:5229  require(currentOwner > lastOwner, "Signatures are not ordered by owner address") */
+      iszero
+      iszero
+      tag_210
+      jumpi
+      mload(0x40)
+      0x8c379a000000000000000000000000000000000000000000000000000000000
+      dup2
+      mstore
+      0x4
+      add
+      dup1
+      dup1
+      0x20
+      add
+      dup3
+      dup2
+      sub
+      dup3
+      mstore
+      0x2b
+      dup2
+      mstore
+      0x20
+      add
+      dup1
+      0x5369676e61747572657320617265206e6f74206f726465726564206279206f77
+      dup2
+      mstore
+      0x20
+      add
+      0x6e65722061646472657373000000000000000000000000000000000000000000
+      dup2
+      mstore
+      pop
+      0x40
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      revert
+    tag_210:
+        /* "GnosisSafePersonalEdition.sol":5255:5267  currentOwner */
+      dup2
+        /* "GnosisSafePersonalEdition.sol":5243:5267  lastOwner = currentOwner */
+      swap3
+      pop
+        /* "GnosisSafePersonalEdition.sol":4985:4988  i++ */
+      dup1
+      dup1
+      0x1
+      add
+      swap2
+      pop
+      pop
+        /* "GnosisSafePersonalEdition.sol":4958:5278  for (i = 0; i < threshold; i++) {... */
+      jump(tag_204)
+    tag_205:
+        /* "GnosisSafePersonalEdition.sol":4678:5284  function checkHash(bytes32 txHash, bytes signatures)... */
+      pop
+      pop
+      pop
+      pop
+      pop
+      jump	// out
+        /* "ModuleManager.sol":3276:3824  function execute(address to, uint256 value, bytes data, Enum.Operation operation, uint256 txGas)... */
+    tag_108:
+        /* "ModuleManager.sol":3407:3419  bool success */
+      0x0
+        /* "ModuleManager.sol":3678:3697  address newContract */
+      dup1
+        /* "ModuleManager.sol":3452:3471  Enum.Operation.Call */
+      0x0
+        /* "ModuleManager.sol":3439:3471  operation == Enum.Operation.Call */
+      0x2
+      dup2
+      gt
+      iszero
+      tag_212
+      jumpi
+      invalid
+    tag_212:
+        /* "ModuleManager.sol":3439:3448  operation */
+      dup5
+        /* "ModuleManager.sol":3439:3471  operation == Enum.Operation.Call */
+      0x2
+      dup2
+      gt
+      iszero
+      tag_213
+      jumpi
+      invalid
+    tag_213:
+      eq
+        /* "ModuleManager.sol":3435:3818  if (operation == Enum.Operation.Call)... */
+      iszero
+      tag_214
+      jumpi
+        /* "ModuleManager.sol":3495:3530  executeCall(to, value, data, txGas) */
+      tag_215
+        /* "ModuleManager.sol":3507:3509  to */
+      dup8
+        /* "ModuleManager.sol":3511:3516  value */
+      dup8
+        /* "ModuleManager.sol":3518:3522  data */
+      dup8
+        /* "ModuleManager.sol":3524:3529  txGas */
+      dup7
+        /* "ModuleManager.sol":3495:3506  executeCall */
+      tag_216
+        /* "ModuleManager.sol":3495:3530  executeCall(to, value, data, txGas) */
+      jump	// in
+    tag_215:
+        /* "ModuleManager.sol":3485:3530  success = executeCall(to, value, data, txGas) */
+      swap2
+      pop
+        /* "ModuleManager.sol":3435:3818  if (operation == Enum.Operation.Call)... */
+      jump(tag_217)
+    tag_214:
+        /* "ModuleManager.sol":3562:3589  Enum.Operation.DelegateCall */
+      0x1
+        /* "ModuleManager.sol":3549:3589  operation == Enum.Operation.DelegateCall */
+      0x2
+      dup2
+      gt
+      iszero
+      tag_218
+      jumpi
+      invalid
+    tag_218:
+        /* "ModuleManager.sol":3549:3558  operation */
+      dup5
+        /* "ModuleManager.sol":3549:3589  operation == Enum.Operation.DelegateCall */
+      0x2
+      dup2
+      gt
+      iszero
+      tag_219
+      jumpi
+      invalid
+    tag_219:
+      eq
+        /* "ModuleManager.sol":3545:3818  if (operation == Enum.Operation.DelegateCall)... */
+      iszero
+      tag_220
+      jumpi
+        /* "ModuleManager.sol":3613:3649  executeDelegateCall(to, data, txGas) */
+      tag_221
+        /* "ModuleManager.sol":3633:3635  to */
+      dup8
+        /* "ModuleManager.sol":3637:3641  data */
+      dup7
+        /* "ModuleManager.sol":3643:3648  txGas */
+      dup6
+        /* "ModuleManager.sol":3613:3632  executeDelegateCall */
+      tag_222
+        /* "ModuleManager.sol":3613:3649  executeDelegateCall(to, data, txGas) */
+      jump	// in
+    tag_221:
+        /* "ModuleManager.sol":3603:3649  success = executeDelegateCall(to, data, txGas) */
+      swap2
+      pop
+        /* "ModuleManager.sol":3545:3818  if (operation == Enum.Operation.DelegateCall)... */
+      jump(tag_223)
+    tag_220:
+        /* "ModuleManager.sol":3700:3719  executeCreate(data) */
+      tag_224
+        /* "ModuleManager.sol":3714:3718  data */
+      dup6
+        /* "ModuleManager.sol":3700:3713  executeCreate */
+      tag_225
+        /* "ModuleManager.sol":3700:3719  executeCreate(data) */
+      jump	// in
+    tag_224:
+        /* "ModuleManager.sol":3678:3719  address newContract = executeCreate(data) */
+      swap1
+      pop
+        /* "ModuleManager.sol":3758:3759  0 */
+      0x0
+        /* "ModuleManager.sol":3743:3754  newContract */
+      dup2
+        /* "ModuleManager.sol":3743:3759  newContract != 0 */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      eq
+      iszero
+        /* "ModuleManager.sol":3733:3759  success = newContract != 0 */
+      swap2
+      pop
+        /* "ModuleManager.sol":3778:3807  ContractCreation(newContract) */
+      0x4db17dd5e4732fb6da34a148104a592783ca119a1e7bb8829eba6cbadef0b511
+        /* "ModuleManager.sol":3795:3806  newContract */
+      dup2
+        /* "ModuleManager.sol":3778:3807  ContractCreation(newContract) */
+      mload(0x40)
+      dup1
+      dup3
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      log1
+        /* "ModuleManager.sol":3545:3818  if (operation == Enum.Operation.DelegateCall)... */
+    tag_223:
+        /* "ModuleManager.sol":3435:3818  if (operation == Enum.Operation.Call)... */
+    tag_217:
+        /* "ModuleManager.sol":3276:3824  function execute(address to, uint256 value, bytes data, Enum.Operation operation, uint256 txGas)... */
+      pop
+      swap6
+      swap5
+      pop
+      pop
+      pop
+      pop
+      pop
+      jump	// out
+        /* "SecuredTokenTransfer.sol":430:1182  function transferToken (... */
+    tag_115:
+        /* "SecuredTokenTransfer.sol":568:584  bool transferred */
+      0x0
+        /* "SecuredTokenTransfer.sol":600:617  bytes memory data */
+      0x60
+        /* "SecuredTokenTransfer.sol":673:681  receiver */
+      dup4
+        /* "SecuredTokenTransfer.sol":683:689  amount */
+      dup4
+        /* "SecuredTokenTransfer.sol":620:690  abi.encodeWithSignature("transfer(address,uint256)", receiver, amount) */
+      add(0x24, mload(0x40))
+      dup1
+      dup4
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      dup3
+      dup2
+      mstore
+      0x20
+      add
+      swap3
+      pop
+      pop
+      pop
+      mload(0x40)
+        /* "--CODEGEN--":49:53   */
+      0x20
+        /* "--CODEGEN--":39:46   */
+      dup2
+        /* "--CODEGEN--":30:37   */
+      dup4
+        /* "--CODEGEN--":26:47   */
+      sub
+        /* "--CODEGEN--":22:54   */
+      sub
+        /* "--CODEGEN--":13:20   */
+      dup2
+        /* "--CODEGEN--":6:55   */
+      mstore
+        /* "SecuredTokenTransfer.sol":620:690  abi.encodeWithSignature("transfer(address,uint256)", receiver, amount) */
+      swap1
+      0x40
+      mstore
+      and(not(0xffffffffffffffffffffffffffffffffffffffffffffffffffffffff), 0xa9059cbb00000000000000000000000000000000000000000000000000000000)
+        /* "--CODEGEN--":38:42   */
+      0x20
+        /* "--CODEGEN--":29:36   */
+      dup3
+        /* "--CODEGEN--":25:43   */
+      add
+        /* "--CODEGEN--":67:77   */
+      dup1
+        /* "--CODEGEN--":61:78   */
+      mload
+        /* "--CODEGEN--":96:154   */
+      0xffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+        /* "--CODEGEN--":199:207   */
+      dup4
+        /* "--CODEGEN--":192:196   */
+      dup2
+        /* "--CODEGEN--":186:190   */
+      dup4
+        /* "--CODEGEN--":182:197   */
+      and
+        /* "--CODEGEN--":179:208   */
+      or
+        /* "--CODEGEN--":167:177   */
+      dup4
+        /* "--CODEGEN--":160:209   */
+      mstore
+        /* "--CODEGEN--":0:215   */
+      pop
+      pop
+      pop
+        /* "SecuredTokenTransfer.sol":620:690  abi.encodeWithSignature("transfer(address,uint256)", receiver, amount) */
+      pop
+        /* "SecuredTokenTransfer.sol":600:690  bytes memory data = abi.encodeWithSignature("transfer(address,uint256)", receiver, amount) */
+      swap1
+      pop
+        /* "SecuredTokenTransfer.sol":867:868  0 */
+      0x0
+        /* "SecuredTokenTransfer.sol":864:865  0 */
+      dup1
+        /* "SecuredTokenTransfer.sol":857:861  data */
+      dup3
+        /* "SecuredTokenTransfer.sol":851:862  mload(data) */
+      mload
+        /* "SecuredTokenTransfer.sol":844:848  0x20 */
+      0x20
+        /* "SecuredTokenTransfer.sol":838:842  data */
+      dup5
+        /* "SecuredTokenTransfer.sol":834:849  add(data, 0x20) */
+      add
+        /* "SecuredTokenTransfer.sol":831:832  0 */
+      0x0
+        /* "SecuredTokenTransfer.sol":824:829  token */
+      dup10
+        /* "SecuredTokenTransfer.sol":816:821  10000 */
+      0x2710
+        /* "SecuredTokenTransfer.sol":811:814  gas */
+      gas
+        /* "SecuredTokenTransfer.sol":807:822  sub(gas, 10000) */
+      sub
+        /* "SecuredTokenTransfer.sol":802:869  call(sub(gas, 10000), token, 0, add(data, 0x20), mload(data), 0, 0) */
+      call
+        /* "SecuredTokenTransfer.sol":899:903  0x40 */
+      0x40
+        /* "SecuredTokenTransfer.sol":893:904  mload(0x40) */
+      mload
+        /* "SecuredTokenTransfer.sol":940:954  returndatasize */
+      returndatasize
+        /* "SecuredTokenTransfer.sol":937:938  0 */
+      0x0
+        /* "SecuredTokenTransfer.sol":932:935  ptr */
+      dup3
+        /* "SecuredTokenTransfer.sol":917:955  returndatacopy(ptr, 0, returndatasize) */
+      returndatacopy
+        /* "SecuredTokenTransfer.sol":975:989  returndatasize */
+      returndatasize
+        /* "SecuredTokenTransfer.sol":1008:1009  0 */
+      0x0
+        /* "SecuredTokenTransfer.sol":1003:1036  case 0 { transferred := success } */
+      dup2
+      eq
+      tag_228
+      jumpi
+        /* "SecuredTokenTransfer.sol":1054:1058  0x20 */
+      0x20
+        /* "SecuredTokenTransfer.sol":1049:1125  case 0x20 { transferred := iszero(or(iszero(success), iszero(mload(ptr)))) } */
+      dup2
+      eq
+      tag_229
+      jumpi
+        /* "SecuredTokenTransfer.sol":1163:1164  0 */
+      0x0
+        /* "SecuredTokenTransfer.sol":1148:1164  transferred := 0 */
+      swap5
+      pop
+        /* "SecuredTokenTransfer.sol":968:1166  switch returndatasize ... */
+      jump(tag_227)
+        /* "SecuredTokenTransfer.sol":1003:1036  case 0 { transferred := success } */
+    tag_228:
+        /* "SecuredTokenTransfer.sol":1027:1034  success */
+      dup3
+        /* "SecuredTokenTransfer.sol":1012:1034  transferred := success */
+      swap5
+      pop
+        /* "SecuredTokenTransfer.sol":1003:1036  case 0 { transferred := success } */
+      jump(tag_227)
+        /* "SecuredTokenTransfer.sol":1049:1125  case 0x20 { transferred := iszero(or(iszero(success), iszero(mload(ptr)))) } */
+    tag_229:
+        /* "SecuredTokenTransfer.sol":1116:1119  ptr */
+      dup2
+        /* "SecuredTokenTransfer.sol":1110:1120  mload(ptr) */
+      mload
+        /* "SecuredTokenTransfer.sol":1103:1121  iszero(mload(ptr)) */
+      iszero
+        /* "SecuredTokenTransfer.sol":1093:1100  success */
+      dup4
+        /* "SecuredTokenTransfer.sol":1086:1101  iszero(success) */
+      iszero
+        /* "SecuredTokenTransfer.sol":1083:1122  or(iszero(success), iszero(mload(ptr))) */
+      or
+        /* "SecuredTokenTransfer.sol":1076:1123  iszero(or(iszero(success), iszero(mload(ptr)))) */
+      iszero
+        /* "SecuredTokenTransfer.sol":1061:1123  transferred := iszero(or(iszero(success), iszero(mload(ptr)))) */
+      swap5
+      pop
+        /* "SecuredTokenTransfer.sol":968:1166  switch returndatasize ... */
+    tag_227:
+      pop
+        /* "SecuredTokenTransfer.sol":773:1176  {... */
+      pop
+      pop
+      pop
+      swap4
+      swap3
+      pop
+      pop
+      pop
+      jump	// out
+        /* "OwnerManager.sol":643:1853  function setupOwners(address[] _owners, uint256 _threshold)... */
+    tag_127:
+        /* "OwnerManager.sol":1249:1269  address currentOwner */
+      0x0
+        /* "OwnerManager.sol":1302:1311  uint256 i */
+      dup1
+        /* "OwnerManager.sol":1401:1414  address owner */
+      0x0
+        /* "OwnerManager.sol":879:880  0 */
+      dup1
+        /* "OwnerManager.sol":866:875  threshold */
+      sload(0x4)
+        /* "OwnerManager.sol":866:880  threshold == 0 */
+      eq
+        /* "OwnerManager.sol":858:915  require(threshold == 0, "Owners have already been setup") */
+      iszero
+      iszero
+      tag_231
+      jumpi
+      mload(0x40)
+      0x8c379a000000000000000000000000000000000000000000000000000000000
+      dup2
+      mstore
+      0x4
+      add
+      dup1
+      dup1
+      0x20
+      add
+      dup3
+      dup2
+      sub
+      dup3
+      mstore
+      0x1e
+      dup2
+      mstore
+      0x20
+      add
+      dup1
+      0x4f776e657273206861766520616c7265616479206265656e2073657475700000
+      dup2
+      mstore
+      pop
+      0x20
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      revert
+    tag_231:
+        /* "OwnerManager.sol":1022:1029  _owners */
+      dup5
+        /* "OwnerManager.sol":1022:1036  _owners.length */
+      mload
+        /* "OwnerManager.sol":1008:1018  _threshold */
+      dup5
+        /* "OwnerManager.sol":1008:1036  _threshold <= _owners.length */
+      gt
+      iszero
+        /* "OwnerManager.sol":1000:1076  require(_threshold <= _owners.length, "Threshold cannot exceed owner count") */
+      iszero
+      iszero
+      tag_232
+      jumpi
+      mload(0x40)
+      0x8c379a000000000000000000000000000000000000000000000000000000000
+      dup2
+      mstore
+      0x4
+      add
+      dup1
+      dup1
+      0x20
+      add
+      dup3
+      dup2
+      sub
+      dup3
+      mstore
+      0x23
+      dup2
+      mstore
+      0x20
+      add
+      dup1
+      0x5468726573686f6c642063616e6e6f7420657863656564206f776e657220636f
+      dup2
+      mstore
+      0x20
+      add
+      0x756e740000000000000000000000000000000000000000000000000000000000
+      dup2
+      mstore
+      pop
+      0x40
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      revert
+    tag_232:
+        /* "OwnerManager.sol":1160:1161  1 */
+      0x1
+        /* "OwnerManager.sol":1146:1156  _threshold */
+      dup5
+        /* "OwnerManager.sol":1146:1161  _threshold >= 1 */
+      lt
+      iszero
+        /* "OwnerManager.sol":1138:1202  require(_threshold >= 1, "Threshold needs to be greater than 0") */
+      iszero
+      iszero
+      tag_233
+      jumpi
+      mload(0x40)
+      0x8c379a000000000000000000000000000000000000000000000000000000000
+      dup2
+      mstore
+      0x4
+      add
+      dup1
+      dup1
+      0x20
+      add
+      dup3
+      dup2
+      sub
+      dup3
+      mstore
+      0x24
+      dup2
+      mstore
+      0x20
+      add
+      dup1
+      0x5468726573686f6c64206e6565647320746f2062652067726561746572207468
+      dup2
+      mstore
+      0x20
+      add
+      0x616e203000000000000000000000000000000000000000000000000000000000
+      dup2
+      mstore
+      pop
+      0x40
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      revert
+    tag_233:
+        /* "OwnerManager.sol":337:340  0x1 */
+      0x1
+        /* "OwnerManager.sol":1249:1287  address currentOwner = SENTINEL_OWNERS */
+      swap3
+      pop
+        /* "OwnerManager.sol":1314:1315  0 */
+      0x0
+        /* "OwnerManager.sol":1302:1315  uint256 i = 0 */
+      swap2
+      pop
+        /* "OwnerManager.sol":1297:1730  for (uint256 i = 0; i < _owners.length; i++) {... */
+    tag_234:
+        /* "OwnerManager.sol":1321:1328  _owners */
+      dup5
+        /* "OwnerManager.sol":1321:1335  _owners.length */
+      mload
+        /* "OwnerManager.sol":1317:1318  i */
+      dup3
+        /* "OwnerManager.sol":1317:1335  i < _owners.length */
+      lt
+        /* "OwnerManager.sol":1297:1730  for (uint256 i = 0; i < _owners.length; i++) {... */
+      iszero
+      tag_235
+      jumpi
+        /* "OwnerManager.sol":1417:1424  _owners */
+      dup5
+        /* "OwnerManager.sol":1425:1426  i */
+      dup3
+        /* "OwnerManager.sol":1417:1427  _owners[i] */
+      dup2
+      mload
+      dup2
+      lt
+      iszero
+      iszero
+      tag_237
+      jumpi
+      invalid
+    tag_237:
+      swap1
+      0x20
+      add
+      swap1
+      0x20
+      mul
+      add
+      mload
+        /* "OwnerManager.sol":1401:1427  address owner = _owners[i] */
+      swap1
+      pop
+        /* "OwnerManager.sol":1458:1459  0 */
+      0x0
+        /* "OwnerManager.sol":1449:1454  owner */
+      dup2
+        /* "OwnerManager.sol":1449:1459  owner != 0 */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      eq
+      iszero
+        /* "OwnerManager.sol":1449:1487  owner != 0 && owner != SENTINEL_OWNERS */
+      dup1
+      iszero
+      tag_238
+      jumpi
+      pop
+        /* "OwnerManager.sol":337:340  0x1 */
+      0x1
+        /* "OwnerManager.sol":1463:1487  owner != SENTINEL_OWNERS */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+        /* "OwnerManager.sol":1463:1468  owner */
+      dup2
+        /* "OwnerManager.sol":1463:1487  owner != SENTINEL_OWNERS */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      eq
+      iszero
+        /* "OwnerManager.sol":1449:1487  owner != 0 && owner != SENTINEL_OWNERS */
+    tag_238:
+        /* "OwnerManager.sol":1441:1522  require(owner != 0 && owner != SENTINEL_OWNERS, "Invalid owner address provided") */
+      iszero
+      iszero
+      tag_239
+      jumpi
+      mload(0x40)
+      0x8c379a000000000000000000000000000000000000000000000000000000000
+      dup2
+      mstore
+      0x4
+      add
+      dup1
+      dup1
+      0x20
+      add
+      dup3
+      dup2
+      sub
+      dup3
+      mstore
+      0x1e
+      dup2
+      mstore
+      0x20
+      add
+      dup1
+      0x496e76616c6964206f776e657220616464726573732070726f76696465640000
+      dup2
+      mstore
+      pop
+      0x20
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      revert
+    tag_239:
+        /* "OwnerManager.sol":1605:1606  0 */
+      0x0
+        /* "OwnerManager.sol":1588:1594  owners */
+      0x2
+        /* "OwnerManager.sol":1588:1601  owners[owner] */
+      0x0
+        /* "OwnerManager.sol":1595:1600  owner */
+      dup4
+        /* "OwnerManager.sol":1588:1601  owners[owner] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+      0x0
+      swap1
+      sload
+      swap1
+      0x100
+      exp
+      swap1
+      div
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+        /* "OwnerManager.sol":1588:1606  owners[owner] == 0 */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      eq
+        /* "OwnerManager.sol":1580:1643  require(owners[owner] == 0, "Duplicate owner address provided") */
+      iszero
+      iszero
+      tag_240
+      jumpi
+      mload(0x40)
+      0x8c379a000000000000000000000000000000000000000000000000000000000
+      dup2
+      mstore
+      0x4
+      add
+      dup1
+      dup1
+      0x20
+      add
+      dup3
+      dup2
+      sub
+      dup3
+      mstore
+      0x20
+      dup2
+      mstore
+      0x20
+      add
+      dup1
+      0x4475706c6963617465206f776e657220616464726573732070726f7669646564
+      dup2
+      mstore
+      pop
+      0x20
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      revert
+    tag_240:
+        /* "OwnerManager.sol":1680:1685  owner */
+      dup1
+        /* "OwnerManager.sol":1657:1663  owners */
+      0x2
+        /* "OwnerManager.sol":1657:1677  owners[currentOwner] */
+      0x0
+        /* "OwnerManager.sol":1664:1676  currentOwner */
+      dup6
+        /* "OwnerManager.sol":1657:1677  owners[currentOwner] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+      0x0
+        /* "OwnerManager.sol":1657:1685  owners[currentOwner] = owner */
+      0x100
+      exp
+      dup2
+      sload
+      dup2
+      0xffffffffffffffffffffffffffffffffffffffff
+      mul
+      not
+      and
+      swap1
+      dup4
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      mul
+      or
+      swap1
+      sstore
+      pop
+        /* "OwnerManager.sol":1714:1719  owner */
+      dup1
+        /* "OwnerManager.sol":1699:1719  currentOwner = owner */
+      swap3
+      pop
+        /* "OwnerManager.sol":1337:1340  i++ */
+      dup2
+      dup1
+      0x1
+      add
+      swap3
+      pop
+      pop
+        /* "OwnerManager.sol":1297:1730  for (uint256 i = 0; i < _owners.length; i++) {... */
+      jump(tag_234)
+    tag_235:
+        /* "OwnerManager.sol":337:340  0x1 */
+      0x1
+        /* "OwnerManager.sol":1739:1745  owners */
+      0x2
+        /* "OwnerManager.sol":1739:1759  owners[currentOwner] */
+      0x0
+        /* "OwnerManager.sol":1746:1758  currentOwner */
+      dup6
+        /* "OwnerManager.sol":1739:1759  owners[currentOwner] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+      0x0
+        /* "OwnerManager.sol":1739:1777  owners[currentOwner] = SENTINEL_OWNERS */
+      0x100
+      exp
+      dup2
+      sload
+      dup2
+      0xffffffffffffffffffffffffffffffffffffffff
+      mul
+      not
+      and
+      swap1
+      dup4
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      mul
+      or
+      swap1
+      sstore
+      pop
+        /* "OwnerManager.sol":1800:1807  _owners */
+      dup5
+        /* "OwnerManager.sol":1800:1814  _owners.length */
+      mload
+        /* "OwnerManager.sol":1787:1797  ownerCount */
+      0x3
+        /* "OwnerManager.sol":1787:1814  ownerCount = _owners.length */
+      dup2
+      swap1
+      sstore
+      pop
+        /* "OwnerManager.sol":1836:1846  _threshold */
+      dup4
+        /* "OwnerManager.sol":1824:1833  threshold */
+      0x4
+        /* "OwnerManager.sol":1824:1846  threshold = _threshold */
+      dup2
+      swap1
+      sstore
+      pop
+        /* "OwnerManager.sol":643:1853  function setupOwners(address[] _owners, uint256 _threshold)... */
+      pop
+      pop
+      pop
+      pop
+      pop
+      jump	// out
+        /* "ModuleManager.sol":735:1144  function setupModules(address to, bytes data)... */
+    tag_129:
+        /* "ModuleManager.sol":849:850  0 */
+      0x0
+        /* "ModuleManager.sol":820:827  modules */
+      0x1
+        /* "ModuleManager.sol":820:845  modules[SENTINEL_MODULES] */
+      0x0
+        /* "ModuleManager.sol":550:553  0x1 */
+      0x1
+        /* "ModuleManager.sol":820:845  modules[SENTINEL_MODULES] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+      0x0
+      swap1
+      sload
+      swap1
+      0x100
+      exp
+      swap1
+      div
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+        /* "ModuleManager.sol":820:850  modules[SENTINEL_MODULES] == 0 */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      eq
+        /* "ModuleManager.sol":812:892  require(modules[SENTINEL_MODULES] == 0, "Modules have already been initialized") */
+      iszero
+      iszero
+      tag_242
+      jumpi
+      mload(0x40)
+      0x8c379a000000000000000000000000000000000000000000000000000000000
+      dup2
+      mstore
+      0x4
+      add
+      dup1
+      dup1
+      0x20
+      add
+      dup3
+      dup2
+      sub
+      dup3
+      mstore
+      0x25
+      dup2
+      mstore
+      0x20
+      add
+      dup1
+      0x4d6f64756c6573206861766520616c7265616479206265656e20696e69746961
+      dup2
+      mstore
+      0x20
+      add
+      0x6c697a6564000000000000000000000000000000000000000000000000000000
+      dup2
+      mstore
+      pop
+      0x40
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      revert
+    tag_242:
+        /* "ModuleManager.sol":550:553  0x1 */
+      0x1
+        /* "ModuleManager.sol":902:909  modules */
+      dup1
+        /* "ModuleManager.sol":902:927  modules[SENTINEL_MODULES] */
+      0x0
+        /* "ModuleManager.sol":550:553  0x1 */
+      0x1
+        /* "ModuleManager.sol":902:927  modules[SENTINEL_MODULES] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+      0x0
+        /* "ModuleManager.sol":902:946  modules[SENTINEL_MODULES] = SENTINEL_MODULES */
+      0x100
+      exp
+      dup2
+      sload
+      dup2
+      0xffffffffffffffffffffffffffffffffffffffff
+      mul
+      not
+      and
+      swap1
+      dup4
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      mul
+      or
+      swap1
+      sstore
+      pop
+        /* "ModuleManager.sol":966:967  0 */
+      0x0
+        /* "ModuleManager.sol":960:962  to */
+      dup3
+        /* "ModuleManager.sol":960:967  to != 0 */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      eq
+      iszero
+        /* "ModuleManager.sol":956:1137  if (to != 0)... */
+      iszero
+      tag_243
+      jumpi
+        /* "ModuleManager.sol":1061:1101  executeDelegateCall(to, data, gasleft()) */
+      tag_244
+        /* "ModuleManager.sol":1081:1083  to */
+      dup3
+        /* "ModuleManager.sol":1085:1089  data */
+      dup3
+        /* "ModuleManager.sol":1091:1100  gasleft() */
+      gas
+        /* "ModuleManager.sol":1061:1080  executeDelegateCall */
+      tag_222
+        /* "ModuleManager.sol":1061:1101  executeDelegateCall(to, data, gasleft()) */
+      jump	// in
+    tag_244:
+        /* "ModuleManager.sol":1053:1137  require(executeDelegateCall(to, data, gasleft()), "Could not finish initialization") */
+      iszero
+      iszero
+      tag_245
+      jumpi
+      mload(0x40)
+      0x8c379a000000000000000000000000000000000000000000000000000000000
+      dup2
+      mstore
+      0x4
+      add
+      dup1
+      dup1
+      0x20
+      add
+      dup3
+      dup2
+      sub
+      dup3
+      mstore
+      0x1f
+      dup2
+      mstore
+      0x20
+      add
+      dup1
+      0x436f756c64206e6f742066696e69736820696e697469616c697a6174696f6e00
+      dup2
+      mstore
+      pop
+      0x20
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      revert
+    tag_245:
+        /* "ModuleManager.sol":956:1137  if (to != 0)... */
+    tag_243:
+        /* "ModuleManager.sol":735:1144  function setupModules(address to, bytes data)... */
+      pop
+      pop
+      jump	// out
+        /* "SignatureValidator.sol":477:807  function recoverKey (... */
+    tag_208:
+        /* "SignatureValidator.sol":629:636  address */
+      0x0
+        /* "SignatureValidator.sol":653:660  uint8 v */
+      dup1
+        /* "SignatureValidator.sol":670:679  bytes32 r */
+      0x0
+        /* "SignatureValidator.sol":689:698  bytes32 s */
+      dup1
+        /* "SignatureValidator.sol":720:757  signatureSplit(messageSignature, pos) */
+      tag_247
+        /* "SignatureValidator.sol":735:751  messageSignature */
+      dup7
+        /* "SignatureValidator.sol":753:756  pos */
+      dup7
+        /* "SignatureValidator.sol":720:734  signatureSplit */
+      tag_248
+        /* "SignatureValidator.sol":720:757  signatureSplit(messageSignature, pos) */
+      jump	// in
+    tag_247:
+        /* "SignatureValidator.sol":708:757  (v, r, s) = signatureSplit(messageSignature, pos) */
+      dup1
+      swap4
+      pop
+      dup2
+      swap5
+      pop
+      dup3
+      swap6
+      pop
+      pop
+      pop
+      pop
+        /* "SignatureValidator.sol":774:800  ecrecover(txHash, v, r, s) */
+      0x1
+        /* "SignatureValidator.sol":784:790  txHash */
+      dup8
+        /* "SignatureValidator.sol":792:793  v */
+      dup5
+        /* "SignatureValidator.sol":795:796  r */
+      dup5
+        /* "SignatureValidator.sol":798:799  s */
+      dup5
+        /* "SignatureValidator.sol":774:800  ecrecover(txHash, v, r, s) */
+      mload(0x40)
+      0x0
+      dup2
+      mstore
+      0x20
+      add
+      0x40
+      mstore
+      mload(0x40)
+      dup1
+      dup6
+      not(0x0)
+      and
+      not(0x0)
+      and
+      dup2
+      mstore
+      0x20
+      add
+      dup5
+      0xff
+      and
+      0xff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      dup4
+      not(0x0)
+      and
+      not(0x0)
+      and
+      dup2
+      mstore
+      0x20
+      add
+      dup3
+      not(0x0)
+      and
+      not(0x0)
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap5
+      pop
+      pop
+      pop
+      pop
+      pop
+      0x20
+      mload(0x40)
+      0x20
+      dup2
+      sub
+      swap1
+      dup1
+      dup5
+      sub
+      swap1
+      0x0
+      dup7
+      gas
+      call
+      iszero
+        /* "--CODEGEN--":8:17   */
+      dup1
+        /* "--CODEGEN--":5:7   */
+      iszero
+      tag_249
+      jumpi
+        /* "--CODEGEN--":45:61   */
+      returndatasize
+        /* "--CODEGEN--":42:43   */
+      0x0
+        /* "--CODEGEN--":39:40   */
+      dup1
+        /* "--CODEGEN--":24:62   */
+      returndatacopy
+        /* "--CODEGEN--":77:93   */
+      returndatasize
+        /* "--CODEGEN--":74:75   */
+      0x0
+        /* "--CODEGEN--":67:94   */
+      revert
+        /* "--CODEGEN--":5:7   */
+    tag_249:
+        /* "SignatureValidator.sol":774:800  ecrecover(txHash, v, r, s) */
+      pop
+      pop
+      pop
+      mload(sub(mload(0x40), 0x20))
+        /* "SignatureValidator.sol":767:800  return ecrecover(txHash, v, r, s) */
+      swap4
+      pop
+        /* "SignatureValidator.sol":477:807  function recoverKey (... */
+      pop
+      pop
+      pop
+      swap4
+      swap3
+      pop
+      pop
+      pop
+      jump	// out
+        /* "ModuleManager.sol":3830:4139  function executeCall(address to, uint256 value, bytes data, uint256 txGas)... */
+    tag_216:
+        /* "ModuleManager.sol":3939:3951  bool success */
+      0x0
+        /* "ModuleManager.sol":4121:4122  0 */
+      dup1
+        /* "ModuleManager.sol":4118:4119  0 */
+      0x0
+        /* "ModuleManager.sol":4111:4115  data */
+      dup5
+        /* "ModuleManager.sol":4105:4116  mload(data) */
+      mload
+        /* "ModuleManager.sol":4098:4102  0x20 */
+      0x20
+        /* "ModuleManager.sol":4092:4096  data */
+      dup7
+        /* "ModuleManager.sol":4088:4103  add(data, 0x20) */
+      add
+        /* "ModuleManager.sol":4081:4086  value */
+      dup8
+        /* "ModuleManager.sol":4077:4079  to */
+      dup10
+        /* "ModuleManager.sol":4070:4075  txGas */
+      dup8
+        /* "ModuleManager.sol":4065:4123  call(txGas, to, value, add(data, 0x20), mload(data), 0, 0) */
+      call
+        /* "ModuleManager.sol":4054:4123  success := call(txGas, to, value, add(data, 0x20), mload(data), 0, 0) */
+      swap1
+      pop
+        /* "ModuleManager.sol":4040:4133  {... */
+      swap5
+      swap4
+      pop
+      pop
+      pop
+      pop
+      jump	// out
+        /* "ModuleManager.sol":4145:4448  function executeDelegateCall(address to, bytes data, uint256 txGas)... */
+    tag_222:
+        /* "ModuleManager.sol":4247:4259  bool success */
+      0x0
+        /* "ModuleManager.sol":4430:4431  0 */
+      dup1
+        /* "ModuleManager.sol":4427:4428  0 */
+      0x0
+        /* "ModuleManager.sol":4420:4424  data */
+      dup5
+        /* "ModuleManager.sol":4414:4425  mload(data) */
+      mload
+        /* "ModuleManager.sol":4407:4411  0x20 */
+      0x20
+        /* "ModuleManager.sol":4401:4405  data */
+      dup7
+        /* "ModuleManager.sol":4397:4412  add(data, 0x20) */
+      add
+        /* "ModuleManager.sol":4393:4395  to */
+      dup8
+        /* "ModuleManager.sol":4386:4391  txGas */
+      dup7
+        /* "ModuleManager.sol":4373:4432  delegatecall(txGas, to, add(data, 0x20), mload(data), 0, 0) */
+      delegatecall
+        /* "ModuleManager.sol":4362:4432  success := delegatecall(txGas, to, add(data, 0x20), mload(data), 0, 0) */
+      swap1
+      pop
+        /* "ModuleManager.sol":4348:4442  {... */
+      swap4
+      swap3
+      pop
+      pop
+      pop
+      jump	// out
+        /* "ModuleManager.sol":4454:4715  function executeCreate(bytes data)... */
+    tag_225:
+        /* "ModuleManager.sol":4523:4542  address newContract */
+      0x0
+        /* "ModuleManager.sol":4693:4697  data */
+      dup2
+        /* "ModuleManager.sol":4687:4698  mload(data) */
+      mload
+        /* "ModuleManager.sol":4680:4684  0x20 */
+      0x20
+        /* "ModuleManager.sol":4674:4678  data */
+      dup4
+        /* "ModuleManager.sol":4670:4685  add(data, 0x20) */
+      add
+        /* "ModuleManager.sol":4667:4668  0 */
+      0x0
+        /* "ModuleManager.sol":4660:4699  create(0, add(data, 0x20), mload(data)) */
+      create
+        /* "ModuleManager.sol":4645:4699  newContract := create(0, add(data, 0x20), mload(data)) */
+      swap1
+      pop
+        /* "ModuleManager.sol":4631:4709  {... */
+      swap2
+      swap1
+      pop
+      jump	// out
+        /* "SignatureValidator.sol":984:1898  function signatureSplit(bytes signatures, uint256 pos)... */
+    tag_248:
+        /* "SignatureValidator.sol":1086:1093  uint8 v */
+      0x0
+        /* "SignatureValidator.sol":1095:1104  bytes32 r */
+      dup1
+        /* "SignatureValidator.sol":1106:1115  bytes32 s */
+      0x0
+        /* "SignatureValidator.sol":1406:1409  pos */
+      dup4
+        /* "SignatureValidator.sol":1400:1404  0x41 */
+      0x41
+        /* "SignatureValidator.sol":1396:1410  mul(0x41, pos) */
+      mul
+        /* "SignatureValidator.sol":1468:1472  0x20 */
+      0x20
+        /* "SignatureValidator.sol":1454:1466  signaturePos */
+      dup2
+        /* "SignatureValidator.sol":1450:1473  add(signaturePos, 0x20) */
+      add
+        /* "SignatureValidator.sol":1438:1448  signatures */
+      dup7
+        /* "SignatureValidator.sol":1434:1474  add(signatures, add(signaturePos, 0x20)) */
+      add
+        /* "SignatureValidator.sol":1428:1475  mload(add(signatures, add(signaturePos, 0x20))) */
+      mload
+        /* "SignatureValidator.sol":1423:1475  r := mload(add(signatures, add(signaturePos, 0x20))) */
+      swap3
+      pop
+        /* "SignatureValidator.sol":1533:1537  0x40 */
+      0x40
+        /* "SignatureValidator.sol":1519:1531  signaturePos */
+      dup2
+        /* "SignatureValidator.sol":1515:1538  add(signaturePos, 0x40) */
+      add
+        /* "SignatureValidator.sol":1503:1513  signatures */
+      dup7
+        /* "SignatureValidator.sol":1499:1539  add(signatures, add(signaturePos, 0x40)) */
+      add
+        /* "SignatureValidator.sol":1493:1540  mload(add(signatures, add(signaturePos, 0x40))) */
+      mload
+        /* "SignatureValidator.sol":1488:1540  s := mload(add(signatures, add(signaturePos, 0x40))) */
+      swap2
+      pop
+        /* "SignatureValidator.sol":1877:1881  0xff */
+      0xff
+        /* "SignatureValidator.sol":1868:1872  0x41 */
+      0x41
+        /* "SignatureValidator.sol":1854:1866  signaturePos */
+      dup3
+        /* "SignatureValidator.sol":1850:1873  add(signaturePos, 0x41) */
+      add
+        /* "SignatureValidator.sol":1838:1848  signatures */
+      dup8
+        /* "SignatureValidator.sol":1834:1874  add(signatures, add(signaturePos, 0x41)) */
+      add
+        /* "SignatureValidator.sol":1828:1875  mload(add(signatures, add(signaturePos, 0x41))) */
+      mload
+        /* "SignatureValidator.sol":1824:1882  and(mload(add(signatures, add(signaturePos, 0x41))), 0xff) */
+      and
+        /* "SignatureValidator.sol":1819:1882  v := and(mload(add(signatures, add(signaturePos, 0x41))), 0xff) */
+      swap4
+      pop
+        /* "SignatureValidator.sol":1362:1892  {... */
+      pop
+      swap3
+      pop
+      swap3
+      pop
+      swap3
+      jump	// out
+
+    auxdata: 0xa165627a7a72305820838bc8e08df307af32d98dcf8de8ea05d5145dfb3c83cfc2504032603894504d0029
+}
