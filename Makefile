@@ -23,9 +23,10 @@ kevm_repo:=https://github.com/kframework/evm-semantics
 kevm_repo_dir:=$(build_dir)/evm-semantics
 
 kevm: clean-kevm
-	git clone $(kevm_repo) --depth 1 $(kevm_repo_dir)
+	git clone $(kevm_repo) $(kevm_repo_dir)
 	cd $(kevm_repo_dir) \
-		&& make deps \
+		&& git reset --hard 5d6a5cd5b3d354e96f549e966ce73ba6219cc359 \
+		&& make repo-deps \
 		&& make build-java
 
 clean-kevm:
