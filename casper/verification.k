@@ -6,6 +6,34 @@ module VERIFICATION
     imports LEMMAS
 
     rule 0 <=Int (X modInt Y) => true
+    rule (X modInt Y) >=Int 0 => true
+
+    //for % operator on int128, failure case
+
+    rule 0 -Int (A modInt B) => 0
+        requires 0 <Int (A modInt B) ==K false
+
+    //Required to rewrite the path condition, but K doesn't support this.
+    //rule 0 <Int A modInt B ==K false => A modInt B ==K 0
+
+    //Alternative to above, also unsupported by K because side condition uses vars that are not on LHS.
+    //rule A &Int 1 => 1
+    //    requires #rangeUInt(256, A)
+    //     andBool ((A &Int (2 ^Int B)) ==K 0) ==K false
+    //     andBool (0 ==K B) ==K false
+
+    //lemmas for proc_reward.
+    rule C:Bool andBool A <Int B => false
+        requires chop( 1 &Int bool2Word ( A <Int B ) ) ==K 0
+
+    rule C:Bool andBool A <Int B => C
+        requires (chop( 1 &Int bool2Word ( A <Int B ) ) ==K 0) ==K false
+
+    //lemmas for vote
+    rule bool2Word(E) &Int 1 => bool2Word(E)
+    rule 1 &Int bool2Word(E) => bool2Word(E)
+    rule bool2Word(_) |Int 1 => 1
+    rule 1 |Int bool2Word(_) => 1
 
     rule (X modInt Y) <Int Y  => true
 
