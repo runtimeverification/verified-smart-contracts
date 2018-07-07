@@ -226,6 +226,8 @@ $(specs_dir)/casper/%-spec.k: $(casper_tmpls) casper/casper-spec.ini
 $(specs_dir)/casper/vote-1-2-3-4-5-6-success-1-spec.k: $(casper_tmpls) casper/casper-spec.ini
 	mkdir -p $(dir $@)
 	python3 resources/gen-spec.py $^ vote-1-2-3-4-5-6-success-1 recommended_target_hash-success proc_reward vote-1-2-3-4-5-6-success-1 > $@
+	cp casper/abstract-semantics.k $(dir $@)
+	cp casper/verification.k $(dir $@)
 
 $(specs_dir)/casper/vote-1-2-3-4-5-6-success-2-spec.k: $(casper_tmpls) casper/casper-spec.ini
 	mkdir -p $(dir $@)
