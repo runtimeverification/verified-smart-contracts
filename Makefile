@@ -170,7 +170,13 @@ casper_files:=recommended_source_epoch-spec.k \
               esf-success-spec.k \
               esf-failure-spec.k \
               insta_finalize-success-spec.k \
-              insta_finalize-failure-spec.k
+              insta_finalize-failure-spec.k \
+              collective_reward-success-normal-1-spec.k \
+              collective_reward-success-normal-2-spec.k \
+              collective_reward-success-zero-1-1-spec.k \
+              collective_reward-success-zero-1-2-spec.k \
+              collective_reward-success-zero-2-spec.k \
+              collective_reward-failure-spec.k
 
 proof_tests:= bihu vyper-erc20 zeppelin-erc20 hkg-erc20 hobby-erc20 sum-to-n ds-token-erc20 casper
 
@@ -300,6 +306,26 @@ $(specs_dir)/casper/vote-1-2-3-4-5-failure-1-spec.k: $(casper_tmpls) casper/casp
 $(specs_dir)/casper/vote-1-2-3-4-5-failure-2-spec.k: $(casper_tmpls) casper/casper-spec.ini
 	python3 resources/gen-spec.py $^ vote-1-2-3-4-5-failure-2 recommended_target_hash-success proc_reward vote-1-2-3-4-5-failure-2 > $@
 
+
+$(specs_dir)/casper/collective_reward-success-normal-1-spec.k: $(casper_tmpls) casper/casper-spec.ini
+	@echo >&2 "==  gen-spec: $@"
+	python3 resources/gen-spec.py $^ collective_reward-success-normal-1 esf-success deposit_exists-success-true collective_reward-success-normal-1 > $@
+
+$(specs_dir)/casper/collective_reward-success-normal-2-spec.k: $(casper_tmpls) casper/casper-spec.ini
+	@echo >&2 "==  gen-spec: $@"
+	python3 resources/gen-spec.py $^ collective_reward-success-normal-2 esf-success deposit_exists-success-true collective_reward-success-normal-2 > $@
+
+$(specs_dir)/casper/collective_reward-success-zero-1-1-spec.k: $(casper_tmpls) casper/casper-spec.ini
+	@echo >&2 "==  gen-spec: $@"
+	python3 resources/gen-spec.py $^ collective_reward-success-zero-1-1 esf-success deposit_exists-success-true deposit_exists-success-false-1 deposit_exists-success-false-2 collective_reward-success-zero-1-1 > $@
+
+$(specs_dir)/casper/collective_reward-success-zero-1-2-spec.k: $(casper_tmpls) casper/casper-spec.ini
+	@echo >&2 "==  gen-spec: $@"
+	python3 resources/gen-spec.py $^ collective_reward-success-zero-1-2 esf-success deposit_exists-success-true deposit_exists-success-false-1 deposit_exists-success-false-2 collective_reward-success-zero-1-2 > $@
+
+$(specs_dir)/casper/collective_reward-success-zero-2-spec.k: $(casper_tmpls) casper/casper-spec.ini
+	@echo >&2 "==  gen-spec: $@"
+	python3 resources/gen-spec.py $^ collective_reward-success-zero-2 esf-success deposit_exists-success-true deposit_exists-success-false-1 deposit_exists-success-false-2 collective_reward-success-zero-2 > $@
 
 # Testing
 # -------
