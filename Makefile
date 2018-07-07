@@ -118,17 +118,7 @@ ds_token_erc20_files:=totalSupply-spec.k \
                    transferFrom-failure-2-b-spec.k \
                    transferFrom-failure-2-c-spec.k
 
-casper_files:=recommended_source_epoch-spec.k \
-              recommended_target_hash-success-spec.k \
-              recommended_target_hash-failure-11-spec.k \
-              recommended_target_hash-failure-12-spec.k \
-              recommended_target_hash-failure-2-spec.k \
-              deposit_exists-success-true-spec.k \
-              deposit_exists-success-false-1-spec.k \
-              deposit_exists-success-false-2-spec.k \
-              deposit_exists-failure-spec.k \
-              proc_reward-spec.k \
-              vote-1-2-3-4-5-6-success-1-spec.k \
+casper_files:=vote-1-2-3-4-5-6-success-1-spec.k \
               vote-1-2-3-4-5-6-success-2-spec.k \
               vote-1-failure-1-spec.k \
               vote-1-failure-2-spec.k \
@@ -139,40 +129,9 @@ casper_files:=recommended_source_epoch-spec.k \
               vote-1-2-3-4-failure-1-spec.k \
               vote-1-2-3-4-failure-2-spec.k \
               vote-1-2-3-4-5-failure-1-spec.k \
-              vote-1-2-3-4-5-failure-2-spec.k \
-              delete_validator-success-spec.k \
-              delete_validator-failure-spec.k \
-              main_hash_voted_frac-success-1-spec.k \
-              main_hash_voted_frac-success-2-spec.k \
-              main_hash_voted_frac-failure-spec.k \
-              total_curdyn_deposits_scaled-success-spec.k \
-              total_curdyn_deposits_scaled-failure-1-spec.k \
-              total_curdyn_deposits_scaled-failure-21-spec.k \
-              total_curdyn_deposits_scaled-failure-22-spec.k \
-              total_prevdyn_deposits_scaled-success-spec.k \
-              total_prevdyn_deposits_scaled-failure-1-spec.k \
-              total_prevdyn_deposits_scaled-failure-21-spec.k \
-              total_prevdyn_deposits_scaled-failure-22-spec.k \
-              deposit_size-success-spec.k \
-              deposit_size-failure-1-spec.k \
-              deposit_size-failure-21-spec.k \
-              deposit_size-failure-22-spec.k \
-              increment_dynasty-is_finalized-justified-spec.k \
-              increment_dynasty-is_finalized-not-justified-spec.k \
-              increment_dynasty-not-is_finalized-justified-spec.k \
-              increment_dynasty-not-is_finalized-not-justified-spec.k \
-              logout-failure-1-spec.k \
-              logout-failure-2-spec.k \
-              logout-12-failure-3-spec.k \
-              logout-12-failure-4-spec.k \
-              logout-12-34-failure-5-spec.k \
-              logout-12-34-5-success-spec.k \
-              esf-success-spec.k \
-              esf-failure-spec.k \
-              insta_finalize-success-spec.k \
-              insta_finalize-failure-spec.k
+              vote-1-2-3-4-5-failure-2-spec.k
 
-proof_tests:= bihu vyper-erc20 zeppelin-erc20 hkg-erc20 hobby-erc20 sum-to-n ds-token-erc20 casper
+proof_tests:= casper
 
 
 split-proof-tests: $(proof_tests)
