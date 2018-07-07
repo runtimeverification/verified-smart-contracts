@@ -22,13 +22,12 @@ $(TANGLER):
 kevm_repo:=https://github.com/kframework/evm-semantics
 kevm_repo_dir:=$(build_dir)/evm-semantics
 
-kevm: clean-kevm
+kevm:
+	git submodule update --init -- $(kevm_repo_dir)
 	cd $(kevm_repo_dir) \
 		&& make repo-deps \
 		&& make build-java
 
-clean-kevm:
-	rm -rf $(kevm_repo_dir)
 
 # Definition Files
 # ----------------
