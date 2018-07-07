@@ -118,18 +118,7 @@ ds_token_erc20_files:=totalSupply-spec.k \
                    transferFrom-failure-2-b-spec.k \
                    transferFrom-failure-2-c-spec.k
 
-casper_files:=vote-1-2-3-4-5-6-success-1-spec.k \
-              vote-1-2-3-4-5-6-success-2-spec.k \
-              vote-1-failure-1-spec.k \
-              vote-1-failure-2-spec.k \
-              vote-1-2-failure-1-spec.k \
-              vote-1-2-failure-2-spec.k \
-              vote-1-2-3-failure-1-spec.k \
-              vote-1-2-3-failure-2-spec.k \
-              vote-1-2-3-4-failure-1-spec.k \
-              vote-1-2-3-4-failure-2-spec.k \
-              vote-1-2-3-4-5-failure-1-spec.k \
-              vote-1-2-3-4-5-failure-2-spec.k
+casper_files:=vote-1-2-3-4-5-6-success-2-spec.k
 
 proof_tests:= casper
 
@@ -232,6 +221,8 @@ $(specs_dir)/casper/vote-1-2-3-4-5-6-success-1-spec.k: $(casper_tmpls) casper/ca
 $(specs_dir)/casper/vote-1-2-3-4-5-6-success-2-spec.k: $(casper_tmpls) casper/casper-spec.ini
 	mkdir -p $(dir $@)
 	python3 resources/gen-spec.py $^ vote-1-2-3-4-5-6-success-2 recommended_target_hash-success proc_reward vote-1-2-3-4-5-6-success-2 > $@
+	cp casper/abstract-semantics.k $(dir $@)
+	cp casper/verification.k $(dir $@)
 
 $(specs_dir)/casper/vote-1-failure-1-spec.k: $(casper_tmpls) casper/casper-spec.ini
 	mkdir -p $(dir $@)
