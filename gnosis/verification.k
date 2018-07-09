@@ -6,8 +6,6 @@ module VERIFICATION
     imports LEMMAS
 
 ///////////////////////////////////////////////////////////////////////////////
-    syntax Int ::= "pow160" [function]
-    rule pow160 => 1461501637330902918203684832716283019655932542976 [macro]
 
     rule chop((ADDR &Int maxUInt160) modInt pow160) => ADDR
       requires #rangeAddress(ADDR)
