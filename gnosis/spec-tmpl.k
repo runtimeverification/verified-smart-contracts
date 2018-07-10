@@ -15,18 +15,21 @@
         <touchedAccounts> _ => _ </touchedAccounts>
 
         <callState>
-          <program> #asMapOpCodes(#dasmOpCodes(#parseByteStack({PROXY_CODE}), BYZANTIUM)) </program>
-          <programBytes> #parseByteStack({PROXY_CODE}) </programBytes>
+          <program> #asMapOpCodes(#dasmOpCodes(#parseByteStack({CUR_CODE}), BYZANTIUM)) </program>
+          <programBytes> #parseByteStack({CUR_CODE}) </programBytes>
 
-          <id> PROXY_ACCT_ID </id> // contract owner
-          <caller> CALLER_ID </caller> // who called this contract; in the begining, origin // msg.sender
+          //<id> PROXY_ACCT_ID </id> // `this`
+          //<caller> CALLER_ID </caller> // `msg.sender`
+
+          <id> {THIS} </id> // `this`
+          <caller> {MSG_SENDER} </caller> // `msg.sender`
 
           <callData> {CALLDATA} </callData>
 
           <callValue> 0 </callValue>
-          <wordStack> .WordStack => _ </wordStack>
-          <localMem> .Map => _ </localMem>
-          <pc> 0 => _ </pc>
+          <wordStack> {WORDSTACK} </wordStack>
+          <localMem> {LOCALMEM} </localMem>
+          <pc> {PC} </pc>
           <gas> {GAS} </gas>
           <memoryUsed> 0 => _ </memoryUsed>
           <previousGas> _ => _ </previousGas>
@@ -88,10 +91,11 @@
           <account>
             <acctID> CALLER_ID </acctID>
             <balance> CALLER_BAL </balance>
-            <code> _ </code>
+            <code> {CALLER_CODE} </code>
             <storage> _  </storage>
             <nonce> _ </nonce>
           </account>
+          {ACCOUNTS}
           ...
         </accounts>
 

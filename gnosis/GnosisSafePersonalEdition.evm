@@ -2191,7 +2191,7 @@ sub_0: assembly {
         /* "GnosisSafePersonalEdition.sol":2156:2161  nonce */
       sload(0x5)
         /* "GnosisSafePersonalEdition.sol":2069:2087  getTransactionHash */
-      tag_79
+      tag_79  // 8283
         /* "GnosisSafePersonalEdition.sol":2069:2162  getTransactionHash(to, value, data, operation, safeTxGas, dataGas, gasPrice, gasToken, nonce) */
       jump	// in
     tag_103:
@@ -2205,7 +2205,7 @@ sub_0: assembly {
         /* "GnosisSafePersonalEdition.sol":2190:2200  signatures */
       dup8
         /* "GnosisSafePersonalEdition.sol":2172:2181  checkHash */
-      tag_105
+      tag_105 // 13439
         /* "GnosisSafePersonalEdition.sol":2172:2201  checkHash(txHash, signatures) */
       jump	// in
     tag_104:
@@ -6596,7 +6596,7 @@ sub_0: assembly {
       pop
       pop
       pop
-      jump	// out
+      jump	// out 13936
         /* "ModuleManager.sol":3276:3824  function execute(address to, uint256 value, bytes data, Enum.Operation operation, uint256 txGas)... */
     tag_108:
         /* "ModuleManager.sol":3407:3419  bool success */
@@ -7761,7 +7761,7 @@ sub_0: assembly {
       0x0
       dup7
       gas
-      call
+      call // 16384
       iszero
         /* "--CODEGEN--":8:17   */
       dup1

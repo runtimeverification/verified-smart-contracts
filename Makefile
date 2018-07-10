@@ -163,8 +163,11 @@ casper_files:=recommended_source_epoch-spec.k \
               insta_finalize-success-spec.k \
               insta_finalize-failure-spec.k
 
-gnosis_files:=setup-example-spec.k \
-              execTransactionAndPaySubmitter-example-spec.k
+gnosis_files:=setup-spec.k \
+              execTransactionAndPaySubmitter-spec.k \
+              getTransactionHash-spec.k \
+              checkHash-spec.k \
+              swapOwner-spec.k
 
 proof_tests:= bihu vyper-erc20 zeppelin-erc20 hkg-erc20 hobby-erc20 sum-to-n ds-token-erc20 casper gnosis
 
@@ -277,6 +280,10 @@ $(specs_dir)/gnosis/%-spec.k: $(gnosis_tmpls) gnosis/gnosis-spec.ini
 	python3 resources/gen-spec.py $^ $* $* > $@
 	cp gnosis/abstract-semantics.k $(dir $@)
 	cp gnosis/verification.k $(dir $@)
+
+$(specs_dir)/gnosis/execTransactionAndPaySubmitter-example-spec.k: $(gnosis_tmpls) gnosis/gnosis-spec.ini
+	@echo >&2 "==  gen-spec: $@"
+	python3 resources/gen-spec.py $^ execTransactionAndPaySubmitter-example checkHash execTransactionAndPaySubmitter-example > $@
 
 # Testing
 # -------

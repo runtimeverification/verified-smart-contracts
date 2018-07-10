@@ -10,6 +10,9 @@ module VERIFICATION
     rule chop((ADDR &Int maxUInt160) modInt pow160) => ADDR
       requires #rangeAddress(ADDR)
 
+    rule 115792089237316195423570985007226406215939081747436879206741300988257197096960 &Int ADDR => 0
+      requires #rangeAddress(ADDR)
+
 /* [[1, 2], [3]] ->
      #array(
         #array(#uint256(_)),
@@ -83,6 +86,8 @@ module VERIFICATION
     rule 0 <=Int symkeccak(N) => true
 
     rule symkeccak(N) <Int pow256 => true
+
+    rule symkeccak(N) <=Int maxUInt256 => true
 
     rule   #signed(X) ==K   #signed(Y) => X ==K Y requires #rangeUInt(256,X) orBool #rangeUInt(256,Y)
     rule #unsigned(X) ==K #unsigned(Y) => X ==K Y requires #rangeSInt(256,X) orBool #rangeSInt(256,Y)
