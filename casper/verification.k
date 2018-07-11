@@ -25,6 +25,27 @@ module VERIFICATION
     rule X |Int Y <Int pow256 => true  requires 0 <=Int X andBool X <Int pow256
                                         andBool 0 <=Int Y andBool Y <Int pow256
 
+    rule A *Int VYPER_DEC_MULTIPLIER /Int B *Int C <Int pow256 => true
+      requires 0 <=Int A andBool 0 <Int B andBool A <=Int B andBool C <=Int maxDecimal
+
+    rule A *Int VYPER_DEC_MULTIPLIER /Int B *Int C <Int pow255 => true
+      requires 0 <=Int A andBool 0 <Int B andBool A <=Int B andBool C <=Int maxDecimal
+
+    rule A *Int VYPER_DEC_MULTIPLIER /Int B *Int C /Int VYPER_DEC_MULTIPLIER <Int pow256 => true
+      requires 0 <=Int A andBool 0 <Int B andBool A <=Int B andBool C <=Int maxDecimal
+
+    rule A *Int VYPER_DEC_MULTIPLIER /Int B *Int C /Int VYPER_DEC_MULTIPLIER <Int pow255 => true
+      requires 0 <=Int A andBool 0 <Int B andBool A <=Int B andBool C <=Int maxDecimal
+
+    rule A *Int VYPER_DEC_MULTIPLIER /Int B *Int C /Int VYPER_DEC_MULTIPLIER /Int 2 <Int pow256 => true
+      requires 0 <=Int A andBool 0 <Int B andBool A <=Int B andBool C <=Int maxDecimal
+
+    rule A *Int VYPER_DEC_MULTIPLIER /Int B *Int C /Int VYPER_DEC_MULTIPLIER /Int 2 <Int pow255 => true
+      requires 0 <=Int A andBool 0 <Int B andBool A <=Int B andBool C <=Int maxDecimal
+
+    rule A *Int VYPER_DEC_MULTIPLIER /Int B *Int C /Int VYPER_DEC_MULTIPLIER /Int 2 <=Int maxDecimal => true
+      requires 0 <=Int A andBool 0 <Int B andBool A <=Int B andBool C <=Int maxDecimal
+
     rule 0 <=Int (A -Word B) => true
 
     rule (A -Word B) <Int pow256 => true
