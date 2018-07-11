@@ -64,7 +64,7 @@ Currently, the following functions are verified:
   - `vote`
 
 
-The verification of the following functions is in progress:
+The verification of the following functions is in progress (but now suspended due to the [deprecated Casper FFG]):
 
 - `sqrt_of_total_deposits`
 - `initialize_epoch`
@@ -143,3 +143,4 @@ We reported several concerns regarding the overall protocol, and the Casper team
 [lemmas]: <https://github.com/runtimeverification/verified-smart-contracts/blob/master/casper/verification.k>
 [signature validation code]: <https://github.com/ethereum/casper/blob/b2a1189506710c37bbdbbf3dc79ff383dbe13875/casper/contracts/simple_casper.v.py#L391-L403>
 [purity checker]: <https://github.com/ethereum/casper/blob/master/casper/contracts/purity_checker.py>
+[deprecated Casper FFG]: <https://medium.com/@djrtwo/casper-%EF%B8%8F-sharding-28a90077f121>
