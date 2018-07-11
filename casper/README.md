@@ -28,7 +28,7 @@ First, we specified [ABSTRACT-CASPER], the abstract high-level business logic sp
 
 Then, we refined [ABSTRACT-CASPER] to [CASPER], the concrete functional specification of the Casper contract. While both are high-level specifications, [CASPER] is much closer to the actual behavior of the contract. For example, [ABSTRACT-CASPER] simplifies the reward/penalty computation mechanism, where it computes the reward and/or penalty of all validators at the end of each epoch. However, [CASPER] specifies the actual mechanism implemented in the contract, where the reward/penalty is incrementally computed every time a validator votes.
 
-Finally, we refined [CASPER] to [CASPER-EVM], the EVM-level specification of the contract bytecode. [CASPER-EVM] specifies the additional details of the compiled EVM bytecode: the gas consumption, the storage layout, the arithmetic overflow, the fixed-point number arithmetic, the decimal rounding errors, and other EVM quicks.
+Finally, we refined [CASPER] to [CASPER-EVM], the EVM-level specification of the contract bytecode. [CASPER-EVM] specifies the additional details of the compiled EVM bytecode: the gas consumption, the storage layout, the arithmetic overflow, the fixed-point number arithmetic, the decimal rounding errors, and other EVM quirks.
 
 
 ## Formal Verification Results: Current Progress and Findings
