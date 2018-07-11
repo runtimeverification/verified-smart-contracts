@@ -1,0 +1,69 @@
+\section{Reward-Penalty Model}
+
+Let $V \in \V$ be a validator.
+Let $D^V_i$ be the deposit (in \t{ether}) of $V$ in epoch $i$.
+Let $\D_i \defeq \Sigma_{V \in \V} D^V_i$ be the total amount of deposits (in \t{ether}) in epoch $i$.
+Let $\RF_i$ be a reward-penalty factor in epoch $i$.
+
+In each epoch $i$, validator $V$ gets reward and/or penalty as follows.
+\lst{
+\i $V$ pays a fee for each epoch whether or not he votes.
+\i $V$ gets a reward, if he votes ``correctly'' --- the source epoch of the vote is equal to the recommended one.
+\i $V$ gets another reward, if epoch $i-1$ is finalized at the end of epoch $i$. 
+}
+Given $D^V_i$ and $\RF_i$, $D^V_{i+1}$ is defined for each case as follows.
+Note that ``incorrect vote'' entails ``no vote''.
+\[
+D^V_{i+1} \defeq
+\begin{cases}
+         D^V_i \cdot \dfrac{1}{1 + \RF_i}                                                       & \m{if $V$ does \emph{not} vote (correctly), and epoch $i-1$ is \emph{not} finalized}
+\\[11pt] D^V_i \cdot \dfrac{1}{1 + \RF_i}                   \cdot (1 + \dfrac{\alpha}{2} \RF_i) & \m{if $V$ does \emph{not} vote (correctly), but epoch $i-1$ is finalized}
+\\[11pt] D^V_i \cdot \dfrac{1}{1 + \RF_i} \cdot (1 + \RF_i)                                     & \m{if $V$ votes correctly, but epoch $i-1$ is \emph{not} finalized}
+\\[11pt] D^V_i \cdot \dfrac{1}{1 + \RF_i} \cdot (1 + \RF_i) \cdot (1 + \dfrac{\alpha}{2} \RF_i) & \m{if $V$ votes correctly, and epoch $i-1$ is finalized}
+\end{cases}
+\]
+Here, $\alpha$ is the fraction of the correct votes in the total deposit $\D_i$.
+Since $\alpha$ is used only when epoch $i-1$ is finalized (which implies the current epoch $i$ is justified),
+we have $\frac{2}{3} \le \alpha \le 1$.
+
+At the beginning of the next epoch $i+1$,
+the reward factor $\RF_{i+1}$ is also adjusted based on the current total deposit and the history of finalization as follows:
+\[
+\RF_{i+1} \defeq \dfrac{\beta}{\sqrt{\D_{i}}} + \gamma \cdot (\ESF - 2)
+\]
+where $\beta$ is a fixed base interest factor,
+and $\gamma$ is a fixed base penalty factor.
+\ESF is the number of epochs since the last finalized epoch.
+We have $\ESF \ge 2$,
+at the beginning of epoch $i+1$,
+since the latest possible finalized epoch is $i-1$.
+
+\begin{lemma}
+We have the followings:
+\lst{
+\i If $V$ votes correctly, his deposit \emph{never} decrease, i.e., $D^V_{i+1} \ge D^V_{i}$.
+\i If $V$ does not votes correctly (or does not vote at all), his deposit strictly decreases, i.e., $D^V_{i+1} < D^V_i$.
+\i In an ideal situation (all validators vote correctly and every epoch is finalized),
+each validator's deposit strictly increases for each epoch, i.e., $D^V_{i+1} > D^V_{i}$,
+and the reward factor strictly decreases for each epoch, i.e., $\RF_{i+1} < \RF_i$.
+% where the rate of increase is reduced, i.e.,
+% \[
+% 0 ~<~ D^V_{i+2} - D^V_{i+1} ~<~ D^V_{i+1} - D^V_{i} ~\le~ \frac{D^V_i \cdot \RF_i}{2}
+% \]
+\i The above holds for both positive and negative $\gamma$.
+}
+\end{lemma}
+
+\paragraph{Relationship to the contract source code}
+
+In the \verb|initialize_epoch| function\footnote{\url{https://github.com/ethereum/casper/blob/b2a1189506710c37bbdbbf3dc79ff383dbe13875/casper/contracts/simple_casper.v.py}}:
+\begin{itemize}
+\i $D^V_{i+1} \times 10^{18} \simeq \t{self.validators[$V$].deposit} \times \verb|self.deposit_scale_factor[epoch]|$ at line 273.
+\i $R_{i+1} \simeq \verb|self.reward_factor|$ at line 284.
+\i $i + 1 = \t{epoch}$ at line 266.
+\i $\sqrt{\D_{i}} \simeq \verb|self.sqrt_of_total_deposits()|$ at line 276.
+\i \ESF = \t{self.esp()} at line 277.
+\i $\alpha \simeq \verb|vote_frac|$ at line 231 of the \verb|collective_reward| function (called at line 270).
+\i $\beta$ = \verb|self.BASE_INTEREST_FACTOR|
+\i $\gamma$ = \verb|self.BASE_PENALTY_FACTOR|
+\end{itemize}
