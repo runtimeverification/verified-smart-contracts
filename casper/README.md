@@ -31,9 +31,9 @@ Then, we refined [ABSTRACT-CASPER] to [CASPER], the concrete functional specific
 Finally, we refined [CASPER] to [CASPER-EVM], the EVM-level specification of the contract bytecode. [CASPER-EVM] specifies the additional details of the compiled EVM bytecode: the gas consumption, the storage layout, the arithmetic overflow, the fixed-point number arithmetic, the decimal rounding errors, and other EVM quicks.
 
 
-## Formal Verification Result: Current Progress and Findings
+## Formal Verification Results: Current Progress and Findings
 
-We provide the current result of the formal verification.
+We provide the current results of the formal verification.
 
 
 ### Current Progress
@@ -75,19 +75,57 @@ The verification of the following functions is in progress:
 
 #### Assumption
 
+The formal verification results presented here assumes the following conditions:
 
+- the correctness of the network node support
+- the correctness of the low-level [signature validation code]
+- the soundness of the refinement between [ABSTRACT-CASPER], [CASPER], and [CASPER-EVM]
+- the completeness of the high-level specification: [ABSTRACT-CASPER] and [reward-penalty model]
+- the correctness of the domain reasoning [lemmas]
+
+We have not formally verified the above assumptions due to time constraints.
 
 
 ### Our Findings
 
 
+#### Bugs found
+
+We found several bugs in the contract source code in the course of the verification, which have been fixed by the developers. Refer to the following Github issue pages for more details.
+
+- https://github.com/ethereum/casper/issues/57
+- https://github.com/ethereum/casper/issues/67
+- https://github.com/ethereum/casper/issues/74
+- https://github.com/ethereum/casper/issues/75
+- https://github.com/ethereum/casper/issues/83
+
+As a (good) side-effect of the Casper contract verification, we also found several issues in the Vyper compiler that resulted in generating an incorrect bytecode from the contract. These issues have been fixed by the Vyper compiler team. Refer to the following for more details.
+
+- https://github.com/ethereum/vyper/issues/767
+- https://github.com/ethereum/vyper/issues/768
+- https://github.com/ethereum/vyper/issues/775
 
 
+#### Concerns
+
+We reported several concerns regarding the overall protocol, and the Casper team confirmed that they are intended.
+
+1. We are concerned that the identity (i.e., either the index or the signature-checker) of a validator could be different across multiple chains, which may be exploitable.
+
+   However, we were answered that:
+   > It is OK because a validator has to wait two dynasties (two finalized blocks) to join a validator set, then the case in which he has two different identities for the same ether deposit would mean that there were two different finalized blocks (competing forks) and some previous validators were slashed. In such a case, the community is expected to either choose a chain to rally behind or simply both chains continue to exist (like eth/eth-classic) in which the people not at fault continue to have funds on both.
 
 
+1. We are concerned that the contract executes the arbitrary external signature validation code provided by validators. Although the external code is checked by the [purity checker], we are still concerned about its security unless we formally verify the [purity checker] is complete (i.e., rejecting all possible malicious behaviors including the reentrancy).
+
+   However, we were answered that:
+   > The external validation code is inevitable to allow various different signature schemes to be used by different validators. So, there is a trade-off between security vs flexibility.
 
 
+1. We are concerned that the accountable safety of the protocol can be violated after many epochs without finalization (e.g., in the "network split" case).
 
+   However, we were answered that:
+   > It may be assumed that the maximum ESF (epochs since finalization) is sufficiently bound according to the reward-penalty model parameter values.
 
 
 
@@ -102,3 +140,6 @@ The verification of the following functions is in progress:
 [CASPER]: <https://github.com/runtimeverification/verified-smart-contracts/blob/master/casper/casper.k>
 [CASPER-EVM]: <https://github.com/runtimeverification/verified-smart-contracts/blob/master/casper/casper-spec.ini>
 [reward-penalty model]: <https://github.com/runtimeverification/verified-smart-contracts/blob/master/casper/reward-penalty-model.pdf>
+[lemmas]: <https://github.com/runtimeverification/verified-smart-contracts/blob/master/casper/verification.k>
+[signature validation code]: <https://github.com/ethereum/casper/blob/b2a1189506710c37bbdbbf3dc79ff383dbe13875/casper/contracts/simple_casper.v.py#L391-L403>
+[purity checker]: <https://github.com/ethereum/casper/blob/master/casper/contracts/purity_checker.py>
