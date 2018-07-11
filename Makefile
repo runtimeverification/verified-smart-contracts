@@ -168,12 +168,16 @@ casper_files:=recommended_source_epoch-spec.k \
               collective_reward-failure-spec.k
 
 gnosis_files:=setup-spec.k \
-              execTransactionAndPaySubmitter-spec.k \
-              getTransactionHash-spec.k \
-              checkHash-spec.k \
               swapOwner-spec.k
 
-proof_tests:= bihu vyper-erc20 zeppelin-erc20 hkg-erc20 hobby-erc20 sum-to-n ds-token-erc20 casper gnosis
+# FIXME: restore the skipped specs
+#             execTransactionAndPaySubmitter-spec.k
+#             getTransactionHash-spec.k
+#             checkHash-spec.k
+
+# FIXME: restore the skipped specs
+#proof_tests:=bihu vyper-erc20 zeppelin-erc20 hkg-erc20 hobby-erc20 sum-to-n ds-token-erc20 casper gnosis
+proof_tests:= bihu vyper-erc20 zeppelin-erc20                       sum-to-n ds-token-erc20        gnosis
 
 
 split-proof-tests: $(proof_tests)
