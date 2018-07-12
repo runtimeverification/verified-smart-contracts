@@ -1,6 +1,12 @@
 # Formal Verification of Casper Smart Contract
 
-We present the formal verification of the Casper FFG smart contract.
+Team: Daejun Park, Yi Zhang, Denis Bogdanas, Jerry Jaehwang Jung, Iustin Iordache, and Grigore Rosu
+
+Date: July 2018
+
+---
+
+We present the formal verification of the Casper FFG smart contract. This work was supported by the [security grant] from the Ethereum Foundation.
 
 
 ## Scope
@@ -129,14 +135,11 @@ We reported several concerns regarding the overall protocol, and the Casper team
 
 
 
-
-
-
 [b2a1189]: <https://github.com/ethereum/casper/blob/b2a1189506710c37bbdbbf3dc79ff383dbe13875/casper/contracts/simple_casper.v.py>
 [Casper the Friendly Finality Gadget]: <https://arxiv.org/abs/1710.09437>
 [ABSTRACT-CASPER]: <https://github.com/runtimeverification/verified-smart-contracts/blob/master/casper/abstract-casper.k>
 [EIP 1011]: <https://eips.ethereum.org/EIPS/eip-1011>
-[protocol verification]: <https://github.com/palmskog/caspertoychain>
+[protocol verification]: <https://github.com/runtimeverification/verified-smart-contracts/blob/master/casper/protocol-verification.md>
 [CASPER]: <https://github.com/runtimeverification/verified-smart-contracts/blob/master/casper/casper.k>
 [CASPER-EVM]: <https://github.com/runtimeverification/verified-smart-contracts/blob/master/casper/casper-spec.ini>
 [reward-penalty model]: <https://github.com/runtimeverification/verified-smart-contracts/blob/master/casper/reward-penalty-model.pdf>
@@ -144,3 +147,4 @@ We reported several concerns regarding the overall protocol, and the Casper team
 [signature validation code]: <https://github.com/ethereum/casper/blob/b2a1189506710c37bbdbbf3dc79ff383dbe13875/casper/contracts/simple_casper.v.py#L391-L403>
 [purity checker]: <https://github.com/ethereum/casper/blob/master/casper/contracts/purity_checker.py>
 [deprecated Casper FFG]: <https://medium.com/@djrtwo/casper-%EF%B8%8F-sharding-28a90077f121>
+[security grant]: <https://blog.ethereum.org/2018/03/07/announcing-beneficiaries-ethereum-foundation-grants/>
