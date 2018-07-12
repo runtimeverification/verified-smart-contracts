@@ -12,9 +12,8 @@ module VERIFICATION
     // maxUInt256 vs pow256
     rule X <=Int maxUInt256 => X <Int pow256
 
-    // TODO: true even if Y < 0 ?
-    rule 0 <=Int (X modInt Y)        => true
-    rule         (X modInt Y) <Int Y => true
+    rule 0 <=Int (X modInt Y)         => true
+    rule         (X modInt Y) <Int Y  => true  requires Y >Int 0
 
     rule 0 <=Int 2 ^Int X             => true
     rule         2 ^Int X <Int pow256 => true  requires X <Int 256
@@ -51,7 +50,7 @@ module VERIFICATION
     rule chop((ADDR &Int maxUInt160) modInt pow160) => ADDR
       requires #rangeAddress(ADDR)
 
-    // TODO: what this number means?
+    // 2^256 - 2^160 = 0x11..1100..00 (96 1's and 160 0's)
     rule 115792089237316195423570985007226406215939081747436879206741300988257197096960 &Int ADDR => 0
       requires #rangeAddress(ADDR)
 
