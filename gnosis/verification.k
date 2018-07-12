@@ -5,6 +5,7 @@ module VERIFICATION
     imports EDSL
     imports LEMMAS
 
+    rule X <=Int maxUInt256 => X <Int pow256
 
     rule chop((ADDR &Int maxUInt160) modInt pow160) => ADDR
       requires #rangeAddress(ADDR)
@@ -47,7 +48,7 @@ module VERIFICATION
 
     rule symkeccak(N) <Int pow256 => true
 
-    rule symkeccak(N) <=Int maxUInt256 => true
+ // rule symkeccak(N) <=Int maxUInt256 => true
 
  // rule   #signed(X) ==K   #signed(Y) => X ==K Y requires #rangeUInt(256,X) orBool #rangeUInt(256,Y)
  // rule #unsigned(X) ==K #unsigned(Y) => X ==K Y requires #rangeSInt(256,X) orBool #rangeSInt(256,Y)
