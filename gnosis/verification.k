@@ -49,8 +49,8 @@ module VERIFICATION
 
     rule symkeccak(N) <=Int maxUInt256 => true
 
-    rule   #signed(X) ==K   #signed(Y) => X ==K Y requires #rangeUInt(256,X) orBool #rangeUInt(256,Y)
-    rule #unsigned(X) ==K #unsigned(Y) => X ==K Y requires #rangeSInt(256,X) orBool #rangeSInt(256,Y)
+ // rule   #signed(X) ==K   #signed(Y) => X ==K Y requires #rangeUInt(256,X) orBool #rangeUInt(256,Y)
+ // rule #unsigned(X) ==K #unsigned(Y) => X ==K Y requires #rangeSInt(256,X) orBool #rangeSInt(256,Y)
 
 
 
@@ -63,13 +63,6 @@ module VERIFICATION
 
     rule X modInt Y => X requires 0 <=Int X andBool X <Int Y
 
-
-    // TODO: needed?
-    rule chop(A *Int B) /Int A ==K B => true
-      requires A >=Int 0 andBool B >=Int 0 andBool A =/=Int 0 andBool A *Int B <=Int maxSInt256
-
-    rule A >Int maxUInt256 => true
-      requires A >Int maxSInt256 andBool chop(A) <=Int maxSInt256
 
     rule 1 |Int chop(A xorInt maxUInt256) => 1
 
