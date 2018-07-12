@@ -30,6 +30,7 @@ making use of SMT solvers like [Z3] to solve the mathematical domain constraints
 
 ## List of Verified Smart Contracts
 
+* **2018-07-12** [Ethereum Casper FFG contract](casper/README.md)
 * **2018-03-12** [DappSys DSToken ERC20 token contract](erc20/ds-token/README.md)
 * **2018-02-28** [Bihu KEY token operation contracts](bihu/README.md)
 * **2018-01-30** [MyKidsEducationToken ERC20 token contract](erc20/hobby/README.md)
