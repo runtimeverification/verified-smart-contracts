@@ -58,7 +58,7 @@
         <accounts>
           <account>
             <acctID> MASTER_COPY_ID </acctID>
-            <balance> MASTER_COPY_BAL </balance>
+            <balance> {MASTER_COPY_BAL} </balance>
             <code> #parseByteStack({MASTER_COPY_CODE}) </code>
             <storage>
 {MASTER_COPY_STORAGE}
@@ -67,7 +67,7 @@
           </account>
           <account>
             <acctID> PROXY_ID </acctID>
-            <balance> PROXY_BAL </balance>
+            <balance> {PROXY_BAL} </balance>
             <code> #parseByteStack({PROXY_CODE}) </code>
             <storage>
 {PROXY_STORAGE}
@@ -76,7 +76,7 @@
           </account>
           <account>
             <acctID> ORIGIN_ID </acctID>
-            <balance> ORIGIN_BAL </balance>
+            <balance> {ORIGIN_BAL} </balance>
             <code> #parseByteStack({ORIGIN_CODE}) </code>
             <storage>
 {ORIGIN_STORAGE}
