@@ -351,4 +351,4 @@ test_files:=$(wildcard specs/*/*-spec.k)
 test: $(test_files:=.test)
 
 specs/%-spec.k.test: specs/%-spec.k
-	$(TEST) $<
+	$(TEST) $< --z3-impl-timeout 500
