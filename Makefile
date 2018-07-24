@@ -357,12 +357,6 @@ $(specs_dir)/ds-token-erc20/%-spec.k: erc20/module-tmpl.k erc20/spec-tmpl.k erc2
 	cp erc20/abstract-semantics.k $(dir $@)
 	cp erc20/verification.k $(dir $@)
 
-# Sum to N
-$(specs_dir)/examples/sum-to-n-spec.k: resources/sum-to-n.md $(TANGLER)
-	@echo "==  tangle: $@"
-	mkdir -p $(dir $@)
-	pandoc --from markdown --to "$(TANGLER)" --metadata="code:.sum-to-n" $< > $@
-
 $(specs_dir)/icon_erc20/%-spec.k: $(erc20_tmpls) erc20/icon/icon-erc20-spec.ini
 	@echo >&2 "==  gen-spec: $@"
 	mkdir -p $(dir $@)
