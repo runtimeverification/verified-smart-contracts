@@ -5,48 +5,110 @@ module VERIFICATION
     imports EDSL
     imports LEMMAS
 
-    rule 0 <=Int #asWord(WS)             => true
-    rule         #asWord(WS) <Int pow256 => true requires #sizeWordStack(WS) <=Int 32
 
-    rule chop(#asWord(WS)) => #asWord(#drop(#sizeWordStack(WS) -Int 32, WS))
-      requires #sizeWordStack(WS) >Int 32
+    syntax Int ::= #stWord(IntList, IntList) [function]
+ //                                    ^ length of each section
+ // - listed in order of their declaration
+ // - implicitly ignore left zero padding
+ // e.g. Zilliqa ERC20 contract, #stWord with 3 sections:
+ // (#hashedLocation({COMPILER}, 3, .IntList) |->
+ //   #stWord(OWNER PAUSED_PUBLIC PAUSED_OWNER_ADMIN,
+ //              20             1                  1)
+ // -> [0..0][PAUSED_OWNER_ADMIN][PAUSED_PUBLIC][OWNER]
+ //        22                  21             20      0
 
-    syntax WordStack ::= WordStack "&ByteStack" WordStack [function]
+    rule 0 <=Int #stWord(VS, _)             => true
+    rule         #stWord(VS, _) <Int pow256 => true
 
-    // equal length assumed
-    rule (B1 : BS1) &ByteStack (B2 : BS2) => (B1 &Int B2) : (BS1 &ByteStack BS2)
+/* Reading Packed Storage Variables ----------------------------------------- */
+// 0. sload to get #stWord(..)
+// 1. shift right #stWord(..)
+// 2. take the lower bytes by [0..0]+[f..f] &Int #stWord(..)
+// 3. then we get #stWord(V 0 .. 0 .IntList, _), and this will be interpreted
+//    as an Int when applied to _Int operations
+/* -------------------------------------------------------------------------- */
 
-    rule .WordStack &ByteStack .WordStack => .WordStack
+/* Updating Packed Storage Variables ---------------------------------------- */
+// 0. sload to get #stWord(..)
+// 1. erase corresponding section by [f..f]*[0..0][f..f]* &Int #stWord(..)
+// 2. shift left the new value to fit in the section
+// 3. [0..0]*[NEW_VALUE][0..0]* |Int #stWord(..)
+//    ^^^^^^^^^^^^^^^^^^^^^^^^^ -> NEW_VALUE *Int (256 ^Int OFFSET)
+/* -------------------------------------------------------------------------- */
 
-    rule I &Int #asWord(WS) => #asWord(#asByteStackInWidth(I, #sizeWordStack(WS)) &ByteStack WS)
+ // shift right
+    rule #stWord(V VS, L LS) /Int OFFSET_POW => #stWord(VS, LS) /Int (OFFSET_POW /Int (256 ^Int L))
+      requires L <=Int log256Int(OFFSET_POW) andBool OFFSET_POW ==Int 256 ^Int log256Int(OFFSET_POW)
+      //andBool isConcrete(OFFSET_POW)
 
- // <Int 256 defined in lemmas.md, but not applied for `MASK &Int N => .. requires .. N <=Int MASK`
-    rule nthbyteof(V, I, N) <=Int 255 => true
+    rule #stWord(VS, LS) /Int 1 => #stWord(VS, LS)
 
-    rule #asWord( 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0
-                : nthbyteof(ADDR, 0, 20)
-                : nthbyteof(ADDR, 1, 20)
-                : nthbyteof(ADDR, 2, 20)
-                : nthbyteof(ADDR, 3, 20)
-                : nthbyteof(ADDR, 4, 20)
-                : nthbyteof(ADDR, 5, 20)
-                : nthbyteof(ADDR, 6, 20)
-                : nthbyteof(ADDR, 7, 20)
-                : nthbyteof(ADDR, 8, 20)
-                : nthbyteof(ADDR, 9, 20)
-                : nthbyteof(ADDR, 10, 20)
-                : nthbyteof(ADDR, 11, 20)
-                : nthbyteof(ADDR, 12, 20)
-                : nthbyteof(ADDR, 13, 20)
-                : nthbyteof(ADDR, 14, 20)
-                : nthbyteof(ADDR, 15, 20)
-                : nthbyteof(ADDR, 16, 20)
-                : nthbyteof(ADDR, 17, 20)
-                : nthbyteof(ADDR, 18, 20)
-                : nthbyteof(ADDR, 19, 20)
-                : .WordStack ) => ADDR
-      requires 0 <=Int ADDR andBool ADDR <=Int maxUInt160
+ // &Int
+    rule M &Int #stWord(VS, LS) => #stWord(#int2IntList(M, LS) &IntList VS, LS)
+ // NOTE: &Int on #stWord is used for: 1. reading, 2. erasing(resetting) a section
+ // If your intention is reading, the result of M &Int #stWord(..) should be a
+ // non-#stWord Int, while you want it to remain as #stWord when you are erasing
+ // a section. The problem is that you cannot know the intention only by looking
+ // at the mask in some cases. For example, let M = 0x00..00ff..ff. It is highly
+ // likely that M is used to read a variable. However, M can also be used to
+ // reset 2nd(upper bits) section of #stWord(..) consisting of 2 uint128 sections.
+ // Because of this ambiguity, I deferred the conversion of #stWord into Int 
+ // until the time we can confirm that it is an Int.
 
- // bytestack shift?
+    syntax IntList ::= #int2IntList(Int, IntList) [function]
+    rule #int2IntList(M, L LS) => (M modInt (256 ^Int L)) #int2IntList(M /Int (256 ^Int L), LS)
+    rule #int2IntList(_, .IntList) => .IntList
+
+    syntax IntList ::= IntList "&IntList" IntList [function]
+    rule (L1 LS1) &IntList L2 LS2 => (L1 &Int L2) (LS1 &IntList LS2)
+    rule .IntList &IntList .IntList => .IntList
+
+ // |Int
+ // 1. simbolic I, zero offset
+    rule I |Int #stWord(0 VS, L LS) => #stWord(I VS, L LS)
+      requires 0 <=Int I andBool I <=Int (256 ^Int L) -Int 1 andBool notBool #isConcrete(I)
+
+ // 2. symbolic I, non zero offset
+    rule (I *Int OFFSET_POW) |Int #stWord(VS, LS)
+      => #stWord(#updateIntList(VS, I, log256Int(OFFSET_POW), LS), LS)
+      requires OFFSET_POW ==Int 256 ^Int log256Int(OFFSET_POW)
+
+    syntax IntList ::= #updateIntList(IntList, Int, Int, IntList) [function]
+    rule #updateIntList(V VS, I, OFFSET, L LS) => V #updateIntList(VS, I, OFFSET -Int L, LS)
+      requires OFFSET >Int 0
+    rule #updateIntList(0 VS, I, 0, L LS) => I VS
+      requires 0 <=Int I andBool I <=Int ((256 ^Int L) -Int 1)
+
+ // 3.concrete I
+    rule I |Int #stWord(VS, LS) => #stWord(#int2IntList(I, LS) |IntList VS, LS)
+      requires #isConcrete(I)
+
+    syntax IntList ::= IntList "|IntList" IntList [function]
+    rule (L1 LS1) |IntList L2 LS2 => (L1 |Int L2) (LS1 |IntList LS2)
+    rule .IntList |IntList .IntList => .IntList
+
+
+ // #stWord with left zeros can be interpreted as an Int when needed
+    rule #stWord(V VS, _) +Int   I => V +Int   I requires #zeroIntList(VS)
+    rule #stWord(V VS, _) -Int   I => V -Int   I requires #zeroIntList(VS)
+    rule #stWord(V VS, _) *Int   I => V *Int   I requires #zeroIntList(VS)
+    rule #stWord(V VS, _) /Int   I => V /Int   I requires #zeroIntList(VS)  // TODO: vs shift right?
+    rule #stWord(V VS, _) %Int   I => V %Int   I requires #zeroIntList(VS)
+    rule #stWord(V VS, _) modInt I => V modInt I requires #zeroIntList(VS)
+    rule #stWord(V VS, _) ==K    I => V ==K    I  andBool #zeroIntList(VS)
+    rule #stWord(V VS, _) =/=K   I => V =/=K   I   orBool notBool #zeroIntList(VS)
+    rule I +Int   #stWord(V VS, _) => I +Int   V requires #zeroIntList(VS)
+    rule I -Int   #stWord(V VS, _) => I -Int   V requires #zeroIntList(VS)
+    rule I *Int   #stWord(V VS, _) => I *Int   V requires #zeroIntList(VS)
+    rule I /Int   #stWord(V VS, _) => I /Int   V requires #zeroIntList(VS)
+    rule I %Int   #stWord(V VS, _) => I %Int   V requires #zeroIntList(VS)
+    rule I modInt #stWord(V VS, _) => I modInt V requires #zeroIntList(VS)
+    rule I ==K    #stWord(V VS, _) => I ==K    V  andBool #zeroIntList(VS)
+    rule I =/=K   #stWord(V VS, _) => I =/=K   V   orBool notBool #zeroIntList(VS)
+    // TODO: bitwise ops?
+
+    syntax Bool ::= #zeroIntList(IntList) [function]
+    rule #zeroIntList(.IntList) => true
+    rule #zeroIntList(V VS) => V ==Int 0 andBool #zeroIntList(VS)
 
 endmodule
