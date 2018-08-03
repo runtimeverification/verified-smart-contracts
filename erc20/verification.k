@@ -96,7 +96,7 @@ module VERIFICATION
     rule #stWord(V VS, _) %Int   I => V %Int   I requires #zeroIntList(VS)
     rule #stWord(V VS, _) modInt I => V modInt I requires #zeroIntList(VS)
     rule #stWord(V VS, _) ==K    I => V ==K    I  andBool #zeroIntList(VS)
-    rule #stWord(V VS, _) =/=K   I => V =/=K   I   orBool notBool #zeroIntList(VS)
+ // rule #stWord(V VS, _) =/=K   I => V =/=K   I   orBool notBool #zeroIntList(VS)
     rule I +Int   #stWord(V VS, _) => I +Int   V requires #zeroIntList(VS)
     rule I -Int   #stWord(V VS, _) => I -Int   V requires #zeroIntList(VS)
     rule I *Int   #stWord(V VS, _) => I *Int   V requires #zeroIntList(VS)
@@ -104,11 +104,22 @@ module VERIFICATION
     rule I %Int   #stWord(V VS, _) => I %Int   V requires #zeroIntList(VS)
     rule I modInt #stWord(V VS, _) => I modInt V requires #zeroIntList(VS)
     rule I ==K    #stWord(V VS, _) => I ==K    V  andBool #zeroIntList(VS)
-    rule I =/=K   #stWord(V VS, _) => I =/=K   V   orBool notBool #zeroIntList(VS)
+ // rule I =/=K   #stWord(V VS, _) => I =/=K   V   orBool notBool #zeroIntList(VS)
     // TODO: bitwise ops?
+
+    rule        #stWord(VS, _) =/=K 0 => notBool #zeroIntList(VS)
+    rule 0 =/=K #stWord(VS, _)        => notBool #zeroIntList(VS)
+    //rule        #stWord(VS, _) =/=K 0 => #nonZeroIntList(VS)
+    //rule 0 =/=K #stWord(VS, _)        => #nonZeroIntList(VS)
 
     syntax Bool ::= #zeroIntList(IntList) [function]
     rule #zeroIntList(.IntList) => true
     rule #zeroIntList(V VS) => V ==Int 0 andBool #zeroIntList(VS)
+
+    //syntax Bool ::= #nonZeroIntList(IntList) [function]
+    //rule #nonZeroIntList(.IntList) => false
+    //rule #nonZeroIntList(V VS) => V =/#nonZeroIntList(VS)
+    //rule #nonZeroIntList(V VS) => true                requires V =/=Int 0
+    //rule #nonZeroIntList(V VS) => #nonZeroIntList(VS) requires V  ==Int 0
 
 endmodule

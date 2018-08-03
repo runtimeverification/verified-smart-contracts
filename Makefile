@@ -270,7 +270,8 @@ gnosis_files:=setup-spec.k \
 #             getTransactionHash-spec.k
 #             checkHash-spec.k
 
-proof_tests:=bihu vyper-erc20 zeppelin-erc20 hkg-erc20 hobby-erc20 sum-to-n ds-token-erc20 gnosis zilliqa_erc20 #tron_erc20 icon_erc20 zilliqa_erc20 zrx_erc20
+#proof_tests:=bihu vyper-erc20 zeppelin-erc20 hkg-erc20 hobby-erc20 sum-to-n ds-token-erc20 gnosis zilliqa_erc20 #tron_erc20 icon_erc20 zilliqa_erc20 zrx_erc20
+proof_tests:=zilliqa_erc20 #tron_erc20 icon_erc20 zilliqa_erc20 zrx_erc20
 
 # FIXME: restore the casper specs
 #proof_tests += casper
