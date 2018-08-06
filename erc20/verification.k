@@ -6,7 +6,7 @@ module VERIFICATION
     imports LEMMAS
 
 
-    syntax Int ::= #stWord(IntList, IntList) [function]
+    syntax Int ::= #stWord(IntList, IntList) [function, smtlib(stWord)]
  //                                    ^ length of each section
  // - listed in order of their declaration
  // - implicitly ignore left zero padding
@@ -96,7 +96,6 @@ module VERIFICATION
     rule #stWord(V VS, _) %Int   I => V %Int   I requires #zeroIntList(VS)
     rule #stWord(V VS, _) modInt I => V modInt I requires #zeroIntList(VS)
     rule #stWord(V VS, _) ==K    I => V ==K    I  andBool #zeroIntList(VS)
- // rule #stWord(V VS, _) =/=K   I => V =/=K   I   orBool notBool #zeroIntList(VS)
     rule I +Int   #stWord(V VS, _) => I +Int   V requires #zeroIntList(VS)
     rule I -Int   #stWord(V VS, _) => I -Int   V requires #zeroIntList(VS)
     rule I *Int   #stWord(V VS, _) => I *Int   V requires #zeroIntList(VS)
@@ -104,22 +103,29 @@ module VERIFICATION
     rule I %Int   #stWord(V VS, _) => I %Int   V requires #zeroIntList(VS)
     rule I modInt #stWord(V VS, _) => I modInt V requires #zeroIntList(VS)
     rule I ==K    #stWord(V VS, _) => I ==K    V  andBool #zeroIntList(VS)
- // rule I =/=K   #stWord(V VS, _) => I =/=K   V   orBool notBool #zeroIntList(VS)
     // TODO: bitwise ops?
-
-    rule        #stWord(VS, _) =/=K 0 => notBool #zeroIntList(VS)
-    rule 0 =/=K #stWord(VS, _)        => notBool #zeroIntList(VS)
-    //rule        #stWord(VS, _) =/=K 0 => #nonZeroIntList(VS)
-    //rule 0 =/=K #stWord(VS, _)        => #nonZeroIntList(VS)
 
     syntax Bool ::= #zeroIntList(IntList) [function]
     rule #zeroIntList(.IntList) => true
     rule #zeroIntList(V VS) => V ==Int 0 andBool #zeroIntList(VS)
 
-    //syntax Bool ::= #nonZeroIntList(IntList) [function]
-    //rule #nonZeroIntList(.IntList) => false
-    //rule #nonZeroIntList(V VS) => V =/#nonZeroIntList(VS)
-    //rule #nonZeroIntList(V VS) => true                requires V =/=Int 0
-    //rule #nonZeroIntList(V VS) => #nonZeroIntList(VS) requires V  ==Int 0
+ // some treatments for solidity bool variables
+    syntax Bool ::= #rangeBool(Int)  [function]
+                  | #isBoolWord(Int) [function, smtlib(isBoolWord)]
+
+    rule #rangeBool(B) => #range(0 <= B <= 1) andBool #isBoolWord(B)
+ // b != false -> b
+    rule bool2Word(notBool(B ==K 0)) => B        requires #isBoolWord(B)
+ // b != true  -> !b
+    rule bool2Word(notBool(B ==K 1)) => 1 -Int B requires #isBoolWord(B)
+
+ // SafeMath overflow check
+    rule chop(A +Int B) <Int A => A +Int B >Int maxUInt256
+      requires #rangeUInt(256, A) andBool #rangeUInt(256, B)
+
+ /*
+    rule bool2Word(B) <=Int 1 => true [smt-lemma]
+    rule 0 <=Int bool2Word(B) => true [smt-lemma]
+ */
 
 endmodule

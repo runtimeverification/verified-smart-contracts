@@ -184,14 +184,15 @@ zilliqa_erc20_files:=totalSupply-spec.k \
                      transfer-success-2-spec.k \
                      transfer-failure-1-a-spec.k \
                      transfer-failure-1-b-spec.k \
-                     transfer-failure-2-spec.k \
+                     transfer-failure-1-c-spec.k \
                      transferFrom-success-1-spec.k \
                      transferFrom-success-2-spec.k \
                      transferFrom-failure-1-a-spec.k \
                      transferFrom-failure-1-b-spec.k \
-                     transferFrom-failure-2-spec.k \
+                     transferFrom-failure-1-c-spec.k \
                      transferOwnership-spec.k \
-                     pause-spec.k
+                     pause-1-spec.k \
+                     pause-2-spec.k
 
 zrx_erc20_files:=totalSupply-spec.k \
                  balanceOf-spec.k \
