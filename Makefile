@@ -108,29 +108,20 @@ icon_erc20_files:=totalSupply-spec.k \
                   balanceOf-spec.k \
                   allowance-spec.k \
                   approve-success-spec.k \
-                  approve-failure-a-spec.k \
-                  approve-failure-b-spec.k \
-                  approve-failure-c-spec.k \
+                  approve-failure-1-spec.k \
+                  approve-failure-2-spec.k \
                   transfer-success-1-spec.k \
                   transfer-success-2-spec.k \
                   transfer-failure-1-a-spec.k \
                   transfer-failure-1-b-spec.k \
-                  transfer-failure-1-c-spec.k \
-                  transfer-failure-1-d-spec.k \
-                  transfer-failure-2-a-spec.k \
-                  transfer-failure-2-b-spec.k \
-                  transfer-failure-2-c-spec.k \
+                  transfer-failure-2-spec.k \
                   transferFrom-success-1-spec.k \
                   transferFrom-success-2-spec.k \
                   transferFrom-failure-1-a-spec.k \
                   transferFrom-failure-1-b-spec.k \
                   transferFrom-failure-1-c-spec.k \
-                  transferFrom-failure-1-d-spec.k \
-                  transferFrom-failure-1-e-spec.k \
                   transferFrom-failure-2-a-spec.k \
-                  transferFrom-failure-2-b-spec.k \
-                  transferFrom-failure-2-c-spec.k \
-                  transferFrom-failure-2-d-spec.k
+                  transferFrom-failure-2-b-spec.k
 
 tron_erc20_files:=totalSupply-spec.k \
                   balanceOf-spec.k \
@@ -272,7 +263,7 @@ gnosis_files:=setup-spec.k \
 #             checkHash-spec.k
 
 #proof_tests:=bihu vyper-erc20 zeppelin-erc20 hkg-erc20 hobby-erc20 sum-to-n ds-token-erc20 gnosis zilliqa_erc20 #tron_erc20 icon_erc20 zilliqa_erc20 zrx_erc20
-proof_tests:=zilliqa_erc20 #tron_erc20 icon_erc20 zilliqa_erc20 zrx_erc20
+proof_tests:=icon_erc20 #tron_erc20 icon_erc20 zilliqa_erc20 zrx_erc20
 
 # FIXME: restore the casper specs
 #proof_tests += casper
