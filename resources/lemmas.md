@@ -162,7 +162,7 @@ These rules are specific to reasoning about EVM programs.
                             andBool 0 <=Int N andBool N <=Int MASK
 
     // N &Int 0xffff...f = N
-    rule MASK &Int N => N  requires MASK ==Int (2 ^Int (log2Int(MASK) +Int 1)) -Int 1 // MASK = 0xffff...f
+    rule N &Int MASK => N  requires MASK ==Int (2 ^Int (log2Int(MASK) +Int 1)) -Int 1 // MASK = 0xffff...f
                             andBool 0 <=Int N andBool N <=Int MASK
 
     // for gas calculation
