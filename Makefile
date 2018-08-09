@@ -67,20 +67,6 @@ erc20_files:=totalSupply-spec.k \
              transferFrom-failure-1-spec.k \
              transferFrom-failure-2-spec.k
 
-zeppelin_erc20_files:=totalSupply-spec.k \
-             balanceOf-spec.k \
-             allowance-spec.k \
-             approve-spec.k \
-             transfer-success-1-spec.k \
-             transfer-success-2-spec.k \
-             transfer-failure-1-a-spec.k \
-             transfer-failure-1-b-spec.k \
-             transfer-failure-2-spec.k \
-             transferFrom-success-1-spec.k \
-             transferFrom-success-2-spec.k \
-             transferFrom-failure-1-a-spec.k \
-             transferFrom-failure-1-b-spec.k \
-             transferFrom-failure-2-spec.k
 
 hobby_erc20_files:=totalSupply-spec.k \
                    balanceOf-spec.k \
@@ -117,6 +103,40 @@ ds_token_erc20_files:=totalSupply-spec.k \
                    transferFrom-failure-2-a-spec.k \
                    transferFrom-failure-2-b-spec.k \
                    transferFrom-failure-2-c-spec.k
+
+zeppelin_erc20_files:=totalSupply-spec.k \
+                      balanceOf-spec.k \
+                      allowance-spec.k \
+                      approve-spec.k \
+                      transfer-success-1-spec.k \
+                      transfer-success-2-spec.k \
+                      transfer-failure-1-a-spec.k \
+                      transfer-failure-1-b-spec.k \
+                      transfer-failure-2-spec.k \
+                      transferFrom-success-1-spec.k \
+                      transferFrom-success-2-spec.k \
+                      transferFrom-failure-1-a-spec.k \
+                      transferFrom-failure-1-b-spec.k \
+                      transferFrom-failure-2-spec.k
+
+zilliqa_erc20_files:=totalSupply-spec.k \
+                     balanceOf-spec.k \
+                     allowance-spec.k \
+                     approve-success-1-spec.k \
+                     approve-success-2-spec.k \
+                     transfer-success-1-spec.k \
+                     transfer-success-2-spec.k \
+                     transfer-failure-1-a-spec.k \
+                     transfer-failure-1-b-spec.k \
+                     transfer-failure-1-c-spec.k \
+                     transferFrom-success-1-spec.k \
+                     transferFrom-success-2-spec.k \
+                     transferFrom-failure-1-a-spec.k \
+                     transferFrom-failure-1-b-spec.k \
+                     transferFrom-failure-1-c-spec.k \
+                     transferOwnership-spec.k \
+                     pause-1-spec.k \
+                     pause-2-spec.k
 
 casper_files:=recommended_source_epoch-spec.k \
               recommended_target_hash-success-spec.k \
@@ -185,7 +205,7 @@ gnosis_files:=setup-spec.k \
 #             getTransactionHash-spec.k
 #             checkHash-spec.k
 
-proof_tests:=bihu vyper-erc20 zeppelin-erc20 hkg-erc20 hobby-erc20 sum-to-n ds-token-erc20 gnosis
+proof_tests:=bihu vyper-erc20 zeppelin-erc20 hkg-erc20 hobby-erc20 sum-to-n ds-token-erc20 gnosis zilliqa_erc20
 
 # FIXME: restore the casper specs
 #proof_tests += casper
@@ -206,9 +226,12 @@ sum-to-n: $(specs_dir)/examples/sum-to-n-spec.k $(specs_dir)/lemmas.k
 
 ds-token-erc20: $(patsubst %, $(specs_dir)/ds-token-erc20/%, $(ds_token_erc20_files)) $(specs_dir)/lemmas.k
 
+zilliqa_erc20: $(patsubst %, $(specs_dir)/zilliqa_erc20/%, $(zilliqa_erc20_files)) $(specs_dir)/lemmas.k
+
 casper: $(patsubst %, $(specs_dir)/casper/%, $(casper_files)) $(specs_dir)/lemmas.k
 
 gnosis: $(patsubst %, $(specs_dir)/gnosis/%, $(gnosis_files)) $(specs_dir)/lemmas.k
+
 
 # Bihu
 bihu_tmpls:=bihu/module-tmpl.k bihu/spec-tmpl.k
@@ -259,6 +282,13 @@ $(specs_dir)/hobby-erc20/%-spec.k: $(erc20_tmpls) erc20/hobby/hobby-erc20-spec.i
 	cp erc20/verification.k $(dir $@)
 
 $(specs_dir)/ds-token-erc20/%-spec.k: erc20/module-tmpl.k erc20/spec-tmpl.k erc20/ds-token/ds-token-erc20-spec.ini
+	@echo >&2 "==  gen-spec: $@"
+	mkdir -p $(dir $@)
+	python3 resources/gen-spec.py $^ $* $* > $@
+	cp erc20/abstract-semantics.k $(dir $@)
+	cp erc20/verification.k $(dir $@)
+
+$(specs_dir)/zilliqa_erc20/%-spec.k: $(erc20_tmpls) erc20/zilliqa/zilliqa-erc20-spec.ini
 	@echo >&2 "==  gen-spec: $@"
 	mkdir -p $(dir $@)
 	python3 resources/gen-spec.py $^ $* $* > $@
