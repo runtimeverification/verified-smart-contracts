@@ -5,16 +5,21 @@ module VERIFICATION
     imports EDSL
     imports LEMMAS
 
+ ///////////////////////////////////////////////////////////////////////////////
+ /* #stWord, an abstraction for packed storage variables -------------------- */
+
     syntax Int ::= #stWord(IntList, IntList) [function, smtlib(stWord)]
  //                                    ^ length of each section
- // - listed in order of their declaration
+ // - listed in order of their declaration, that is, the first entry in #stWord
+ //   starts from LSB of that word. FIXME: exchange the order?
  // - implicitly ignore left zero padding
  // e.g. Zilliqa ERC20 contract, #stWord with 3 sections:
  // (#hashedLocation({COMPILER}, 3, .IntList) |->
  //   #stWord(OWNER PAUSED_PUBLIC PAUSED_OWNER_ADMIN,
  //              20             1                  1)
+ // where `address owner; bool pausedPublic; bool pausedOwnerAdmin;`
  // -> [0..0][PAUSED_OWNER_ADMIN][PAUSED_PUBLIC][OWNER]
- //        22                  21             20      0
+ //        22                  21             20      0 LSB
 
     rule 0 <=Int #stWord(VS, _)             => true
     rule         #stWord(VS, _) <Int pow256 => true
@@ -38,7 +43,7 @@ module VERIFICATION
  // shift right
     rule #stWord(V VS, L LS) /Int OFFSET_POW => #stWord(VS, LS) /Int (OFFSET_POW /Int (256 ^Int L))
       requires L <=Int log256Int(OFFSET_POW) andBool OFFSET_POW ==Int 256 ^Int log256Int(OFFSET_POW)
-      //andBool isConcrete(OFFSET_POW)
+       andBool #isConcrete(OFFSET_POW)
 
     rule #stWord(VS, LS) /Int 1 => #stWord(VS, LS)
 
@@ -63,6 +68,7 @@ module VERIFICATION
     rule .IntList &IntList .IntList => .IntList
 
  // |Int
+ // FIXME: merge cases 1 and 2
  // 1. simbolic I, zero offset
     rule I |Int #stWord(0 VS, L LS) => #stWord(I VS, L LS)
       requires 0 <=Int I andBool I <=Int (256 ^Int L) -Int 1 andBool notBool #isConcrete(I)
@@ -108,18 +114,33 @@ module VERIFICATION
     rule #zeroIntList(.IntList) => true
     rule #zeroIntList(V VS) => V ==Int 0 andBool #zeroIntList(VS)
 
- // some treatments for solidity bool variables
-    syntax Bool ::= #rangeBool(Int)  [function]
-                  | #isBoolWord(Int) [function, smtlib(isBoolWord)]
+ /* End of #stWord rules  --------------------------------------------------- */
+ ///////////////////////////////////////////////////////////////////////////////
 
-    rule #rangeBool(B) => #range(0 <= B <= 1) andBool #isBoolWord(B)
- // b != false -> b
-    rule bool2Word(notBool(B ==K 0)) => B        requires #isBoolWord(B)
- // b != true  -> !b
-    rule bool2Word(notBool(B ==K 1)) => 1 -Int B requires #isBoolWord(B)
+
+ ///////////////////////////////////////////////////////////////////////////////
+ /* Supplementary lemmas for #stWord ---------------------------------------- */
+
+ // #stWord is just a simple abstracted representation for a bitvector of length
+ // 256. That is one bitvector value can have multiple representation: #stWord,
+ // an Int value, symbolic computation of Int values, and so on. For example,
+ // chop(chop(bool2Word(notBool(notBool(notBool(B ==K 0)))) *Int (256 *Int 21)) |Int #stWord(I B' 0, 20 1 1))
+ // must be equal to #stWord(I B' B, 20 1 1), and we want this equivalence check
+ // to be automated by Z3. This requires SMTLib translation of all rules related
+ // to #stWord, which will lead to a lot of complexity. Rather than doing so, I
+ // used some ad-hoc lemmas so that equivalence can be checked simply by
+ // AST matching.
+
+    rule bool2Word(notBool(B ==K 0)) => B requires #rangeBool(B)
 
  // SafeMath overflow check
     rule chop(A +Int B) <Int A => A +Int B >Int maxUInt256
       requires #rangeUInt(256, A) andBool #rangeUInt(256, B)
+
+ ///////////////////////////////////////////////////////////////////////////////
+
+ // range definition for bool
+    syntax Bool ::= #rangeBool(Int)  [function]
+    rule #rangeBool(B) => #range(0 <= B <= 1) [macro]
 
 endmodule
