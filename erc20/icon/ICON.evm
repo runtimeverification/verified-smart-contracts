@@ -1,0 +1,3177 @@
+
+======= ICON.sol:IcxToken =======
+EVM assembly:
+    /* "ICON.sol":3734:6648  contract IcxToken is ERC20, Lockable {... */
+  mstore(0x40, 0x80)
+    /* "ICON.sol":4222:4471  function IcxToken( uint initial_balance, address wallet) {... */
+  callvalue
+    /* "--CODEGEN--":8:17   */
+  dup1
+    /* "--CODEGEN--":5:7   */
+  iszero
+  tag_1
+  jumpi
+    /* "--CODEGEN--":30:31   */
+  0x0
+    /* "--CODEGEN--":27:28   */
+  dup1
+    /* "--CODEGEN--":20:32   */
+  revert
+    /* "--CODEGEN--":5:7   */
+tag_1:
+    /* "ICON.sol":4222:4471  function IcxToken( uint initial_balance, address wallet) {... */
+  pop
+  mload(0x40)
+  0x40
+  dup1
+  bytecodeSize
+  dup4
+  codecopy
+  dup2
+  add
+  dup1
+  0x40
+  mstore
+  dup2
+  add
+  swap1
+  dup1
+  dup1
+  mload
+  swap1
+  0x20
+  add
+  swap1
+  swap3
+  swap2
+  swap1
+  dup1
+  mload
+  swap1
+  0x20
+  add
+  swap1
+  swap3
+  swap2
+  swap1
+  pop
+  pop
+  pop
+    /* "ICON.sol":2052:2055  now */
+  timestamp
+    /* "ICON.sol":2037:2049  creationTime */
+  0x0
+    /* "ICON.sol":2037:2055  creationTime = now */
+  dup2
+  swap1
+  sstore
+  pop
+    /* "ICON.sol":2081:2086  false */
+  0x0
+    /* "ICON.sol":2065:2078  tokenTransfer */
+  0x1
+  dup1
+    /* "ICON.sol":2065:2086  tokenTransfer = false */
+  0x100
+  exp
+  dup2
+  sload
+  dup2
+  0xff
+  mul
+  not
+  and
+  swap1
+  dup4
+  iszero
+  iszero
+  mul
+  or
+  swap1
+  sstore
+  pop
+    /* "ICON.sol":2104:2114  msg.sender */
+  caller
+    /* "ICON.sol":2096:2101  owner */
+  0x1
+  0x2
+    /* "ICON.sol":2096:2114  owner = msg.sender */
+  0x100
+  exp
+  dup2
+  sload
+  dup2
+  0xffffffffffffffffffffffffffffffffffffffff
+  mul
+  not
+  and
+  swap1
+  dup4
+  0xffffffffffffffffffffffffffffffffffffffff
+  and
+  mul
+  or
+  swap1
+  sstore
+  pop
+    /* "ICON.sol":4307:4308  0 */
+  0x0
+    /* "ICON.sol":4297:4303  wallet */
+  dup2
+    /* "ICON.sol":4297:4308  wallet != 0 */
+  0xffffffffffffffffffffffffffffffffffffffff
+  and
+  eq
+  iszero
+    /* "ICON.sol":4289:4309  require(wallet != 0) */
+  iszero
+  iszero
+  tag_6
+  jumpi
+  0x0
+  dup1
+  revert
+tag_6:
+    /* "ICON.sol":4346:4347  0 */
+  0x0
+    /* "ICON.sol":4327:4342  initial_balance */
+  dup3
+    /* "ICON.sol":4327:4347  initial_balance != 0 */
+  eq
+  iszero
+    /* "ICON.sol":4319:4348  require(initial_balance != 0) */
+  iszero
+  iszero
+  tag_7
+  jumpi
+  0x0
+  dup1
+  revert
+tag_7:
+    /* "ICON.sol":4382:4397  initial_balance */
+  dup2
+    /* "ICON.sol":4358:4367  _balances */
+  0x4
+    /* "ICON.sol":4358:4379  _balances[msg.sender] */
+  0x0
+    /* "ICON.sol":4368:4378  msg.sender */
+  caller
+    /* "ICON.sol":4358:4379  _balances[msg.sender] */
+  0xffffffffffffffffffffffffffffffffffffffff
+  and
+  0xffffffffffffffffffffffffffffffffffffffff
+  and
+  dup2
+  mstore
+  0x20
+  add
+  swap1
+  dup2
+  mstore
+  0x20
+  add
+  0x0
+  keccak256
+    /* "ICON.sol":4358:4397  _balances[msg.sender] = initial_balance */
+  dup2
+  swap1
+  sstore
+  pop
+    /* "ICON.sol":4417:4432  initial_balance */
+  dup2
+    /* "ICON.sol":4407:4414  _supply */
+  0x6
+    /* "ICON.sol":4407:4432  _supply = initial_balance */
+  dup2
+  swap1
+  sstore
+  pop
+    /* "ICON.sol":4458:4464  wallet */
+  dup1
+    /* "ICON.sol":4442:4455  walletAddress */
+  0x7
+  0x0
+    /* "ICON.sol":4442:4464  walletAddress = wallet */
+  0x100
+  exp
+  dup2
+  sload
+  dup2
+  0xffffffffffffffffffffffffffffffffffffffff
+  mul
+  not
+  and
+  swap1
+  dup4
+  0xffffffffffffffffffffffffffffffffffffffff
+  and
+  mul
+  or
+  swap1
+  sstore
+  pop
+    /* "ICON.sol":4222:4471  function IcxToken( uint initial_balance, address wallet) {... */
+  pop
+  pop
+    /* "ICON.sol":3734:6648  contract IcxToken is ERC20, Lockable {... */
+  dataSize(sub_0)
+  dup1
+  dataOffset(sub_0)
+  0x0
+  codecopy
+  0x0
+  return
+stop
+
+sub_0: assembly {
+        /* "ICON.sol":3734:6648  contract IcxToken is ERC20, Lockable {... */
+      mstore(0x40, 0x80)
+      jumpi(tag_1, lt(calldatasize, 0x4))
+      calldataload(0x0)
+      0x100000000000000000000000000000000000000000000000000000000
+      swap1
+      div
+      0xffffffff
+      and
+      dup1
+      0x95ea7b3
+      eq
+      tag_2
+      jumpi
+      dup1
+      0x18160ddd
+      eq
+      tag_3
+      jumpi
+      dup1
+      0x23b872dd
+      eq
+      tag_4
+      jumpi
+      dup1
+      0x3a764462
+      eq
+      tag_5
+      jumpi
+      dup1
+      0x60805e5a
+      eq
+      tag_6
+      jumpi
+      dup1
+      0x6ad5b3ea
+      eq
+      tag_7
+      jumpi
+      dup1
+      0x6c4eca27
+      eq
+      tag_8
+      jumpi
+      dup1
+      0x6d1b229d
+      eq
+      tag_9
+      jumpi
+      dup1
+      0x70a08231
+      eq
+      tag_10
+      jumpi
+      dup1
+      0x8da5cb5b
+      eq
+      tag_11
+      jumpi
+      dup1
+      0xa9059cbb
+      eq
+      tag_12
+      jumpi
+      dup1
+      0xcb7bba39
+      eq
+      tag_13
+      jumpi
+      dup1
+      0xd8270dce
+      eq
+      tag_14
+      jumpi
+      dup1
+      0xdd62ed3e
+      eq
+      tag_15
+      jumpi
+      dup1
+      0xe2a9ca4c
+      eq
+      tag_16
+      jumpi
+      dup1
+      0xec4a79cf
+      eq
+      tag_17
+      jumpi
+      dup1
+      0xf2260031
+      eq
+      tag_18
+      jumpi
+      dup1
+      0xf83d08ba
+      eq
+      tag_19
+      jumpi
+    tag_1:
+      0x0
+      dup1
+      revert
+        /* "ICON.sol":5780:6012  function approve(address spender, uint value)... */
+    tag_2:
+      callvalue
+        /* "--CODEGEN--":8:17   */
+      dup1
+        /* "--CODEGEN--":5:7   */
+      iszero
+      tag_20
+      jumpi
+        /* "--CODEGEN--":30:31   */
+      0x0
+        /* "--CODEGEN--":27:28   */
+      dup1
+        /* "--CODEGEN--":20:32   */
+      revert
+        /* "--CODEGEN--":5:7   */
+    tag_20:
+        /* "ICON.sol":5780:6012  function approve(address spender, uint value)... */
+      pop
+      tag_21
+      0x4
+      dup1
+      calldatasize
+      sub
+      dup2
+      add
+      swap1
+      dup1
+      dup1
+      calldataload
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      dup1
+      calldataload
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      pop
+      pop
+      pop
+      jump(tag_22)
+    tag_21:
+      mload(0x40)
+      dup1
+      dup3
+      iszero
+      iszero
+      iszero
+      iszero
+      dup2
+      mstore
+      0x20
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      return
+        /* "ICON.sol":4477:4562  function totalSupply() constant returns (uint supply) {... */
+    tag_3:
+      callvalue
+        /* "--CODEGEN--":8:17   */
+      dup1
+        /* "--CODEGEN--":5:7   */
+      iszero
+      tag_23
+      jumpi
+        /* "--CODEGEN--":30:31   */
+      0x0
+        /* "--CODEGEN--":27:28   */
+      dup1
+        /* "--CODEGEN--":20:32   */
+      revert
+        /* "--CODEGEN--":5:7   */
+    tag_23:
+        /* "ICON.sol":4477:4562  function totalSupply() constant returns (uint supply) {... */
+      pop
+      tag_24
+      jump(tag_25)
+    tag_24:
+      mload(0x40)
+      dup1
+      dup3
+      dup2
+      mstore
+      0x20
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      return
+        /* "ICON.sol":5168:5774  function transferFrom( address from, address to, uint value)... */
+    tag_4:
+      callvalue
+        /* "--CODEGEN--":8:17   */
+      dup1
+        /* "--CODEGEN--":5:7   */
+      iszero
+      tag_26
+      jumpi
+        /* "--CODEGEN--":30:31   */
+      0x0
+        /* "--CODEGEN--":27:28   */
+      dup1
+        /* "--CODEGEN--":20:32   */
+      revert
+        /* "--CODEGEN--":5:7   */
+    tag_26:
+        /* "ICON.sol":5168:5774  function transferFrom( address from, address to, uint value)... */
+      pop
+      tag_27
+      0x4
+      dup1
+      calldatasize
+      sub
+      dup2
+      add
+      swap1
+      dup1
+      dup1
+      calldataload
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      dup1
+      calldataload
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      dup1
+      calldataload
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      pop
+      pop
+      pop
+      jump(tag_28)
+    tag_27:
+      mload(0x40)
+      dup1
+      dup3
+      iszero
+      iszero
+      iszero
+      iszero
+      dup2
+      mstore
+      0x20
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      return
+        /* "ICON.sol":6387:6512  function enableTokenTransfer()... */
+    tag_5:
+      callvalue
+        /* "--CODEGEN--":8:17   */
+      dup1
+        /* "--CODEGEN--":5:7   */
+      iszero
+      tag_29
+      jumpi
+        /* "--CODEGEN--":30:31   */
+      0x0
+        /* "--CODEGEN--":27:28   */
+      dup1
+        /* "--CODEGEN--":20:32   */
+      revert
+        /* "--CODEGEN--":5:7   */
+    tag_29:
+        /* "ICON.sol":6387:6512  function enableTokenTransfer()... */
+      pop
+      tag_30
+      jump(tag_31)
+    tag_30:
+      stop
+        /* "ICON.sol":2365:2527  function unlockAddress(address target, bool status)... */
+    tag_6:
+      callvalue
+        /* "--CODEGEN--":8:17   */
+      dup1
+        /* "--CODEGEN--":5:7   */
+      iszero
+      tag_32
+      jumpi
+        /* "--CODEGEN--":30:31   */
+      0x0
+        /* "--CODEGEN--":27:28   */
+      dup1
+        /* "--CODEGEN--":20:32   */
+      revert
+        /* "--CODEGEN--":5:7   */
+    tag_32:
+        /* "ICON.sol":2365:2527  function unlockAddress(address target, bool status)... */
+      pop
+      tag_33
+      0x4
+      dup1
+      calldatasize
+      sub
+      dup2
+      add
+      swap1
+      dup1
+      dup1
+      calldataload
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      dup1
+      calldataload
+      iszero
+      iszero
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      pop
+      pop
+      pop
+      jump(tag_34)
+    tag_33:
+      stop
+        /* "ICON.sol":3932:3960  address public walletAddress */
+    tag_7:
+      callvalue
+        /* "--CODEGEN--":8:17   */
+      dup1
+        /* "--CODEGEN--":5:7   */
+      iszero
+      tag_35
+      jumpi
+        /* "--CODEGEN--":30:31   */
+      0x0
+        /* "--CODEGEN--":27:28   */
+      dup1
+        /* "--CODEGEN--":20:32   */
+      revert
+        /* "--CODEGEN--":5:7   */
+    tag_35:
+        /* "ICON.sol":3932:3960  address public walletAddress */
+      pop
+      tag_36
+      jump(tag_37)
+    tag_36:
+      mload(0x40)
+      dup1
+      dup3
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      return
+        /* "ICON.sol":1191:1216  bool public tokenTransfer */
+    tag_8:
+      callvalue
+        /* "--CODEGEN--":8:17   */
+      dup1
+        /* "--CODEGEN--":5:7   */
+      iszero
+      tag_38
+      jumpi
+        /* "--CODEGEN--":30:31   */
+      0x0
+        /* "--CODEGEN--":27:28   */
+      dup1
+        /* "--CODEGEN--":20:32   */
+      revert
+        /* "--CODEGEN--":5:7   */
+    tag_38:
+        /* "ICON.sol":1191:1216  bool public tokenTransfer */
+      pop
+      tag_39
+      jump(tag_40)
+    tag_39:
+      mload(0x40)
+      dup1
+      dup3
+      iszero
+      iszero
+      iszero
+      iszero
+      dup2
+      mstore
+      0x20
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      return
+        /* "ICON.sol":6072:6380  function burnTokens(uint tokensAmount)... */
+    tag_9:
+      callvalue
+        /* "--CODEGEN--":8:17   */
+      dup1
+        /* "--CODEGEN--":5:7   */
+      iszero
+      tag_41
+      jumpi
+        /* "--CODEGEN--":30:31   */
+      0x0
+        /* "--CODEGEN--":27:28   */
+      dup1
+        /* "--CODEGEN--":20:32   */
+      revert
+        /* "--CODEGEN--":5:7   */
+    tag_41:
+        /* "ICON.sol":6072:6380  function burnTokens(uint tokensAmount)... */
+      pop
+      tag_42
+      0x4
+      dup1
+      calldatasize
+      sub
+      dup2
+      add
+      swap1
+      dup1
+      dup1
+      calldataload
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      pop
+      pop
+      pop
+      jump(tag_43)
+    tag_42:
+      stop
+        /* "ICON.sol":4568:4670  function balanceOf( address who ) constant returns (uint value) {... */
+    tag_10:
+      callvalue
+        /* "--CODEGEN--":8:17   */
+      dup1
+        /* "--CODEGEN--":5:7   */
+      iszero
+      tag_44
+      jumpi
+        /* "--CODEGEN--":30:31   */
+      0x0
+        /* "--CODEGEN--":27:28   */
+      dup1
+        /* "--CODEGEN--":20:32   */
+      revert
+        /* "--CODEGEN--":5:7   */
+    tag_44:
+        /* "ICON.sol":4568:4670  function balanceOf( address who ) constant returns (uint value) {... */
+      pop
+      tag_45
+      0x4
+      dup1
+      calldatasize
+      sub
+      dup2
+      add
+      swap1
+      dup1
+      dup1
+      calldataload
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      pop
+      pop
+      pop
+      jump(tag_46)
+    tag_45:
+      mload(0x40)
+      dup1
+      dup3
+      dup2
+      mstore
+      0x20
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      return
+        /* "ICON.sol":1222:1242  address public owner */
+    tag_11:
+      callvalue
+        /* "--CODEGEN--":8:17   */
+      dup1
+        /* "--CODEGEN--":5:7   */
+      iszero
+      tag_47
+      jumpi
+        /* "--CODEGEN--":30:31   */
+      0x0
+        /* "--CODEGEN--":27:28   */
+      dup1
+        /* "--CODEGEN--":20:32   */
+      revert
+        /* "--CODEGEN--":5:7   */
+    tag_47:
+        /* "ICON.sol":1222:1242  address public owner */
+      pop
+      tag_48
+      jump(tag_49)
+    tag_48:
+      mload(0x40)
+      dup1
+      dup3
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      return
+        /* "ICON.sol":4818:5162  function transfer( address to, uint value)... */
+    tag_12:
+      callvalue
+        /* "--CODEGEN--":8:17   */
+      dup1
+        /* "--CODEGEN--":5:7   */
+      iszero
+      tag_50
+      jumpi
+        /* "--CODEGEN--":30:31   */
+      0x0
+        /* "--CODEGEN--":27:28   */
+      dup1
+        /* "--CODEGEN--":20:32   */
+      revert
+        /* "--CODEGEN--":5:7   */
+    tag_50:
+        /* "ICON.sol":4818:5162  function transfer( address to, uint value)... */
+      pop
+      tag_51
+      0x4
+      dup1
+      calldatasize
+      sub
+      dup2
+      add
+      swap1
+      dup1
+      dup1
+      calldataload
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      dup1
+      calldataload
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      pop
+      pop
+      pop
+      jump(tag_52)
+    tag_51:
+      mload(0x40)
+      dup1
+      dup3
+      iszero
+      iszero
+      iszero
+      iszero
+      dup2
+      mstore
+      0x20
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      return
+        /* "ICON.sol":1301:1346  mapping( address => bool ) public lockaddress */
+    tag_13:
+      callvalue
+        /* "--CODEGEN--":8:17   */
+      dup1
+        /* "--CODEGEN--":5:7   */
+      iszero
+      tag_53
+      jumpi
+        /* "--CODEGEN--":30:31   */
+      0x0
+        /* "--CODEGEN--":27:28   */
+      dup1
+        /* "--CODEGEN--":20:32   */
+      revert
+        /* "--CODEGEN--":5:7   */
+    tag_53:
+        /* "ICON.sol":1301:1346  mapping( address => bool ) public lockaddress */
+      pop
+      tag_54
+      0x4
+      dup1
+      calldatasize
+      sub
+      dup2
+      add
+      swap1
+      dup1
+      dup1
+      calldataload
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      pop
+      pop
+      pop
+      jump(tag_55)
+    tag_54:
+      mload(0x40)
+      dup1
+      dup3
+      iszero
+      iszero
+      iszero
+      iszero
+      dup2
+      mstore
+      0x20
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      return
+        /* "ICON.sol":1139:1163  uint public creationTime */
+    tag_14:
+      callvalue
+        /* "--CODEGEN--":8:17   */
+      dup1
+        /* "--CODEGEN--":5:7   */
+      iszero
+      tag_56
+      jumpi
+        /* "--CODEGEN--":30:31   */
+      0x0
+        /* "--CODEGEN--":27:28   */
+      dup1
+        /* "--CODEGEN--":20:32   */
+      revert
+        /* "--CODEGEN--":5:7   */
+    tag_56:
+        /* "ICON.sol":1139:1163  uint public creationTime */
+      pop
+      tag_57
+      jump(tag_58)
+    tag_57:
+      mload(0x40)
+      dup1
+      dup3
+      dup2
+      mstore
+      0x20
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      return
+        /* "ICON.sol":4676:4812  function allowance(address owner, address spender) constant returns (uint _allowance) {... */
+    tag_15:
+      callvalue
+        /* "--CODEGEN--":8:17   */
+      dup1
+        /* "--CODEGEN--":5:7   */
+      iszero
+      tag_59
+      jumpi
+        /* "--CODEGEN--":30:31   */
+      0x0
+        /* "--CODEGEN--":27:28   */
+      dup1
+        /* "--CODEGEN--":20:32   */
+      revert
+        /* "--CODEGEN--":5:7   */
+    tag_59:
+        /* "ICON.sol":4676:4812  function allowance(address owner, address spender) constant returns (uint _allowance) {... */
+      pop
+      tag_60
+      0x4
+      dup1
+      calldatasize
+      sub
+      dup2
+      add
+      swap1
+      dup1
+      dup1
+      calldataload
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      dup1
+      calldataload
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      pop
+      pop
+      pop
+      jump(tag_61)
+    tag_60:
+      mload(0x40)
+      dup1
+      dup3
+      dup2
+      mstore
+      0x20
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      return
+        /* "ICON.sol":6518:6645  function disableTokenTransfer()... */
+    tag_16:
+      callvalue
+        /* "--CODEGEN--":8:17   */
+      dup1
+        /* "--CODEGEN--":5:7   */
+      iszero
+      tag_62
+      jumpi
+        /* "--CODEGEN--":30:31   */
+      0x0
+        /* "--CODEGEN--":27:28   */
+      dup1
+        /* "--CODEGEN--":20:32   */
+      revert
+        /* "--CODEGEN--":5:7   */
+    tag_62:
+        /* "ICON.sol":6518:6645  function disableTokenTransfer()... */
+      pop
+      tag_63
+      jump(tag_64)
+    tag_63:
+      stop
+        /* "ICON.sol":1248:1295  mapping( address => bool ) public unlockaddress */
+    tag_17:
+      callvalue
+        /* "--CODEGEN--":8:17   */
+      dup1
+        /* "--CODEGEN--":5:7   */
+      iszero
+      tag_65
+      jumpi
+        /* "--CODEGEN--":30:31   */
+      0x0
+        /* "--CODEGEN--":27:28   */
+      dup1
+        /* "--CODEGEN--":20:32   */
+      revert
+        /* "--CODEGEN--":5:7   */
+    tag_65:
+        /* "ICON.sol":1248:1295  mapping( address => bool ) public unlockaddress */
+      pop
+      tag_66
+      0x4
+      dup1
+      calldatasize
+      sub
+      dup2
+      add
+      swap1
+      dup1
+      dup1
+      calldataload
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      pop
+      pop
+      pop
+      jump(tag_67)
+    tag_66:
+      mload(0x40)
+      dup1
+      dup3
+      iszero
+      iszero
+      iszero
+      iszero
+      dup2
+      mstore
+      0x20
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      return
+        /* "ICON.sol":2147:2337  function lockAddress(address target, bool status)... */
+    tag_18:
+      callvalue
+        /* "--CODEGEN--":8:17   */
+      dup1
+        /* "--CODEGEN--":5:7   */
+      iszero
+      tag_68
+      jumpi
+        /* "--CODEGEN--":30:31   */
+      0x0
+        /* "--CODEGEN--":27:28   */
+      dup1
+        /* "--CODEGEN--":20:32   */
+      revert
+        /* "--CODEGEN--":5:7   */
+    tag_68:
+        /* "ICON.sol":2147:2337  function lockAddress(address target, bool status)... */
+      pop
+      tag_69
+      0x4
+      dup1
+      calldatasize
+      sub
+      dup2
+      add
+      swap1
+      dup1
+      dup1
+      calldataload
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      dup1
+      calldataload
+      iszero
+      iszero
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      pop
+      pop
+      pop
+      jump(tag_70)
+    tag_69:
+      stop
+        /* "ICON.sol":1169:1185  bool public lock */
+    tag_19:
+      callvalue
+        /* "--CODEGEN--":8:17   */
+      dup1
+        /* "--CODEGEN--":5:7   */
+      iszero
+      tag_71
+      jumpi
+        /* "--CODEGEN--":30:31   */
+      0x0
+        /* "--CODEGEN--":27:28   */
+      dup1
+        /* "--CODEGEN--":20:32   */
+      revert
+        /* "--CODEGEN--":5:7   */
+    tag_71:
+        /* "ICON.sol":1169:1185  bool public lock */
+      pop
+      tag_72
+      jump(tag_73)
+    tag_72:
+      mload(0x40)
+      dup1
+      dup3
+      iszero
+      iszero
+      iszero
+      iszero
+      dup2
+      mstore
+      0x20
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      return
+        /* "ICON.sol":5780:6012  function approve(address spender, uint value)... */
+    tag_22:
+        /* "ICON.sol":5873:5885  bool success */
+      0x0
+        /* "ICON.sol":1570:1583  tokenTransfer */ ########
+      0x1    1
+      dup1   1 1
+      swap1  1 1
+      sload  x 1
+      swap1  1 x
+      0x100  0x100 1 x
+      exp    0x100 x 
+      swap1  x 0x100 
+      div    x >> 8
+      0xff   0xff (x>>8)
+      and    x[15:8]
+        /* "ICON.sol":1569:1583  !tokenTransfer */
+      iszero
+        /* "ICON.sol":1566:1644  if(!tokenTransfer) {... */
+      iszero
+      tag_75
+      jumpi
+        /* "ICON.sol":1607:1620  unlockaddress */
+      0x2
+        /* "ICON.sol":1607:1632  unlockaddress[msg.sender] */
+      0x0
+        /* "ICON.sol":1621:1631  msg.sender */
+      caller
+        /* "ICON.sol":1607:1632  unlockaddress[msg.sender] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+      0x0
+      swap1
+      sload
+      swap1
+      0x100
+      exp
+      swap1
+      div
+      0xff
+      and
+        /* "ICON.sol":1599:1633  require(unlockaddress[msg.sender]) */
+      iszero
+      iszero
+      tag_76
+      jumpi
+      0x0
+      dup1
+      revert
+    tag_76:
+        /* "ICON.sol":1566:1644  if(!tokenTransfer) {... */
+    tag_75:
+        /* "ICON.sol":1850:1861  lockaddress */
+      0x3
+        /* "ICON.sol":1850:1873  lockaddress[msg.sender] */
+      0x0
+        /* "ICON.sol":1862:1872  msg.sender */
+      caller
+        /* "ICON.sol":1850:1873  lockaddress[msg.sender] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+      0x0
+      swap1
+      sload
+      swap1
+      0x100
+      exp
+      swap1
+      div
+      0xff
+      and
+        /* "ICON.sol":1846:1905  if (lockaddress[msg.sender]) {... */
+      iszero
+      tag_78
+      jumpi
+        /* "ICON.sol":1889:1894  throw */
+      0x0
+      dup1
+      revert
+        /* "ICON.sol":1846:1905  if (lockaddress[msg.sender]) {... */
+    tag_78:
+        /* "ICON.sol":5931:5936  value */
+      dup2
+        /* "ICON.sol":5897:5907  _approvals */
+      0x5
+        /* "ICON.sol":5897:5919  _approvals[msg.sender] */
+      0x0
+        /* "ICON.sol":5908:5918  msg.sender */
+      caller
+        /* "ICON.sol":5897:5919  _approvals[msg.sender] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+        /* "ICON.sol":5897:5928  _approvals[msg.sender][spender] */
+      0x0
+        /* "ICON.sol":5920:5927  spender */
+      dup6
+        /* "ICON.sol":5897:5928  _approvals[msg.sender][spender] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+        /* "ICON.sol":5897:5936  _approvals[msg.sender][spender] = value */
+      dup2
+      swap1
+      sstore
+      pop
+        /* "ICON.sol":5968:5975  spender */
+      dup3
+        /* "ICON.sol":5946:5984  Approval( msg.sender, spender, value ) */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+        /* "ICON.sol":5956:5966  msg.sender */
+      caller
+        /* "ICON.sol":5946:5984  Approval( msg.sender, spender, value ) */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0x8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925
+        /* "ICON.sol":5977:5982  value */
+      dup5
+        /* "ICON.sol":5946:5984  Approval( msg.sender, spender, value ) */
+      mload(0x40)
+      dup1
+      dup3
+      dup2
+      mstore
+      0x20
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      log3
+        /* "ICON.sol":6001:6005  true */
+      0x1
+        /* "ICON.sol":5994:6005  return true */
+      swap1
+      pop
+        /* "ICON.sol":5780:6012  function approve(address spender, uint value)... */
+      swap3
+      swap2
+      pop
+      pop
+      jump	// out
+        /* "ICON.sol":4477:4562  function totalSupply() constant returns (uint supply) {... */
+    tag_25:
+        /* "ICON.sol":4518:4529  uint supply */
+      0x0
+        /* "ICON.sol":4548:4555  _supply */
+      sload(0x6)
+        /* "ICON.sol":4541:4555  return _supply */
+      swap1
+      pop
+        /* "ICON.sol":4477:4562  function totalSupply() constant returns (uint supply) {... */
+      swap1
+      jump	// out
+        /* "ICON.sol":5168:5774  function transferFrom( address from, address to, uint value)... */
+    tag_28:
+        /* "ICON.sol":5276:5288  bool success */
+      0x0
+        /* "ICON.sol":1570:1583  tokenTransfer */
+      0x1
+      dup1
+      swap1
+      sload
+      swap1
+      0x100
+      exp
+      swap1
+      div
+      0xff
+      and
+        /* "ICON.sol":1569:1583  !tokenTransfer */
+      iszero
+        /* "ICON.sol":1566:1644  if(!tokenTransfer) {... */
+      iszero
+      tag_82
+      jumpi
+        /* "ICON.sol":1607:1620  unlockaddress */
+      0x2
+        /* "ICON.sol":1607:1632  unlockaddress[msg.sender] */
+      0x0
+        /* "ICON.sol":1621:1631  msg.sender */
+      caller
+        /* "ICON.sol":1607:1632  unlockaddress[msg.sender] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+      0x0
+      swap1
+      sload
+      swap1
+      0x100
+      exp
+      swap1
+      div
+      0xff
+      and
+        /* "ICON.sol":1599:1633  require(unlockaddress[msg.sender]) */
+      iszero
+      iszero
+      tag_83
+      jumpi
+      0x0
+      dup1
+      revert
+    tag_83:
+        /* "ICON.sol":1566:1644  if(!tokenTransfer) {... */
+    tag_82:
+        /* "ICON.sol":1850:1861  lockaddress */
+      0x3
+        /* "ICON.sol":1850:1873  lockaddress[msg.sender] */
+      0x0
+        /* "ICON.sol":1862:1872  msg.sender */
+      caller
+        /* "ICON.sol":1850:1873  lockaddress[msg.sender] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+      0x0
+      swap1
+      sload
+      swap1
+      0x100
+      exp
+      swap1
+      div
+      0xff
+      and
+        /* "ICON.sol":1846:1905  if (lockaddress[msg.sender]) {... */
+      iszero
+      tag_85
+      jumpi
+        /* "ICON.sol":1889:1894  throw */
+      0x0
+      dup1
+      revert
+        /* "ICON.sol":1846:1905  if (lockaddress[msg.sender]) {... */
+    tag_85:
+        /* "ICON.sol":5379:5384  value */
+      dup2
+        /* "ICON.sol":5360:5369  _balances */
+      0x4
+        /* "ICON.sol":5360:5375  _balances[from] */
+      0x0
+        /* "ICON.sol":5370:5374  from */
+      dup7
+        /* "ICON.sol":5360:5375  _balances[from] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+      sload
+        /* "ICON.sol":5360:5384  _balances[from] >= value */
+      lt
+      iszero
+        /* "ICON.sol":5351:5386  require( _balances[from] >= value ) */
+      iszero
+      iszero
+      tag_87
+      jumpi
+      0x0
+      dup1
+      revert
+    tag_87:
+        /* "ICON.sol":5482:5487  value */
+      dup2
+        /* "ICON.sol":5450:5460  _approvals */
+      0x5
+        /* "ICON.sol":5450:5466  _approvals[from] */
+      0x0
+        /* "ICON.sol":5461:5465  from */
+      dup7
+        /* "ICON.sol":5450:5466  _approvals[from] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+        /* "ICON.sol":5450:5478  _approvals[from][msg.sender] */
+      0x0
+        /* "ICON.sol":5467:5477  msg.sender */
+      caller
+        /* "ICON.sol":5450:5478  _approvals[from][msg.sender] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+      sload
+        /* "ICON.sol":5450:5487  _approvals[from][msg.sender] >= value */
+      lt
+      iszero
+        /* "ICON.sol":5441:5489  require( _approvals[from][msg.sender] >= value ) */
+      iszero
+      iszero
+      tag_88
+      jumpi
+      0x0
+      dup1
+      revert
+    tag_88:
+        /* "ICON.sol":5566:5605  _approvals[from][msg.sender].sub(value) */
+      tag_89
+        /* "ICON.sol":5599:5604  value */
+      dup3
+        /* "ICON.sol":5566:5576  _approvals */
+      0x5
+        /* "ICON.sol":5566:5582  _approvals[from] */
+      0x0
+        /* "ICON.sol":5577:5581  from */
+      dup8
+        /* "ICON.sol":5566:5582  _approvals[from] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+        /* "ICON.sol":5566:5594  _approvals[from][msg.sender] */
+      0x0
+        /* "ICON.sol":5583:5593  msg.sender */
+      caller
+        /* "ICON.sol":5566:5594  _approvals[from][msg.sender] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+      sload
+        /* "ICON.sol":5566:5598  _approvals[from][msg.sender].sub */
+      tag_90
+      swap1
+        /* "ICON.sol":5566:5605  _approvals[from][msg.sender].sub(value) */
+      swap2
+      swap1
+      0xffffffff
+      and
+      jump	// in
+    tag_89:
+        /* "ICON.sol":5535:5545  _approvals */
+      0x5
+        /* "ICON.sol":5535:5551  _approvals[from] */
+      0x0
+        /* "ICON.sol":5546:5550  from */
+      dup7
+        /* "ICON.sol":5535:5551  _approvals[from] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+        /* "ICON.sol":5535:5563  _approvals[from][msg.sender] */
+      0x0
+        /* "ICON.sol":5552:5562  msg.sender */
+      caller
+        /* "ICON.sol":5535:5563  _approvals[from][msg.sender] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+        /* "ICON.sol":5535:5605  _approvals[from][msg.sender] = _approvals[from][msg.sender].sub(value) */
+      dup2
+      swap1
+      sstore
+      pop
+        /* "ICON.sol":5633:5659  _balances[from].sub(value) */
+      tag_91
+        /* "ICON.sol":5653:5658  value */
+      dup3
+        /* "ICON.sol":5633:5642  _balances */
+      0x4
+        /* "ICON.sol":5633:5648  _balances[from] */
+      0x0
+        /* "ICON.sol":5643:5647  from */
+      dup8
+        /* "ICON.sol":5633:5648  _balances[from] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+      sload
+        /* "ICON.sol":5633:5652  _balances[from].sub */
+      tag_90
+      swap1
+        /* "ICON.sol":5633:5659  _balances[from].sub(value) */
+      swap2
+      swap1
+      0xffffffff
+      and
+      jump	// in
+    tag_91:
+        /* "ICON.sol":5615:5624  _balances */
+      0x4
+        /* "ICON.sol":5615:5630  _balances[from] */
+      0x0
+        /* "ICON.sol":5625:5629  from */
+      dup7
+        /* "ICON.sol":5615:5630  _balances[from] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+        /* "ICON.sol":5615:5659  _balances[from] = _balances[from].sub(value) */
+      dup2
+      swap1
+      sstore
+      pop
+        /* "ICON.sol":5685:5709  _balances[to].add(value) */
+      tag_92
+        /* "ICON.sol":5703:5708  value */
+      dup3
+        /* "ICON.sol":5685:5694  _balances */
+      0x4
+        /* "ICON.sol":5685:5698  _balances[to] */
+      0x0
+        /* "ICON.sol":5695:5697  to */
+      dup7
+        /* "ICON.sol":5685:5698  _balances[to] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+      sload
+        /* "ICON.sol":5685:5702  _balances[to].add */
+      tag_93
+      swap1
+        /* "ICON.sol":5685:5709  _balances[to].add(value) */
+      swap2
+      swap1
+      0xffffffff
+      and
+      jump	// in
+    tag_92:
+        /* "ICON.sol":5669:5678  _balances */
+      0x4
+        /* "ICON.sol":5669:5682  _balances[to] */
+      0x0
+        /* "ICON.sol":5679:5681  to */
+      dup6
+        /* "ICON.sol":5669:5682  _balances[to] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+        /* "ICON.sol":5669:5709  _balances[to] = _balances[to].add(value) */
+      dup2
+      swap1
+      sstore
+      pop
+        /* "ICON.sol":5735:5737  to */
+      dup3
+        /* "ICON.sol":5719:5746  Transfer( from, to, value ) */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+        /* "ICON.sol":5729:5733  from */
+      dup5
+        /* "ICON.sol":5719:5746  Transfer( from, to, value ) */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef
+        /* "ICON.sol":5739:5744  value */
+      dup5
+        /* "ICON.sol":5719:5746  Transfer( from, to, value ) */
+      mload(0x40)
+      dup1
+      dup3
+      dup2
+      mstore
+      0x20
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      log3
+        /* "ICON.sol":5763:5767  true */
+      0x1
+        /* "ICON.sol":5756:5767  return true */
+      swap1
+      pop
+        /* "ICON.sol":5168:5774  function transferFrom( address from, address to, uint value)... */
+      swap4
+      swap3
+      pop
+      pop
+      pop
+      jump	// out
+        /* "ICON.sol":6387:6512  function enableTokenTransfer()... */
+    tag_31:
+        /* "ICON.sol":4184:4197  walletAddress */
+      0x7
+      0x0
+      swap1
+      sload
+      swap1
+      0x100
+      exp
+      swap1
+      div
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+        /* "ICON.sol":4170:4197  msg.sender != walletAddress */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+        /* "ICON.sol":4170:4180  msg.sender */
+      caller
+        /* "ICON.sol":4170:4197  msg.sender != walletAddress */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      eq
+      iszero
+        /* "ICON.sol":4162:4198  require(msg.sender != walletAddress) */
+      iszero
+      iszero
+      tag_95
+      jumpi
+      0x0
+      dup1
+      revert
+    tag_95:
+        /* "ICON.sol":6476:6480  true */
+      0x1
+        /* "ICON.sol":6460:6473  tokenTransfer */
+      dup1
+      0x1
+        /* "ICON.sol":6460:6480  tokenTransfer = true */
+      0x100
+      exp
+      dup2
+      sload
+      dup2
+      0xff
+      mul
+      not
+      and
+      swap1
+      dup4
+      iszero
+      iszero
+      mul
+      or
+      swap1
+      sstore
+      pop
+        /* "ICON.sol":6490:6505  TokenTransfer() */
+      0xeb2cf4fc9168a2d848de8c48d73f2b6e32ef3b25eb1e730b673209b002bca01d
+      mload(0x40)
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      log1
+        /* "ICON.sol":6387:6512  function enableTokenTransfer()... */
+      jump	// out
+        /* "ICON.sol":2365:2527  function unlockAddress(address target, bool status)... */
+    tag_34:
+        /* "ICON.sol":1972:1982  msg.sender */
+      caller
+        /* "ICON.sol":1963:1982  owner == msg.sender */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+        /* "ICON.sol":1963:1968  owner */ ##########
+      0x1    1
+      0x2    2 1
+      swap1  1 2
+      sload  x 2
+      swap1  2 x
+      0x100  2^8 2 x
+      exp    2^16 x
+      swap1  x 2^16
+      div    x>>16
+      0xffffffffffffffffffffffffffffffffffffffff
+      and    x[175:16]
+        /* "ICON.sol":1963:1982  owner == msg.sender */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      eq
+        /* "ICON.sol":1955:1983  require(owner == msg.sender) */
+      iszero
+      iszero
+      tag_98
+      jumpi
+      0x0
+      dup1
+      revert
+    tag_98:
+        /* "ICON.sol":2480:2486  status */
+      dup1
+        /* "ICON.sol":2456:2469  unlockaddress */
+      0x2
+        /* "ICON.sol":2456:2477  unlockaddress[target] */
+      0x0
+        /* "ICON.sol":2470:2476  target */
+      dup5
+        /* "ICON.sol":2456:2477  unlockaddress[target] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+      0x0
+        /* "ICON.sol":2456:2486  unlockaddress[target] = status */
+      0x100
+      exp
+      dup2
+      sload
+      dup2
+      0xff
+      mul
+      not
+      and
+      swap1
+      dup4
+      iszero
+      iszero
+      mul
+      or
+      swap1
+      sstore
+      pop
+        /* "ICON.sol":2496:2520  Unlocked(target, status) */
+      0x5c42a6eb70f030b267ab6ddbc362cfe8dbe7cc3b42c590692fa695c58aeaca2b
+        /* "ICON.sol":2505:2511  target */
+      dup3
+        /* "ICON.sol":2513:2519  status */
+      dup3
+        /* "ICON.sol":2496:2520  Unlocked(target, status) */
+      mload(0x40)
+      dup1
+      dup4
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      dup3
+      iszero
+      iszero
+      iszero
+      iszero
+      dup2
+      mstore
+      0x20
+      add
+      swap3
+      pop
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      log1
+        /* "ICON.sol":2365:2527  function unlockAddress(address target, bool status)... */
+      pop
+      pop
+      jump	// out
+        /* "ICON.sol":3932:3960  address public walletAddress */
+    tag_37:
+      0x7
+      0x0
+      swap1
+      sload
+      swap1
+      0x100
+      exp
+      swap1
+      div
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      jump	// out
+        /* "ICON.sol":1191:1216  bool public tokenTransfer */
+    tag_40:
+      0x1
+      dup1
+      swap1
+      sload
+      swap1
+      0x100
+      exp
+      swap1
+      div
+      0xff
+      and
+      dup2
+      jump	// out
+        /* "ICON.sol":6072:6380  function burnTokens(uint tokensAmount)... */
+    tag_43:
+        /* "ICON.sol":1570:1583  tokenTransfer */
+      0x1
+      dup1
+      swap1
+      sload
+      swap1
+      0x100
+      exp
+      swap1
+      div
+      0xff
+      and
+        /* "ICON.sol":1569:1583  !tokenTransfer */
+      iszero
+        /* "ICON.sol":1566:1644  if(!tokenTransfer) {... */
+      iszero
+      tag_101
+      jumpi
+        /* "ICON.sol":1607:1620  unlockaddress */
+      0x2
+        /* "ICON.sol":1607:1632  unlockaddress[msg.sender] */
+      0x0
+        /* "ICON.sol":1621:1631  msg.sender */
+      caller
+        /* "ICON.sol":1607:1632  unlockaddress[msg.sender] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+      0x0
+      swap1
+      sload
+      swap1
+      0x100
+      exp
+      swap1
+      div
+      0xff
+      and
+        /* "ICON.sol":1599:1633  require(unlockaddress[msg.sender]) */
+      iszero
+      iszero
+      tag_102
+      jumpi
+      0x0
+      dup1
+      revert
+    tag_102:
+        /* "ICON.sol":1566:1644  if(!tokenTransfer) {... */
+    tag_101:
+        /* "ICON.sol":6192:6204  tokensAmount */
+      dup1
+        /* "ICON.sol":6167:6176  _balances */
+      0x4
+        /* "ICON.sol":6167:6188  _balances[msg.sender] */
+      0x0
+        /* "ICON.sol":6177:6187  msg.sender */
+      caller
+        /* "ICON.sol":6167:6188  _balances[msg.sender] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+      sload
+        /* "ICON.sol":6167:6204  _balances[msg.sender] >= tokensAmount */
+      lt
+      iszero
+        /* "ICON.sol":6158:6206  require( _balances[msg.sender] >= tokensAmount ) */
+      iszero
+      iszero
+      tag_104
+      jumpi
+      0x0
+      dup1
+      revert
+    tag_104:
+        /* "ICON.sol":6241:6280  _balances[msg.sender].sub(tokensAmount) */
+      tag_105
+        /* "ICON.sol":6267:6279  tokensAmount */
+      dup2
+        /* "ICON.sol":6241:6250  _balances */
+      0x4
+        /* "ICON.sol":6241:6262  _balances[msg.sender] */
+      0x0
+        /* "ICON.sol":6251:6261  msg.sender */
+      caller
+        /* "ICON.sol":6241:6262  _balances[msg.sender] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+      sload
+        /* "ICON.sol":6241:6266  _balances[msg.sender].sub */
+      tag_90
+      swap1
+        /* "ICON.sol":6241:6280  _balances[msg.sender].sub(tokensAmount) */
+      swap2
+      swap1
+      0xffffffff
+      and
+      jump	// in
+    tag_105:
+        /* "ICON.sol":6217:6226  _balances */
+      0x4
+        /* "ICON.sol":6217:6238  _balances[msg.sender] */
+      0x0
+        /* "ICON.sol":6227:6237  msg.sender */
+      caller
+        /* "ICON.sol":6217:6238  _balances[msg.sender] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+        /* "ICON.sol":6217:6280  _balances[msg.sender] = _balances[msg.sender].sub(tokensAmount) */
+      dup2
+      swap1
+      sstore
+      pop
+        /* "ICON.sol":6300:6325  _supply.sub(tokensAmount) */
+      tag_106
+        /* "ICON.sol":6312:6324  tokensAmount */
+      dup2
+        /* "ICON.sol":6300:6307  _supply */
+      sload(0x6)
+        /* "ICON.sol":6300:6311  _supply.sub */
+      tag_90
+      swap1
+        /* "ICON.sol":6300:6325  _supply.sub(tokensAmount) */
+      swap2
+      swap1
+      0xffffffff
+      and
+      jump	// in
+    tag_106:
+        /* "ICON.sol":6290:6297  _supply */
+      0x6
+        /* "ICON.sol":6290:6325  _supply = _supply.sub(tokensAmount) */
+      dup2
+      swap1
+      sstore
+      pop
+        /* "ICON.sol":6335:6372  TokenBurned(msg.sender, tokensAmount) */
+      0x1af5163f80e79b5e554f61e1d052084d3a3fe1166e42a265798c4e2ddce8ffa2
+        /* "ICON.sol":6347:6357  msg.sender */
+      caller
+        /* "ICON.sol":6359:6371  tokensAmount */
+      dup3
+        /* "ICON.sol":6335:6372  TokenBurned(msg.sender, tokensAmount) */
+      mload(0x40)
+      dup1
+      dup4
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      dup3
+      dup2
+      mstore
+      0x20
+      add
+      swap3
+      pop
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      log1
+        /* "ICON.sol":6072:6380  function burnTokens(uint tokensAmount)... */
+      pop
+      jump	// out
+        /* "ICON.sol":4568:4670  function balanceOf( address who ) constant returns (uint value) {... */
+    tag_46:
+        /* "ICON.sol":4620:4630  uint value */
+      0x0
+        /* "ICON.sol":4649:4658  _balances */
+      0x4
+        /* "ICON.sol":4649:4663  _balances[who] */
+      0x0
+        /* "ICON.sol":4659:4662  who */
+      dup4
+        /* "ICON.sol":4649:4663  _balances[who] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+      sload
+        /* "ICON.sol":4642:4663  return _balances[who] */
+      swap1
+      pop
+        /* "ICON.sol":4568:4670  function balanceOf( address who ) constant returns (uint value) {... */
+      swap2
+      swap1
+      pop
+      jump	// out
+        /* "ICON.sol":1222:1242  address public owner */
+    tag_49:
+      0x1
+      0x2
+      swap1
+      sload
+      swap1
+      0x100
+      exp
+      swap1
+      div
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      jump	// out
+        /* "ICON.sol":4818:5162  function transfer( address to, uint value)... */
+    tag_52:
+        /* "ICON.sol":4908:4920  bool success */
+      0x0
+        /* "ICON.sol":1570:1583  tokenTransfer */
+      0x1
+      dup1
+      swap1
+      sload
+      swap1
+      0x100
+      exp
+      swap1
+      div
+      0xff
+      and
+        /* "ICON.sol":1569:1583  !tokenTransfer */
+      iszero
+        /* "ICON.sol":1566:1644  if(!tokenTransfer) {... */
+      iszero
+      tag_109
+      jumpi
+        /* "ICON.sol":1607:1620  unlockaddress */
+      0x2
+        /* "ICON.sol":1607:1632  unlockaddress[msg.sender] */
+      0x0
+        /* "ICON.sol":1621:1631  msg.sender */
+      caller
+        /* "ICON.sol":1607:1632  unlockaddress[msg.sender] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+      0x0
+      swap1
+      sload
+      swap1
+      0x100
+      exp
+      swap1
+      div
+      0xff
+      and
+        /* "ICON.sol":1599:1633  require(unlockaddress[msg.sender]) */
+      iszero
+      iszero
+      tag_110
+      jumpi
+      0x0
+      dup1
+      revert
+    tag_110:
+        /* "ICON.sol":1566:1644  if(!tokenTransfer) {... */
+    tag_109:
+        /* "ICON.sol":1850:1861  lockaddress */
+      0x3
+        /* "ICON.sol":1850:1873  lockaddress[msg.sender] */
+      0x0
+        /* "ICON.sol":1862:1872  msg.sender */
+      caller
+        /* "ICON.sol":1850:1873  lockaddress[msg.sender] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+      0x0
+      swap1
+      sload
+      swap1
+      0x100
+      exp
+      swap1
+      div
+      0xff
+      and
+        /* "ICON.sol":1846:1905  if (lockaddress[msg.sender]) {... */
+      iszero
+      tag_112
+      jumpi
+        /* "ICON.sol":1889:1894  throw */
+      0x0
+      dup1
+      revert
+        /* "ICON.sol":1846:1905  if (lockaddress[msg.sender]) {... */
+    tag_112:
+        /* "ICON.sol":4967:4972  value */
+      dup2
+        /* "ICON.sol":4942:4951  _balances */
+      0x4
+        /* "ICON.sol":4942:4963  _balances[msg.sender] */
+      0x0
+        /* "ICON.sol":4952:4962  msg.sender */
+      caller
+        /* "ICON.sol":4942:4963  _balances[msg.sender] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+      sload
+        /* "ICON.sol":4942:4972  _balances[msg.sender] >= value */
+      lt
+      iszero
+        /* "ICON.sol":4933:4974  require( _balances[msg.sender] >= value ) */
+      iszero
+      iszero
+      tag_114
+      jumpi
+      0x0
+      dup1
+      revert
+    tag_114:
+        /* "ICON.sol":5009:5041  _balances[msg.sender].sub(value) */
+      tag_115
+        /* "ICON.sol":5035:5040  value */
+      dup3
+        /* "ICON.sol":5009:5018  _balances */
+      0x4
+        /* "ICON.sol":5009:5030  _balances[msg.sender] */
+      0x0
+        /* "ICON.sol":5019:5029  msg.sender */
+      caller
+        /* "ICON.sol":5009:5030  _balances[msg.sender] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+      sload
+        /* "ICON.sol":5009:5034  _balances[msg.sender].sub */
+      tag_90
+      swap1
+        /* "ICON.sol":5009:5041  _balances[msg.sender].sub(value) */
+      swap2
+      swap1
+      0xffffffff
+      and
+      jump	// in
+    tag_115:
+        /* "ICON.sol":4985:4994  _balances */
+      0x4
+        /* "ICON.sol":4985:5006  _balances[msg.sender] */
+      0x0
+        /* "ICON.sol":4995:5005  msg.sender */
+      caller
+        /* "ICON.sol":4985:5006  _balances[msg.sender] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+        /* "ICON.sol":4985:5041  _balances[msg.sender] = _balances[msg.sender].sub(value) */
+      dup2
+      swap1
+      sstore
+      pop
+        /* "ICON.sol":5067:5091  _balances[to].add(value) */
+      tag_116
+        /* "ICON.sol":5085:5090  value */
+      dup3
+        /* "ICON.sol":5067:5076  _balances */
+      0x4
+        /* "ICON.sol":5067:5080  _balances[to] */
+      0x0
+        /* "ICON.sol":5077:5079  to */
+      dup7
+        /* "ICON.sol":5067:5080  _balances[to] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+      sload
+        /* "ICON.sol":5067:5084  _balances[to].add */
+      tag_93
+      swap1
+        /* "ICON.sol":5067:5091  _balances[to].add(value) */
+      swap2
+      swap1
+      0xffffffff
+      and
+      jump	// in
+    tag_116:
+        /* "ICON.sol":5051:5060  _balances */
+      0x4
+        /* "ICON.sol":5051:5064  _balances[to] */
+      0x0
+        /* "ICON.sol":5061:5063  to */
+      dup6
+        /* "ICON.sol":5051:5064  _balances[to] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+        /* "ICON.sol":5051:5091  _balances[to] = _balances[to].add(value) */
+      dup2
+      swap1
+      sstore
+      pop
+        /* "ICON.sol":5123:5125  to */
+      dup3
+        /* "ICON.sol":5101:5134  Transfer( msg.sender, to, value ) */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+        /* "ICON.sol":5111:5121  msg.sender */
+      caller
+        /* "ICON.sol":5101:5134  Transfer( msg.sender, to, value ) */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef
+        /* "ICON.sol":5127:5132  value */
+      dup5
+        /* "ICON.sol":5101:5134  Transfer( msg.sender, to, value ) */
+      mload(0x40)
+      dup1
+      dup3
+      dup2
+      mstore
+      0x20
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      log3
+        /* "ICON.sol":5151:5155  true */
+      0x1
+        /* "ICON.sol":5144:5155  return true */
+      swap1
+      pop
+        /* "ICON.sol":4818:5162  function transfer( address to, uint value)... */
+      swap3
+      swap2
+      pop
+      pop
+      jump	// out
+        /* "ICON.sol":1301:1346  mapping( address => bool ) public lockaddress */
+    tag_55:
+      mstore(0x20, 0x3)
+      dup1
+      0x0
+      mstore
+      keccak256(0x0, 0x40)
+      0x0
+      swap2
+      pop
+      sload
+      swap1
+      0x100
+      exp
+      swap1
+      div
+      0xff
+      and
+      dup2
+      jump	// out
+        /* "ICON.sol":1139:1163  uint public creationTime */
+    tag_58:
+      sload(0x0)
+      dup2
+      jump	// out
+        /* "ICON.sol":4676:4812  function allowance(address owner, address spender) constant returns (uint _allowance) {... */
+    tag_61:
+        /* "ICON.sol":4745:4760  uint _allowance */
+      0x0
+        /* "ICON.sol":4779:4789  _approvals */
+      0x5
+        /* "ICON.sol":4779:4796  _approvals[owner] */
+      0x0
+        /* "ICON.sol":4790:4795  owner */
+      dup5
+        /* "ICON.sol":4779:4796  _approvals[owner] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+        /* "ICON.sol":4779:4805  _approvals[owner][spender] */
+      0x0
+        /* "ICON.sol":4797:4804  spender */
+      dup4
+        /* "ICON.sol":4779:4805  _approvals[owner][spender] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+      sload
+        /* "ICON.sol":4772:4805  return _approvals[owner][spender] */
+      swap1
+      pop
+        /* "ICON.sol":4676:4812  function allowance(address owner, address spender) constant returns (uint _allowance) {... */
+      swap3
+      swap2
+      pop
+      pop
+      jump	// out
+        /* "ICON.sol":6518:6645  function disableTokenTransfer()... */
+    tag_64:
+        /* "ICON.sol":4184:4197  walletAddress */
+      0x7
+      0x0
+      swap1
+      sload
+      swap1
+      0x100
+      exp
+      swap1
+      div
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+        /* "ICON.sol":4170:4197  msg.sender != walletAddress */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+        /* "ICON.sol":4170:4180  msg.sender */
+      caller
+        /* "ICON.sol":4170:4197  msg.sender != walletAddress */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      eq
+      iszero
+        /* "ICON.sol":4162:4198  require(msg.sender != walletAddress) */
+      iszero
+      iszero
+      tag_119
+      jumpi
+      0x0
+      dup1
+      revert
+    tag_119:
+        /* "ICON.sol":6608:6613  false */
+      0x0
+        /* "ICON.sol":6592:6605  tokenTransfer */
+      0x1
+      dup1
+        /* "ICON.sol":6592:6613  tokenTransfer = false */
+      0x100
+      exp
+      dup2
+      sload
+      dup2
+      0xff
+      mul
+      not
+      and
+      swap1
+      dup4
+      iszero
+      iszero
+      mul
+      or
+      swap1
+      sstore
+      pop
+        /* "ICON.sol":6623:6638  TokenTransfer() */
+      0xeb2cf4fc9168a2d848de8c48d73f2b6e32ef3b25eb1e730b673209b002bca01d
+      mload(0x40)
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      log1
+        /* "ICON.sol":6518:6645  function disableTokenTransfer()... */
+      jump	// out
+        /* "ICON.sol":1248:1295  mapping( address => bool ) public unlockaddress */
+    tag_67:
+      mstore(0x20, 0x2)
+      dup1
+      0x0
+      mstore
+      keccak256(0x0, 0x40)
+      0x0
+      swap2
+      pop
+      sload
+      swap1
+      0x100
+      exp
+      swap1
+      div
+      0xff
+      and
+      dup2
+      jump	// out
+        /* "ICON.sol":2147:2337  function lockAddress(address target, bool status)... */
+    tag_70:
+        /* "ICON.sol":1972:1982  msg.sender */
+      caller
+        /* "ICON.sol":1963:1982  owner == msg.sender */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+        /* "ICON.sol":1963:1968  owner */
+      0x1
+      0x2
+      swap1
+      sload
+      swap1
+      0x100
+      exp
+      swap1
+      div
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+        /* "ICON.sol":1963:1982  owner == msg.sender */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      eq
+        /* "ICON.sol":1955:1983  require(owner == msg.sender) */
+      iszero
+      iszero
+      tag_122
+      jumpi
+      0x0
+      dup1
+      revert
+    tag_122:
+        /* "ICON.sol":2253:2259  target */
+      dup2
+        /* "ICON.sol":2244:2259  owner != target */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+        /* "ICON.sol":2244:2249  owner */
+      0x1
+      0x2
+      swap1
+      sload
+      swap1
+      0x100
+      exp
+      swap1
+      div
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+        /* "ICON.sol":2244:2259  owner != target */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      eq
+      iszero
+        /* "ICON.sol":2236:2260  require(owner != target) */
+      iszero
+      iszero
+      tag_124
+      jumpi
+      0x0
+      dup1
+      revert
+    tag_124:
+        /* "ICON.sol":2292:2298  status */
+      dup1
+        /* "ICON.sol":2270:2281  lockaddress */
+      0x3
+        /* "ICON.sol":2270:2289  lockaddress[target] */
+      0x0
+        /* "ICON.sol":2282:2288  target */
+      dup5
+        /* "ICON.sol":2270:2289  lockaddress[target] */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap1
+      dup2
+      mstore
+      0x20
+      add
+      0x0
+      keccak256
+      0x0
+        /* "ICON.sol":2270:2298  lockaddress[target] = status */
+      0x100
+      exp
+      dup2
+      sload
+      dup2
+      0xff
+      mul
+      not
+      and
+      swap1
+      dup4
+      iszero
+      iszero
+      mul
+      or
+      swap1
+      sstore
+      pop
+        /* "ICON.sol":2308:2330  Locked(target, status) */
+      0xcaf46096bdd957e9271a7e46a00ff61870b80644805049e7ea814162a2b606bc
+        /* "ICON.sol":2315:2321  target */
+      dup3
+        /* "ICON.sol":2323:2329  status */
+      dup3
+        /* "ICON.sol":2308:2330  Locked(target, status) */
+      mload(0x40)
+      dup1
+      dup4
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      dup3
+      iszero
+      iszero
+      iszero
+      iszero
+      dup2
+      mstore
+      0x20
+      add
+      swap3
+      pop
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      log1
+        /* "ICON.sol":2147:2337  function lockAddress(address target, bool status)... */
+      pop
+      pop
+      jump	// out
+        /* "ICON.sol":1169:1185  bool public lock */
+    tag_73:
+      0x1
+      0x0
+      swap1
+      sload
+      swap1
+      0x100
+      exp
+      swap1
+      div
+      0xff
+      and
+      dup2
+      jump	// out
+        /* "ICON.sol":2934:3030  function sub(uint a, uint b) internal returns (uint) {... */
+    tag_90:
+        /* "ICON.sol":2981:2985  uint */
+      0x0
+        /* "ICON.sol":2993:3007  assert(b <= a) */
+      tag_126
+        /* "ICON.sol":3005:3006  a */
+      dup4
+        /* "ICON.sol":3000:3001  b */
+      dup4
+        /* "ICON.sol":3000:3006  b <= a */
+      gt
+      iszero
+        /* "ICON.sol":2993:2999  assert */
+      tag_127
+        /* "ICON.sol":2993:3007  assert(b <= a) */
+      jump	// in
+    tag_126:
+        /* "ICON.sol":3024:3025  b */
+      dup2
+        /* "ICON.sol":3020:3021  a */
+      dup4
+        /* "ICON.sol":3020:3025  a - b */
+      sub
+        /* "ICON.sol":3013:3025  return a - b */
+      swap1
+      pop
+        /* "ICON.sol":2934:3030  function sub(uint a, uint b) internal returns (uint) {... */
+      swap3
+      swap2
+      pop
+      pop
+      jump	// out
+        /* "ICON.sol":3034:3146  function add(uint a, uint b) internal returns (uint) {... */
+    tag_93:
+        /* "ICON.sol":3081:3085  uint */
+      0x0
+        /* "ICON.sol":3093:3099  uint c */
+      dup1
+        /* "ICON.sol":3106:3107  b */
+      dup3
+        /* "ICON.sol":3102:3103  a */
+      dup5
+        /* "ICON.sol":3102:3107  a + b */
+      add
+        /* "ICON.sol":3093:3107  uint c = a + b */
+      swap1
+      pop
+        /* "ICON.sol":3113:3127  assert(c >= a) */
+      tag_129
+        /* "ICON.sol":3125:3126  a */
+      dup5
+        /* "ICON.sol":3120:3121  c */
+      dup3
+        /* "ICON.sol":3120:3126  c >= a */
+      lt
+      iszero
+        /* "ICON.sol":3113:3119  assert */
+      tag_127
+        /* "ICON.sol":3113:3127  assert(c >= a) */
+      jump	// in
+    tag_129:
+        /* "ICON.sol":3140:3141  c */
+      dup1
+        /* "ICON.sol":3133:3141  return c */
+      swap2
+      pop
+        /* "ICON.sol":3034:3146  function add(uint a, uint b) internal returns (uint) {... */
+      pop
+      swap3
+      swap2
+      pop
+      pop
+      jump	// out
+        /* "ICON.sol":3580:3667  function assert(bool assertion) internal {... */
+    tag_127:
+        /* "ICON.sol":3632:3641  assertion */
+      dup1
+        /* "ICON.sol":3631:3641  !assertion */
+      iszero
+        /* "ICON.sol":3627:3663  if (!assertion) {... */
+      iszero
+      tag_131
+      jumpi
+        /* "ICON.sol":3651:3656  throw */
+      0x0
+      dup1
+      revert
+        /* "ICON.sol":3627:3663  if (!assertion) {... */
+    tag_131:
+        /* "ICON.sol":3580:3667  function assert(bool assertion) internal {... */
+      pop
+      jump	// out
+
+    auxdata: 0xa165627a7a72305820b2885bd8643f40aecf46d8fadbf4c70c0e2ff604207dd06afea9cefccf75cd870029
+}
+
