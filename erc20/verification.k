@@ -143,4 +143,7 @@ module VERIFICATION
     syntax Bool ::= #rangeBool(Int)  [function]
     rule #rangeBool(B) => #range(0 <= B <= 1) [macro]
 
+ // more lemmas
+    rule chop(A) -Word B => A -Word B
+
 endmodule
