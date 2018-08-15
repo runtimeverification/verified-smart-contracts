@@ -70,11 +70,11 @@ module VERIFICATION
 
 
     // FIXME:(A *Int B /Int A ==Int B or A ==Int 0)
-    rule chop(bool2Word((A *Int B) /Word A ==K B) |Int chop(A xorInt maxUInt256)) => 1
+    rule chop(bool2Word((A *Int B) /Word A ==K B) |Int chop(A xorInt 115792089237316195423570985008687907853269984665640564039457584007913129639935)) => 1
     //  requires A *Int B <=Int maxUInt256
 
     // FIXME:(A *Int B /Int A ==Int B or A ==Int 0)
-    rule chop(bool2Word((A *Int B) /Int A ==K B) |Int chop(A xorInt maxUInt256)) => 1
+    rule chop(bool2Word((A *Int B) /Int A ==K B) |Int chop(A xorInt 115792089237316195423570985008687907853269984665640564039457584007913129639935)) => 1
     //  requires A *Int B <=Int maxUInt256
 
     rule C s<Word (A -Word B) => 0  requires 0 <=Int A andBool A <=Int maxSInt256
