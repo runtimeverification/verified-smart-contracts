@@ -6,6 +6,7 @@ requires "evm.k"
 
 module LEMMAS
     imports EVM
+    imports K-REFLECTION
 ```
 
 ### Memory Abstraction
