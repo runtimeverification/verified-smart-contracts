@@ -1,0 +1,343 @@
+
+======= contracts/proxies/Proxy.sol:Proxy =======
+EVM assembly:
+    /* "contracts/proxies/Proxy.sol":190:1532  contract Proxy {... */
+  mstore(0x40, 0x80)
+    /* "contracts/proxies/Proxy.sol":508:676  constructor(address _masterCopy)... */
+  callvalue
+    /* "--CODEGEN--":8:17   */
+  dup1
+    /* "--CODEGEN--":5:7   */
+  iszero
+  tag_1
+  jumpi
+    /* "--CODEGEN--":30:31   */
+  0x0
+    /* "--CODEGEN--":27:28   */
+  dup1
+    /* "--CODEGEN--":20:32   */
+  revert
+    /* "--CODEGEN--":5:7   */
+tag_1:
+    /* "contracts/proxies/Proxy.sol":508:676  constructor(address _masterCopy)... */
+  pop
+  mload(0x40)
+  0x20
+  dup1
+  bytecodeSize
+  dup4
+  codecopy
+  dup2
+  add
+  dup1
+  0x40
+  mstore
+  dup2
+  add
+  swap1
+  dup1
+  dup1
+  mload
+  swap1
+  0x20
+  add
+  swap1
+  swap3
+  swap2
+  swap1
+  pop
+  pop
+  pop
+    /* "contracts/proxies/Proxy.sol":593:594  0 */
+  0x0
+    /* "contracts/proxies/Proxy.sol":578:589  _masterCopy */
+  dup2
+    /* "contracts/proxies/Proxy.sol":578:594  _masterCopy != 0 */
+  0xffffffffffffffffffffffffffffffffffffffff
+  and
+  eq
+  iszero
+    /* "contracts/proxies/Proxy.sol":570:635  require(_masterCopy != 0, "Invalid master copy address provided") */
+  iszero
+  iszero
+  tag_4
+  jumpi
+  mload(0x40)
+  0x8c379a000000000000000000000000000000000000000000000000000000000
+  dup2
+  mstore
+  0x4
+  add
+  dup1
+  dup1
+  0x20
+  add
+  dup3
+  dup2
+  sub
+  dup3
+  mstore
+  0x24
+  dup2
+  mstore
+  0x20
+  add
+  dup1
+  0x496e76616c6964206d617374657220636f707920616464726573732070726f76
+  dup2
+  mstore
+  0x20
+  add
+  0x6964656400000000000000000000000000000000000000000000000000000000
+  dup2
+  mstore
+  pop
+  0x40
+  add
+  swap2
+  pop
+  pop
+  mload(0x40)
+  dup1
+  swap2
+  sub
+  swap1
+  revert
+tag_4:
+    /* "contracts/proxies/Proxy.sol":658:669  _masterCopy */
+  dup1
+    /* "contracts/proxies/Proxy.sol":645:655  masterCopy */
+  0x0
+  dup1
+    /* "contracts/proxies/Proxy.sol":645:669  masterCopy = _masterCopy */
+  0x100
+  exp
+  dup2
+  sload
+  dup2
+  0xffffffffffffffffffffffffffffffffffffffff
+  mul
+  not
+  and
+  swap1
+  dup4
+  0xffffffffffffffffffffffffffffffffffffffff
+  and
+  mul
+  or
+  swap1
+  sstore
+  pop
+    /* "contracts/proxies/Proxy.sol":508:676  constructor(address _masterCopy)... */
+  pop
+    /* "contracts/proxies/Proxy.sol":190:1532  contract Proxy {... */
+  dataSize(sub_0)
+  dup1
+  dataOffset(sub_0)
+  0x0
+  codecopy
+  0x0
+  return
+stop
+
+sub_0: assembly {
+        /* "contracts/proxies/Proxy.sol":190:1532  contract Proxy {... */
+      mstore(0x40, 0x80)
+      jumpi(tag_1, lt(calldatasize, 0x4))
+      calldataload(0x0)
+      0x100000000000000000000000000000000000000000000000000000000
+      swap1
+      div
+      0xffffffff
+      and
+      dup1
+      0x4555d5c9
+      eq
+      tag_2
+      jumpi
+      dup1
+      0x5c60da1b
+      eq
+      tag_3
+      jumpi
+    tag_1:
+        /* "contracts/proxies/Proxy.sol":955:997  0xffffffffffffffffffffffffffffffffffffffff */
+      0xffffffffffffffffffffffffffffffffffffffff
+        /* "contracts/proxies/Proxy.sol":951:952  0 */
+      0x0
+        /* "contracts/proxies/Proxy.sol":945:953  sload(0) */
+      sload
+        /* "contracts/proxies/Proxy.sol":941:998  and(sload(0), 0xffffffffffffffffffffffffffffffffffffffff) */
+      and
+        /* "contracts/proxies/Proxy.sol":1030:1044  calldatasize() */
+      calldatasize
+        /* "contracts/proxies/Proxy.sol":1027:1028  0 */
+      0x0
+        /* "contracts/proxies/Proxy.sol":1024:1025  0 */
+      dup1
+        /* "contracts/proxies/Proxy.sol":1011:1045  calldatacopy(0, 0, calldatasize()) */
+      calldatacopy
+        /* "contracts/proxies/Proxy.sol":1125:1126  0 */
+      0x0
+        /* "contracts/proxies/Proxy.sol":1122:1123  0 */
+      dup1
+        /* "contracts/proxies/Proxy.sol":1106:1120  calldatasize() */
+      calldatasize
+        /* "contracts/proxies/Proxy.sol":1103:1104  0 */
+      0x0
+        /* "contracts/proxies/Proxy.sol":1091:1101  masterCopy */
+      dup5
+        /* "contracts/proxies/Proxy.sol":1086:1089  gas */
+      gas
+        /* "contracts/proxies/Proxy.sol":1073:1127  delegatecall(gas, masterCopy, 0, calldatasize(), 0, 0) */
+      delegatecall
+        /* "contracts/proxies/Proxy.sol":1161:1177  returndatasize() */
+      returndatasize
+        /* "contracts/proxies/Proxy.sol":1158:1159  0 */
+      0x0
+        /* "contracts/proxies/Proxy.sol":1155:1156  0 */
+      dup1
+        /* "contracts/proxies/Proxy.sol":1140:1178  returndatacopy(0, 0, returndatasize()) */
+      returndatacopy
+        /* "contracts/proxies/Proxy.sol":1206:1207  0 */
+      0x0
+        /* "contracts/proxies/Proxy.sol":1197:1204  success */
+      dup2
+        /* "contracts/proxies/Proxy.sol":1194:1208  eq(success, 0) */
+      eq
+        /* "contracts/proxies/Proxy.sol":1191:1193  if */
+      iszero
+      tag_6
+      jumpi
+        /* "contracts/proxies/Proxy.sol":1221:1237  returndatasize() */
+      returndatasize
+        /* "contracts/proxies/Proxy.sol":1218:1219  0 */
+      0x0
+        /* "contracts/proxies/Proxy.sol":1211:1238  revert(0, returndatasize()) */
+      revert
+        /* "contracts/proxies/Proxy.sol":1191:1193  if */
+    tag_6:
+        /* "contracts/proxies/Proxy.sol":1263:1279  returndatasize() */
+      returndatasize
+        /* "contracts/proxies/Proxy.sol":1260:1261  0 */
+      0x0
+        /* "contracts/proxies/Proxy.sol":1253:1280  return(0, returndatasize()) */
+      return
+        /* "contracts/proxies/Proxy.sol":1426:1530  function proxyType()... */
+    tag_2:
+      callvalue
+        /* "--CODEGEN--":8:17   */
+      dup1
+        /* "--CODEGEN--":5:7   */
+      iszero
+      tag_7
+      jumpi
+        /* "--CODEGEN--":30:31   */
+      0x0
+        /* "--CODEGEN--":27:28   */
+      dup1
+        /* "--CODEGEN--":20:32   */
+      revert
+        /* "--CODEGEN--":5:7   */
+    tag_7:
+        /* "contracts/proxies/Proxy.sol":1426:1530  function proxyType()... */
+      pop
+      tag_8
+      jump(tag_9)
+    tag_8:
+      mload(0x40)
+      dup1
+      dup3
+      dup2
+      mstore
+      0x20
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      return
+        /* "contracts/proxies/Proxy.sol":1302:1420  function implementation()... */
+    tag_3:
+      callvalue
+        /* "--CODEGEN--":8:17   */
+      dup1
+        /* "--CODEGEN--":5:7   */
+      iszero
+      tag_10
+      jumpi
+        /* "--CODEGEN--":30:31   */
+      0x0
+        /* "--CODEGEN--":27:28   */
+      dup1
+        /* "--CODEGEN--":20:32   */
+      revert
+        /* "--CODEGEN--":5:7   */
+    tag_10:
+        /* "contracts/proxies/Proxy.sol":1302:1420  function implementation()... */
+      pop
+      tag_11
+      jump(tag_12)
+    tag_11:
+      mload(0x40)
+      dup1
+      dup3
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      return
+        /* "contracts/proxies/Proxy.sol":1426:1530  function proxyType()... */
+    tag_9:
+        /* "contracts/proxies/Proxy.sol":1492:1499  uint256 */
+      0x0
+        /* "contracts/proxies/Proxy.sol":1522:1523  2 */
+      0x2
+        /* "contracts/proxies/Proxy.sol":1515:1523  return 2 */
+      swap1
+      pop
+        /* "contracts/proxies/Proxy.sol":1426:1530  function proxyType()... */
+      swap1
+      jump	// out
+        /* "contracts/proxies/Proxy.sol":1302:1420  function implementation()... */
+    tag_12:
+        /* "contracts/proxies/Proxy.sol":1373:1380  address */
+      0x0
+        /* "contracts/proxies/Proxy.sol":1403:1413  masterCopy */
+      dup1
+      0x0
+      swap1
+      sload
+      swap1
+      0x100
+      exp
+      swap1
+      div
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+        /* "contracts/proxies/Proxy.sol":1396:1413  return masterCopy */
+      swap1
+      pop
+        /* "contracts/proxies/Proxy.sol":1302:1420  function implementation()... */
+      swap1
+      jump	// out
+
+    auxdata: 0xa165627a7a723058209831bad75772164414931a91aa4e9e2be55d2879d839299b8d19bbe1a373cde60029
+}
+
