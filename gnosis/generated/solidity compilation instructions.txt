@@ -1,0 +1,14 @@
+Solidity version: v0.4.24+commit.e67f0147.js
+Gnosis version: v0.0.2-alpha
+
+Instructions to produce hex files:
+
+$ cd <gnosis project root>
+$ solc --bin-runtime contracts/proxies/Proxy.sol  > gnosis-Proxy-0.0.2.hex
+$ solc --bin-runtime contracts/GnosisSafe.sol > gnosis-Master-0.0.2.hex
+
+Resulting files are bigger than .hex files in this repo. They contain the bytecode for multiple solidity classes.
+Hex files on this repo were cleared up. They only contain the fragment that was used in gnosis-spec.ini
+
+To generate .evm files:
+    Use --asm option instead of --bin-runtime
