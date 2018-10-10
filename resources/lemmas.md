@@ -3,9 +3,11 @@ Verification Lemmas
 
 ```k
 requires "evm.k"
+requires "edsl.k"
 
 module LEMMAS
     imports EVM
+    imports EDSL
     imports K-REFLECTION
 ```
 
@@ -117,6 +119,40 @@ It reduces the reasoning efforts of the underlying theorem prover, factoring out
     rule #asByteStackInWidthaux(X, 0, N, WS) => nthbyteof(X, 0, N) : WS
 ```
 
+### Hashed Location
+
+```k
+    // TODO: drop hash1 and keccakIntList once new vyper hashed location scheme is captured in edsl.md
+
+    syntax Int ::= hash1(Int)      [function, smtlib(smt_hash1)]
+                 | hash2(Int, Int) [function, smtlib(smt_hash2)]
+
+    rule hash1(V) => keccak(#padToWidth(32, #asByteStack(V)))
+      requires 0 <=Int V andBool V <Int pow256
+      [concrete]
+
+    rule hash2(V1, V2) => keccak(   #padToWidth(32, #asByteStack(V1))
+                                 ++ #padToWidth(32, #asByteStack(V2)))
+      requires 0 <=Int V1 andBool V1 <Int pow256
+       andBool 0 <=Int V2 andBool V2 <Int pow256
+      [concrete]
+
+    rule keccakIntList(V:Int .IntList) => hash1(V)
+    rule keccakIntList(V1:Int V2:Int .IntList) => hash2(V1, V2)
+
+    // for terms came from bytecode not via #hashedLocation
+    rule keccak(WS) => keccakIntList(byteStack2IntList(WS))
+      requires ( notBool #isConcrete(WS) )
+       andBool ( #sizeWordStack(WS) ==Int 32 orBool #sizeWordStack(WS) ==Int 64 )
+
+    // inverse of intList2ByteStack of edsl.md
+    syntax IntList ::= byteStack2IntList ( WordStack )       [function]
+                     | byteStack2IntList ( WordStack , Int ) [function]
+    rule byteStack2IntList ( WS ) => byteStack2IntList ( WS , #sizeWordStack(WS) /Int 32 ) requires #sizeWordStack(WS) %Int 32 ==Int 0
+    rule byteStack2IntList ( WS , N ) => #asWord ( WS [ 0 .. 32 ] ) byteStack2IntList ( #drop(32, WS) , N -Int 1 ) requires N >Int 1
+    rule byteStack2IntList ( WS , 1 ) => #asWord ( WS [ 0 .. 32 ] ) .IntList
+```
+
 ### Integer Expression Simplification Rules
 
 We introduce simplification rules that capture arithmetic properties, which reduce the given terms into smaller ones.
@@ -195,11 +231,20 @@ In EVM, no boolean value exist but instead, 1 and 0 are used to represent true a
 Some lemmas over the comparison operators are also provided.
 
 ```k
+    rule 0 <=Int hash1(_)             => true
+    rule         hash1(_) <Int pow256 => true
+
+    rule 0 <=Int hash2(_,_)             => true
+    rule         hash2(_,_) <Int pow256 => true
+
     rule 0 <=Int chop(V)             => true
     rule         chop(V) <Int pow256 => true
 
     rule 0 <=Int keccak(V)             => true
     rule         keccak(V) <Int pow256 => true
+
+    rule 0 <=Int keccakIntList(_)             => true
+    rule         keccakIntList(_) <Int pow256 => true
 
     rule 0 <=Int X &Int Y             => true requires 0 <=Int X andBool X <Int pow256 andBool 0 <=Int Y andBool Y <Int pow256
     rule         X &Int Y <Int pow256 => true requires 0 <=Int X andBool X <Int pow256 andBool 0 <=Int Y andBool Y <Int pow256
