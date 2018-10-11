@@ -94,7 +94,7 @@ It reduces the reasoning efforts of the underlying theorem prover, factoring out
 
     // storing a symbolic boolean value in memory
     rule #padToWidth(32, #asByteStack(bool2Word(E)))
-      => #asByteStackInWidthaux(0, 30, 32, nthbyteof(bool2Word(E), 31, 32) : .WordStack)
+      => #asByteStackInWidthAux(0, 30, 32, nthbyteof(bool2Word(E), 31, 32) : .WordStack)
 
     // for Solidity
     rule #asWord(WS) /Int D => #asWord(#take(#sizeWordStack(WS) -Int log256Int(D), WS))
@@ -111,12 +111,30 @@ It reduces the reasoning efforts of the underlying theorem prover, factoring out
     rule #noOverflowAux(.WordStack) => true
 
     syntax WordStack ::= #asByteStackInWidth    ( Int, Int )                 [function]
-                       | #asByteStackInWidthaux ( Int, Int, Int, WordStack ) [function]
+                       | #asByteStackInWidthAux ( Int, Int, Int, WordStack ) [function]
  // -----------------------------------------------------------------------------------
-    rule #asByteStackInWidth(X, N) => #asByteStackInWidthaux(X, N -Int 1, N, .WordStack)
+    rule #asByteStackInWidth(X, N) => #asByteStackInWidthAux(X, N -Int 1, N, .WordStack)
 
-    rule #asByteStackInWidthaux(X, I, N, WS) => #asByteStackInWidthaux(X, I -Int 1, N, nthbyteof(X, I, N) : WS) when I >Int 0
-    rule #asByteStackInWidthaux(X, 0, N, WS) => nthbyteof(X, 0, N) : WS
+    rule #asByteStackInWidthAux(X, I => I -Int 1, N, WS => nthbyteof(X, I, N) : WS) when I >=Int 0
+    rule #asByteStackInWidthAux(X,            -1, N, WS) => WS
+    
+    //symbolic padding to right
+    syntax WordStack ::= #asByteStackSymbolic ( Int,        //the data 
+                                                Int,        //index of next byte to extract
+                                                Int         //size of WordStack
+                                              )                              [function]    
+
+    rule #enc(#bytes(N, DATA)) 
+      => #enc(#uint256(N)) ++ #padRightToWidthAux(#ceil32(N) -Int N, #asByteStackSymbolic(DATA, N -Int 1, N), .WordStack)
+
+    //todo long rule, top-level rewrite (KRewrite), delete and keep the short version   
+    rule #padRightToWidthAux(0, #asByteStackSymbolic(DATA, I, N), WS)
+      => #padRightToWidthAux(0, #asByteStackSymbolic(DATA, I -Int 1, N), nthbyteof(DATA, I, N) : WS) 
+      when I >=Int 0
+    //todo short rule, 2 inner rewrites (KApply), enable if it's causing issues
+    //rule #padRightToWidthAux(0, #asByteStackSymbolic(DATA, I => I -Int 1, N), WS => nthbyteof(DATA, I, N) : WS) when I >=Int 0
+    
+    rule #padRightToWidthAux(0, #asByteStackSymbolic(DATA,            -1, N), WS) => WS
 ```
 
 ### Hashed Location

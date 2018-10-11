@@ -5,26 +5,6 @@ module VERIFICATION
     imports EDSL
     imports LEMMAS
 
- // FIXME: remove this
-    syntax TypedArg ::= #bytes ( WordStack )
-    rule #typeName(#bytes( _ )) => "bytes"
-    rule #lenOfHead(#bytes( _ )) => 32
-    rule #isStaticType(#bytes( _ )) => false
-    rule #sizeOfDynamicType(#bytes( WS )) => 32 +Int #ceil32(#sizeWordStack(WS))
-    rule #enc(#bytes(WS)) => #enc(#uint256(#sizeWordStack(WS))) ++ #padRightToWidth(#ceil32(#sizeWordStack(WS)), WS)
-
-    rule #enc( #bytes(N, DATA)) => #enc(#uint256(N)) ++ #padRightToWidth(#ceil32(N), #asByteStack(DATA))
-
-    syntax WordStack ::= #padRightToWidth ( Int , WordStack ) [function]
- // --------------------------------------------------------------------
-    rule  #padRightToWidth(N, WS) => #padRightToWidthAux(N -Int #sizeWordStack(WS), WS, .WordStack)
-
-    syntax WordStack ::= #padRightToWidthAux ( Int , WordStack , WordStack ) [function]
- // -----------------------------------------------------------------------------------
-    rule #padRightToWidthAux(0, WS, ZEROS) => WS ++ ZEROS
-    rule #padRightToWidthAux(N, WS, ZEROS) => #padRightToWidthAux(N -Int 1, WS, 0 : ZEROS)
-      requires N >Int 0
-
     //
     // Range
     //
