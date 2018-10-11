@@ -177,13 +177,13 @@ casper_files:=recommended_source_epoch-spec.k \
               collective_reward-success-zero-2-spec.k \
               collective_reward-failure-spec.k
 
-gnosis_files:=setup-spec.k \
-              swapOwner-spec.k \
-              execTransactionAndPaySubmitter_data-spec.k \
-              execTransactionAndPaySubmitter-spec.k
+gnosis_files:=encodeTransactionData-data32-spec.k
 
 # FIXME: restore the skipped specs
+#             setupSafe-spec.k
+#             swapOwner-spec.k
 #             execTransactionAndPaySubmitter-spec.k
+#             execTransactionAndPaySubmitter_data-spec.k
 #             getTransactionHash-spec.k
 #             checkHash-spec.k
 
