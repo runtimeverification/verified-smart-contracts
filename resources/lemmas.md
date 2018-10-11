@@ -127,12 +127,7 @@ It reduces the reasoning efforts of the underlying theorem prover, factoring out
     rule #enc(#bytes(N, DATA)) 
       => #enc(#uint256(N)) ++ #padRightToWidthAux(#ceil32(N) -Int N, #asByteStackSymbolic(DATA, N -Int 1, N), .WordStack)
 
-    //todo long rule, top-level rewrite (KRewrite), delete and keep the short version   
-    rule #padRightToWidthAux(0, #asByteStackSymbolic(DATA, I, N), WS)
-      => #padRightToWidthAux(0, #asByteStackSymbolic(DATA, I -Int 1, N), nthbyteof(DATA, I, N) : WS) 
-      when I >=Int 0
-    //todo short rule, 2 inner rewrites (KApply), enable if it's causing issues
-    //rule #padRightToWidthAux(0, #asByteStackSymbolic(DATA, I => I -Int 1, N), WS => nthbyteof(DATA, I, N) : WS) when I >=Int 0
+    rule #padRightToWidthAux(0, #asByteStackSymbolic(DATA, I => I -Int 1, N), WS => nthbyteof(DATA, I, N) : WS) when I >=Int 0
     
     rule #padRightToWidthAux(0, #asByteStackSymbolic(DATA,            -1, N), WS) => WS
 ```
