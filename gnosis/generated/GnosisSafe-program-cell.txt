@@ -1,4 +1,5 @@
 <program>
+    /* "contracts/GnosisSafe.sol":534:15285  contract GnosisSafe is MasterCopy, BaseSafe, SignatureDecoder, SecuredTokenTransfer, ISignatureValidator {... */
   0 |-> PUSH ( 1 , 128 )
   2 |-> PUSH ( 1 , 64 )
   4 |-> MSTORE
@@ -17,26 +18,31 @@
   54 |-> DUP ( 1 )
   55 |-> PUSH ( 4 , 168831172 )
   60 |-> EQ
+      tag_2
   61 |-> PUSH ( 2 , 408 )
   64 |-> JUMPI
   65 |-> DUP ( 1 )
   66 |-> PUSH ( 4 , 223883027 )
   71 |-> EQ
+      tag_3
   72 |-> PUSH ( 2 , 541 )
   75 |-> JUMPI
   76 |-> DUP ( 1 )
   77 |-> PUSH ( 4 , 247958942 )
   82 |-> EQ
+      tag_4
   83 |-> PUSH ( 2 , 618 )
   86 |-> JUMPI
   87 |-> DUP ( 1 )
   88 |-> PUSH ( 4 , 498473812 )
   93 |-> EQ
+      tag_5
   94 |-> PUSH ( 2 , 832 )
   97 |-> JUMPI
   98 |-> DUP ( 1 )
   99 |-> PUSH ( 4 , 549534475 )
   104 |-> EQ
+      tag_6
   105 |-> PUSH ( 2 , 883 )
   108 |-> JUMPI
   109 |-> DUP ( 1 )
@@ -97,6 +103,7 @@
   230 |-> DUP ( 1 )
   231 |-> PUSH ( 4 , 2699460139 )
   236 |-> EQ
+      tag_18
   237 |-> PUSH ( 2 , 2333 )
   240 |-> JUMPI
   241 |-> DUP ( 1 )
@@ -157,6 +164,7 @@
   362 |-> DUP ( 1 )
   363 |-> PUSH ( 4 , 3899013083 )
   368 |-> EQ
+      tag_30
   369 |-> PUSH ( 2 , 3632 )
   372 |-> JUMPI
   373 |-> DUP ( 1 )
@@ -172,20 +180,27 @@
   395 |-> DUP ( 1 )
   396 |-> PUSH ( 4 , 4288785780 )
   401 |-> EQ
+      tag_33
   402 |-> PUSH ( 2 , 4177 )
   405 |-> JUMPI
   406 |-> JUMPDEST
+    tag_1:
   407 |-> STOP
+    /* "contracts/GnosisSafe.sol":12395:12752  function getMessageHash(... */
   408 |-> JUMPDEST
+    tag_2:
   409 |-> CALLVALUE
   410 |-> DUP ( 1 )
   411 |-> ISZERO
+      tag_36
   412 |-> PUSH ( 2 , 420 )
   415 |-> JUMPI
   416 |-> PUSH ( 1 , 0 )
   418 |-> DUP ( 1 )
   419 |-> REVERT
   420 |-> JUMPDEST
+    tag_36:
+        /* "contracts/GnosisSafe.sol":12395:12752  function getMessageHash(... */
   421 |-> POP
   422 |-> PUSH ( 2 , 511 )
   425 |-> PUSH ( 1 , 4 )
@@ -262,8 +277,9 @@
   505 |-> POP
   506 |-> POP
   507 |-> PUSH ( 2 , 4321 )
-  510 |-> JUMP
+  510 |-> JUMP  //(tag_38)
   511 |-> JUMPDEST
+    tag_37:
   512 |-> PUSH ( 1 , 64 )
   514 |-> MLOAD
   515 |-> DUP ( 1 )
@@ -289,7 +305,10 @@
   539 |-> SWAP ( 1 )
   540 |-> RETURN
   541 |-> JUMPDEST
+        /* "contracts/base/OwnerManager.sol":2225:2852  function addOwnerWithThreshold(address owner, uint256 _threshold)... */
+    tag_3:
   542 |-> CALLVALUE
+        /* "--CODEGEN--":8:17   */
   543 |-> DUP ( 1 )
   544 |-> ISZERO
   545 |-> PUSH ( 2 , 553 )
@@ -298,6 +317,8 @@
   551 |-> DUP ( 1 )
   552 |-> REVERT
   553 |-> JUMPDEST
+    tag_39:
+        /* "contracts/base/OwnerManager.sol":2225:2852  function addOwnerWithThreshold(address owner, uint256 _threshold)... */
   554 |-> POP
   555 |-> PUSH ( 2 , 616 )
   558 |-> PUSH ( 1 , 4 )
@@ -332,8 +353,9 @@
   610 |-> POP
   611 |-> POP
   612 |-> PUSH ( 2 , 4999 )
-  615 |-> JUMP
+  615 |-> JUMP  //(tag_41)
   616 |-> JUMPDEST
+    tag_40:
   617 |-> STOP
   618 |-> JUMPDEST
   619 |-> CALLVALUE
