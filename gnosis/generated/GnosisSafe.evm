@@ -42,162 +42,162 @@ sub_0: assembly {
       DUP ( 1 )
       168831172
       EQ
-      tag_2
+      tag_2         /* "contracts/GnosisSafe.sol":12395:12752  function getMessageHash(... */
       JUMPI
       DUP ( 1 )
       223883027
       EQ
-      tag_3
+      tag_3         /* "contracts/base/OwnerManager.sol":2225:2852  function addOwnerWithThreshold(address owner, uint256 _threshold)... */
       JUMPI
       DUP ( 1 )
       247958942
       EQ
-      tag_4
+      tag_4         /* "contracts/GnosisSafe.sol":2198:2506  function setup(address[] _owners, uint256 _threshold, address to, bytes data)... */
       JUMPI
       DUP ( 1 )
       498473812
       EQ
-      tag_5
+      tag_5         /* "contracts/GnosisSafe.sol":820:938  bytes32 public constant DOMAIN_SEPARATOR_TYPEHASH = 0x035aff83d86937d35b32e04f0ddc6ff469290eef2f1b692d8a815c89404d4749 */
       JUMPI
       DUP ( 1 )
       549534475
       EQ
-      tag_6
+      tag_6         /* "contracts/GnosisSafe.sol":11790:12237  function isValidSignature(bytes _data, bytes _signature)... */
       JUMPI
       DUP ( 1 )
       794083182
       EQ
-      tag_7
+      tag_7         /* "contracts/base/OwnerManager.sol":5925:6054  function isOwner(address owner)... */
       JUMPI
       DUP ( 1 )
       1183261095
       EQ
-      tag_8
+      tag_8         /* "contracts/base/ModuleManager.sol":2785:3214  function execTransactionFromModule(address to, uint256 value, bytes data, Enum.Operation operation)... */
       JUMPI
       DUP ( 1 )
       1525071159
       EQ
-      tag_9
+      tag_9         /* "contracts/GnosisSafe.sol":1649:1698  mapping(bytes32 => uint256) public signedMessages */
       JUMPI
       DUP ( 1 )
       1628133669
       EQ
-      tag_10
+      tag_10        /* "contracts/base/ModuleManager.sol":1182:1677  function enableModule(Module module)... */
       JUMPI
       DUP ( 1 )
       1766752451
       EQ
-      tag_11
+      tag_11        /* "contracts/base/OwnerManager.sol":5357:5798  function changeThreshold(uint256 _threshold)... */
       JUMPI
       DUP ( 1 )
       1786122754
       EQ
-      tag_12
+      tag_12        /* "contracts/GnosisSafe.sol":3493:4943  function execTransaction(... */
       JUMPI
       DUP ( 1 )
       2105747828
       EQ
-      tag_13
+      tag_13        /* "contracts/base/OwnerManager.sol":5804:5919  function getThreshold()... */
       JUMPI
       DUP ( 1 )
       2112351727
       EQ
-      tag_14
+      tag_14        /* "contracts/common/MasterCopy.sol":626:874  function changeMasterCopy(address _masterCopy)... */
       JUMPI
       DUP ( 1 )
       2242228222
       EQ
-      tag_15
+      tag_15        /* "contracts/GnosisSafe.sol":11328:11458  function signMessage(bytes _data)... */
       JUMPI
       DUP ( 1 )
       2246259405
       EQ
-      tag_16
+      tag_16        /* "contracts/base/ModuleManager.sol":488:543  address public constant SENTINEL_MODULES = address(0x1) */
       JUMPI
       DUP ( 1 )
       2365547349
       EQ
-      tag_17
+      tag_17        /* "contracts/base/OwnerManager.sol":419:473  address public constant SENTINEL_OWNERS = address(0x1) */
       JUMPI
       DUP ( 1 )
       2699460139
       EQ
-      tag_18
+      tag_18        /* "contracts/base/OwnerManager.sol":6136:6594  function getOwners()... */
       JUMPI
       DUP ( 1 )
       2750734206
       EQ
-      tag_19
+      tag_19        /* "contracts/GnosisSafe.sol":646:689  string public constant NAME = "Gnosis Safe" */
       JUMPI
       DUP ( 1 )
       2952712416
       EQ
-      tag_20
+      tag_20        /* "contracts/GnosisSafe.sol":1490:1510  uint256 public nonce */
       JUMPI
       DUP ( 1 )
       2991148531
       EQ
-      tag_21
+      tag_21        /* "contracts/base/ModuleManager.sol":3293:4031  function getModules()... */
       JUMPI
       DUP ( 1 )
       3229970428
       EQ
-      tag_22
+      tag_22        /* "contracts/GnosisSafe.sol":1329:1439  bytes32 public constant SAFE_MSG_TYPEHASH = 0x60b3cbf8b4a223d68d641b3b6ddf9a298e7f33710cf3d3a9d1146b5a6150fbca */
       JUMPI
       DUP ( 1 )
       3301587612
       EQ
-      tag_23
+      tag_23        /* "contracts/GnosisSafe.sol":10149:10721  function requiredTxGas(address to, uint256 value, bytes data, Enum.Operation operation)... */
       JUMPI
       DUP ( 1 )
       3434070919
       EQ
-      tag_24
+      tag_24        /* "contracts/GnosisSafe.sol":1148:1257  bytes32 public constant SAFE_TX_TYPEHASH = 0x14d461bc7412367e924637b363c7bf29b8f47e2f84869f4426e5633d8af47b20 */
       JUMPI
       DUP ( 1 )
       3571039693
       EQ
-      tag_25
+      tag_25        /* "contracts/GnosisSafe.sol":10965:11166  function approveHash(bytes32 hashToApprove)... */
       JUMPI
       DUP ( 1 )
       3637583736
       EQ
-      tag_26
+      tag_26        /* "contracts/GnosisSafe.sol":14786:15283  function getTransactionHash(... */
       JUMPI
       DUP ( 1 )
       3758739422
       EQ
-      tag_27
+      tag_27        /* "contracts/base/ModuleManager.sol":1938:2449  function disableModule(Module prevModule, Module module)... */
       JUMPI
       DUP ( 1 )
       3810047275
       EQ
-      tag_28
+      tag_28        /* "contracts/base/OwnerManager.sol":4345:5168  function swapOwner(address prevOwner, address oldOwner, address newOwner)... */
       JUMPI
       DUP ( 1 )
       3880924600
       EQ
-      tag_29
+      tag_29        /* "contracts/base/OwnerManager.sol":5804:5919  function getThreshold()... */
       JUMPI
       DUP ( 1 )
       3899013083
       EQ
-      tag_30
+      tag_30        /* "contracts/GnosisSafe.sol":13465:14100  function encodeTransactionData(... */
       JUMPI
       DUP ( 1 )
       4137212453
       EQ
-      tag_31
+      tag_31        /* "contracts/GnosisSafe.sol":1516:1546  bytes32 public domainSeparator */
       JUMPI
       DUP ( 1 )
       4175191513
       EQ
-      tag_32
+      tag_32        /* "contracts/base/OwnerManager.sol":3194:4011  function removeOwner(address prevOwner, address owner, uint256 _threshold)... */
       JUMPI
       DUP ( 1 )
       4288785780
       EQ
-      tag_33
+      tag_33        /* "contracts/GnosisSafe.sol":695:735  string public constant VERSION = "0.0.2" */
       JUMPI
     tag_1:
       STOP
