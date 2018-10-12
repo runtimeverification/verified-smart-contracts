@@ -177,13 +177,18 @@ Below are universal simplification rules that are free to be used in any context
     rule N +Int 0 => N
 
     rule N -Int 0 => N
+    rule I1 -Int I2 >Int 0 => true requires I2 <Int I1
+    rule I1 -Int I2 <Int pow256 => true requires I1 <Int pow256 andBool 0 <=Int I2
 
     rule 1 *Int N => N
     rule N *Int 1 => N
     rule 0 *Int _ => 0
     rule _ *Int 0 => 0
+    rule (I1 *Int I2) /Int I1 => I2
 
     rule N /Int 1 => N
+    rule 0 <=Int I1 /Int I2 => true requires 0 <=Int I1 andBool 0 <Int I2
+    rule I1 /Int I2 <Int pow256 => true requires I1 <Int pow256 andBool 0 <Int I2
 
     rule 0 |Int N => N
     rule N |Int 0 => N
@@ -276,6 +281,8 @@ In EVM, no boolean value exist but instead, 1 and 0 are used to represent true a
     rule #asWord(0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 
                    : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : nthbyteof(bool2Word( E ), I, N) : .WordStack) 
          => bool2Word( E ) 
+
+    rule 1 &Int bool2Word(B) => bool2Word(B)
 ```
 
 Some lemmas over the comparison operators are also provided.
@@ -331,6 +338,7 @@ match the range lemmas above. Note that lemmas above all use `<Int pow256` for t
 
 ```k
     rule chop(I) => I requires 0 <=Int I andBool I <Int pow256
+    rule I modInt pow160 => I requires 0 <=Int I andBool I <Int pow160
 ```
 
 ### Wordstack

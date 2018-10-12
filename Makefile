@@ -180,6 +180,12 @@ casper_files:=recommended_source_epoch-spec.k \
 gnosis_files:=encodeTransactionData-data32-spec.k \
               encodeTransactionData-data33-spec.k
 
+uniswap_files:=addLiquidity-1-spec.k \
+	       addLiquidity-2-spec.k \
+               removeLiquidity-spec.k \
+               ethToTokenSwapInput-spec.k \
+               ethToTokenSwapOutput-spec.k
+
 # FIXME: restore the skipped specs
 #             setupSafe-spec.k
 #             swapOwner-spec.k
@@ -198,7 +204,7 @@ gnosis_test_files:=testKeccak-data1-spec.k \
                    testSignatureSplit-pos1-spec.k \
                    testSignatureSplit-pos2-spec.k
 
-proof_tests:=bihu vyper-erc20 zeppelin-erc20 hkg-erc20 hobby-erc20 sum-to-n ds-token-erc20 gnosis
+proof_tests:=bihu vyper-erc20 zeppelin-erc20 hkg-erc20 hobby-erc20 sum-to-n ds-token-erc20 gnosis uniswap
 
 # FIXME: restore the casper specs
 #proof_tests += casper
@@ -224,6 +230,8 @@ casper: $(patsubst %, $(specs_dir)/casper/%, $(casper_files)) $(specs_dir)/lemma
 gnosis: $(patsubst %, $(specs_dir)/gnosis/%, $(gnosis_files)) $(specs_dir)/lemmas.k
 
 gnosis-test: $(specs_dir)/lemmas.k $(patsubst %, $(specs_dir)/gnosis/test/%, $(gnosis_test_files))
+
+uniswap: $(patsubst %, $(specs_dir)/uniswap/%, $(uniswap_files)) $(specs_dir)/lemmas.k
 
 # Bihu
 bihu_tmpls:=bihu/module-tmpl.k bihu/spec-tmpl.k
@@ -369,6 +377,15 @@ gnosis_tmpls:=gnosis/module-tmpl.k gnosis/spec-tmpl.k
 	cp gnosis/verification.k $(dir $@)
 	cp $(dir $@)/../../lemmas.k $(dir $@)/..
 
+#Uniswap
+uniswap_tmpls:=uniswap/module-tmpl.k uniswap/spec-tmpl.k
+
+$(specs_dir)/uniswap/%-spec.k: $(uniswap_tmpls) uniswap/uniswap-spec.ini
+	@echo >&2 "==  gen-spec: $@"
+	mkdir -p $(dir $@)
+	python3 resources/gen-spec.py $^ $* $* > $@
+	cp uniswap/abstract-semantics.k $(dir $@)
+	cp uniswap/verification.k $(dir $@)
 
 # Testing
 # -------
