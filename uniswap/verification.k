@@ -37,22 +37,28 @@ module VERIFICATION
     rule <k> CALL GCAP TOKEN_ADDR 0 764 68 896 32
            => 1 ~> #push ~> #setLocalMem 896 32 #asByteStackInWidth(1, 32) ... </k> [trusted]
 
+    // send()
     rule <k> CALL 0 ACCTTO VALUE 0 0 0 0 => 1 ~> #push ... </k> [trusted]
 
     // ethToTokenSwapInput
-    rule <k> STATICCALL GCAP TOKEN_ADDR 572 36 RETSTART RETWIDTH
-           => 1 ~> #push ~> #setLocalMem RETSTART RETWIDTH #asByteStackInWidth(#tokenReserve, 32) ... </k> [trusted]
+    // #Line 130: self.token.balanceOf(self)
+    rule <k> STATICCALL GCAP TOKEN_ADDR 572 36 672 32
+           => 1 ~> #push ~> #setLocalMem 672 32 #asByteStackInWidth(#tokenReserve, 32) ... </k> [trusted]
 
-    rule <k> CALL GCAP TOKEN_ADDR 0 988 68 RETSTART RETWIDTH
-           => 1 ~> #push ~> #setLocalMem RETSTART RETWIDTH #asByteStackInWidth(1, 32) ... </k> [trusted]
+    // #Line 133: self.token.transfer(recipient, tokens_bought)
+    rule <k> CALL GCAP TOKEN_ADDR 0 988 68 1120 32
+           => 1 ~> #push ~> #setLocalMem 1120 32 #asByteStackInWidth(1, 32) ... </k> [trusted]
 
     // ethToTokenSwapOutput
-    // rule <k> STATICCALL GCAP ACCTTO 572 36 RETSTART RETWIDTH
-    //       => 1 ~> #push ~> #setLocalMem RETSTART RETWIDTH #asByteStackInWidth(#tokenReserve, 32) ... </k> [trusted]
+    // #Line 170: self.token.balanceOf(self)
+    // rule <k> STATICCALL GCAP ACCTTO 572 36 672 32
+    //       => 1 ~> #push ~> #setLocalMem 672 32 #asByteStackInWidth(#tokenReserve, 32) ... </k> [trusted]
 
-    // rule <k> CALL GCAP ACCTTO 0 1052 68 RETSTART RETWIDTH
-    //       => 1 ~> #push ~> #setLocalMem RETSTART RETWIDTH #asByteStackInWidth(1, 32) ... </k> [trusted]
+    // #Line 176: self.token.transfer(recipient, tokens_bought)
+    rule <k> CALL GCAP ACCTTO 0 1052 68 1184 32
+           => 1 ~> #push ~> #setLocalMem 1184 32 #asByteStackInWidth(1, 32) ... </k> [trusted]
 
+    // send()
     //rule <k> CALL 0 ACCTTO VALUE 0 0 0 0 => 1 ~> #push ... </k> [trusted]
 
     rule 0 <=Int #tokenReserve => true
