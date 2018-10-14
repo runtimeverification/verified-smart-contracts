@@ -72,11 +72,11 @@ module VERIFICATION
 
 // Reading symbolic WordStack from memory, then extracting bytes from it. General case (stack size can be != 32)
 //========================================================================
-    rule nthbyteof(chop(#asWord(W : WS) &Int MASK), I, N)
-         => nthbyteof( chop(#asWord(WS) &Int (MASK &Int (256 ^Int #sizeWordStack(WS) -Int 1))), I -Int 1, N -Int 1)
+    rule nthbyteof(chop(#asWord(W : WS) &Int MASK), I       , N       )
+      => nthbyteof(chop(#asWord(    WS) &Int MASK), I -Int 1, N -Int 1)
       requires I >Int 0
 
-    rule nthbyteof(chop(#asWord(W : WS) &Int MASK), 0, N) => W &Int ((MASK /Int 256 ^Int #sizeWordStack(WS)) modInt 256)
+    rule nthbyteof(chop(#asWord(W : WS) &Int MASK), 0, N) => W &Int ((MASK >>Byte #sizeWordStack(WS)) &Int 255)
 
     rule nthbyteof(WS, I, N) &Int 255 => nthbyteof(WS, I, N)
 

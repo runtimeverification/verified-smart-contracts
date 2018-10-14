@@ -117,19 +117,16 @@ It reduces the reasoning efforts of the underlying theorem prover, factoring out
 
     rule #asByteStackInWidthAux(X, I => I -Int 1, N, WS => nthbyteof(X, I, N) : WS) when I >=Int 0
     rule #asByteStackInWidthAux(X,            -1, N, WS) => WS
-    
-    //symbolic padding to right
-    syntax WordStack ::= #asByteStackSymbolic ( Int,        //the data 
-                                                Int,        //index of next byte to extract
-                                                Int         //size of WordStack
-                                              )                              [function]    
+```
 
-    rule #enc(#bytes(N, DATA)) 
-      => #enc(#uint256(N)) ++ #padRightToWidthAux(#ceil32(N) -Int N, #asByteStackSymbolic(DATA, N -Int 1, N), .WordStack)
+### Byte arrays with concrete size
 
-    rule #padRightToWidthAux(0, #asByteStackSymbolic(DATA, I => I -Int 1, N), WS => nthbyteof(DATA, I, N) : WS) when I >=Int 0
-    
-    rule #padRightToWidthAux(0, #asByteStackSymbolic(DATA,            -1, N), WS) => WS
+Code sugar to represent byte arrays with concrete size but symbolic data.
+
+```k
+    syntax TypedArg ::= #toBytes    ( Int , Int )      [function] //data, len
+ // -----------------------------------------------------------------
+    rule #toBytes(DATA, N) => #bytes(#asByteStackInWidth(DATA, N))
 ```
 
 ### Hashed Location
