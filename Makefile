@@ -187,6 +187,11 @@ gnosis_files:=encodeTransactionData-data32-spec.k
 #             getTransactionHash-spec.k
 #             checkHash-spec.k
 
+gnosis_test_files:=testKeccak-data1-spec.k \
+                   testKeccak-data32-spec.k \
+                   testKeccak-data33-spec.k \
+                   testAbiEncode-data32-spec.k
+
 proof_tests:=bihu vyper-erc20 zeppelin-erc20 hkg-erc20 hobby-erc20 sum-to-n ds-token-erc20 gnosis
 
 # FIXME: restore the casper specs
@@ -211,6 +216,8 @@ ds-token-erc20: $(patsubst %, $(specs_dir)/ds-token-erc20/%, $(ds_token_erc20_fi
 casper: $(patsubst %, $(specs_dir)/casper/%, $(casper_files)) $(specs_dir)/lemmas.k
 
 gnosis: $(patsubst %, $(specs_dir)/gnosis/%, $(gnosis_files)) $(specs_dir)/lemmas.k
+
+gnosis-test: $(specs_dir)/lemmas.k $(patsubst %, $(specs_dir)/gnosis/test/%, $(gnosis_test_files))
 
 # Bihu
 bihu_tmpls:=bihu/module-tmpl.k bihu/spec-tmpl.k
@@ -344,6 +351,18 @@ $(specs_dir)/gnosis/%-spec.k: $(gnosis_tmpls) gnosis/gnosis-spec.ini
 $(specs_dir)/gnosis/execTransactionAndPaySubmitter-example-spec.k: $(gnosis_tmpls) gnosis/gnosis-spec.ini
 	@echo >&2 "==  gen-spec: $@"
 	python3 resources/gen-spec.py $^ execTransactionAndPaySubmitter-example checkHash execTransactionAndPaySubmitter-example > $@
+
+# Gnosis Test
+gnosis_tmpls:=gnosis/module-tmpl.k gnosis/spec-tmpl.k
+
+ $(specs_dir)/gnosis/test/%-spec.k: $(gnosis_tmpls) gnosis/test/api-test.ini
+	@echo >&2 "==  gen-spec: $@"
+	mkdir -p $(dir $@)
+	python3 resources/gen-spec.py $^ $* $* > $@
+	cp gnosis/abstract-semantics.k $(dir $@)
+	cp gnosis/verification.k $(dir $@)
+	cp $(dir $@)/../../lemmas.k $(dir $@)/..
+
 
 # Testing
 # -------

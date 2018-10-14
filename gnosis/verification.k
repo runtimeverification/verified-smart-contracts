@@ -58,6 +58,7 @@ module VERIFICATION
     // Abstraction
     //
 
+    //Rule doesn't apply. Why?
     syntax Int ::= symkeccak ( Int ) [function, smtlib(smt_symkeccak)]
     rule keccak(WS) => symkeccak(#asWord(WS))  requires notBool #isConcrete(WS)
 
@@ -67,5 +68,16 @@ module VERIFICATION
 
  // rule   #signed(X) ==K   #signed(Y) => X ==K Y requires #rangeUInt(256,X) orBool #rangeUInt(256,Y)
  // rule #unsigned(X) ==K #unsigned(Y) => X ==K Y requires #rangeSInt(256,X) orBool #rangeSInt(256,Y)
+
+
+// Reading symbolic WordStack from memory, then extracting bytes from it. General case (stack size can be != 32)
+//========================================================================
+    rule nthbyteof(chop(#asWord(W : WS) &Int MASK), I, N)
+         => nthbyteof( chop(#asWord(WS) &Int (MASK &Int (256 ^Int #sizeWordStack(WS) -Int 1))), I -Int 1, N -Int 1)
+      requires I >Int 0
+
+    rule nthbyteof(chop(#asWord(W : WS) &Int MASK), 0, N) => W &Int ((MASK /Int 256 ^Int #sizeWordStack(WS)) modInt 256)
+
+    rule nthbyteof(WS, I, N) &Int 255 => nthbyteof(WS, I, N)
 
 endmodule
