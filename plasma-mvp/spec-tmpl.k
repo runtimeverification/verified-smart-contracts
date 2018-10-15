@@ -1,112 +1,92 @@
-  // {RULENAME} {COMMENT}
+  // {RULENAME}
   rule
     <k> {K} </k>
     <exit-code> 1 </exit-code>
     <mode> NORMAL </mode>
     <schedule> BYZANTIUM </schedule>
     <analysis> .Map </analysis> // not part of evm
+
     <ethereum>
       <evm>
         <output> {OUTPUT} </output>
         <statusCode> {STATUSCODE} </statusCode>
-        <callStack> {CALLSTACK} </callStack>
+        <callStack> _ </callStack>
         <interimStates> _ </interimStates>
         <touchedAccounts> _ => _ </touchedAccounts>
+
         <callState>
           <program> #asMapOpCodes(#dasmOpCodes(#parseByteStack({CODE}), BYZANTIUM)) </program>
           <programBytes> #parseByteStack({CODE}) </programBytes>
-          <id> {THIS} </id> // `this`
-          <caller> {MSG_SENDER} </caller> // `msg.sender`
-          <callData> {CALLDATA} </callData> // msg.data
-          <callValue> {CALLVALUE} </callValue> // msg.value
-          <wordStack> {WORDSTACK} </wordStack>
-          <localMem> {LOCALMEM} </localMem>
-          <pc> {PC} </pc>
+
+          <id> ACCT_ID </id> // contract owner
+          <caller> CALLER_ID </caller> // who called this contract; in the begining, origin // msg.sender
+
+          <callData> {CALLDATA} </callData>
+
+          <callValue> 0 </callValue>
+          <wordStack> .WordStack => _ </wordStack>
+          <localMem> .Map => _ </localMem>
+          <pc> 0 => _ </pc>
           <gas> {GAS} </gas>
-          <memoryUsed> {MEMORYUSED} </memoryUsed>
+          <memoryUsed> 0 => _ </memoryUsed>
           <previousGas> _ => _ </previousGas>
+
           <static> false </static> // NOTE: non-static call
-          <callDepth> {CALLDEPTH} </callDepth>
+          <callDepth> CALL_DEPTH </callDepth>
         </callState>
+
         <substate>
           <selfDestruct> _ </selfDestruct>
           <log> {LOG} </log>
-          <refund> {REFUND} </refund>
+          <refund> {REFUND} </refund> // TODO: more detail
         </substate>
+
         <gasPrice> _ </gasPrice>
-        <origin> ORIGIN_ID </origin> // tx.origin
+        <origin> ORIGIN_ID </origin> // who fires tx
+
         <previousHash> _ </previousHash>
         <ommersHash> _ </ommersHash>
-        <coinbase> {COINBASE} </coinbase> // block.coinbase
+        <coinbase> _ </coinbase>
         <stateRoot> _ </stateRoot>
         <transactionsRoot> _ </transactionsRoot>
         <receiptsRoot> _ </receiptsRoot>
         <logsBloom> _ </logsBloom>
         <difficulty> _ </difficulty>
-        <number> BLOCK_NUM </number> // block.number
+        <number> _ </number>
         <gasLimit> _ </gasLimit>
         <gasUsed> _ </gasUsed>
-        <timestamp> NOW </timestamp> // now = block.timestamp
+        <timestamp> _ </timestamp>
         <extraData> _ </extraData>
         <mixHash> _ </mixHash>
         <blockNonce> _ </blockNonce>
+
         <ommerBlockHeaders> _ </ommerBlockHeaders>
-        <blockhash> BLOCK_HASHES </blockhash> // block.blockhash
+        <blockhash> _ </blockhash>
       </evm>
+
       <network>
-        <activeAccounts> {ACTIVEACCOUNTS} </activeAccounts>
+        <activeAccounts> SetItem(ACCT_ID) _:Set </activeAccounts>
+
         <accounts>
           <account>
-            <acctID> MASTER_COPY_ID </acctID>
-            <balance> MASTER_COPY_BAL </balance>
-            <code> #parseByteStack({MASTER_COPY_CODE}) </code>
+            <acctID> ACCT_ID </acctID>
+            <balance> _ </balance>
+            <code> #parseByteStack({CODE}) </code>
             <storage>
-{MASTER_COPY_STORAGE}
+              {STORAGE}
             </storage>
-            <nonce> {MASTER_COPY_NONCE} </nonce>
+            <nonce> _ </nonce>
           </account>
-          <account>
-            <acctID> PROXY_ID </acctID>
-            <balance> PROXY_BAL </balance>
-            <code> #parseByteStack({PROXY_CODE}) </code>
-            <storage>
-{PROXY_STORAGE}
-            </storage>
-            <nonce> {PROXY_NONCE} </nonce>
-          </account>
-          <account>
-            <acctID> ORIGIN_ID </acctID>
-            <balance> ORIGIN_BAL </balance>
-            <code> #parseByteStack({ORIGIN_CODE}) </code>
-            <storage>
-{ORIGIN_STORAGE}
-            </storage>
-            <nonce> {ORIGIN_NONCE} </nonce>
-          </account>
-{ACCOUNTS}
-          ...
+       // ... // TODO: fix
         </accounts>
+
         <txOrder> _ </txOrder>
         <txPending> _ </txPending>
         <messages> _ </messages>
       </network>
     </ethereum>
-    requires #rangeAddress(MASTER_COPY_ID)
-     andBool #rangeAddress(PROXY_ID)
-     andBool #rangeAddress(ORIGIN_ID)
-     andBool #rangeUInt(256, MASTER_BAL)
-     andBool #rangeUInt(256, PROXY_BAL)
-     andBool #rangeUInt(256, ORIGIN_BAL)
-     andBool #rangeUInt(256, NOW)
-     andBool #rangeUInt(128, BLOCK_NUM) // Solidity
-     //
-     andBool MASTER_COPY_ID =/=Int PROXY_ID
-     andBool MASTER_COPY_ID =/=Int ORIGIN_ID
-     andBool PROXY_ID       =/=Int ORIGIN_ID
-     // Account address normality
-     andBool MASTER_COPY_ID >Int 0 andBool (notBool MASTER_COPY_ID in #precompiledAccounts(BYZANTIUM))
-     andBool PROXY_ID       >Int 0 andBool (notBool PROXY_ID       in #precompiledAccounts(BYZANTIUM))
-     andBool ORIGIN_ID      >Int 0 andBool (notBool ORIGIN_ID      in #precompiledAccounts(BYZANTIUM))
-{REQUIRES}
-{ENSURES}
-{ATTRIBUTE}
+    requires 0 <=Int ACCT_ID    andBool ACCT_ID    <Int (2 ^Int 160)
+     andBool 0 <=Int CALLER_ID  andBool CALLER_ID  <Int (2 ^Int 160)
+     andBool 0 <=Int ORIGIN_ID  andBool ORIGIN_ID  <Int (2 ^Int 160)
+     andBool 0 <=Int CALL_DEPTH andBool CALL_DEPTH <Int 1024
+     {REQUIRES}
