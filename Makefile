@@ -350,7 +350,7 @@ $(specs_dir)/gnosis/execTransactionAndPaySubmitter-example-spec.k: $(gnosis_tmpl
 #plasma
 plasma_tmpls:=plasma/module-tmpl.k plasma/spec-tmpl.k
 
-$(specs_dir)/plasma/%-spec.k: $(gnosis_tmpls) plasma/plasma-spec.ini
+$(specs_dir)/plasma/%-spec.k: $(plasma_tmpls) plasma/plasma-spec.ini
 	@echo >&2 "==  gen-spec: $@"
 	mkdir -p $(dir $@)
 	python3 resources/gen-spec.py $^ $* $* > $@
