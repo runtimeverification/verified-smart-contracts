@@ -180,7 +180,8 @@ casper_files:=recommended_source_epoch-spec.k \
 gnosis_files:=setup-spec.k \
               swapOwner-spec.k
 
-plasma_files:=operator-spec.k
+plasma_files:=operator-spec.k \
+              currentChildBlock-spec.k
 
 # FIXME: restore the skipped specs
 #             execTransactionAndPaySubmitter-spec.k
