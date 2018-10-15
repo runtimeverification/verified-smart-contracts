@@ -180,6 +180,8 @@ casper_files:=recommended_source_epoch-spec.k \
 gnosis_files:=setup-spec.k \
               swapOwner-spec.k
 
+plasma_files:=operator-spec.k
+
 # FIXME: restore the skipped specs
 #             execTransactionAndPaySubmitter-spec.k
 #             getTransactionHash-spec.k
@@ -209,6 +211,8 @@ ds-token-erc20: $(patsubst %, $(specs_dir)/ds-token-erc20/%, $(ds_token_erc20_fi
 casper: $(patsubst %, $(specs_dir)/casper/%, $(casper_files)) $(specs_dir)/lemmas.k
 
 gnosis: $(patsubst %, $(specs_dir)/gnosis/%, $(gnosis_files)) $(specs_dir)/lemmas.k
+
+plasma: $(patsubst %, $(specs_dir)/plasma/%, $(plasma_files)) $(specs_dir)/lemmas.k
 
 # Bihu
 bihu_tmpls:=bihu/module-tmpl.k bihu/spec-tmpl.k
@@ -342,6 +346,16 @@ $(specs_dir)/gnosis/%-spec.k: $(gnosis_tmpls) gnosis/gnosis-spec.ini
 $(specs_dir)/gnosis/execTransactionAndPaySubmitter-example-spec.k: $(gnosis_tmpls) gnosis/gnosis-spec.ini
 	@echo >&2 "==  gen-spec: $@"
 	python3 resources/gen-spec.py $^ execTransactionAndPaySubmitter-example checkHash execTransactionAndPaySubmitter-example > $@
+
+#plasma
+plasma_tmpls:=plasma/module-tmpl.k plasma/spec-tmpl.k
+
+$(specs_dir)/plasma/%-spec.k: $(gnosis_tmpls) plasma/plasma-spec.ini
+	@echo >&2 "==  gen-spec: $@"
+	mkdir -p $(dir $@)
+	python3 resources/gen-spec.py $^ $* $* > $@
+	cp plasma/abstract-semantics.k $(dir $@)
+	cp plasma/verification.k $(dir $@)
 
 # Testing
 # -------
