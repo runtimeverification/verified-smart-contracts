@@ -181,7 +181,9 @@ gnosis_files:=setup-spec.k \
               swapOwner-spec.k
 
 plasma_files:=operator-spec.k \
-              currentChildBlock-spec.k
+              currentChildBlock-spec.k \
+              currentDepositBlock-spec.k \
+              currentFeeExit-spec.k
 
 # FIXME: restore the skipped specs
 #             execTransactionAndPaySubmitter-spec.k
