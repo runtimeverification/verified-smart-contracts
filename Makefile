@@ -190,7 +190,7 @@ plasma_files:=operator-spec.k \
               currentDepositBlock-spec.k \
               currentFeeExit-spec.k \
               addToken-success-spec.k \
-              addToken-success-failure.k
+              addToken-failure-spec.k
 
 proof_tests:=bihu vyper-erc20 zeppelin-erc20 hkg-erc20 hobby-erc20 sum-to-n ds-token-erc20 gnosis plasma
 
