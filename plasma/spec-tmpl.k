@@ -84,6 +84,7 @@
             <storage> _ </storage>
             <nonce> CALLER_NONCE </nonce>
           </account>
+          ...
         </accounts>
         <txOrder> _ </txOrder>
         <txPending> _ </txPending>
