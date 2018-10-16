@@ -28,3 +28,5 @@ The issue was fixed in [commit fa912634](https://github.com/Uniswap/contracts-vy
 * In `tokenToTokenExact`function([line 269](https://github.com/Uniswap/contracts-vyper/blob/d4cfffd2eb5dda71dbb0a35a23d9f6425bd345a2/contracts/uniswap_exchange.vy#L269)), the developer
 wrongly used `min_eth_bought` instead of `max_eth_bought` to bound the ratio from eth to target token. 
 The issue was fixed in [commit 07e86fb](https://github.com/Uniswap/contracts-vyper/commit/07e86fbfad9834ce4288a2704fcd3987c49ab550).
+
+* We suggested adding `assert msg.value > 0` in the `addLiquidity` function. The issue was fixed in [commit 3956e9a](https://github.com/Uniswap/contracts-vyper/commit/3956e9a493b182ec408cd9d118e2ff4f1ff628ab).
