@@ -65,8 +65,7 @@
       </evm>
 
       <network>
-        <activeAccounts> SetItem(ACCT_ID)
-        SetItem(CALLER_ID) _ </activeAccounts>
+        <activeAccounts> SetItem(ACCT_ID) </activeAccounts>
         <accounts>
           <account>
             <acctID> ACCT_ID </acctID>
@@ -75,14 +74,7 @@
             <storage>
               {STORAGE}
             </storage>
-            <nonce> _ </nonce>
-          </account>
-          <account>
-            <acctID> CALLER_ID </acctID>
-            <balance> _ </balance>
-            <code> _ </code>
-            <storage> _ </storage>
-            <nonce> CALLER_NONCE </nonce>
+            <nonce> ACCT_NONCE </nonce>
           </account>
           ...
         </accounts>
@@ -95,5 +87,5 @@
      andBool 0 <=Int CALLER_ID    andBool CALLER_ID    <Int (2 ^Int 160)
      andBool 0 <=Int ORIGIN_ID    andBool ORIGIN_ID    <Int (2 ^Int 160)
      andBool 0 <=Int CALL_DEPTH   andBool CALL_DEPTH   <Int 1024
-     andBool 0 <=Int CALLER_NONCE andBool CALLER_NONCE <Int (2 ^Int 64)
+     andBool 0 <=Int ACCT_NONCE andBool ACCT_NONCE <Int (2 ^Int 64)
      {REQUIRES}
