@@ -77,14 +77,14 @@
             </storage>
             <nonce> _ </nonce>
           </account>
-            <account>
-              <acctID> CALLER_ID </acctID>
-              <balance> _ </balance>
-              <code> _ </code>
-              <storage> _ </storage>
-              <nonce> CALLER_NONCE </nonce>
-            </account>
-          </accounts>
+          <account>
+            <acctID> CALLER_ID </acctID>
+            <balance> _ </balance>
+            <code> _ </code>
+            <storage> _ </storage>
+            <nonce> CALLER_NONCE </nonce>
+          </account>
+        </accounts>
         <txOrder> _ </txOrder>
         <txPending> _ </txPending>
         <messages> _ </messages>
