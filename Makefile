@@ -183,7 +183,8 @@ gnosis_files:=setup-spec.k \
 plasma_files:=operator-spec.k \
               currentChildBlock-spec.k \
               currentDepositBlock-spec.k \
-              currentFeeExit-spec.k
+              currentFeeExit-spec.k \
+              exitsQueues-spec.k
 
 # FIXME: restore the skipped specs
 #             execTransactionAndPaySubmitter-spec.k
