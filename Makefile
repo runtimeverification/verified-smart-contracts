@@ -180,17 +180,17 @@ casper_files:=recommended_source_epoch-spec.k \
 gnosis_files:=setup-spec.k \
               swapOwner-spec.k
 
+# FIXME: restore the skipped specs
+#             execTransactionAndPaySubmitter-spec.k
+#             getTransactionHash-spec.k
+#             checkHash-spec.k
+
 plasma_files:=operator-spec.k \
               currentChildBlock-spec.k \
               currentDepositBlock-spec.k \
               currentFeeExit-spec.k \
               addToken-success-spec.k \
               addToken-success-failure.k
-
-# FIXME: restore the skipped specs
-#             execTransactionAndPaySubmitter-spec.k
-#             getTransactionHash-spec.k
-#             checkHash-spec.k
 
 proof_tests:=bihu vyper-erc20 zeppelin-erc20 hkg-erc20 hobby-erc20 sum-to-n ds-token-erc20 gnosis plasma
 
