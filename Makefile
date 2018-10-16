@@ -190,7 +190,7 @@ gnosis_files:=encodeTransactionData-data32-spec.k
 gnosis_test_files:=testKeccak-data1-spec.k \
                    testKeccak-data32-spec.k \
                    testKeccak-data33-spec.k \
-                   testAbiEncode-data32-spec.k
+                   testAbiEncode-spec.k
 
 proof_tests:=bihu vyper-erc20 zeppelin-erc20 hkg-erc20 hobby-erc20 sum-to-n ds-token-erc20 gnosis
 
