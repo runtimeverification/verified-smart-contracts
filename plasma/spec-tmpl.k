@@ -82,7 +82,7 @@
               <balance> _ </balance>
               <code> _ </code>
               <storage> _ </storage>
-              <nonce> NONCE </nonce>
+              <nonce> CALLER_NONCE </nonce>
             </account>
           </accounts>
         <txOrder> _ </txOrder>
