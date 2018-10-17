@@ -10,7 +10,7 @@ The issue was fixed in [commit 2c29ee8](https://github.com/Uniswap/contracts-vyp
 * In `ethToToken`([line 92](https://github.com/Uniswap/contracts-vyper/blob/fddd25e9ab5602535bb00e3f5d44296e08d9a0fc/contracts/uniswap_exchange.vy#L92)) and `ethToTokenExact`([line 110](https://github.com/Uniswap/contracts-vyper/blob/fddd25e9ab5602535bb00e3f5d44296e08d9a0fc/contracts/uniswap_exchange.vy#L110)) functions,
 the way to compute final results uses two integer divisions, and thus the error can notbe bounded. 
 We proposed a better way to compute the results and reduced the error to at most 1.
-The issue was fixed in [commit 2c29ee8](https://github.com/Uniswap/contracts-vyper/commit/7b23a2e60a1c8ff5d4b88fd4f83e74467256f8da).
+The issue was fixed in [commit 7b23a2e](https://github.com/Uniswap/contracts-vyper/commit/7b23a2e60a1c8ff5d4b88fd4f83e74467256f8da).
 
 # Issues in Implementation
 * On [line 28](https://github.com/Uniswap/contracts-vyper/blob/fddd25e9ab5602535bb00e3f5d44296e08d9a0fc/contracts/uniswap_exchange.vy#L28),
@@ -30,3 +30,7 @@ wrongly used `min_eth_bought` instead of `max_eth_bought` to bound the ratio fro
 The issue was fixed in [commit 07e86fb](https://github.com/Uniswap/contracts-vyper/commit/07e86fbfad9834ce4288a2704fcd3987c49ab550).
 
 * We suggested adding `assert msg.value > 0` in the `addLiquidity` function. The issue was fixed in [commit 3956e9a](https://github.com/Uniswap/contracts-vyper/commit/3956e9a493b182ec408cd9d118e2ff4f1ff628ab).
+
+* We suggested refactoring `ethToToken*/tokenToEther*` functions to extract common code and avoid code duplication. The issue was fixed in [commit 7b23a2e](https://github.com/Uniswap/contracts-vyper/commit/7b23a2e60a1c8ff5d4b88fd4f83e74467256f8da).
+
+* We found a naming issue on [line 322](https://github.com/Uniswap/contracts-vyper/blob/59418f748ba1465a02f662ed9703892079cf576e/contracts/uniswap_exchange.vy#L322). The issue was fixed in [commit 3956e9a](https://github.com/Uniswap/contracts-vyper/commit/3956e9a493b182ec408cd9d118e2ff4f1ff628ab).
