@@ -55,7 +55,7 @@
         <number> _ </number>
         <gasLimit> _ </gasLimit>
         <gasUsed> _ </gasUsed>
-        <timestamp> TIMESTAMP </timestamp>
+        <timestamp> TIME_STAMP </timestamp>
         <extraData> _ </extraData>
         <mixHash> _ </mixHash>
         <blockNonce> _ </blockNonce>
