@@ -82,6 +82,21 @@ zeppelin_erc20_files:=totalSupply-spec.k \
              transferFrom-failure-1-b-spec.k \
              transferFrom-failure-2-spec.k
 
+gnosis_erc20_files:=totalSupply-spec.k \
+             balanceOf-spec.k \
+             allowance-spec.k \
+             approve-spec.k \
+             transfer-success-1-spec.k \
+             transfer-success-2-spec.k \
+             transfer-failure-1-spec.k \
+             transfer-failure-1-spec.k \
+             transfer-failure-2-spec.k \
+             transferFrom-success-1-spec.k \
+             transferFrom-success-2-spec.k \
+             transferFrom-failure-1-spec.k \
+             transferFrom-failure-1-spec.k \
+             transferFrom-failure-2-spec.k
+
 hobby_erc20_files:=totalSupply-spec.k \
                    balanceOf-spec.k \
                    allowance-spec.k \
@@ -187,7 +202,7 @@ gnosis_files:=setup-spec.k \
 #             getTransactionHash-spec.k
 #             checkHash-spec.k
 
-proof_tests:=bihu vyper-erc20 zeppelin-erc20 hkg-erc20 hobby-erc20 sum-to-n ds-token-erc20 gnosis
+proof_tests:=bihu vyper-erc20 zeppelin-erc20 hkg-erc20 hobby-erc20 sum-to-n ds-token-erc20 gnosis gnosis-erc20
 
 # FIXME: restore the casper specs
 #proof_tests += casper
@@ -211,6 +226,8 @@ ds-token-erc20: $(patsubst %, $(specs_dir)/ds-token-erc20/%, $(ds_token_erc20_fi
 casper: $(patsubst %, $(specs_dir)/casper/%, $(casper_files)) $(specs_dir)/lemmas.k
 
 gnosis: $(patsubst %, $(specs_dir)/gnosis/%, $(gnosis_files)) $(specs_dir)/lemmas.k
+
+gnosis-erc20: $(patsubst %, $(specs_dir)/gnosis-erc20/%, $(gnosis_erc20_files)) $(specs_dir)/lemmas.k
 
 # Bihu
 bihu_tmpls:=bihu/module-tmpl.k bihu/spec-tmpl.k
@@ -240,6 +257,13 @@ $(specs_dir)/vyper-erc20/%-spec.k: $(erc20_tmpls) erc20/vyper/vyper-erc20-spec.i
 	cp erc20/verification.k $(dir $@)
 
 $(specs_dir)/zeppelin-erc20/%-spec.k: $(erc20_tmpls) erc20/zeppelin/zeppelin-erc20-spec.ini
+	@echo >&2 "==  gen-spec: $@"
+	mkdir -p $(dir $@)
+	python3 resources/gen-spec.py $^ $* $* > $@
+	cp erc20/abstract-semantics.k $(dir $@)
+	cp erc20/verification.k $(dir $@)
+
+$(specs_dir)/gnosis-erc20/%-spec.k: $(erc20_tmpls) dteiml/gnosis-erc20/gnosis-erc20-spec.ini
 	@echo >&2 "==  gen-spec: $@"
 	mkdir -p $(dir $@)
 	python3 resources/gen-spec.py $^ $* $* > $@
