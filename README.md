@@ -56,7 +56,7 @@ We refer the reader to the following resources for background knowledge about th
   * [eDSL]: domain-specific language for EVM-level specifications
 * [ERC20-K]: a formal specification of the high-level business logic of [ERC20]
 * [ERC20-EVM]: an EVM-level refinement of ERC20-K
-* ERC777-K (coming soon): a formal specification of the high-level business logic of [ERC777]
+* [ERC777-K]: a formal specification of the high-level business logic of [ERC777]
 
 ## Disclaimer
 
@@ -92,3 +92,4 @@ The possibility of human error in the manual review process is very real, and we
 [Solidity]: <https://solidity.readthedocs.io/en/develop/>
 [Vyper]: <https://github.com/ethereum/vyper>
 [reachability logic]: <http://fsl.cs.illinois.edu/index.php/Reachability_Logic>
+[ERC777-K]: <https://github.com/runtimeverification/erc777-semantics>
