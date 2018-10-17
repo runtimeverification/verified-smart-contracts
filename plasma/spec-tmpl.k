@@ -23,7 +23,7 @@
 
           <callData> {CALLDATA} </callData>
 
-          <callValue> 0 </callValue>
+          <callValue> {CALLVALUE} </callValue>
           <wordStack> .WordStack => _ </wordStack>
           <localMem> .Map => _ </localMem>
           <pc> 0 => _ </pc>
@@ -55,7 +55,7 @@
         <number> _ </number>
         <gasLimit> _ </gasLimit>
         <gasUsed> _ </gasUsed>
-        <timestamp> _ </timestamp>
+        <timestamp> TIMESTAMP </timestamp>
         <extraData> _ </extraData>
         <mixHash> _ </mixHash>
         <blockNonce> _ </blockNonce>
