@@ -186,7 +186,7 @@ plasma_files:=operator-spec.k \
               currentFeeExit-spec.k \
               exitsQueues-spec.k \
               deposit-success-spec.k \
-              deposit-success-failure.k
+              deposit-failure-spec.k
 
 # FIXME: restore the skipped specs
 #             execTransactionAndPaySubmitter-spec.k
