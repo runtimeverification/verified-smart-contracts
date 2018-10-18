@@ -210,6 +210,12 @@ Some lemmas over the comparison operators are also provided.
     rule chop(I) => I requires 0 <=Int I andBool I <Int pow256
 ```
 
+### `-Word` Reduction
+
+```k
+    rule chop ( W0:Int +Int W1:Int ) -Word W1:Int => chop ( W0 )
+```
+
 ### Wordstack
 
 These lemmas abstract some properties about `#sizeWordStack`:
@@ -223,3 +229,5 @@ These lemmas abstract some properties about `#sizeWordStack`:
 
 endmodule
 ```
+
+### 
