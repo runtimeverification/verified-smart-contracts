@@ -82,7 +82,7 @@ zeppelin_erc20_files:=totalSupply-spec.k \
              transferFrom-failure-1-b-spec.k \
              transferFrom-failure-2-spec.k
 
-gnosis_erc20_files:=totalSupply-spec.k \
+gno_erc20_files:=totalSupply-spec.k \
              balanceOf-spec.k \
              allowance-spec.k \
              approve-spec.k \
@@ -202,7 +202,7 @@ gnosis_files:=setup-spec.k \
 #             getTransactionHash-spec.k
 #             checkHash-spec.k
 
-proof_tests:=bihu vyper-erc20 zeppelin-erc20 hkg-erc20 hobby-erc20 sum-to-n ds-token-erc20 gnosis gnosis-erc20
+proof_tests:=bihu vyper-erc20 zeppelin-erc20 hkg-erc20 hobby-erc20 sum-to-n ds-token-erc20 gnosis gno-erc20
 
 # FIXME: restore the casper specs
 #proof_tests += casper
@@ -227,7 +227,7 @@ casper: $(patsubst %, $(specs_dir)/casper/%, $(casper_files)) $(specs_dir)/lemma
 
 gnosis: $(patsubst %, $(specs_dir)/gnosis/%, $(gnosis_files)) $(specs_dir)/lemmas.k
 
-gnosis-erc20: $(patsubst %, $(specs_dir)/gnosis-erc20/%, $(gnosis_erc20_files)) $(specs_dir)/lemmas.k
+gno-erc20: $(patsubst %, $(specs_dir)/gno-erc20/%, $(gno_erc20_files)) $(specs_dir)/lemmas.k
 
 # Bihu
 bihu_tmpls:=bihu/module-tmpl.k bihu/spec-tmpl.k
@@ -263,7 +263,7 @@ $(specs_dir)/zeppelin-erc20/%-spec.k: $(erc20_tmpls) erc20/zeppelin/zeppelin-erc
 	cp erc20/abstract-semantics.k $(dir $@)
 	cp erc20/verification.k $(dir $@)
 
-$(specs_dir)/gnosis-erc20/%-spec.k: $(erc20_tmpls) dteiml/gnosis-erc20/gnosis-erc20-spec.ini
+$(specs_dir)/gno-erc20/%-spec.k: $(erc20_tmpls) erc20/gno/gno-erc20-spec.ini
 	@echo >&2 "==  gen-spec: $@"
 	mkdir -p $(dir $@)
 	python3 resources/gen-spec.py $^ $* $* > $@

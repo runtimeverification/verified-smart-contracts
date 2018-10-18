@@ -1,5 +1,5 @@
 --- erc20/vyper/vyper-erc20-spec.ini	2018-10-01 09:54:31.000000000 +0200
-+++ erc20/gno/gno-erc20-spec.ini	2018-10-17 17:40:40.000000000 +0200
++++ erc20/gno/gno-erc20-spec.ini	2018-10-18 13:12:42.000000000 +0200
 @@ -39,7 +39,7 @@
  log: _
  refund: _
@@ -46,16 +46,7 @@
      _:Map
  +requires:
      andBool FROM_ID ==Int TO_ID
-@@ -161,26 +160,26 @@
- 
- [transferFrom-failure]
- k: #execute => #halt
--statusCode: _ => EVMC_REVERT
- output: _ => _
- log: _
- 
- [transferFrom-failure-1]
-+statusCode: _ => EVMC_REVERT
+@@ -169,18 +168,17 @@
  storage:
      #hashedLocation({COMPILER}, {_BALANCES},   FROM_ID)           |-> (BAL_FROM => _)  // BAL_FROM
      #hashedLocation({COMPILER}, {_BALANCES},   TO_ID)             |-> (BAL_TO   => _)  // BAL_TO
@@ -69,7 +60,6 @@
       orBool   VALUE >Int ALLOW )
  
  [transferFrom-failure-2]
-+statusCode: _ => EVMC_REVERT
  storage:
      #hashedLocation({COMPILER}, {_BALANCES},   FROM_ID)           |-> BAL_FROM
 -    #hashedLocation({COMPILER}, {_ALLOWANCES}, FROM_ID CALLER_ID) |-> ALLOW
@@ -77,7 +67,7 @@
      _:Map
  +requires:
      andBool FROM_ID ==Int TO_ID
-@@ -188,9 +187,9 @@
+@@ -188,9 +186,9 @@
       orBool   VALUE >Int ALLOW )
  
  [pgm]
