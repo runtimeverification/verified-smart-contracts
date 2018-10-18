@@ -11,6 +11,7 @@ contract ApiTest {
     }
 
     bytes32 public constant SAFE_TX_TYPEHASH = 0x14d461bc7412367e924637b363c7bf29b8f47e2f84869f4426e5633d8af47b20;
+    bytes32 public domainSeparator;
 
     //same set of arguments as encodeTransactionData
     function testAbiEncodeAndKeccak(
@@ -32,10 +33,6 @@ contract ApiTest {
         return abi.encode(SAFE_TX_TYPEHASH, to, value, keccak256(data), operation, safeTxGas, dataGas, gasPrice, gasToken, refundReceiver, _nonce);
     }
 
-    //Same set of arguments as abi.encode() in encodeTransactionData
-    //Better explanation of what abi.encode does:
-    // https://medium.com/@libertylocked/what-are-abi-encoding-functions-in-solidity-0-4-24-c1a90b5ddce8
-    //The function wraps the arguments into a tuple and encodes the tuple according to ABI specification.
     function testAbiEncode(
         address to,
         uint256 value,
@@ -61,5 +58,13 @@ contract ApiTest {
         returns (bytes32)
     {
         return keccak256(data);
+    }
+
+    function testAbiEncodePacked(bytes32 safeTxHash)
+        public
+        view
+        returns (bytes)
+    {
+        return abi.encodePacked(byte(0x19), byte(1), domainSeparator, safeTxHash);
     }
 }

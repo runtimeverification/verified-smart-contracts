@@ -177,7 +177,7 @@ casper_files:=recommended_source_epoch-spec.k \
               collective_reward-success-zero-2-spec.k \
               collective_reward-failure-spec.k
 
-gnosis_files:=encodeTransactionData-data32-spec.k
+gnosis_files:=encodeTransactionData-data33-spec.k
 
 # FIXME: restore the skipped specs
 #             setupSafe-spec.k
@@ -190,7 +190,9 @@ gnosis_files:=encodeTransactionData-data32-spec.k
 gnosis_test_files:=testKeccak-data1-spec.k \
                    testKeccak-data32-spec.k \
                    testKeccak-data33-spec.k \
-                   testAbiEncode-spec.k
+                   testAbiEncode-spec.k \
+                   testAbiEncode-AndKeccak-data1-spec.k \
+                   testAbiEncodePacked-spec.k
 
 proof_tests:=bihu vyper-erc20 zeppelin-erc20 hkg-erc20 hobby-erc20 sum-to-n ds-token-erc20 gnosis
 

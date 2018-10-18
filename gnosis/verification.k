@@ -80,4 +80,9 @@ module VERIFICATION
 
     rule nthbyteof(WS, I, N) &Int 255 => nthbyteof(WS, I, N)
 
+    rule nthbyteof(chop(MASK &Int #asWord(WS)) => chop(#asWord(WS) &Int MASK), _, _)
+      requires #isConcrete(MASK)
+      //version below doesn't work
+      //requires notBool (getKLabel(MASK) ==K #klabel(`#asWord`))
+
 endmodule
