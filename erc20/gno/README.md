@@ -4,11 +4,11 @@ By Dominik Teiml (dominik@gnosis.pm), [Gnosis](https://www.gnosis.pm)
 
 We formally verified the GNO ERC20 token contract [runtime bytecode](./gno-erc20.bytes).
 
-We found the following deviations from [ERC20-EVM](./../erc20/vyper/vyper-erc20-spec.ini):
+We found the following deviations from [ERC20-EVM](../vyper/vyper-erc20-spec.ini):
 
 - In the [high-level Solidity code](https://etherscan.io/address/0x6810e776880c02933d47db1b9fc05908e5386b96#code), mapping of users' allowances is called `allowed`, hence we use that in our [eDSL spec](./gno-erc20-spec.ini).
 - In `transfer-failure-1` and `transferFrom-failure-1`, `BAL_TO +Int VALUE >=Int (2 ^Int 256)` was removed from the constraint. The reason is the GNO was constructed with a fixed supply of 10 M. Hence no overflow protections are necessary (and so none are present)
-- A new lemma was added to be added to [lemmas.k](../../specs/lemmas.k) to help K tool with the reduction of a specific term. We present the lemma as well as its soundness proof:
+- A new lemma was added to be added to [lemmas.md](../../resources/lemmas.md) to help K tool with the reduction of a specific term. We present the lemma as well as its soundness proof:
 
 ## Lemma
 
