@@ -185,6 +185,8 @@ plasma_files:=operator-spec.k \
               currentDepositBlock-spec.k \
               currentFeeExit-spec.k \
               exitsQueues-spec.k \
+              submitBlock-success-spec.k \
+              submitBlock-failure-spec.k \
               deposit-success-spec.k \
               deposit-failure-spec.k \
               getDepositBlock-spec.k
