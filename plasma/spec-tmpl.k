@@ -23,7 +23,7 @@
 
           <callData> {CALLDATA} </callData>
 
-          <callValue> 0 </callValue>
+          <callValue> {CALLVALUE} </callValue>
           <wordStack> .WordStack => _ </wordStack>
           <localMem> .Map => _ </localMem>
           <pc> 0 => _ </pc>
@@ -55,7 +55,7 @@
         <number> _ </number>
         <gasLimit> _ </gasLimit>
         <gasUsed> _ </gasUsed>
-        <timestamp> _ </timestamp>
+        <timestamp> TIME_STAMP </timestamp>
         <extraData> _ </extraData>
         <mixHash> _ </mixHash>
         <blockNonce> _ </blockNonce>
@@ -89,4 +89,5 @@
      andBool 0 <=Int CALLER_ID  andBool CALLER_ID  <Int (2 ^Int 160)
      andBool 0 <=Int ORIGIN_ID  andBool ORIGIN_ID  <Int (2 ^Int 160)
      andBool 0 <=Int CALL_DEPTH andBool CALL_DEPTH <Int 1024
+     andBool 0 <=Int TIME_STAMP andBool TIME_STAMP <Int (2 ^Int 256)
      {REQUIRES}
