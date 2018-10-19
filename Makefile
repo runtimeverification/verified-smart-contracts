@@ -184,7 +184,10 @@ plasma_files:=operator-spec.k \
               currentChildBlock-spec.k \
               currentDepositBlock-spec.k \
               currentFeeExit-spec.k \
-              exitsQueues-spec.k
+              exitsQueues-spec.k \
+              deposit-success-spec.k \
+              deposit-failure-spec.k \
+              getDepositBlock-spec.k
 
 # FIXME: restore the skipped specs
 #             execTransactionAndPaySubmitter-spec.k
