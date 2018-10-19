@@ -85,4 +85,9 @@ module VERIFICATION
       //version below doesn't work
       //requires notBool (getKLabel(MASK) ==K #klabel(`#asWord`))
 
+
+    syntax WordStack ::= #encSig (Int, Int, Int) [function]
+ // ===============================================================
+    rule #encSig(SIG_R, SIG_S, SIG_V) => #enc(#bytes32(SIG_R)) ++ #enc(#bytes32(SIG_S)) ++ #getValue(#uint8(SIG_V)) : .WordStack
+
 endmodule

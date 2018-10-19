@@ -193,7 +193,10 @@ gnosis_test_files:=testKeccak-data1-spec.k \
                    testKeccak-data33-spec.k \
                    testAbiEncode-spec.k \
                    testAbiEncode-AndKeccak-data1-spec.k \
-                   testAbiEncodePacked-spec.k
+                   testAbiEncodePacked-spec.k \
+		   testSignatureSplit-pos0-spec.k \
+		   testSignatureSplit-pos1-spec.k \
+                   testSignatureSplit-pos2-spec.k
 
 proof_tests:=bihu vyper-erc20 zeppelin-erc20 hkg-erc20 hobby-erc20 sum-to-n ds-token-erc20 gnosis
 
