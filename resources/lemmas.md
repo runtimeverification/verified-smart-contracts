@@ -114,6 +114,7 @@ It reduces the reasoning efforts of the underlying theorem prover, factoring out
                        | #asByteStackInWidthAux ( Int, Int, Int, WordStack ) [function]
  // -----------------------------------------------------------------------------------
     rule #asByteStackInWidth(X, N) => #asByteStackInWidthAux(X, N -Int 1, N, .WordStack)
+      requires #rangeBytes(N, X)
 
     rule #asByteStackInWidthAux(X, I => I -Int 1, N, WS => nthbyteof(X, I, N) : WS) when I >=Int 0
     rule #asByteStackInWidthAux(X,            -1, N, WS) => WS
@@ -127,6 +128,7 @@ Code sugar to represent byte arrays with concrete size but symbolic data.
     syntax TypedArg ::= #toBytes    ( Int , Int )      [function] //data, len
  // -----------------------------------------------------------------
     rule #toBytes(DATA, N) => #bytes(#asByteStackInWidth(DATA, N))
+      requires #rangeBytes(N, DATA)
 ```
 
 ### Hashed Location
