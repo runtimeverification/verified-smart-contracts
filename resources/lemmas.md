@@ -243,6 +243,24 @@ In EVM, no boolean value exist but instead, 1 and 0 are used to represent true a
 Some lemmas over the comparison operators are also provided.
 
 ```k
+    rule 0 <=Int X &Int Y             => true requires 0 <=Int X andBool X <Int pow256 andBool 0 <=Int Y andBool Y <Int pow256
+    rule         X &Int Y <Int pow256 => true requires 0 <=Int X andBool X <Int pow256 andBool 0 <=Int Y andBool Y <Int pow256
+```
+
+### Range Matching Lemmas
+Many rules both in KEVM and in this file contain range-related side conditions, like
+`requires 0 <=Int V andBool V <Int pow256`. These expressions have to be reduced to `true` in order to side condition to match.
+This can generally happen in 3 ways.
+- If expression is concrete, then regular rules from KEVM will apply and eventually reduce it to true or false.
+- Otherwise, side condition can be matched by an inequality in the term constraint (path condition).
+If side condition cannot be matched exactly, Z3 will be invoked and can still deduct it indirectly from the entire constraint,
+through boolean and arithmetic reasoning.
+- Otherwise, we can extend the semantics with specific "lemma" rules for symbolic expression that can be proved true 
+from their concrete semantics.
+
+Below are the most common such range matching lemmas.
+
+```k
     rule 0 <=Int hash1(_)             => true
     rule         hash1(_) <Int pow256 => true
 
@@ -257,9 +275,18 @@ Some lemmas over the comparison operators are also provided.
 
     rule 0 <=Int keccakIntList(_)             => true
     rule         keccakIntList(_) <Int pow256 => true
+```
 
-    rule 0 <=Int X &Int Y             => true requires 0 <=Int X andBool X <Int pow256 andBool 0 <=Int Y andBool Y <Int pow256
-    rule         X &Int Y <Int pow256 => true requires 0 <=Int X andBool X <Int pow256 andBool 0 <=Int Y andBool Y <Int pow256
+Because lemmas are applied as plain K rewrite rule, they have to match exactly, without any deductive reasoning.
+For example the lemma `rule A < 100 => true` won't match the side condition `requires A <= 99` or 
+`requires 100 > A`.
+To avoid such mismatching situations we need additional expression normalization rules.
+At the moment we have only one, that converts `maxUInt256` to `pow256`.
+It allows side conditions that use `maxUInt256` or `#range` macros 
+match the range lemmas above. Note that lemmas above all use `<Int pow256` for the upper range.
+
+```k
+    rule X <=Int maxUInt256 => X <Int pow256
 ```
 
 ### `chop` Reduction

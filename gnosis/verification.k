@@ -9,9 +9,6 @@ module VERIFICATION
     // Range
     //
 
-    // maxUInt256 vs pow256
-    rule X <=Int maxUInt256 => X <Int pow256
-
     rule 0 <=Int (X modInt Y)         => true
     rule         (X modInt Y) <Int Y  => true  requires Y >Int 0
 
