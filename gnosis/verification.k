@@ -57,7 +57,10 @@ module VERIFICATION
 
     //Rule doesn't apply. Why?
     syntax Int ::= symkeccak ( Int ) [function, smtlib(smt_symkeccak)]
-    rule keccak(WS) => symkeccak(#asWord(WS))  requires notBool #isConcrete(WS)
+    rule keccak(WS) => symkeccak(#asWord(WS))
+      requires notBool #isConcrete(WS)
+               //to avoid collision with rule keccak(WS) => keccakIntList(...)
+               andBool #sizeWordStack(WS) =/=Int 32 andBool #sizeWordStack(WS) =/=Int 64
 
     //
     // Unification

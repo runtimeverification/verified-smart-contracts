@@ -177,7 +177,8 @@ casper_files:=recommended_source_epoch-spec.k \
               collective_reward-success-zero-2-spec.k \
               collective_reward-failure-spec.k
 
-gnosis_files:=encodeTransactionData-data33-spec.k
+gnosis_files:=encodeTransactionData-data32-spec.k \
+              encodeTransactionData-data33-spec.k
 
 # FIXME: restore the skipped specs
 #             setupSafe-spec.k
