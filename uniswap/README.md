@@ -85,6 +85,6 @@ During the verification process, we found several issues, and suggested fixes.  
 [K]: <https://github.com/kframework/k/tree/92d21b60ee087a368038a332ef98535455c26b63>
 [KEVM]: <https://github.com/kframework/evm-semantics/tree/f9727f67754ba2b292fbe337f9ca9f53fba5b5b5>
 [instructions]: </resources/instructions.md>
-[erc20]: </erc20>
+[erc20]: </erc20/README.md>
 
 [35038d2]: <https://github.com/ethereum/vyper/commits/35038d20bd9946a35261c4c4fbcb27fe61e65f78>
