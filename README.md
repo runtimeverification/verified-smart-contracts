@@ -30,13 +30,13 @@ making use of SMT solvers like [Z3] to solve the mathematical domain constraints
 
 ## List of Verified Smart Contracts
 
-* **2018-07-12** [Ethereum Casper FFG contract](casper/README.md)
-* **2018-03-12** [DappSys DSToken ERC20 token contract](erc20/ds-token/README.md)
-* **2018-02-28** [Bihu KEY token operation contracts](bihu/README.md)
-* **2018-01-30** [MyKidsEducationToken ERC20 token contract](erc20/hobby/README.md)
-* **2018-01-26** [OpenZeppelin ERC20 token contract](erc20/zeppelin/README.md)
-* **2018-01-16** [HackerGold (HKG) ERC20 token contract](erc20/hkg/README.md)
-* **2017-12-23** [Philip Daian's Vyper ERC20 token contract](erc20/vyper/README.md)
+* **2018-07-12** [Ethereum Casper FFG contract](/casper/README.md)
+* **2018-03-12** [DappSys DSToken ERC20 token contract](/erc20/ds-token/README.md)
+* **2018-02-28** [Bihu KEY token operation contracts](/bihu/README.md)
+* **2018-01-30** [MyKidsEducationToken ERC20 token contract](/erc20/hobby/README.md)
+* **2018-01-26** [OpenZeppelin ERC20 token contract](/erc20/zeppelin/README.md)
+* **2018-01-16** [HackerGold (HKG) ERC20 token contract](/erc20/hkg/README.md)
+* **2017-12-23** [Philip Daian's Vyper ERC20 token contract](/erc20/vyper/README.md)
 
 ## Resources
 
