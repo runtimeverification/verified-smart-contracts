@@ -45,12 +45,17 @@ A non-trivial case is the path #4, where `msg.value == 0` leads to the failure o
 This case is not trivial to catch without the symbolic execution result.
 Indeed, the latest version add [`assert msg.value > 0`] in the beginning to save the unnecessary gas consumption in that case.
 
-Note that here we assume that the existing balance before calling this function is non-zero, that is, `self.balance > msg.value`, thus `eth_reserve` is not zero and no division-by-zero failure occurs. We'd like show the property that if `total_liquidity > 0`, `eth_reserve` is always greater than 0. We show this by induction:
-1. Base case: after the contract is setup, `total_liquidity` is 0, and `eth_reserve` may or maynot be greater than 0. The property holds.
-1. Induction: We assume that the property holds in the current state, we show that `addLiquidity`, `removeLiquidity`, `ethToToken` and `tokenToEth` functions preserve the property:
-   * addLiquidity: if `total_liquidity` is zero, after execution, `total_liquidity` and `eth_reserve` will both be greater than 0. If `total_liquidity` is greater than zero, after execution, `total_liquidity` and `eth_reserve` will be both increase.
-   * removeLiquidity: the function takes out eth proportionally. If you don't burn the whole liquidity, there is always eth left.
-   * ethToToken or tokenToEth: you can not use either ethToToken or tokenToEth functions to drain eth because of the x*y = k model and our rounding policy.
+Note that here we assume that the existing balance before calling this function is non-zero, that is, `self.balance > msg.value`, thus `eth_reserve` is not zero and no division-by-zero failure occurs.
+Let us show that `total_liquidity > 0` implies `eth_reserve > 0`.
+We show it by induction:
+ * Base case. In the beginning, once the contract is created, `total_liquidity = 0` and `eth_reserve >= 0`.
+ * Inductive case: We have four (families) of functions that can update `self.balance`, that is, `addLiquidity`, `removeLiquidity`, `ethToToken*`, and `tokenToEth*`:
+   * `addLiquidity`:
+     * When `total_liquidity = 0`, we have `total_liquidity > 0` and `eth_reserve > 0` at the end of the function since `msg.value > 0`.
+     * When `total_liquidity > 0`, it strictly increases both `total_liquidity` and `eth_reserve` since `msg.value > 0`.
+   * `removeLiquidity`: We have `eth_amount < self.balance` if `amount < total_liquidity`. That is, the remaining balance is greater than 0 at the end of the function, as long as it does not burn the whole liquidity.
+   * `ethToToken*` family: They always increase the balance.
+   * `tokenToEth*` family: The remaining balance is always greater than 0 at the end of the functions. They do not allow to buy the whole amount of the reserved Ether, since `getOutputPrice` reverts when `output_amount >= output_reserve`, and the return value of `getInputPrice` is always less than the balance (i.e., `input_amount_with_fee * output_reserve / ((input_reserve * 1000) + input_amount_with_fee) < output_reserve` because `input_reserve > 0`). In other word, you need the infinite amount of tokens to buy the whole Ether, which is not possible in reality.
 
 ### [addLiquidity-2.txt]
 
@@ -182,6 +187,7 @@ Symbolic exploration of [`ethToTokenSwapOutput`] bytecode.
           * RETURN `((self.balance - msg.value) * token_bought * 1000) / ((token_reserve - token_bought) * 997) + 1`
 
 NOTE: The path #3.v reverts due to the division-by-zero failure of `numerator / denominator`, where `denominator` becomes zero.
+In other word, you are not allowed to buy the whole amount of reserved tokens.
 
 
 
