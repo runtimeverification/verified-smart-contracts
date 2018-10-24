@@ -46,9 +46,9 @@ This case is not trivial to catch without the symbolic execution result.
 Indeed, the latest version add [`assert msg.value > 0`] in the beginning to save the unnecessary gas consumption in that case.
 
 Note that here we assume that the existing balance before calling this function is non-zero, that is, `self.balance > msg.value`, thus `eth_reserve` is not zero and no division-by-zero failure occurs. We'd like show the property that if `total_liquidity > 0`, `eth_reserve` is always greater than 0. We show this by induction:
-1. Base case: after the contract is setup, `total_liquidity` is 0, and `eth_reserve` may or maynot greater than 0. The property holds.
-1. Induction: We assume that the property holds in the current state, we show that `addLiquidity`, `removeLiquidity`, `ethToToken` and `tokenToEth` functions preserves the property:
-   * addLiquidity: if `total_liquidity` is zero, after execution, `total_liquidity` and `eth_reserve` will be both greater than 0. If `total_liquidity` is greater than zero, after execution, `total_liquidity` and `eth_reserve` will be both increase.
+1. Base case: after the contract is setup, `total_liquidity` is 0, and `eth_reserve` may or maynot be greater than 0. The property holds.
+1. Induction: We assume that the property holds in the current state, we show that `addLiquidity`, `removeLiquidity`, `ethToToken` and `tokenToEth` functions preserve the property:
+   * addLiquidity: if `total_liquidity` is zero, after execution, `total_liquidity` and `eth_reserve` will both be greater than 0. If `total_liquidity` is greater than zero, after execution, `total_liquidity` and `eth_reserve` will be both increase.
    * removeLiquidity: the function takes out eth proportionally. If you don't burn the whole liquidity, there is always eth left.
    * ethToToken or tokenToEth: you can not use either ethToToken or tokenToEth functions to drain eth because of the x*y = k model and our rounding policy.
 
