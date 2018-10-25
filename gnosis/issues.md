@@ -20,7 +20,5 @@ If the bytecode does not reset the return memory address, it may reuse the garba
 Even if the current Solidity compiler generates the robust bytecode, a future version may not.
 Thus, it is required to re-verify the bytecode once the compiler version is updated.
 
-Update:
-
-According to the curretn bytecode, it checks the existence of the return value using `returndatasize`:
+In the current bytecode, it checks the existence of the return value using `returndatasize`:
 https://github.com/runtimeverification/verified-smart-contracts/blob/master/gnosis/generated/GnosisSafe.evm#L9704-L9721
