@@ -214,6 +214,44 @@ These rules are specific to reasoning about EVM programs.
     rule N &Int MASK => N  requires MASK ==Int (2 ^Int (log2Int(MASK) +Int 1)) -Int 1 // MASK = 0xffff...f
                             andBool 0 <=Int N andBool N <=Int MASK
 
+
+    rule #asWord( B1 : B2 : B3 : B4 : B5 : B6 : B7 : B8 : B9 : B10 : B11 : B12 : B13 : B14 : B15 : B16
+                : B17: B18: B19: B20: B21: B22: B23: B24: B25: B26 : B27 : B28 : B29 : B30 : B31 : B32
+                : .WordStack ) &Int 255 => B32
+      requires 0 <=Int B1  andBool B1  <Int 256
+       andBool 0 <=Int B2  andBool B2  <Int 256
+       andBool 0 <=Int B3  andBool B3  <Int 256
+       andBool 0 <=Int B4  andBool B4  <Int 256
+       andBool 0 <=Int B5  andBool B5  <Int 256
+       andBool 0 <=Int B6  andBool B6  <Int 256
+       andBool 0 <=Int B7  andBool B7  <Int 256
+       andBool 0 <=Int B8  andBool B8  <Int 256
+       andBool 0 <=Int B9  andBool B9  <Int 256
+       andBool 0 <=Int B10 andBool B10 <Int 256
+       andBool 0 <=Int B11 andBool B11 <Int 256
+       andBool 0 <=Int B12 andBool B12 <Int 256
+       andBool 0 <=Int B13 andBool B13 <Int 256
+       andBool 0 <=Int B14 andBool B14 <Int 256
+       andBool 0 <=Int B15 andBool B15 <Int 256
+       andBool 0 <=Int B16 andBool B16 <Int 256
+       andBool 0 <=Int B17 andBool B17 <Int 256
+       andBool 0 <=Int B18 andBool B18 <Int 256
+       andBool 0 <=Int B19 andBool B19 <Int 256
+       andBool 0 <=Int B20 andBool B20 <Int 256
+       andBool 0 <=Int B21 andBool B21 <Int 256
+       andBool 0 <=Int B22 andBool B22 <Int 256
+       andBool 0 <=Int B23 andBool B23 <Int 256
+       andBool 0 <=Int B24 andBool B24 <Int 256
+       andBool 0 <=Int B25 andBool B25 <Int 256
+       andBool 0 <=Int B26 andBool B26 <Int 256
+       andBool 0 <=Int B27 andBool B27 <Int 256
+       andBool 0 <=Int B28 andBool B28 <Int 256
+       andBool 0 <=Int B29 andBool B29 <Int 256
+       andBool 0 <=Int B30 andBool B30 <Int 256
+       andBool 0 <=Int B31 andBool B31 <Int 256
+       andBool 0 <=Int B32 andBool B32 <Int 256
+
+
     // for gas calculation
     rule A -Int (#if C #then B1 #else B2 #fi) => #if C #then (A -Int B1) #else (A -Int B2) #fi
     rule (#if C #then B1 #else B2 #fi) -Int A => #if C #then (B1 -Int A) #else (B2 -Int A) #fi
