@@ -110,7 +110,7 @@ It reduces the reasoning efforts of the underlying theorem prover, factoring out
     rule #noOverflowAux(W : WS)     => 0 <=Int W andBool W <Int 256 andBool #noOverflowAux(WS)
     rule #noOverflowAux(.WordStack) => true
 
-    rule #noOverflowAux(_:Buffer) => true
+    rule #noOverflowAux(BUF) => true requires #isBuf(BUF)
     rule #noOverflowAux(WS1 ++ WS2) => #noOverflowAux(WS1) andBool #noOverflowAux(WS2)
 
     syntax WordStack ::= #asByteStackInWidth    ( Int, Int )                 [function]
