@@ -74,9 +74,10 @@ module VERIFICATION
 //========================================================================
     rule nthbyteof(chop(#asWord(W : WS) &Int MASK), I       , N       )
       => nthbyteof(chop(#asWord(    WS) &Int MASK), I -Int 1, N -Int 1)
-      requires I >Int 0
+      requires I >Int 0 andBool #sizeWordStack(W : WS) <=Int 32
 
-    rule nthbyteof(chop(#asWord(W : WS) &Int MASK), 0, N) => W &Int ((MASK >>Byte #sizeWordStack(WS)) &Int 255)
+    rule nthbyteof(chop(#asWord(W : WS) &Int MASK), 0, N) => W &Int (MASK >>Byte #sizeWordStack(WS))
+      requires #sizeWordStack(W : WS) <=Int 32
 
     rule nthbyteof(WS, I, N) &Int 255 => nthbyteof(WS, I, N)
 
