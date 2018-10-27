@@ -101,7 +101,7 @@ It reduces the reasoning efforts of the underlying theorem prover, factoring out
       requires         #sizeWordStack(WS) <Int N andBool #isRegularWordStack(WS) ==K true
 
     //Rules for #padToWidth with non-regular symbolic arguments.
-    rule #padToWidth(32, #asByteStack(V)) => #asByteStackInWidth(V, 32)
+    rule #padToWidth(32, #asByteStack(V)) => #buf(32, V) // #asByteStackInWidth(V, 32)
       requires 0 <=Int V andBool V <Int pow256
 
     // for Vyper
@@ -129,6 +129,9 @@ It reduces the reasoning efforts of the underlying theorem prover, factoring out
 
     rule #noOverflowAux(W : WS)     => 0 <=Int W andBool W <Int 256 andBool #noOverflowAux(WS)
     rule #noOverflowAux(.WordStack) => true
+
+    rule #noOverflowAux(_:Buffer) => true
+    rule #noOverflowAux(WS1 ++ WS2) => #noOverflowAux(WS1) andBool #noOverflowAux(WS2)
 
     syntax WordStack ::= #asByteStackInWidth    ( Int, Int )                 [function]
                        | #asByteStackInWidthAux ( Int, Int, Int, WordStack ) [function]
