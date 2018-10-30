@@ -4,7 +4,7 @@
 specs_dir:=specs
 build_dir:=.build
 
-.PHONY: all clean kevm clean-kevm
+.PHONY: all clean kevm clean-kevm issues
 
 all: k-files split-proof-tests
 
@@ -41,6 +41,31 @@ $(specs_dir)/lemmas.k: resources/lemmas.md $(TANGLER)
 	@echo >&2 "== tangle: $@"
 	mkdir -p $(dir $@)
 	pandoc --from markdown --to "$(TANGLER)" --metadata=code:".k" $< > $@
+
+# Reports
+# -------
+
+issues: $(build_dir)/issues.pdf
+
+$(build_dir)/issues.pdf: $(build_dir)/issues.md
+	pandoc --from markdown --to latex --output $@ $<
+
+$(build_dir)/issues.md: uniswap/issues.md gnosis/issues.md
+	echo "---"                      	   > $@
+	echo "title: All Issues Found So Far" >> $@
+	echo "geometry: margin=2.5cm"	      >> $@
+	echo "---"                            >> $@
+	echo                                  >> $@
+	echo "Uniswap"                        >> $@
+	echo "======="                        >> $@
+	echo                                  >> $@
+	cat  uniswap/issues.md                >> $@
+	echo                                  >> $@
+	echo "Gnosis"                         >> $@
+	echo "======"                         >> $@
+	echo                                  >> $@
+	cat  gnosis/issues.md                 >> $@
+	echo                                  >> $@
 
 # Spec Files
 # ----------
