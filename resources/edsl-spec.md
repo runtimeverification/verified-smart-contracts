@@ -81,6 +81,7 @@ Note that there are only a few of parameters, meaning that the larger part of th
             <balance> _ </balance>
             <code> #parseByteStack({CODE}) </code>
             <storage> {STORAGE} </storage>
+            <origStorage> _ </origStorage>
             <nonce> _ </nonce>
           </account>
           ...

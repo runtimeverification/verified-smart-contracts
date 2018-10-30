@@ -63,6 +63,7 @@
             <storage>
 {MASTER_COPY_STORAGE}
             </storage>
+            <origStorage> _ </origStorage>
             <nonce> {MASTER_COPY_NONCE} </nonce>
           </account>
           <account>
@@ -72,6 +73,7 @@
             <storage>
 {PROXY_STORAGE}
             </storage>
+            <origStorage> _ </origStorage>
             <nonce> {PROXY_NONCE} </nonce>
           </account>
           <account>
@@ -81,6 +83,7 @@
             <storage>
 {ORIGIN_STORAGE}
             </storage>
+            <origStorage> _ </origStorage>
             <nonce> {ORIGIN_NONCE} </nonce>
           </account>
 {ACCOUNTS}
