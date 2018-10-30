@@ -165,3 +165,9 @@ Use EDSL inheritance mechanism to avoid duplication.
 Example:
 
 https://github.com/runtimeverification/verified-smart-contracts/blob/6bcc9eb0b2964d6d03eefbde130e2f8494548cd4/gnosis/gnosis-spec.ini#L280-L349
+
+## Other debug messages
+Look at various strings logged to `System.err` in classes `SymbolicRewriter` and `FormulaContext`. Alternatively, to see all possible debug messages, look at usages of fields `logBasic` and `debugZ3` from class `GlobalOptions`:
+https://github.com/kframework/k/blob/gnosis/kernel/src/main/java/org/kframework/main/GlobalOptions.java
+
+It's better to navigate this code from an IDE, like Intellij Idea.
