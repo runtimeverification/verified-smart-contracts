@@ -265,7 +265,8 @@ gnosis_test_files:=testKeccak-data1-spec.k \
                    testAbiEncode-AndKeccak-data1-spec.k \
                    testAbiEncodePacked-spec.k \
                    testEcrecover-non-empty-spec.k \
-                   testEcrecover-empty-spec.k
+                   testEcrecover-empty-spec.k \
+                   testSignatureSplit-spec.k
 
 proof_tests:=sum-to-n vyper-erc20 zeppelin-erc20
 
