@@ -11,6 +11,17 @@ module LEMMAS
     imports K-REFLECTION
 ```
 
+### Gas Abstraction
+```k
+    // Temporary solution to avoid reasoning about gas
+    syntax Int ::= "#infinity" [function]
+ // -------------------------------------
+    rule #infinity -Int _ => #infinity
+    rule #infinity >=Int _ => true
+    rule #infinity <Int _ => false
+
+```
+
 ### Memory Abstraction
 
 We present an abstraction for the EVM memory to allow the word-level reasoning.
@@ -72,6 +83,13 @@ They capture the essential mechanisms used by the two instructions: splitting a 
                 : nthbyteof(V, 31, 32)
                 : .WordStack ) => V
       requires 0 <=Int V andBool V <Int pow256
+
+    rule 0 <=Int #asWord(#bufSeg(_, _, _))                 => true
+    rule         #asWord(#bufSeg(_, _, WIDTH)) <Int pow256 => true
+
+    rule         #asWord(#bufSeg(_, _, WIDTH)) <=Int 255 => true requires WIDTH ==Int 1
+
+    rule #buf(32, #asWord(#bufSeg(BUF, START, WIDTH))) => #bufSeg(BUF, START +Int WIDTH -Int 32, 32)  requires WIDTH >=Int 32
 ```
 
 Another type of byte-array manipulating operation is used to extract the function signature from the call data.
@@ -121,17 +139,6 @@ It reduces the reasoning efforts of the underlying theorem prover, factoring out
 
     rule #asByteStackInWidthAux(X, I => I -Int 1, N, WS => nthbyteof(X, I, N) : WS) when I >=Int 0
     rule #asByteStackInWidthAux(X,            -1, N, WS) => WS
-```
-
-### Byte arrays with concrete size
-
-Code sugar to represent byte arrays with concrete size but symbolic data.
-
-```k
-    syntax TypedArg ::= #toBytes    ( Int , Int )      [function] //data, len
- // -----------------------------------------------------------------
-    rule #toBytes(DATA, N) => #bytes(#asByteStackInWidth(DATA, N))
-      requires #rangeBytes(N, DATA)
 ```
 
 ### Hashed Location
@@ -207,6 +214,12 @@ These rules are specific to reasoning about EVM programs.
     rule (I1 -Int I2) +Int I3 => I1 -Int (I2 -Int I3) when #isConcrete(I2) andBool #isConcrete(I3)
     rule (I1 -Int I2) -Int I3 => I1 -Int (I2 +Int I3) when #isConcrete(I2) andBool #isConcrete(I3)
 
+    rule I1 +Int (I2 +Int I3) => I2 +Int (I1 +Int I3) when #isConcrete(I1) andBool #isConcrete(I3)
+    rule I1 +Int (I2 +Int I3) => I3 +Int (I1 +Int I2) when #isConcrete(I1) andBool #isConcrete(I2)
+
+    rule (I1 +Int I2) +Int (I3 -Int I2) => I1 +Int I3
+    rule (I1 +Int I2) -Int (I1 +Int I3) => I2 -Int I3
+
     rule I1 &Int (I2 &Int I3) => (I1 &Int I2) &Int I3 when #isConcrete(I1) andBool #isConcrete(I2)
 
     // 0xffff...f &Int N = N
@@ -218,41 +231,8 @@ These rules are specific to reasoning about EVM programs.
                             andBool 0 <=Int N andBool N <=Int MASK
 
 
-    rule #asWord( B1 : B2 : B3 : B4 : B5 : B6 : B7 : B8 : B9 : B10 : B11 : B12 : B13 : B14 : B15 : B16
-                : B17: B18: B19: B20: B21: B22: B23: B24: B25: B26 : B27 : B28 : B29 : B30 : B31 : B32
-                : .WordStack ) &Int 255 => B32
-      requires 0 <=Int B1  andBool B1  <Int 256
-       andBool 0 <=Int B2  andBool B2  <Int 256
-       andBool 0 <=Int B3  andBool B3  <Int 256
-       andBool 0 <=Int B4  andBool B4  <Int 256
-       andBool 0 <=Int B5  andBool B5  <Int 256
-       andBool 0 <=Int B6  andBool B6  <Int 256
-       andBool 0 <=Int B7  andBool B7  <Int 256
-       andBool 0 <=Int B8  andBool B8  <Int 256
-       andBool 0 <=Int B9  andBool B9  <Int 256
-       andBool 0 <=Int B10 andBool B10 <Int 256
-       andBool 0 <=Int B11 andBool B11 <Int 256
-       andBool 0 <=Int B12 andBool B12 <Int 256
-       andBool 0 <=Int B13 andBool B13 <Int 256
-       andBool 0 <=Int B14 andBool B14 <Int 256
-       andBool 0 <=Int B15 andBool B15 <Int 256
-       andBool 0 <=Int B16 andBool B16 <Int 256
-       andBool 0 <=Int B17 andBool B17 <Int 256
-       andBool 0 <=Int B18 andBool B18 <Int 256
-       andBool 0 <=Int B19 andBool B19 <Int 256
-       andBool 0 <=Int B20 andBool B20 <Int 256
-       andBool 0 <=Int B21 andBool B21 <Int 256
-       andBool 0 <=Int B22 andBool B22 <Int 256
-       andBool 0 <=Int B23 andBool B23 <Int 256
-       andBool 0 <=Int B24 andBool B24 <Int 256
-       andBool 0 <=Int B25 andBool B25 <Int 256
-       andBool 0 <=Int B26 andBool B26 <Int 256
-       andBool 0 <=Int B27 andBool B27 <Int 256
-       andBool 0 <=Int B28 andBool B28 <Int 256
-       andBool 0 <=Int B29 andBool B29 <Int 256
-       andBool 0 <=Int B30 andBool B30 <Int 256
-       andBool 0 <=Int B31 andBool B31 <Int 256
-       andBool 0 <=Int B32 andBool B32 <Int 256
+    rule #asWord(#bufSeg(BUF, START, WIDTH)) &Int 255 => #asWord(#bufSeg(BUF, START +Int WIDTH -Int 1, 1))  requires WIDTH >=Int 1
+    rule 255 &Int #asWord(#bufSeg(BUF, START, WIDTH)) => #asWord(#bufSeg(BUF, START +Int WIDTH -Int 1, 1))  requires WIDTH >=Int 1
 
 
     // for gas calculation
@@ -342,10 +322,8 @@ These lemmas abstract some properties about `#sizeWordStack`:
 
 ```k
     rule #sizeWordStack ( _ , _ ) >=Int 0 => true [smt-lemma]
-    rule #sizeWordStack ( WS , N:Int )
-      => #sizeWordStack ( WS , 0 ) +Int N
-      requires N =/=K 0
-      [lemma]
+
+    rule WS ++ .WordStack => WS
 
 endmodule
 ```
