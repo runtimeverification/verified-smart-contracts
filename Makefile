@@ -7,9 +7,11 @@ build_dir:=.build
 K_VERSION   :=$(shell cat .k.rev)
 KEVM_VERSION:=$(shell cat .kevm.rev)
 
-.PHONY: all clean k kevm clean-kevm
+.PHONY: all all-dev clean k kevm clean-kevm
 
-all: k-files split-proof-tests
+all: k-files split-proof-tests-minimal
+
+all-dev: all split-proof-tests
 
 clean:
 	rm -rf $(specs_dir) $(build_dir)
@@ -41,7 +43,7 @@ kevm:
 		&& git reset --hard $(KEVM_VERSION) \
 		&& make tangle-deps \
 		&& make defn \
-		&& $(k_bin)/kompile --debug --backend java -I .build/java -d .build/java --main-module ETHEREUM-SIMULATION --syntax-module ETHEREUM-SIMULATION .build/java/driver.k
+		&& $(k_bin)/kompile -v --debug --backend java -I .build/java -d .build/java --main-module ETHEREUM-SIMULATION --syntax-module ETHEREUM-SIMULATION .build/java/driver.k
 
 
 # Definition Files
@@ -213,10 +215,14 @@ gnosis_test_files:=testKeccak-data1-spec.k \
                    testSignatureSplit-pos1-spec.k \
                    testSignatureSplit-pos2-spec.k
 
-proof_tests:=bihu vyper-erc20 zeppelin-erc20 hkg-erc20 hobby-erc20 sum-to-n ds-token-erc20 gnosis
+proof_tests_minimal:=sum-to-n vyper-erc20 zeppelin-erc20
+
+proof_tests:=$(proof_tests_minimal) bihu hkg-erc20 hobby-erc20 ds-token-erc20 gnosis
 
 # FIXME: restore the casper specs
 #proof_tests += casper
+
+split-proof-tests-minimal: $(proof_tests_minimal)
 
 split-proof-tests: $(proof_tests)
 
@@ -388,11 +394,11 @@ gnosis_tmpls:=gnosis/module-tmpl.k gnosis/spec-tmpl.k
 # Testing
 # -------
 
-TEST:=$(k_bin)/kprove -d $(kevm_repo_dir)/.build/java -m VERIFICATION --z3-executable
+TEST:=$(k_bin)/kprove -d $(kevm_repo_dir)/.build/java -m VERIFICATION --z3-executable --z3-impl-timeout 500
 
 test_files:=$(wildcard specs/*/*-spec.k)
 
 test: $(test_files:=.test)
 
 specs/%-spec.k.test: specs/%-spec.k
-	$(TEST) $< --z3-impl-timeout 500 --verbose
+	$(TEST) $<
