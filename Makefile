@@ -4,8 +4,8 @@
 specs_dir:=specs
 build_dir:=.build
 
-K_VERSION   :=$(shell cat .k.rev)
-KEVM_VERSION:=$(shell cat .kevm.rev)
+K_VERSION   :=$(shell cat ${build_dir}/.k.rev)
+KEVM_VERSION:=$(shell cat ${build_dir}/.kevm.rev)
 
 .PHONY: all all-dev clean k kevm clean-kevm
 
@@ -14,7 +14,7 @@ all: k-files split-proof-tests-minimal
 all-dev: all split-proof-tests
 
 clean:
-	rm -rf $(specs_dir) $(build_dir)
+	rm -rf $(specs_dir) $(build_dir)/*
 
 pandoc_tangle_submodule:=$(build_dir)/pandoc-tangle
 TANGLER:=$(pandoc_tangle_submodule)/tangle.lua
