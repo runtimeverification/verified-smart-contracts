@@ -4,7 +4,10 @@
 specs_dir:=specs
 build_dir:=.build
 
-.PHONY: all clean kevm clean-kevm
+K_VERSION   :=$(shell cat .k.rev)
+KEVM_VERSION:=$(shell cat .kevm.rev)
+
+.PHONY: all clean k kevm clean-kevm
 
 all: k-files split-proof-tests
 
@@ -19,14 +22,26 @@ export LUA_PATH
 $(TANGLER):
 	git submodule update --init -- $(pandoc_tangle_submodule)
 
+k_repo:=https://github.com/kframework/k
+k_repo_dir:=$(build_dir)/k
+k_bin:=$(shell pwd)/$(k_repo_dir)/k-distribution/target/release/k/bin
+
+k:
+	git clone $(k_repo) $(k_repo_dir)
+	cd $(k_repo_dir) \
+		&& git reset --hard $(K_VERSION) \
+		&& mvn package -DskipTests
+
 kevm_repo:=https://github.com/kframework/evm-semantics
 kevm_repo_dir:=$(build_dir)/evm-semantics
 
 kevm:
-	git submodule update --init -- $(kevm_repo_dir)
+	git clone $(kevm_repo) $(kevm_repo_dir)
 	cd $(kevm_repo_dir) \
-		&& make repo-deps \
-		&& make build-java
+		&& git reset --hard $(KEVM_VERSION) \
+		&& make tangle-deps \
+		&& make defn \
+		&& $(k_bin)/kompile --debug --backend java -I .build/java -d .build/java --main-module ETHEREUM-SIMULATION --syntax-module ETHEREUM-SIMULATION .build/java/driver.k
 
 
 # Definition Files
@@ -373,7 +388,7 @@ gnosis_tmpls:=gnosis/module-tmpl.k gnosis/spec-tmpl.k
 # Testing
 # -------
 
-TEST:=$(kevm_repo_dir)/kevm prove
+TEST:=$(k_bin)/kprove -d $(kevm_repo_dir)/.build/java -m VERIFICATION --z3-executable
 
 test_files:=$(wildcard specs/*/*-spec.k)
 
