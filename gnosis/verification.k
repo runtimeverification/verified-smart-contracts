@@ -75,25 +75,25 @@ module VERIFICATION
     //decoding nthbyteof(#asWord())
     rule nthbyteof(#asWord(W : WS), I       , N       )
       => nthbyteof(#asWord(    WS), I -Int 1, N -Int 1)
-      requires I >Int 0 andBool #sizeWordStack(W : WS) <=Int 32
+      requires 0 <Int I andBool I <Int N andBool N <=Int 32 andBool N ==Int #sizeWordStack(W : WS)
 
     rule nthbyteof(#asWord(W : WS), 0, N) => W
-      requires #sizeWordStack(W : WS) <=Int 32
+      requires N <=Int 32 andBool N ==Int #sizeWordStack(W : WS)
 
     //decoding nthbyteof(#asWord() &Int MASK)
     rule nthbyteof(#asWord(W : WS) &Int MASK, I       , N       )
       => nthbyteof(#asWord(    WS) &Int MASK, I -Int 1, N -Int 1)
-      requires I >Int 0 andBool #sizeWordStack(W : WS) <=Int 32
+      requires 0 <Int I andBool I <Int N andBool N <=Int 32 andBool N ==Int #sizeWordStack(W : WS)
 
     rule nthbyteof(#asWord(W : WS) &Int MASK, 0, N) => W &Int (MASK >>Byte #sizeWordStack(WS))
-      requires #sizeWordStack(W : WS) <=Int 32
+      requires N <=Int 32 andBool N ==Int #sizeWordStack(W : WS)
 
     //decoding nthbyteof() &Int MASK
     rule MASK &Int nthbyteof(WS, I, N) => nthbyteof(WS, I, N) &Int MASK
       requires #isConcrete(MASK)
 
-    rule nthbyteof(_, _, _)  &Int (A => A &Int 255)
-      requires A >Int 255
+    rule nthbyteof(_, _, _)  &Int (MASK => MASK &Int 255)
+      requires #isConcrete(MASK) andBool MASK >Int 255
 
     rule nthbyteof(WS, I, N) &Int 255 => nthbyteof(WS, I, N)
 
@@ -119,17 +119,5 @@ module VERIFICATION
       requires #range ( 0 <= START < N ) andBool #range( 1 <= START +Int LEN <= N ) andBool LEN >Int 0
 
     rule #bytesSegment(_, _, 0, _) => .WordStack
-
-    syntax Bool ::= #isRegularWordStack ( WordStack ) [function]
- // ===============================================================
-    rule #isRegularWordStack(N : WS => WS)
-    rule #isRegularWordStack(.WordStack) => true
-
-    //same rules as for concrete #padToWidth, when WordStack is of regular form "A:B ... :.WordStack"
-    rule #padToWidth(N, WS) => WS
-      requires notBool #sizeWordStack(WS) <Int N andBool #isRegularWordStack(WS) ==K true
-
-    rule #padToWidth(N, WS) => #padToWidth(N, 0 : WS)
-      requires         #sizeWordStack(WS) <Int N andBool #isRegularWordStack(WS) ==K true
 
 endmodule

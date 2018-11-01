@@ -70,6 +70,8 @@ They capture the essential mechanisms used by the two instructions: splitting a 
                 : .WordStack ) => V
       requires 0 <=Int V andBool V <Int pow256
       
+    rule #asWord( 0 : W1 : WS  =>  W1 : WS )
+      
     rule nthbyteof(N, 0, 1) => N
 ```
 
@@ -84,6 +86,21 @@ The following lemmas essentially capture the signature extraction mechanisms.
 It reduces the reasoning efforts of the underlying theorem prover, factoring out the essence of the byte-twiddling operations.
 
 ```k
+    syntax Bool ::= #isRegularWordStack ( WordStack ) [function]
+ // -------------------------------------------------------
+    rule #isRegularWordStack(N : WS => WS)
+    rule #isRegularWordStack(.WordStack) => true
+
+    //Rules for #padToWidth with regular symbolic arguments.
+    //Same as for concrete #padToWidth, when WordStack is of regular form "A:B ... :.WordStack"
+    //Not clear why KEVM rules for #padToWidth were marked [concrete]. If they were general, rules below would not be necessary.
+    rule #padToWidth(N, WS) => WS
+      requires notBool #sizeWordStack(WS) <Int N andBool #isRegularWordStack(WS) ==K true
+
+    rule #padToWidth(N, WS) => #padToWidth(N, 0 : WS)
+      requires         #sizeWordStack(WS) <Int N andBool #isRegularWordStack(WS) ==K true
+
+    //Rules for #padToWidth with non-regular symbolic arguments.
     rule #padToWidth(32, #asByteStack(V)) => #asByteStackInWidth(V, 32)
       requires 0 <=Int V andBool V <Int pow256
 
