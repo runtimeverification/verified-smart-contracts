@@ -9,9 +9,9 @@ KEVM_VERSION:=$(shell cat ${build_dir}/.kevm.rev)
 
 .PHONY: all all-dev clean k kevm clean-kevm
 
-all: k-files split-proof-tests-minimal
+all: k-files split-proof-tests
 
-all-dev: all split-proof-tests
+all-dev: all split-proof-tests-dev
 
 clean:
 	rm -rf $(specs_dir) $(build_dir)/*
@@ -215,16 +215,16 @@ gnosis_test_files:=testKeccak-data1-spec.k \
                    testSignatureSplit-pos1-spec.k \
                    testSignatureSplit-pos2-spec.k
 
-proof_tests_minimal:=sum-to-n vyper-erc20 zeppelin-erc20
+proof_tests:=sum-to-n vyper-erc20 zeppelin-erc20
 
-proof_tests:=$(proof_tests_minimal) bihu hkg-erc20 hobby-erc20 ds-token-erc20 gnosis
+proof_tests_dev:=$(proof_tests) bihu hkg-erc20 hobby-erc20 ds-token-erc20 gnosis
 
 # FIXME: restore the casper specs
-#proof_tests += casper
-
-split-proof-tests-minimal: $(proof_tests_minimal)
+#proof_tests_dev += casper
 
 split-proof-tests: $(proof_tests)
+
+split-proof-tests-dev: $(proof_tests_dev)
 
 bihu: $(patsubst %, $(specs_dir)/bihu/%, $(bihu_collectToken_file)) $(patsubst %, $(specs_dir)/bihu/%, $(bihu_forwardToHotWallet_files)) $(specs_dir)/lemmas.k
 
