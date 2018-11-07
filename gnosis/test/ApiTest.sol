@@ -100,4 +100,12 @@ contract ApiTest {
     {
         (v, r, s) = signatureSplit(signatures, pos);
     }
+
+    function testEcrecover(bytes32 hash, uint8 v, bytes32 r, bytes32 s)
+        public
+        pure
+        returns (address)
+    {
+        return ecrecover(hash, v, r, s);
+    }
 }

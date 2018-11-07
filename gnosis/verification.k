@@ -120,4 +120,14 @@ module VERIFICATION
 
     rule #bytesSegment(_, _, 0, _) => .WordStack
 
+    //For some reason rules for #symEcrec don't work if placed in abstract-semantics.k
+    //This term replaces #sender(...) inside #ecrec(#sender()), in the symbolic version of rule for ECREC.
+    syntax Int ::= #symEcrec ( WordStack ) [function]
+ // ===============================================================
+
+    rule 0 <=Int #symEcrec(DATA)             => true
+
+    //that's because the result in concrete semantics is trimmed to Address range.
+    rule         #symEcrec(DATA) <Int pow160 => true
+
 endmodule

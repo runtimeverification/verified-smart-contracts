@@ -316,11 +316,15 @@ The other rules are similar.
 
 ```k
     rule X <=Int maxUInt256 => X <Int pow256
+    rule X <=Int maxUInt160 => X <Int pow160
     rule X <=Int 255        => X <Int 256
     
     //Range transformation, required for example for chop reduction rules below.
     rule X <Int pow256 => true
       requires X <Int 256
+      
+    rule X <Int pow256 => true
+      requires X <Int pow160
 ```
 
 ### `chop` Reduction

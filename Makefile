@@ -213,7 +213,8 @@ gnosis_test_files:=testKeccak-data1-spec.k \
                    testAbiEncodePacked-spec.k \
                    testSignatureSplit-pos0-spec.k \
                    testSignatureSplit-pos1-spec.k \
-                   testSignatureSplit-pos2-spec.k
+                   testSignatureSplit-pos2-spec.k \
+                   testEcrecover-spec.k
 
 proof_tests:=sum-to-n vyper-erc20 zeppelin-erc20
 
