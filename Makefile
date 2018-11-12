@@ -214,7 +214,8 @@ gnosis_test_files:=testKeccak-data1-spec.k \
                    testSignatureSplit-pos0-spec.k \
                    testSignatureSplit-pos1-spec.k \
                    testSignatureSplit-pos2-spec.k \
-                   testEcrecover-spec.k
+                   testEcrecover-non-empty-spec.k \
+                   testEcrecover-empty-spec.k
 
 proof_tests:=sum-to-n vyper-erc20 zeppelin-erc20
 
