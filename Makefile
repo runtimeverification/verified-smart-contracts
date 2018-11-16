@@ -135,6 +135,33 @@ ds_token_erc20_files:=totalSupply-spec.k \
                    transferFrom-failure-2-b-spec.k \
                    transferFrom-failure-2-c-spec.k
 
+proxied_token_files:=proxyType-success-spec.k \
+                    proxyType-failure-spec.k \
+                    implementation-success-spec.k \
+                    implementation-failure-spec.k \
+                    changeMasterCopy-success-spec.k \
+                    changeMasterCopy-failure-1-spec.k \
+                    changeMasterCopy-failure-2-spec.k \
+                    changeMasterCopy-failure-3-spec.k \
+                    totalSupply-success-spec.k \
+                    totalSupply-failure-spec.k \
+                    balanceOf-success-spec.k \
+                    balanceOf-failure-spec.k \
+                    allowance-success-spec.k \
+                    allowance-failure-spec.k \
+                    approve-success-spec.k \
+                    approve-failure-spec.k \
+                    transfer-success-1-spec.k \
+                    transfer-success-2-spec.k \
+                    transfer-failure-1-spec.k \
+                    transfer-failure-2-spec.k \
+                    transfer-failure-3-spec.k \
+                    transferFrom-success-1-spec.k \
+                    transferFrom-success-2-spec.k \
+                    transferFrom-failure-1-spec.k \
+                    transferFrom-failure-2-spec.k \
+                    transferFrom-failure-3-spec.k
+
 casper_files:=recommended_source_epoch-spec.k \
               recommended_target_hash-success-spec.k \
               recommended_target_hash-failure-11-spec.k \
@@ -219,7 +246,7 @@ gnosis_test_files:=testKeccak-data1-spec.k \
 
 proof_tests:=sum-to-n vyper-erc20 zeppelin-erc20
 
-proof_tests_dev:=$(proof_tests) bihu hkg-erc20 hobby-erc20 ds-token-erc20 gnosis gnosis-test
+proof_tests_dev:=$(proof_tests) bihu hkg-erc20 hobby-erc20 ds-token-erc20 gnosis gnosis-test proxied-token
 
 # FIXME: restore the casper specs
 #proof_tests_dev += casper
@@ -241,6 +268,8 @@ hobby-erc20: $(patsubst %, $(specs_dir)/hobby-erc20/%, $(hobby_erc20_files)) $(s
 sum-to-n: $(specs_dir)/examples/sum-to-n-spec.k $(specs_dir)/lemmas.k
 
 ds-token-erc20: $(patsubst %, $(specs_dir)/ds-token-erc20/%, $(ds_token_erc20_files)) $(specs_dir)/lemmas.k
+
+proxied-token: $(patsubst %, $(specs_dir)/proxied-token/%, $(proxied_token_files)) $(specs_dir)/lemmas.k
 
 casper: $(patsubst %, $(specs_dir)/casper/%, $(casper_files)) $(specs_dir)/lemmas.k
 
@@ -267,6 +296,7 @@ $(specs_dir)/bihu/forwardToHotWallet%-spec.k: $(bihu_tmpls) bihu/forwardToHotWal
 
 # ERC20
 erc20_tmpls:=erc20/module-tmpl.k erc20/spec-tmpl.k
+proxied-token_tmpls:=proxied-token/module-tmpl.k proxied-token/spec-tmpl.k
 
 $(specs_dir)/vyper-erc20/%-spec.k: $(erc20_tmpls) erc20/vyper/vyper-erc20-spec.ini
 	@echo >&2 "==  gen-spec: $@"
@@ -302,6 +332,13 @@ $(specs_dir)/ds-token-erc20/%-spec.k: erc20/module-tmpl.k erc20/spec-tmpl.k erc2
 	python3 resources/gen-spec.py $^ $* $* > $@
 	cp erc20/abstract-semantics.k $(dir $@)
 	cp erc20/verification.k $(dir $@)
+
+$(specs_dir)/proxied-token/%-spec.k: $(proxied-token_tmpls) proxied-token/proxied-token-spec.ini
+	@echo >&2 "==  gen-spec: $@"
+	mkdir -p $(dir $@)
+	python3 resources/gen-spec.py $^ $* $* > $@
+	cp proxied-token/abstract-semantics.k $(dir $@)
+	cp proxied-token/verification.k $(dir $@)
 
 # Sum to N
 $(specs_dir)/examples/sum-to-n-spec.k: resources/sum-to-n.md $(TANGLER)
