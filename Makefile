@@ -135,6 +135,25 @@ ds_token_erc20_files:=totalSupply-spec.k \
                    transferFrom-failure-2-b-spec.k \
                    transferFrom-failure-2-c-spec.k
 
+gno_erc20_files:=totalSupply-success-spec.k \
+             totalSupply-failure-spec.k \
+             balanceOf-success-spec.k \
+             balanceOf-failure-spec.k \
+             allowance-success-spec.k \
+             allowance-failure-spec.k \
+             approve-success-spec.k \
+             approve-failure-spec.k \
+             transfer-success-1-spec.k \
+             transfer-success-2-spec.k \
+             transfer-failure-1-spec.k \
+             transfer-failure-2-spec.k \
+             transfer-failure-3-spec.k \
+             transferFrom-success-1-spec.k \
+             transferFrom-success-2-spec.k \
+             transferFrom-failure-1-spec.k \
+             transferFrom-failure-2-spec.k \
+             transferFrom-failure-3-spec.k
+
 casper_files:=recommended_source_epoch-spec.k \
               recommended_target_hash-success-spec.k \
               recommended_target_hash-failure-11-spec.k \
@@ -219,7 +238,7 @@ gnosis_test_files:=testKeccak-data1-spec.k \
 
 proof_tests:=sum-to-n vyper-erc20 zeppelin-erc20
 
-proof_tests_dev:=$(proof_tests) bihu hkg-erc20 hobby-erc20 ds-token-erc20 gnosis gnosis-test
+proof_tests_dev:=$(proof_tests) bihu hkg-erc20 hobby-erc20 ds-token-erc20 gnosis gnosis-test gno-erc20
 
 # FIXME: restore the casper specs
 #proof_tests_dev += casper
@@ -242,11 +261,14 @@ sum-to-n: $(specs_dir)/examples/sum-to-n-spec.k $(specs_dir)/lemmas.k
 
 ds-token-erc20: $(patsubst %, $(specs_dir)/ds-token-erc20/%, $(ds_token_erc20_files)) $(specs_dir)/lemmas.k
 
+gno-erc20: $(patsubst %, $(specs_dir)/gno-erc20/%, $(gno_erc20_files)) $(specs_dir)/lemmas.k
+
 casper: $(patsubst %, $(specs_dir)/casper/%, $(casper_files)) $(specs_dir)/lemmas.k
 
 gnosis: $(patsubst %, $(specs_dir)/gnosis/%, $(gnosis_files)) $(specs_dir)/lemmas.k
 
 gnosis-test: $(patsubst %, $(specs_dir)/gnosis-test/%, $(gnosis_test_files)) $(specs_dir)/lemmas.k
+
 
 # Bihu
 bihu_tmpls:=bihu/module-tmpl.k bihu/spec-tmpl.k
@@ -267,6 +289,7 @@ $(specs_dir)/bihu/forwardToHotWallet%-spec.k: $(bihu_tmpls) bihu/forwardToHotWal
 
 # ERC20
 erc20_tmpls:=erc20/module-tmpl.k erc20/spec-tmpl.k
+gno-erc20_tmpls:=erc20/module-tmpl.k erc20/gno/spec-tmpl.k
 
 $(specs_dir)/vyper-erc20/%-spec.k: $(erc20_tmpls) erc20/vyper/vyper-erc20-spec.ini
 	@echo >&2 "==  gen-spec: $@"
@@ -297,6 +320,13 @@ $(specs_dir)/hobby-erc20/%-spec.k: $(erc20_tmpls) erc20/hobby/hobby-erc20-spec.i
 	cp erc20/verification.k $(dir $@)
 
 $(specs_dir)/ds-token-erc20/%-spec.k: erc20/module-tmpl.k erc20/spec-tmpl.k erc20/ds-token/ds-token-erc20-spec.ini
+	@echo >&2 "==  gen-spec: $@"
+	mkdir -p $(dir $@)
+	python3 resources/gen-spec.py $^ $* $* > $@
+	cp erc20/abstract-semantics.k $(dir $@)
+	cp erc20/verification.k $(dir $@)
+
+$(specs_dir)/gno-erc20/%-spec.k: $(gno-erc20_tmpls) erc20/gno/gno-erc20-spec.ini
 	@echo >&2 "==  gen-spec: $@"
 	mkdir -p $(dir $@)
 	python3 resources/gen-spec.py $^ $* $* > $@
