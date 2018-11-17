@@ -1,5 +1,7 @@
 Solidity version: v0.4.24+commit.e67f0147.js
-Gnosis version: v0.0.2-alpha
+Gnosis version: https://github.com/denis-bogdanas/safe-contracts
+    branch `rv`
+    At the moment it is v0.0.2-alpha with some functions marked public.
 
 Instructions to produce hex files:
 

@@ -195,7 +195,12 @@ casper_files:=recommended_source_epoch-spec.k \
               collective_reward-failure-spec.k
 
 gnosis_files:=encodeTransactionData-data32-spec.k \
-              encodeTransactionData-data33-spec.k
+              encodeTransactionData-data33-spec.k \
+              checkSignatures-threshold-0-spec.k \
+              checkSignatures-threshold-too-large-spec.k \
+              checkSignatures-threshold-1-sigv-2-empty-spec.k \
+              checkSignatures-threshold-1-sigv-2-ne-success-spec.k \
+              checkSignatures-threshold-1-sigv-2-ne-notOwner-spec.k
 
 # FIXME: restore the skipped specs
 #             setupSafe-spec.k
