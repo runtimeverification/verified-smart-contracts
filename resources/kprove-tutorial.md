@@ -2,7 +2,10 @@
 This tutorial is not meant to be complete or even correct. It is a work in progress technical reference.
 
 # Installation
-- Checkout repositories `k`, `evm-semantics` and `verified-smart-contracts`, all with branch `gnosis` (at the moment of writing). DO NOT follow build instructions in `evm-semantics` projects as they are known to be incomplete.
+- Clone repositories `k`, `evm-semantics` and `verified-smart-contracts`.
+If you are an external contributor, then fork `verified-smart-contracts` first then checkout the fork.
+Use these branches (unless you got other instructions): K: `gnosis`, evm-semantics: `gnosis`, verified-smart-contracts: `master`. 
+DO NOT follow build instructions in `evm-semantics` projects as they are known to be incomplete.
 
 Right now these 3 projects depend on each other in git level, like evm-smart-contracts has a git submodule for evm-semantics wich have a git submodule for k, but it's better not to use these dependencies but have them checked out separately. This way there are less chances you'll have issues when one of them gets updated on git.
 
