@@ -234,8 +234,10 @@ These rules are specific to reasoning about EVM programs.
     rule (#if C #then B1 #else B2 #fi) -Int A => #if C #then (B1 -Int A) #else (B2 -Int A) #fi
 ```
 
-Operator normalization rules. Required to simplify lemma matching.
-In range lemmas we only use comparison operators <Int and <=Int.
+Operator direction normalization rules. Required to reduce the number of forms of inequalities that can be matched by 
+general lemmas. We chose to keep `<Int` and `<=Int` because those operators are used in all range lemmas and in
+`#range` macros. Operators `>Int` and `>=Int` are still allowed anywhere except rules LHS.
+In all other places they will be matched and rewritten by rules below.
 ```k
     rule X >Int Y => Y <Int X
     rule X >=Int Y => Y <=Int X
@@ -341,7 +343,7 @@ The other rules are similar.
 These lemmas abstract some properties about `#sizeWordStack`:
 
 ```k
-    rule #sizeWordStack ( _ , _ ) >=Int 0 => true [smt-lemma]
+    rule 0 <=Int #sizeWordStack ( _ , _ ) => true [smt-lemma]
     rule #sizeWordStack ( WS , N:Int )
       => #sizeWordStack ( WS , 0 ) +Int N
       requires N =/=K 0

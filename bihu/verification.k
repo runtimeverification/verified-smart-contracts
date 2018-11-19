@@ -16,7 +16,7 @@ module VERIFICATION
 
     rule I1 +Int I2 <Int I1 => false requires 0 <=Int I2
 
-    rule I1 -Int I2 >Int I1 => false requires 0 <=Int I2
+    rule I1 <Int I1 -Int I2 => false requires 0 <=Int I2
 
     rule chop(I1 -Int I2) => I1 -Int I2 requires 0 <=Int I1 andBool I2 <Int pow256 andBool I1 >=Int I2
 
@@ -91,13 +91,12 @@ module VERIFICATION
     rule @canExtractThisYear(COLLECTED +Int BAL, NOW, START) +Int ((COLLECTED +Int BAL) -Int @remainingTokens(COLLECTED +Int BAL, NOW, START)) <Int pow256 => true
       requires #accumulatedReleasedTokens(BAL, COLLECTED, START, NOW) >Int COLLECTED +Int 3
 
-
     // proved manually (canExtract > balance) --- if condition
-    rule @canExtractThisYear(COLLECTED +Int BAL, NOW, START) +Int ((COLLECTED +Int BAL) -Int @remainingTokens(COLLECTED +Int BAL, NOW, START)) -Int COLLECTED >Int BAL => false
+    rule BAL <Int @canExtractThisYear(COLLECTED +Int BAL, NOW, START) +Int ((COLLECTED +Int BAL) -Int @remainingTokens(COLLECTED +Int BAL, NOW, START)) -Int COLLECTED => false
       requires #accumulatedReleasedTokens(BAL, COLLECTED, START, NOW) <Int (BAL +Int COLLECTED) -Int 10
 
     // proved manually (balance >= canExtract) --- balance = sub(balance, canExtract)
-    rule BAL >=Int @canExtractThisYear(COLLECTED +Int BAL, NOW, START) +Int ((COLLECTED +Int BAL) -Int @remainingTokens(COLLECTED +Int BAL, NOW, START)) -Int COLLECTED => true
+    rule @canExtractThisYear(COLLECTED +Int BAL, NOW, START) +Int ((COLLECTED +Int BAL) -Int @remainingTokens(COLLECTED +Int BAL, NOW, START)) -Int COLLECTED <=Int BAL => true
       requires #accumulatedReleasedTokens(BAL, COLLECTED, START, NOW) <Int (BAL +Int COLLECTED) -Int 10
 
 endmodule
