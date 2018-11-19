@@ -88,6 +88,9 @@ They capture the essential mechanisms used by the two instructions: splitting a 
     rule 0 <=Int #asWord(#bufSeg(_, _, _))                 => true
     rule         #asWord(#bufSeg(_, _, WIDTH)) <Int pow256 => true
 
+    rule 0 <=Int #asWord(selectRange(_, _, _))             => true
+    rule         #asWord(selectRange(_, _, _)) <Int pow256 => true
+
     rule         #asWord(#bufSeg(_, _, WIDTH)) <=Int 255 => true requires WIDTH ==Int 1
 
     rule #buf(32, #asWord(#bufSeg(BUF, START, WIDTH))) => #bufSeg(BUF, START +Int WIDTH -Int 32, 32)  requires WIDTH >=Int 32
