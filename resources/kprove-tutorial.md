@@ -9,9 +9,9 @@ DO NOT follow build instructions in `evm-semantics` projects as they are known t
 
 Right now these 3 projects depend on each other in git level, like evm-smart-contracts has a git submodule for evm-semantics wich have a git submodule for k, but it's better not to use these dependencies but have them checked out separately. This way there are less chances you'll have issues when one of them gets updated on git.
 
-- Add `$K_HOME` to `$PATH` as specified in K installation manual.
-
 Let's consider you have 3 path variables for home dir of the 3 projects: `$K_HOME`, `$KEVM`, `$VSC`.
+
+- Add `$K_HOME/k-distribution/target/release/k/bin` to `$PATH` as specified in K installation manual.
 
 - To build a new version of K, whenever you need it:
 
