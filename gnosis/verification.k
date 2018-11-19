@@ -5,6 +5,11 @@ module VERIFICATION
     imports EDSL
     imports LEMMAS
 
+    // Account Map
+    syntax Int ::= "#MASTER_COPY_ID" [function]
+    syntax Int ::= "#PROXY_ID" [function]
+    syntax Int ::= "#ORIGIN_ID" [function]
+
     //
     // Range
     //
@@ -51,6 +56,77 @@ module VERIFICATION
     rule 115792089237316195423570985007226406215939081747436879206741300988257197096960 &Int ADDR => 0
       requires #rangeAddress(ADDR)
 
+    rule (X *Int 32) +Int 192 ==K (Y *Int 32) +Int 160 => X +Int 1 ==K Y
+
+    rule (X *Int 32) +Int 32 ==K Y *Int 32             => X +Int 1 ==K Y
+
+    rule 192 ==K (X *Int 32) +Int 160                  => X ==K 1
+
+    rule maxInt(maxInt(A, B), C) => maxInt(A, C)  requires B <=Int C
+
+    rule (31 +Int X) /Int 32 *Int 32 => #ceil32(X)
+
+    rule (X +Int 31) /Int 32 *Int 32 => #ceil32(X)
+
+    rule (X /Int 32) *Int 32 => X  requires X modInt 32 ==Int 0
+
+    rule #ceil32(X) => X requires X modInt 32 ==Int 0
+
+    rule #asWord(WS) &Int 115792089237316195423570985008687907853269984665640564039457584007913129639935 => #asWord(WS)
+
+    rule powmod(256, X, pow256) >=Int 1 => true  requires 0 <=Int X andBool X <Int 32
+
+    rule powmod(256, X, pow256) <Int pow256 => true  requires 0 <=Int X
+
+    rule 0 <=Int 32 -Int ( X -Int (X /Int 32) *Int 32 ) => true  requires 0 <=Int X
+
+    rule 32 -Int ( X -Int (X /Int 32) *Int 32 ) <Int 32 => true requires 0 <=Int X andBool X modInt 32 =/=Int 0
+
+    rule 0 <=Int X -Int 1 => true      requires X >=Int 1
+
+    rule X -Int 1 <Int pow256 => true  requires X <Int pow256
+
+    rule 0 <=Int X xorInt 115792089237316195423570985008687907853269984665640564039457584007913129639935 => true      requires 0<=Int X andBool X <Int pow256
+
+    rule X xorInt 115792089237316195423570985008687907853269984665640564039457584007913129639935 <Int pow256 => true  requires 0<=Int X andBool X <Int pow256 
+
+    rule #sizeWordStack(selectRange(_, _, WIDTH), SIZE) => SIZE +Int WIDTH
+
+    rule (I1 +Int I2) -Int (I3 +Int I1) => I2 -Int I3
+
+    rule I1 -Int (I1 -Int I2) => I2
+
+    rule I1 +Int (I2 -Int I1) => I2
+
+    // Left mask
+    rule #asWord(WS1 ++ WS2) &Int ((powmod(256, MASKWIDTH, pow256) -Int 1) xorInt 115792089237316195423570985008687907853269984665640564039457584007913129639935)
+        => #asWord(WS1 ++ #buf(MASKWIDTH, 0))
+      requires 0 <=Int MASKWIDTH
+       andBool #sizeWordStack(WS1) +Int #sizeWordStack(WS2) ==Int 32
+       andBool #sizeWordStack(WS2) ==Int MASKWIDTH
+
+    // Right mask
+    rule #asWord(selectRange(M, START, 32)) &Int (powmod(256, MASKWIDTH, pow256) -Int 1) => #asWord(#buf(32 -Int MASKWIDTH, 0) ++ selectRange(M, START +Int 32 -Int MASKWIDTH, MASKWIDTH))
+      requires 0 <=Int MASKWIDTH
+       andBool MASKWIDTH <=Int 32
+
+    rule #asWord(WS0 ++ #buf(MASKWIDTH0, 0)) |Int #asWord(#buf(MASKWIDHT1, 0) ++ WS1)
+      => #asWord(WS0 ++ WS1)
+      requires #sizeWordStack(WS0) +Int MASKWIDTH0 ==Int 32
+       andBool #sizeWordStack(WS0) ==Int MASKWIDHT1
+       andBool MASKWIDTH0 ==Int #sizeWordStack(WS1)
+
+    rule 0 <=Int #asWord(_) => true
+
+    rule #asWord(_) <Int pow256 => true
+
+    rule #buf(32, #asWord(WS)) => WS  requires #sizeWordStack(WS) ==Int 32
+
+
+    syntax Int ::= #wordFirstNBytesMask ( Int )  [function]
+ // -------------------------------------------------------
+    rule chop((powmod(256, 32 -Int N, pow256) -Word 1) xorInt 115792089237316195423570985008687907853269984665640564039457584007913129639935) => #wordFirstNBytesMask(N)
+
     //
     // Abstraction
     //
@@ -96,5 +172,16 @@ module VERIFICATION
     syntax WordStack ::= #encSig (Int, Int, Int) [function]
  // ===============================================================
     rule #encSig(SIG_R, SIG_S, SIG_V) => #enc(#bytes32(SIG_R)) ++ #enc(#bytes32(SIG_S)) ++ #getValue(#uint8(SIG_V)) : .WordStack
+
+
+ // Memory reasoning
+ // ================
+    rule #bufSeg(BUF, S0, W0) ++ #bufSeg(BUF, S1, W1) => #bufSeg(BUF, S0, W0 +Int W1)
+      requires S1 ==Int S0 +Int W0
+
+    rule storeRange(storeRange(M, MS0, MW0, #bufSeg(BUF, BS0, BW0)), MS1, MW1, #bufSeg(BUF, BS1, BW1))
+        => storeRange(M, MS0, MW0 +Int MW1, #bufSeg(BUF, BS0, MW0 +Int MW1))
+      requires #isBuf(BUF) andBool MW0 ==Int BW0 andBool MW1 ==Int BW1
+       andBool MS1 ==Int MS0 +Int MW0 andBool BS1 ==Int BS0 +Int BW0
 
 endmodule

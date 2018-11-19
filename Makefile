@@ -188,9 +188,9 @@ gnosis_files:=encodeTransactionData-data32-spec.k \
 #             getTransactionHash-spec.k
 #             checkHash-spec.k
 
-gnosis_test_files:=testKeccak-data1-spec.k \
-                   testKeccak-data32-spec.k \
-                   testKeccak-data33-spec.k \
+gnosis_test_files:=testKeccak-1-spec.k \
+                   testKeccak-2-spec.k \
+                   testKeccakLoop-spec.k \
                    testAbiEncode-spec.k \
                    testAbiEncode-AndKeccak-data1-spec.k \
                    testAbiEncodePacked-spec.k \
@@ -359,13 +359,23 @@ $(specs_dir)/gnosis/execTransactionAndPaySubmitter-example-spec.k: $(gnosis_tmpl
 # Gnosis Test
 gnosis_tmpls:=gnosis/module-tmpl.k gnosis/spec-tmpl.k
 
- $(specs_dir)/gnosis/test/%-spec.k: $(gnosis_tmpls) gnosis/test/api-test.ini
+$(specs_dir)/gnosis/test/%-spec.k: $(gnosis_tmpls) gnosis/test/api-test.ini
 	@echo >&2 "==  gen-spec: $@"
 	mkdir -p $(dir $@)
 	python3 resources/gen-spec.py $^ $* $* > $@
 	cp gnosis/abstract-semantics.k $(dir $@)
 	cp gnosis/verification.k $(dir $@)
 	cp $(dir $@)/../../lemmas.k $(dir $@)/..
+
+$(specs_dir)/gnosis/test/testKeccak-1-spec.k: $(gnosis_tmpls) gnosis/test/api-test.ini
+	@echo >&2 "==  gen-spec: $@"
+	mkdir -p $(dir $@)
+	python3 resources/gen-spec.py $^ testKeccak-1 testKeccak-1 testKeccakLoop > $@
+
+$(specs_dir)/gnosis/test/testKeccak-2-spec.k: $(gnosis_tmpls) gnosis/test/api-test.ini
+	@echo >&2 "==  gen-spec: $@"
+	mkdir -p $(dir $@)
+	python3 resources/gen-spec.py $^ testKeccak-2 testKeccak-2 testKeccakLoop > $@
 
 
 # Testing
