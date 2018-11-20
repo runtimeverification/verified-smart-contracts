@@ -1,0 +1,1 @@
+A Proxy contract with a masterCopy of a Standard ERC20 Token has been verified. Both contracts are available in [deployed.sol](./deployed.sol), the spec template is in [spec-tmpl.k](./spec-tmpl.k) and the template params are in [proxied-token-spec.ini](proxied-token-spec.ini).
