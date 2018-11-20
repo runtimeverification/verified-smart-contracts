@@ -224,7 +224,7 @@ gnosis_test_files:=testKeccak-data1-spec.k \
 
 proof_tests:=sum-to-n vyper-erc20 zeppelin-erc20
 
-proof_tests_dev:=$(proof_tests) bihu
+proof_tests_dev:=bihu
 
 # FIXME: restore the casper specs
 #proof_tests_dev += casper
