@@ -71,6 +71,7 @@
             <balance> _ </balance>
             <code> #parseByteStack({MASTER_COPY_CODE}) </code>
             <storage> _ </storage>
+            <origStorage> _ </origStorage>
             <nonce> _ </nonce>
           </account>
           <account>
@@ -81,6 +82,7 @@
               {STORAGE} 
               _:Map 
             </storage>
+            <origStorage> _ </origStorage>
             <nonce> _ </nonce>
           </account>
           <account>
@@ -88,6 +90,7 @@
             <balance> CREATOR_BALANCE </balance>
             <code> _ </code>
             <storage> _ </storage>
+            <origStorage> _ </origStorage>
             <nonce> _ </nonce>
           </account>
           <account>
@@ -95,6 +98,7 @@
             <balance> RANDOM_BALANCE </balance>
             <code> _ </code>
             <storage> _ </storage>
+            <origStorage> _ </origStorage>
             <nonce> _ </nonce>
           </account>
           ...
