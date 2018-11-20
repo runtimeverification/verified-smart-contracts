@@ -224,7 +224,7 @@ gnosis_test_files:=testKeccak-data1-spec.k \
 
 proof_tests:=sum-to-n vyper-erc20 zeppelin-erc20
 
-proof_tests_dev:=$(proof_tests) bihu hkg-erc20 hobby-erc20 ds-token-erc20 gnosis gnosis-test
+proof_tests_dev:=$(proof_tests) bihu
 
 # FIXME: restore the casper specs
 #proof_tests_dev += casper
@@ -233,7 +233,7 @@ split-proof-tests: $(proof_tests)
 
 split-proof-tests-dev: $(proof_tests_dev)
 
-bihu: $(patsubst %, $(specs_dir)/bihu/%, $(bihu_collectToken_file)) $(patsubst %, $(specs_dir)/bihu/%, $(bihu_forwardToHotWallet_files)) $(specs_dir)/lemmas.k
+bihu: $(patsubst %, $(specs_dir)/bihu/%, $(bihu_collectToken_file)) $(specs_dir)/lemmas.k
 
 vyper-erc20: $(patsubst %, $(specs_dir)/vyper-erc20/%, $(erc20_files)) $(specs_dir)/lemmas.k
 
@@ -400,7 +400,7 @@ gnosis_test_tmpls:=gnosis/module-tmpl.k gnosis/spec-tmpl.k
 # Testing
 # -------
 
-TEST:=$(k_bin)/kprove -v -d $(kevm_repo_dir)/.build/java -m VERIFICATION --z3-executable --z3-impl-timeout 500
+TEST:=$(k_bin)/kprove -v -d $(kevm_repo_dir)/.build/java -m VERIFICATION --z3-executable --z3-impl-timeout 500 --debug-z3
 
 test_files:=$(wildcard specs/*/*-spec.k)
 
