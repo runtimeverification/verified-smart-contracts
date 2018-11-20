@@ -333,29 +333,6 @@ The other rules are similar.
     rule chop(I) => I requires 0 <=Int I andBool I <Int pow256
 ```
 
-### `-Word` Reduction
-
-```k
-    rule chop ( W0:Int +Int W1:Int ) -Word W1:Int => chop ( W0 )
-    requires #rangeUInt(256, W0) andBool #rangeUInt(256, W1)
-```
-
-### `modInt` Reduction
-
-```k
-    rule X:Int modInt 1461501637330902918203684832716283019655932542976 => X
-        requires #rangeAddress(X)
-```
-
-### `&Int` Reduction
-
-An Ethereum address X has an address space of [0, 2^160). Hence if we do (2^256 - 1) - (2^160 - 1) &Int X, the result will always be 0.
-
-```k
-    rule 115792089237316195423570985007226406215939081747436879206741300988257197096960 &Int X:Int => 0
-        requires #rangeAddress(X)
-```
-
 ### Wordstack
 
 These lemmas abstract some properties about `#sizeWordStack`:
