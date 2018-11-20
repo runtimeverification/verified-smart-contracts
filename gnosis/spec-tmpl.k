@@ -86,6 +86,15 @@
             <origStorage> _ </origStorage>
             <nonce> {ORIGIN_NONCE} </nonce>
           </account>
+          <account>
+            // precompiled account for ECCREC
+            <acctID> 1 </acctID>
+            <balance> 0 </balance>
+            <code> .WordStack </code>
+            <storage> .Map </storage>
+            <origStorage> .Map </origStorage>
+            <nonce> 0 </nonce>
+          </account>
 {ACCOUNTS}
           ...
         </accounts>

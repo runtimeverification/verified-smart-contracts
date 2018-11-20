@@ -196,6 +196,9 @@ casper_files:=recommended_source_epoch-spec.k \
 
 gnosis_files:=encodeTransactionData-data32-spec.k \
               encodeTransactionData-data33-spec.k \
+              signatureSplit-pos0-spec.k \
+              signatureSplit-pos1-spec.k \
+              signatureSplit-pos2-spec.k \
               checkSignatures-threshold-0-spec.k \
               checkSignatures-threshold-too-large-spec.k \
               checkSignatures-threshold-1-sigv-2-empty-spec.k \
@@ -216,9 +219,6 @@ gnosis_test_files:=testKeccak-data1-spec.k \
                    testAbiEncode-spec.k \
                    testAbiEncode-AndKeccak-data1-spec.k \
                    testAbiEncodePacked-spec.k \
-                   testSignatureSplit-pos0-spec.k \
-                   testSignatureSplit-pos1-spec.k \
-                   testSignatureSplit-pos2-spec.k \
                    testEcrecover-non-empty-spec.k \
                    testEcrecover-empty-spec.k
 

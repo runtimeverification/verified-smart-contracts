@@ -68,39 +68,6 @@ contract ApiTest {
         return abi.encodePacked(byte(0x19), byte(1), domainSeparator, safeTxHash);
     }
 
-    /// @dev divides bytes signature into `uint8 v, bytes32 r, bytes32 s`
-    /// @param pos which signature to read
-    /// @param signatures concatenated rsv signatures
-    function signatureSplit(bytes signatures, uint256 pos)
-        internal
-        pure
-        returns (uint8 v, bytes32 r, bytes32 s)
-    {
-        // The signature format is a compact form of:
-        //   {bytes32 r}{bytes32 s}{uint8 v}
-        // Compact means, uint8 is not padded to 32 bytes.
-        // solium-disable-next-line security/no-inline-assembly
-        assembly {
-            let signaturePos := mul(0x41, pos)
-            r := mload(add(signatures, add(signaturePos, 0x20)))
-            s := mload(add(signatures, add(signaturePos, 0x40)))
-            // Here we are loading the last 32 bytes, including 31 bytes
-            // of 's'. There is no 'mload8' to do this.
-            //
-            // 'byte' is not working due to the Solidity parser, so lets
-            // use the second best option, 'and'
-            v := and(mload(add(signatures, add(signaturePos, 0x41))), 0xff)
-        }
-    }
-
-    function testSignatureSplit(bytes signatures, uint256 pos)
-        public
-        pure
-        returns (uint8 v, bytes32 r, bytes32 s)
-    {
-        (v, r, s) = signatureSplit(signatures, pos);
-    }
-
     function testEcrecover(bytes32 hash, uint8 v, bytes32 r, bytes32 s)
         public
         pure
