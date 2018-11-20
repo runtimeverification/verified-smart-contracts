@@ -222,7 +222,7 @@ gnosis_test_files:=testKeccak-data1-spec.k \
                    testEcrecover-non-empty-spec.k \
                    testEcrecover-empty-spec.k
 
-proof_tests:=sum-to-n vyper-erc20 zeppelin-erc20
+proof_tests:=bihu
 
 proof_tests_dev:=bihu
 
