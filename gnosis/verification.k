@@ -122,6 +122,8 @@ module VERIFICATION
 
     rule #buf(32, #asWord(WS)) => WS  requires #sizeWordStack(WS) ==Int 32
 
+    rule #buf(32, DATA) => #padToWidth(32, #asByteStack(DATA))  [concrete]
+
 
     syntax Int ::= #wordFirstNBytesMask ( Int )  [function]
  // -------------------------------------------------------
