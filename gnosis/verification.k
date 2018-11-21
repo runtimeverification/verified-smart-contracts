@@ -56,6 +56,23 @@ module VERIFICATION
     rule 115792089237316195423570985007226406215939081747436879206741300988257197096960 &Int ADDR => 0
       requires #rangeAddress(ADDR)
 
+    // x &Int (NOT 31)
+    rule X &Int 115792089237316195423570985008687907853269984665640564039457584007913129639904 => (X /Int 32) *Int 32  requires 0 <=Int X
+
+    rule (X /Int 32) *Int 32 => X  requires X modInt 32 ==Int 0
+
+    rule #ceil32(X) => X requires X modInt 32 ==Int 0
+
+    rule 0 <=Int #asWord(_) => true
+
+    rule #asWord(_) <Int pow256 => true
+
+    rule #buf(32, #asWord(WS)) => WS  requires #sizeWordStack(WS) ==Int 32
+
+    rule #buf(32, DATA) => #padToWidth(32, #asByteStack(DATA))  [concrete]
+
+
+    // following lemmma is required for solidty 0.4.25
     rule (X *Int 32) +Int 192 ==K (Y *Int 32) +Int 160 => X +Int 1 ==K Y
 
     rule (X *Int 32) +Int 32 ==K Y *Int 32             => X +Int 1 ==K Y
@@ -67,10 +84,6 @@ module VERIFICATION
     rule (31 +Int X) /Int 32 *Int 32 => #ceil32(X)
 
     rule (X +Int 31) /Int 32 *Int 32 => #ceil32(X)
-
-    rule (X /Int 32) *Int 32 => X  requires X modInt 32 ==Int 0
-
-    rule #ceil32(X) => X requires X modInt 32 ==Int 0
 
     rule #asWord(WS) &Int 115792089237316195423570985008687907853269984665640564039457584007913129639935 => #asWord(WS)
 
@@ -115,14 +128,6 @@ module VERIFICATION
       requires #sizeWordStack(WS0) +Int MASKWIDTH0 ==Int 32
        andBool #sizeWordStack(WS0) ==Int MASKWIDHT1
        andBool MASKWIDTH0 ==Int #sizeWordStack(WS1)
-
-    rule 0 <=Int #asWord(_) => true
-
-    rule #asWord(_) <Int pow256 => true
-
-    rule #buf(32, #asWord(WS)) => WS  requires #sizeWordStack(WS) ==Int 32
-
-    rule #buf(32, DATA) => #padToWidth(32, #asByteStack(DATA))  [concrete]
 
 
     syntax Int ::= #wordFirstNBytesMask ( Int )  [function]
