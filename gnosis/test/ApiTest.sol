@@ -1,4 +1,4 @@
-pragma solidity 0.4.24;
+pragma solidity 0.5.0;
 
 
 /// @title Enum - Collection of enums
@@ -17,7 +17,7 @@ contract ApiTest {
     function testAbiEncodeAndKeccak(
         address to,
         uint256 value,
-        bytes data,
+        bytes memory data,
         Operation operation,
         uint256 safeTxGas,
         uint256 dataGas,
@@ -28,7 +28,7 @@ contract ApiTest {
     )
         public
         pure
-        returns (bytes)
+        returns (bytes memory)
     {
         return abi.encode(SAFE_TX_TYPEHASH, to, value, keccak256(data), operation, safeTxGas, dataGas, gasPrice, gasToken, refundReceiver, _nonce);
     }
@@ -47,12 +47,12 @@ contract ApiTest {
     )
         public
         pure
-        returns (bytes)
+        returns (bytes memory)
     {
         return abi.encode(SAFE_TX_TYPEHASH, to, value, keccakOut, operation, safeTxGas, dataGas, gasPrice, gasToken, refundReceiver, _nonce);
     }
 
-    function testKeccak(bytes data)
+    function testKeccak(bytes memory data)
         public
         pure
         returns (bytes32)
@@ -63,9 +63,9 @@ contract ApiTest {
     function testAbiEncodePacked(bytes32 safeTxHash)
         public
         view
-        returns (bytes)
+        returns (bytes memory)
     {
-        return abi.encodePacked(byte(0x19), byte(1), domainSeparator, safeTxHash);
+        return abi.encodePacked(byte(0x19), byte(0x01), domainSeparator, safeTxHash);
     }
 
     function testEcrecover(bytes32 hash, uint8 v, bytes32 r, bytes32 s)
