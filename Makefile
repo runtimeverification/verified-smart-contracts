@@ -194,16 +194,7 @@ casper_files:=recommended_source_epoch-spec.k \
               collective_reward-success-zero-2-spec.k \
               collective_reward-failure-spec.k
 
-gnosis_files:=encodeTransactionData-data32-spec.k \
-              encodeTransactionData-data33-spec.k \
-              signatureSplit-pos0-spec.k \
-              signatureSplit-pos1-spec.k \
-              signatureSplit-pos2-spec.k \
-              checkSignatures-threshold-0-spec.k \
-              checkSignatures-threshold-too-large-spec.k \
-              checkSignatures-threshold-1-sigv-2-empty-spec.k \
-              checkSignatures-threshold-1-sigv-2-ne-success-spec.k \
-              checkSignatures-threshold-1-sigv-2-ne-notOwner-spec.k
+gnosis_files:=checkSignatures-threshold-too-large-spec.k
 
 # FIXME: restore the skipped specs
 #             setupSafe-spec.k
@@ -222,9 +213,9 @@ gnosis_test_files:=testKeccak-data1-spec.k \
                    testEcrecover-non-empty-spec.k \
                    testEcrecover-empty-spec.k
 
-proof_tests:=sum-to-n vyper-erc20 zeppelin-erc20
+proof_tests:=gnosis
 
-proof_tests_dev:=$(proof_tests) bihu hkg-erc20 hobby-erc20 ds-token-erc20 gnosis gnosis-test
+proof_tests_dev:=gnosis
 
 # FIXME: restore the casper specs
 #proof_tests_dev += casper
@@ -400,7 +391,7 @@ gnosis_test_tmpls:=gnosis/module-tmpl.k gnosis/spec-tmpl.k
 # Testing
 # -------
 
-TEST:=$(k_bin)/kprove -v -d $(kevm_repo_dir)/.build/java -m VERIFICATION --z3-executable --z3-impl-timeout 500
+TEST:=$(k_bin)/kprove -v -d $(kevm_repo_dir)/.build/java -m VERIFICATION --z3-executable --z3-impl-timeout 500 --debug-z3
 
 test_files:=$(wildcard specs/*/*-spec.k)
 
