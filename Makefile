@@ -466,7 +466,7 @@ gnosis_test_tmpls:=gnosis/module-tmpl.k gnosis/spec-tmpl.k
 # Testing
 # -------
 
-TEST:=$(k_bin)/kprove -v -d $(kevm_repo_dir)/.build/java -m VERIFICATION --z3-executable --z3-impl-timeout 500
+TEST:=$(k_bin)/kprove -v -d $(kevm_repo_dir)/.build/java -m VERIFICATION --z3-impl-timeout 500
 
 test_files:=$(wildcard specs/*/*-spec.k)
 
