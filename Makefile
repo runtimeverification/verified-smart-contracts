@@ -245,7 +245,6 @@ gnosis_files:=encodeTransactionData-data32-spec.k \
               signatureSplit-pos0-spec.k \
               signatureSplit-pos1-spec.k \
               signatureSplit-pos2-spec.k \
-              checkSignatures-threshold-0-spec.k \
               checkSignatures-threshold-too-large-spec.k \
               checkSignatures-threshold-1-sigv-2-empty-spec.k \
               checkSignatures-threshold-1-sigv-2-ne-success-spec.k \
