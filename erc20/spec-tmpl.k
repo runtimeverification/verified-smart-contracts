@@ -3,7 +3,7 @@
     <k> {K} </k>
     <exit-code> 1 </exit-code>
     <mode> NORMAL </mode>
-    <schedule> BYZANTIUM </schedule>
+    <schedule> {SCHEDULE} </schedule>
     <analysis> .Map </analysis> // not part of evm
 
     <ethereum>
@@ -15,7 +15,7 @@
         <touchedAccounts> _ => _ </touchedAccounts>
 
         <callState>
-          <program> #asMapOpCodes(#dasmOpCodes(#parseByteStack({CODE}), BYZANTIUM)) </program>
+          <program> #asMapOpCodes(#dasmOpCodes(#parseByteStack({CODE}), {SCHEDULE})) </program>
           <programBytes> #parseByteStack({CODE}) </programBytes>
 
           <id> ACCT_ID </id> // contract owner
@@ -72,10 +72,8 @@
             <acctID> ACCT_ID </acctID>
             <balance> _ </balance>
             <code> #parseByteStack({CODE}) </code>
-            <storage>
-              {STORAGE}
-            </storage>
-            <origStorage> _ </origStorage>
+            <storage>{STORAGE} </storage>
+            <origStorage> {ORIGSTORAGE} </origStorage>
             <nonce> _ </nonce>
           </account>
        // ... // TODO: fix
