@@ -213,6 +213,9 @@ In all other places they will be matched and rewritten by rules below.
 ```k
     rule X >Int Y => Y <Int X
     rule X >=Int Y => Y <=Int X
+    
+    rule notBool (X <Int Y) => Y <=Int X
+    rule notBool (X <=Int Y) => Y <Int X
 ``` 
 
 ### Boolean
