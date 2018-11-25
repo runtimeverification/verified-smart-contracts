@@ -262,7 +262,8 @@ gnosis_test_files:=testKeccak-1-spec.k \
                    testKeccak-2-spec.k \
                    testKeccakLoop-spec.k \
                    testAbiEncode-spec.k \
-                   testAbiEncode-AndKeccak-data1-spec.k \
+                   testAbiEncode-AndKeccak-1-spec.k \
+                   testAbiEncode-AndKeccak-2-spec.k \
                    testAbiEncodePacked-spec.k \
                    testEcrecover-non-empty-spec.k \
                    testEcrecover-empty-spec.k \

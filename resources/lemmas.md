@@ -80,9 +80,9 @@ They capture the essential mechanisms used by the two instructions: splitting a 
                 : nthbyteof(V, 31, 32)
                 : .WordStack ) => V
       requires 0 <=Int V andBool V <Int pow256
-      
+
     rule #asWord( 0 : W1 : WS  =>  W1 : WS )
-      
+
     rule nthbyteof(N, 0, 1) => N
 
     rule 0 <=Int #asWord(#bufSeg(_, _, _))                 => true
@@ -115,11 +115,11 @@ It reduces the reasoning efforts of the underlying theorem prover, factoring out
     //Rules for #padToWidth with regular symbolic arguments.
     //Same as for concrete #padToWidth, when WordStack is of regular form "A:B ... :.WordStack"
     //Not clear why KEVM rules for #padToWidth were marked [concrete]. If they were general, rules below would not be necessary.
-    rule #padToWidth(N, WS) => WS
-      requires notBool #sizeWordStack(WS) <Int N andBool #isRegularWordStack(WS) ==K true
+    //rule #padToWidth(N, WS) => WS
+    //  requires notBool #sizeWordStack(WS) <Int N andBool #isRegularWordStack(WS) ==K true
 
-    rule #padToWidth(N, WS) => #padToWidth(N, 0 : WS)
-      requires         #sizeWordStack(WS) <Int N andBool #isRegularWordStack(WS) ==K true
+    //rule #padToWidth(N, WS) => #padToWidth(N, 0 : WS)
+    //  requires         #sizeWordStack(WS) <Int N andBool #isRegularWordStack(WS) ==K true
 
     //Rules for #padToWidth with non-regular symbolic arguments.
     rule #padToWidth(32, #asByteStack(V)) => #buf(32, V) // #asByteStackInWidth(V, 32)
@@ -132,10 +132,10 @@ It reduces the reasoning efforts of the underlying theorem prover, factoring out
     // storing a symbolic boolean value in memory
     rule #padToWidth(32, #asByteStack(bool2Word(E)))
       => #asByteStackInWidthAux(0, 30, 32, nthbyteof(bool2Word(E), 31, 32) : .WordStack)
-      
+
     //1-byte ByteStack.
-    rule #asByteStack(W) => W : .WordStack
-      requires #rangeUInt(8, W)
+    //rule #asByteStack(W) => W : .WordStack
+    //  requires #rangeUInt(8, W)
 
     // for Solidity
     rule #asWord(WS) /Int D => #asWord(#take(#sizeWordStack(WS) -Int log256Int(D), WS))
@@ -255,14 +255,14 @@ These rules are specific to reasoning about EVM programs.
     rule (#if C #then B1 #else B2 #fi) -Int A => #if C #then (B1 -Int A) #else (B2 -Int A) #fi
 ```
 
-Operator direction normalization rules. Required to reduce the number of forms of inequalities that can be matched by 
+Operator direction normalization rules. Required to reduce the number of forms of inequalities that can be matched by
 general lemmas. We chose to keep `<Int` and `<=Int` because those operators are used in all range lemmas and in
 `#range` macros. Operators `>Int` and `>=Int` are still allowed anywhere except rules LHS.
 In all other places they will be matched and rewritten by rules below.
 ```k
     rule X >Int Y => Y <Int X
     rule X >=Int Y => Y <=Int X
-``` 
+```
 
 ### Boolean
 
