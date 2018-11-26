@@ -72,6 +72,11 @@ module VERIFICATION
 
     rule #buf(32, DATA) => #padToWidth(32, #asByteStack(DATA))  [concrete]
 
+    // 0xff..ff00..00 (16 1's followed by 240 0's)
+    rule 115790322390251417039241401711187164934754157181743688420499462401711837020160 &Int #asWord(WS1 ++ WS2)
+        => #asWord(WS1 ++ #buf(30, 0))
+      requires #sizeWordStack(WS1) ==Int 2
+       andBool #sizeWordStack(WS2) ==Int 30
 
     // following lemmma is required for solidty 0.4.25
     rule (X *Int 32) +Int 192 ==K (Y *Int 32) +Int 160 => X +Int 1 ==K Y
@@ -216,6 +221,9 @@ module VERIFICATION
  // Memory reasoning
  // ================
     rule #bufSeg(BUF, S0, W0) ++ #bufSeg(BUF, S1, W1) => #bufSeg(BUF, S0, W0 +Int W1)
+      requires S1 ==Int S0 +Int W0
+
+    rule #bufSeg(BUF, S0, W0) ++ (#bufSeg(BUF, S1, W1) ++ WS) => #bufSeg(BUF, S0, W0 +Int W1) ++ WS
       requires S1 ==Int S0 +Int W0
 
     rule storeRange(storeRange(M, MS0, MW0, #bufSeg(BUF, BS0, BW0)), MS1, MW1, #bufSeg(BUF, BS1, BW1))
