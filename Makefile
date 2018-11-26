@@ -190,7 +190,6 @@ gnosis_files:=encodeTransactionData-data32-spec.k \
 
 gnosis_test_files:=testKeccak-1-spec.k \
                    testKeccak-2-spec.k \
-                   testKeccakLoop-spec.k \
                    testAbiEncode-spec.k \
                    testAbiEncode-AndKeccak-1-spec.k \
                    testAbiEncode-AndKeccak-2-spec.k \
