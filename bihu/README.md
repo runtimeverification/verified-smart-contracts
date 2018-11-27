@@ -81,6 +81,23 @@ $ make bihu
 Run the EVM verifier to prove that the specifications are satisfied by (the compiled EVM bytecode of) the target functions.
 See these [instructions] for more details of running the verifier.
 
+## FAQ 
+
+**Q:** In [WarmWallet.modified.inlined.sol](../bihu/forwardToHotWallet/WarmWallet.modified.inlined.sol#L37), the `paused` boolean is declared. The `bool` type is equivalent with the `uint8` type, but in the spec file ([forwardToHotWallet-spec.ini](../bihu/forwardToHotWallet-spec.ini#L14)), the storage location named `PAUSED` is verified as an `uint256`. Shouldn't it be  
+```
+andBool 0 <=Int PAUSED   andBool PAUSED <Int (2 ^Int 8)
+```
+instead?
+
+Also, in a [failure case](../bihu/forwardToHotWallet-spec.ini#L68), it looks like the storage slot is compared to a shifted value.
+```
+andBool PAUSED ==Int 1 <<Int (20 *Int 8)
+```
+
+**A:**
+All storage locations have a size of 32 bytes, and multiple items of elementary types that need less than 32 bytes, such as `bool` or `address` could be packed into a single storage location only if they fit ([Layout of State Variables in Storage]).
+In the contract, the `paused` boolean is declared right after the `owner` address, and since they both have a combined size of less than 32 bytes (20 from `address` and one from `bool`) they are both kept in the same storage slot, which in the spec file is referenced as `PAUSED`.
+Therefore, in order to check that the boolean is true, the storage slot is compared with the value of 1 which is shifted 160 bits (representing the width of the address type) to the left. But this logic is valid only if the address is presumed to be 0.
 
 ## [Resources](../README.md#resources)
 
@@ -102,3 +119,5 @@ See these [instructions] for more details of running the verifier.
 [resources]: </README.md#resources>
 [eDSL]: </resources/edsl.md>
 [instructions]: </resources/instructions.md>
+[Layout of State Variables in Storage]: <https://solidity.readthedocs.io/en/v0.4.25/miscellaneous.html#layout-of-state-variables-in-storage>
+
