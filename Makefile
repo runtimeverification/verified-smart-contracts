@@ -265,7 +265,7 @@ gnosis_test_files:=testKeccak-data1-spec.k \
 
 proof_tests:=sum-to-n vyper-erc20 zeppelin-erc20
 
-proof_tests_dev:=$(proof_tests) bihu hkg-erc20 hobby-erc20 ds-token-erc20 gnosis gnosis-test gno-erc20 proxied-token
+proof_tests_dev:=$(proof_tests) bihu hkg-erc20 hobby-erc20 ds-token-erc20 gno-erc20 proxied-token
 
 # FIXME: restore the casper specs
 #proof_tests_dev += casper
