@@ -20,6 +20,8 @@ SPEC_INI?=spec.ini
 LOCAL_LEMMAS?=abstract-semantics.k verification.k
 TMPLS?=module-tmpl.k spec-tmpl.k
 
+KPROVE_OPTS?=
+
 #
 # Settings
 #
@@ -40,7 +42,7 @@ K_REPO_DIR:=$(BUILD_DIR)/k
 KEVM_REPO_DIR:=$(BUILD_DIR)/evm-semantics
 
 K_BIN:=$(abspath $(K_REPO_DIR)/k-distribution/target/release/k/bin)
-KPROVE:=$(K_BIN)/kprove -v -d $(KEVM_REPO_DIR)/.build/java -m VERIFICATION --z3-impl-timeout 500
+KPROVE:=$(K_BIN)/kprove -v -d $(KEVM_REPO_DIR)/.build/java -m VERIFICATION --z3-impl-timeout 500 $(KPROVE_OPTS)
 
 SPEC_FILES:=$(patsubst %,$(SPECS_DIR)/$(SPEC_GROUP)/%-spec.k,$(SPEC_NAMES))
 
