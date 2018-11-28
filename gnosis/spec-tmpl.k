@@ -115,6 +115,7 @@
      andBool #MASTER_COPY_ID =/=Int #PROXY_ID
      andBool #MASTER_COPY_ID =/=Int #ORIGIN_ID
      andBool #PROXY_ID       =/=Int #ORIGIN_ID
+     andBool #PROXY_ID       =/=Int 1
      // Account address normality
      andBool #MASTER_COPY_ID >Int 0 andBool (notBool #MASTER_COPY_ID in #precompiledAccounts(BYZANTIUM))
      andBool #PROXY_ID       >Int 0 andBool (notBool #PROXY_ID       in #precompiledAccounts(BYZANTIUM))

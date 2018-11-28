@@ -16,6 +16,7 @@ module LEMMAS
     // Temporary solution to avoid reasoning about gas
     syntax Int ::= "#infinity" [function]
  // -------------------------------------
+    rule #infinity +Int _ => #infinity
     rule #infinity -Int _ => #infinity
     rule #infinity >=Int _ => true
     rule #infinity <Int _ => false
