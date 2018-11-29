@@ -78,7 +78,7 @@
             <origStorage> _ </origStorage>
             <nonce> _ </nonce>
           </account>
-       // ... // TODO: fix
+          ...
         </accounts>
 
         <txOrder> _ </txOrder>
