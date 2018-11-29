@@ -3,8 +3,6 @@ BUILD_DIR:=.build
 SPEC_GROUP:=gnosis
 SPEC_INI:=gnosis-spec.ini
 
-KPROVE_OPTS:=--smt-prelude $(abspath $(dir $(abspath $(lastword $(MAKEFILE_LIST))))/evm.smt2)
-
 LEMMAS_DIR:=.
 
 SPEC_NAMES:=encodeTransactionData-data32 \
