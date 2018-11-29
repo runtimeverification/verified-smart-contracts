@@ -8,7 +8,7 @@ This program sums the numbers from 1 to N (for sufficiently small N), including 
 
 ```{.k .sum-to-n}
 requires "edsl.k"
-requires "../lemmas.k"
+requires "lemmas.k"
 
 module VERIFICATION
     imports EDSL

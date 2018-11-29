@@ -8,6 +8,8 @@ SPEC_INI:=api-test.ini
 
 KPROVE_OPTS:=--smt-prelude $(abspath $(dir $(abspath $(lastword $(MAKEFILE_LIST))))/../evm.smt2)
 
+LEMMAS_DIR:=..
+
 SPEC_NAMES:=testKeccak-1 \
             testKeccak-2 \
             testAbiEncode \

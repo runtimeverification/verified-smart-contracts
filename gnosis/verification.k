@@ -1,5 +1,5 @@
 requires "evm-symbolic.k"
-requires "../lemmas.k"
+requires "lemmas.k"
 
 module VERIFICATION
     imports EVM-SYMBOLIC

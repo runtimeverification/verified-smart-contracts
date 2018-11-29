@@ -1,3 +1,10 @@
+# path to this file
+THIS_FILE:=$(abspath $(lastword $(MAKEFILE_LIST)))
+# path to root directory
+ROOT:=$(abspath $(dir $(THIS_FILE))/../)
+
+RESOURCES:=$(ROOT)/resources
+
 #
 # Parameters
 #
@@ -20,18 +27,15 @@ SPEC_INI?=spec.ini
 LOCAL_LEMMAS?=abstract-semantics.k verification.k
 TMPLS?=module-tmpl.k spec-tmpl.k
 
+# additional options to kprove command
 KPROVE_OPTS?=
+
+# path to the directory that contains lemmas.md
+LEMMAS_DIR?=$(RESOURCES)
 
 #
 # Settings
 #
-
-# path to this file
-THIS_FILE:=$(abspath $(lastword $(MAKEFILE_LIST)))
-# path to root directory
-ROOT:=$(abspath $(dir $(THIS_FILE))/../)
-
-RESOURCES:=$(ROOT)/resources
 
 SPECS_DIR:=$(ROOT)/specs
 
@@ -60,6 +64,9 @@ export LUA_PATH
 all: deps split-proof-tests
 
 clean:
+	rm -rf $(SPECS_DIR)
+
+clean-deps:
 	rm -rf $(SPECS_DIR) $(BUILD_DIR)/*
 
 deps: $(K_REPO_DIR) $(KEVM_REPO_DIR) $(TANGLER)
@@ -85,7 +92,7 @@ $(TANGLER):
 # Specs
 #
 
-split-proof-tests: $(SPECS_DIR)/$(SPEC_GROUP) $(SPECS_DIR)/lemmas.k $(SPEC_FILES)
+split-proof-tests: $(SPECS_DIR)/$(SPEC_GROUP) $(SPECS_DIR)/$(SPEC_GROUP)/lemmas.k $(SPEC_FILES)
 
 $(SPECS_DIR)/$(SPEC_GROUP): $(LOCAL_LEMMAS)
 	mkdir -p $@
@@ -93,7 +100,7 @@ ifneq ($(strip $(LOCAL_LEMMAS)),)
 	cp $(LOCAL_LEMMAS) $@
 endif
 
-$(SPECS_DIR)/lemmas.k: $(RESOURCES)/lemmas.md $(TANGLER)
+$(SPECS_DIR)/$(SPEC_GROUP)/lemmas.k: $(LEMMAS_DIR)/lemmas.md $(TANGLER)
 	pandoc --from markdown --to "$(TANGLER)" --metadata=code:".k" $< > $@
 
 $(SPECS_DIR)/$(SPEC_GROUP)/%-spec.k: $(TMPLS) $(SPEC_INI)
