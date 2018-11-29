@@ -11,6 +11,18 @@ module LEMMAS
     imports K-REFLECTION
 ```
 
+### Gas Abstraction
+```k
+    // Temporary solution to avoid reasoning about gas
+    syntax Int ::= "#infinity" [function]
+ // -------------------------------------
+    rule #infinity +Int _ => #infinity
+    rule #infinity -Int _ => #infinity
+    rule #infinity >=Int _ => true
+    rule #infinity <Int _ => false
+
+```
+
 ### Memory Abstraction
 
 We present an abstraction for the EVM memory to allow the word-level reasoning.
@@ -69,10 +81,20 @@ They capture the essential mechanisms used by the two instructions: splitting a 
                 : nthbyteof(V, 31, 32)
                 : .WordStack ) => V
       requires 0 <=Int V andBool V <Int pow256
-      
+
     rule #asWord( 0 : W1 : WS  =>  W1 : WS )
-      
+
     rule nthbyteof(N, 0, 1) => N
+
+    rule 0 <=Int #asWord(#bufSeg(_, _, _))                 => true
+    rule         #asWord(#bufSeg(_, _, WIDTH)) <Int pow256 => true
+
+    rule 0 <=Int #asWord(selectRange(_, _, _))             => true
+    rule         #asWord(selectRange(_, _, _)) <Int pow256 => true
+
+    rule         #asWord(#bufSeg(_, _, WIDTH)) <=Int 255 => true requires WIDTH ==Int 1
+
+    rule #buf(32, #asWord(#bufSeg(BUF, START, WIDTH))) => #bufSeg(BUF, START +Int WIDTH -Int 32, 32)  requires WIDTH >=Int 32
 ```
 
 Another type of byte-array manipulating operation is used to extract the function signature from the call data.
@@ -94,14 +116,14 @@ It reduces the reasoning efforts of the underlying theorem prover, factoring out
     //Rules for #padToWidth with regular symbolic arguments.
     //Same as for concrete #padToWidth, when WordStack is of regular form "A:B ... :.WordStack"
     //Not clear why KEVM rules for #padToWidth were marked [concrete]. If they were general, rules below would not be necessary.
-    rule #padToWidth(N, WS) => WS
-      requires notBool #sizeWordStack(WS) <Int N andBool #isRegularWordStack(WS) ==K true
+    //rule #padToWidth(N, WS) => WS
+    //  requires notBool #sizeWordStack(WS) <Int N andBool #isRegularWordStack(WS) ==K true
 
-    rule #padToWidth(N, WS) => #padToWidth(N, 0 : WS)
-      requires         #sizeWordStack(WS) <Int N andBool #isRegularWordStack(WS) ==K true
+    //rule #padToWidth(N, WS) => #padToWidth(N, 0 : WS)
+    //  requires         #sizeWordStack(WS) <Int N andBool #isRegularWordStack(WS) ==K true
 
     //Rules for #padToWidth with non-regular symbolic arguments.
-    rule #padToWidth(32, #asByteStack(V)) => #asByteStackInWidth(V, 32)
+    rule #padToWidth(32, #asByteStack(V)) => #buf(32, V) // #asByteStackInWidth(V, 32)
       requires 0 <=Int V andBool V <Int pow256
 
     // for Vyper
@@ -111,10 +133,10 @@ It reduces the reasoning efforts of the underlying theorem prover, factoring out
     // storing a symbolic boolean value in memory
     rule #padToWidth(32, #asByteStack(bool2Word(E)))
       => #asByteStackInWidthAux(0, 30, 32, nthbyteof(bool2Word(E), 31, 32) : .WordStack)
-      
+
     //1-byte ByteStack.
-    rule #asByteStack(W) => W : .WordStack
-      requires #rangeUInt(8, W)
+    //rule #asByteStack(W) => W : .WordStack
+    //  requires #rangeUInt(8, W)
 
     // for Solidity
     rule #asWord(WS) /Int D => #asWord(#take(#sizeWordStack(WS) -Int log256Int(D), WS))
@@ -130,6 +152,9 @@ It reduces the reasoning efforts of the underlying theorem prover, factoring out
     rule #noOverflowAux(W : WS)     => 0 <=Int W andBool W <Int 256 andBool #noOverflowAux(WS)
     rule #noOverflowAux(.WordStack) => true
 
+    rule #noOverflowAux(BUF) => true requires #isBuf(BUF)
+    rule #noOverflowAux(WS1 ++ WS2) => #noOverflowAux(WS1) andBool #noOverflowAux(WS2)
+
     syntax WordStack ::= #asByteStackInWidth    ( Int, Int )                 [function]
                        | #asByteStackInWidthAux ( Int, Int, Int, WordStack ) [function]
  // -----------------------------------------------------------------------------------
@@ -138,17 +163,6 @@ It reduces the reasoning efforts of the underlying theorem prover, factoring out
 
     rule #asByteStackInWidthAux(X, I => I -Int 1, N, WS => nthbyteof(X, I, N) : WS) when I >=Int 0
     rule #asByteStackInWidthAux(X,            -1, N, WS) => WS
-```
-
-### Byte arrays with concrete size
-
-Code sugar to represent byte arrays with concrete size but symbolic data.
-
-```k
-    syntax TypedArg ::= #toBytes    ( Int , Int )      [function] //data, len
- // -----------------------------------------------------------------
-    rule #toBytes(DATA, N) => #bytes(#asByteStackInWidth(DATA, N))
-      requires #rangeBytes(N, DATA)
 ```
 
 ### Hashed Location
@@ -217,6 +231,12 @@ These rules are specific to reasoning about EVM programs.
     rule (I1 -Int I2) +Int I3 => I1 -Int (I2 -Int I3) when #isConcrete(I2) andBool #isConcrete(I3)
     rule (I1 -Int I2) -Int I3 => I1 -Int (I2 +Int I3) when #isConcrete(I2) andBool #isConcrete(I3)
 
+    rule I1 +Int (I2 +Int I3) => I2 +Int (I1 +Int I3) when #isConcrete(I1) andBool #isConcrete(I3)
+    rule I1 +Int (I2 +Int I3) => I3 +Int (I1 +Int I2) when #isConcrete(I1) andBool #isConcrete(I2)
+
+    rule (I1 +Int I2) +Int (I3 -Int I2) => I1 +Int I3
+    rule (I1 +Int I2) -Int (I1 +Int I3) => I2 -Int I3
+
     rule I1 &Int (I2 &Int I3) => (I1 &Int I2) &Int I3 when #isConcrete(I1) andBool #isConcrete(I2)
 
     // 0xffff...f &Int N = N
@@ -228,20 +248,22 @@ These rules are specific to reasoning about EVM programs.
                             andBool 0 <=Int N andBool N <=Int MASK
 
 
+    rule #asWord(#bufSeg(BUF, START, WIDTH)) &Int 255 => #asWord(#bufSeg(BUF, START +Int WIDTH -Int 1, 1))  requires WIDTH >=Int 1
+    rule 255 &Int #asWord(#bufSeg(BUF, START, WIDTH)) => #asWord(#bufSeg(BUF, START +Int WIDTH -Int 1, 1))  requires WIDTH >=Int 1
 
     // for gas calculation
     rule A -Int (#if C #then B1 #else B2 #fi) => #if C #then (A -Int B1) #else (A -Int B2) #fi
     rule (#if C #then B1 #else B2 #fi) -Int A => #if C #then (B1 -Int A) #else (B2 -Int A) #fi
 ```
 
-Operator direction normalization rules. Required to reduce the number of forms of inequalities that can be matched by 
+Operator direction normalization rules. Required to reduce the number of forms of inequalities that can be matched by
 general lemmas. We chose to keep `<Int` and `<=Int` because those operators are used in all range lemmas and in
 `#range` macros. Operators `>Int` and `>=Int` are still allowed anywhere except rules LHS.
 In all other places they will be matched and rewritten by rules below.
 ```k
     rule X >Int Y => Y <Int X
     rule X >=Int Y => Y <=Int X
-``` 
+```
 
 ### Boolean
 
@@ -348,6 +370,8 @@ These lemmas abstract some properties about `#sizeWordStack`:
       => #sizeWordStack ( WS , 0 ) +Int N
       requires N =/=K 0
       [lemma]
+
+    rule WS ++ .WordStack => WS
 
 endmodule
 ```
