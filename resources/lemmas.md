@@ -102,7 +102,7 @@ It reduces the reasoning efforts of the underlying theorem prover, factoring out
 
     //Rules for #padToWidth with non-regular symbolic arguments.
     rule #padToWidth(32, #asByteStack(V)) => #asByteStackInWidth(V, 32)
-      requires 0 <=Int V andBool V <Int pow256
+      requires 0 <=Int V andBool V <Int pow256 andBool #getKLabelString(V) =/=String "#asWord"
 
     // for Vyper
     rule #padToWidth(N, #asByteStack(#asWord(WS))) => WS
