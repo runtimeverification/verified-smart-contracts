@@ -5,6 +5,9 @@ module VERIFICATION
     imports EDSL
     imports LEMMAS
 
+    //Rules for #padToWidth with non-regular symbolic arguments.
+    rule #padToWidth(32, #asByteStack(V)) => #asByteStackInWidth(V, 32)
+      requires 0 <=Int V andBool V <Int pow256 andBool #getKLabelString(V) =/=String "#asWord"
 
     rule N -Int N => 0
 

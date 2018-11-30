@@ -6,6 +6,30 @@ module VERIFICATION
     imports EDSL
     imports LEMMAS
 
+    //Rules for #padToWidth with regular symbolic arguments.
+    //Same as for concrete #padToWidth, when WordStack is of regular form "A:B ... :.WordStack"
+    //Not clear why KEVM rules for #padToWidth were marked [concrete]. If they were general, rules below would not be necessary.
+    rule #padToWidth(N, WS) => WS
+      requires notBool #sizeWordStack(WS) <Int N andBool #isRegularWordStack(WS) ==K true
+
+    rule #padToWidth(N, WS) => #padToWidth(N, 0 : WS)
+      requires         #sizeWordStack(WS) <Int N andBool #isRegularWordStack(WS) ==K true
+
+    //Rules for #padToWidth with non-regular symbolic arguments.
+    rule #padToWidth(32, #asByteStack(V)) => #asByteStackInWidth(V, 32)
+      requires 0 <=Int V andBool V <Int pow256 andBool #getKLabelString(V) =/=String "#asWord"
+
+    //1-byte ByteStack.
+    rule #asByteStack(W) => W : .WordStack
+      requires #rangeUInt(8, W)
+
+    // Byte arrays with concrete size
+    // Code sugar to represent byte arrays with concrete size but symbolic data.
+    syntax TypedArg ::= #toBytes    ( Int , Int )      [function] //data, len
+ // -----------------------------------------------------------------
+    rule #toBytes(DATA, N) => #bytes(#asByteStackInWidth(DATA, N))
+      requires #rangeBytes(N, DATA)
+
     //
     // Range
     //
