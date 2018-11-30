@@ -1,0 +1,16 @@
+dist: trusty
+
+before_install:
+  - wget https://github.com/jgm/pandoc/releases/download/2.1.1/pandoc-2.1.1-1-amd64.deb
+  - sudo dpkg -i pandoc-2.1.1-1-amd64.deb
+  - pandoc --version
+  - wget https://github.com/Z3Prover/z3/releases/download/z3-4.6.0/z3-4.6.0-x64-ubuntu-14.04.zip
+  - unzip z3-4.6.0-x64-ubuntu-14.04.zip
+  - export PATH=$PATH:$PWD/z3-4.6.0-x64-ubuntu-14.04/bin
+  - z3 --version
+  - nproc
+  - export BRANCH=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then echo $TRAVIS_BRANCH; else echo $TRAVIS_PULL_REQUEST_BRANCH; fi)
+  - echo ${BRANCH#travis-test-}
+
+language: java
+script: make -C ${BRANCH#travis-test-} all test
