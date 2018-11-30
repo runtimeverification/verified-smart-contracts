@@ -13,4 +13,4 @@ before_install:
   - echo ${BRANCH#travis-test-}
 
 language: java
-script: make -C ${BRANCH#travis-test-} all test
+script: make all test MODE=${BRANCH#travis-test-}
