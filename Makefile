@@ -1,20 +1,28 @@
 .NOTPARALLEL:
 
-ERC20:=
 SUBDIRS:=
+ERC20:=
 
 ifneq (,$(or $(findstring all,$(MODE)),$(findstring minimal,$(MODE))))
-ERC20+=vyper zeppelin
 SUBDIRS+=resources
+ERC20+=vyper zeppelin
 endif
 
 ifneq (,$(or $(findstring all,$(MODE)),$(findstring erc20,$(MODE))))
-ERC20+=hkg hobby ds-token gno
-SUBDIRS+=proxied-token
+ERC20+=hkg hobby ds-token
 endif
 
-ifneq (,$(or $(findstring all,$(MODE)),$(findstring custom,$(MODE))))
-SUBDIRS+=bihu gnosis gnosis/test
+ifneq (,$(or $(findstring all,$(MODE)),$(findstring bihu,$(MODE))))
+SUBDIRS+=bihu
+endif
+
+ifneq (,$(or $(findstring all,$(MODE)),$(findstring gnosis,$(MODE))))
+SUBDIRS+=gnosis gnosis/test
+endif
+
+ifneq (,$(or $(findstring all,$(MODE)),$(findstring dom,$(MODE))))
+SUBDIRS+=proxied-token
+ERC20+=gno
 endif
 
 SUBDIRS+=$(addprefix erc20/,$(ERC20))
