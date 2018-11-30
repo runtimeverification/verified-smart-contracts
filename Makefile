@@ -1,6 +1,6 @@
 PROCS?=1
 
-GOALS:=all clean deps split-proof-tests test
+GOALS:=all clean clean-deps deps split-proof-tests test
 
 .PHONY: $(GOALS)
 

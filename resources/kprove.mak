@@ -5,6 +5,11 @@
 # path to a directory that contains .k.rev and .kevm.rev
 BUILD_DIR?=.build
 
+# check if the build directory exists (note: $(wildcard BUILD_DIR) is not enough since it doesn't check if it is a directory)
+ifeq ($(wildcard BUILD_DIR/.),)
+$(error BUILD_DIR does not exist)
+endif
+
 K_REPO_URL?=https://github.com/kframework/k
 KEVM_REPO_URL?=https://github.com/kframework/evm-semantics
 
@@ -19,6 +24,9 @@ endif
 SPEC_INI?=spec.ini
 LOCAL_LEMMAS?=abstract-semantics.k verification.k
 TMPLS?=module-tmpl.k spec-tmpl.k
+
+# additional options to kprove command
+KPROVE_OPTS?=
 
 #
 # Settings
@@ -36,11 +44,11 @@ SPECS_DIR:=$(ROOT)/specs
 K_VERSION   :=$(shell cat $(BUILD_DIR)/.k.rev)
 KEVM_VERSION:=$(shell cat $(BUILD_DIR)/.kevm.rev)
 
-K_REPO_DIR:=$(BUILD_DIR)/k
-KEVM_REPO_DIR:=$(BUILD_DIR)/evm-semantics
+K_REPO_DIR:=$(abspath $(BUILD_DIR)/k)
+KEVM_REPO_DIR:=$(abspath $(BUILD_DIR)/evm-semantics)
 
 K_BIN:=$(abspath $(K_REPO_DIR)/k-distribution/target/release/k/bin)
-KPROVE:=$(K_BIN)/kprove -v -d $(KEVM_REPO_DIR)/.build/java -m VERIFICATION --z3-impl-timeout 500
+KPROVE:=$(K_BIN)/kprove -v -d $(KEVM_REPO_DIR)/.build/java -m VERIFICATION --z3-impl-timeout 500 $(KPROVE_OPTS)
 
 SPEC_FILES:=$(patsubst %,$(SPECS_DIR)/$(SPEC_GROUP)/%-spec.k,$(SPEC_NAMES))
 
@@ -53,11 +61,14 @@ export LUA_PATH
 # Dependencies
 #
 
-.PHONY: all clean deps split-proof-tests test
+.PHONY: all clean clean-deps deps split-proof-tests test
 
 all: deps split-proof-tests
 
 clean:
+	rm -rf $(SPECS_DIR)
+
+clean-deps:
 	rm -rf $(SPECS_DIR) $(BUILD_DIR)/*
 
 deps: $(K_REPO_DIR) $(KEVM_REPO_DIR) $(TANGLER)
