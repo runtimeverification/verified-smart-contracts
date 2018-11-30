@@ -1,4 +1,4 @@
-BUILD_DIR:=.build
+BUILD_DIR:=../.build
 
 SPEC_GROUP:=bihu
 SPEC_INI:=forwardToHotWallet-spec.ini
