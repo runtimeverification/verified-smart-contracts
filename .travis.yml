@@ -11,6 +11,7 @@ before_install:
   - nproc
   - export BRANCH=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then echo $TRAVIS_BRANCH; else echo $TRAVIS_PULL_REQUEST_BRANCH; fi)
   - echo ${BRANCH#travis-test-}
+  - travis_wait 30 sleep 1800 &
 
 language: java
 script: make all test MODE=${BRANCH#travis-test-}
