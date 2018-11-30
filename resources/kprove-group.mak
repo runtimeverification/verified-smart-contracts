@@ -1,12 +1,14 @@
 SUBCLEAN=$(addsuffix .clean,$(SUBDIRS))
+SUBCLEANDEPS=$(addsuffix .clean-deps,$(SUBDIRS))
 SUBDEPS=$(addsuffix .deps,$(SUBDIRS))
 SUBPROOF=$(addsuffix .proof,$(SUBDIRS))
 SUBTEST=$(addsuffix .test,$(SUBDIRS))
 
-.PHONY: all clean $(SUBDIRS) $(SUBCLEAN) $(SUBDEPS) $(SUBPROOF) $(SUBTEST)
+.PHONY: all clean clean-deps deps split-proof-tests test $(SUBDIRS) $(SUBCLEAN) $(SUBCLEANDEPS) $(SUBDEPS) $(SUBPROOF) $(SUBTEST)
 
 all: $(SUBDIRS)
 clean: $(SUBCLEAN)
+clean-deps: $(SUBCLEANDEPS)
 deps: $(SUBDEPS)
 split-proof-tests: $(SUBPROOF)
 test: $(SUBTEST)
@@ -16,6 +18,9 @@ $(SUBDIRS):
 
 $(SUBCLEAN): %.clean:
 	$(MAKE) -C $* clean
+
+$(SUBCLEANDEPS): %.clean-deps:
+	$(MAKE) -C $* clean-deps
 
 $(SUBDEPS): %.deps:
 	$(MAKE) -C $* deps

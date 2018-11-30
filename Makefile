@@ -1,20 +1,22 @@
-PROCS?=1
+.NOTPARALLEL:
 
-GOALS:=all clean clean-deps deps split-proof-tests test
+ERC20:=
+SUBDIRS:=
 
-.PHONY: $(GOALS)
-
-$(GOALS):
-	$(MAKE) -C resources      -j$(PROCS) $@
-	$(MAKE) -C erc20/vyper    -j$(PROCS) $@
-	$(MAKE) -C erc20/zeppelin -j$(PROCS) $@
-ifeq ($(MODE),all)
-	$(MAKE) -C erc20/hkg      -j$(PROCS) $@
-	$(MAKE) -C erc20/hobby    -j$(PROCS) $@
-	$(MAKE) -C erc20/ds-token -j$(PROCS) $@
-	$(MAKE) -C erc20/gno      -j$(PROCS) $@
-	$(MAKE) -C bihu           -j$(PROCS) $@
-	$(MAKE) -C gnosis         -j$(PROCS) $@
-	$(MAKE) -C gnosis/test    -j$(PROCS) $@
-	$(MAKE) -C proxied-token  -j$(PROCS) $@
+ifneq (,$(or $(findstring all,$(MODE)),$(findstring minimal,$(MODE))))
+ERC20+=vyper zeppelin
+SUBDIRS+=resources
 endif
+
+ifneq (,$(or $(findstring all,$(MODE)),$(findstring erc20,$(MODE))))
+ERC20+=hkg hobby ds-token gno
+SUBDIRS+=proxied-token
+endif
+
+ifneq (,$(or $(findstring all,$(MODE)),$(findstring custom,$(MODE))))
+SUBDIRS+=bihu gnosis gnosis/test
+endif
+
+SUBDIRS+=$(addprefix erc20/,$(ERC20))
+
+include resources/kprove-group.mak

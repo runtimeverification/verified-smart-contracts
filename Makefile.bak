@@ -1,12 +1,20 @@
-ERC20:=vyper zeppelin
-ifeq ($(MODE),all)
-ERC20+=hkg hobby ds-token gno
-endif
-ERC20_DIRS:=$(addprefix erc20/,$(ERC20))
+PROCS?=1
 
-SUBDIRS:=resources $(ERC20_DIRS)
-ifeq ($(MODE),all)
-SUBDIRS+=bihu gnosis gnosis/test proxied-token
-endif
+GOALS:=all clean clean-deps deps split-proof-tests test
 
-include resources/kprove-group.mak
+.PHONY: $(GOALS)
+
+$(GOALS):
+	$(MAKE) -C resources      -j$(PROCS) $@
+	$(MAKE) -C erc20/vyper    -j$(PROCS) $@
+	$(MAKE) -C erc20/zeppelin -j$(PROCS) $@
+ifeq ($(MODE),all)
+	$(MAKE) -C erc20/hkg      -j$(PROCS) $@
+	$(MAKE) -C erc20/hobby    -j$(PROCS) $@
+	$(MAKE) -C erc20/ds-token -j$(PROCS) $@
+	$(MAKE) -C erc20/gno      -j$(PROCS) $@
+	$(MAKE) -C bihu           -j$(PROCS) $@
+	$(MAKE) -C gnosis         -j$(PROCS) $@
+	$(MAKE) -C gnosis/test    -j$(PROCS) $@
+	$(MAKE) -C proxied-token  -j$(PROCS) $@
+endif

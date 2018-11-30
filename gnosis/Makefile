@@ -3,6 +3,8 @@ BUILD_DIR:=../.build
 SPEC_GROUP:=gnosis
 SPEC_INI:=gnosis-spec.ini
 
+KPROVE_OPTS:=--log-basic
+
 SPEC_NAMES:=encodeTransactionData-data32 \
             encodeTransactionData-data33 \
             signatureSplit-pos0 \
