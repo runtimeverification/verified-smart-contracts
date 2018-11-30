@@ -11,6 +11,8 @@ SPEC_NAMES:=collectToken \
             forwardToHotWallet-failure-3 \
             forwardToHotWallet-failure-4
 
+LEMMAS_DIR:=.
+
 include ../resources/kprove.mak
 
 # non-standard spec generation
