@@ -13,7 +13,7 @@ ERC20+=hkg hobby ds-token
 endif
 
 ifneq (,$(or $(findstring all,$(MODE)),$(findstring bihu,$(MODE))))
-SUBDIRS+=bihu
+#SUBDIRS+=bihu
 endif
 
 ifneq (,$(or $(findstring all,$(MODE)),$(findstring gnosis,$(MODE))))
