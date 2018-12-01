@@ -6,33 +6,61 @@ module VERIFICATION
     imports EDSL
     imports LEMMAS
 
-    //Rules for #padToWidth with regular symbolic arguments.
-    //Same as for concrete #padToWidth, when WordStack is of regular form "A:B ... :.WordStack"
-    //Not clear why KEVM rules for #padToWidth were marked [concrete]. If they were general, rules below would not be necessary.
-    rule #padToWidth(N, WS) => WS
-      requires notBool #sizeWordStack(WS) <Int N andBool #isRegularWordStack(WS) ==K true
+  // ########################
+  // Gas
+  // ########################
 
-    rule #padToWidth(N, WS) => #padToWidth(N, 0 : WS)
-      requires         #sizeWordStack(WS) <Int N andBool #isRegularWordStack(WS) ==K true
+    // Temporary solution to avoid reasoning about gas
+    syntax Int ::= "#infinity" [function]
+ // -------------------------------------
+    rule #infinity +Int _ => #infinity
+    rule #infinity -Int _ => #infinity
+    rule #infinity >=Int _ => true
+    rule _ <=Int #infinity => true
+    rule #infinity <Int _ => false
 
-    //Rules for #padToWidth with non-regular symbolic arguments.
-    rule #padToWidth(32, #asByteStack(V)) => #asByteStackInWidth(V, 32)
-      requires 0 <=Int V andBool V <Int pow256 andBool #getKLabelString(V) =/=String "#asWord"
 
-    //1-byte ByteStack.
-    rule #asByteStack(W) => W : .WordStack
-      requires #rangeUInt(8, W)
+  // ########################
+  // Account Map
+  // ########################
 
-    // Byte arrays with concrete size
-    // Code sugar to represent byte arrays with concrete size but symbolic data.
-    syntax TypedArg ::= #toBytes    ( Int , Int )      [function] //data, len
- // -----------------------------------------------------------------
-    rule #toBytes(DATA, N) => #bytes(#asByteStackInWidth(DATA, N))
-      requires #rangeBytes(N, DATA)
+    syntax Int ::= "#MASTER_COPY_ID" [function]
+    syntax Int ::= "#PROXY_ID" [function]
+    syntax Int ::= "#ORIGIN_ID" [function]
 
-    //
-    // Range
-    //
+
+  // ########################
+  // Memory Reasoning
+  // ########################
+
+    // Merge
+    rule storeRange(storeRange(M, MS0, MW0, #bufSeg(BUF, BS0, BW0)), MS1, MW1, #bufSeg(BUF, BS1, BW1))
+        => storeRange(M, MS0, MW0 +Int MW1, #bufSeg(BUF, BS0, MW0 +Int MW1))
+      requires #isBuf(BUF) andBool MW0 ==Int BW0 andBool MW1 ==Int BW1
+       andBool MS1 ==Int MS0 +Int MW0 andBool BS1 ==Int BS0 +Int BW0
+
+
+  // ########################
+  // Buffer Reasoning
+  // ########################
+
+    rule #noOverflowAux(BUF) => true requires #isBuf(BUF)
+    rule #noOverflowAux(WS1 ++ WS2) => #noOverflowAux(WS1) andBool #noOverflowAux(WS2)
+
+    rule #bufSeg(BUF, S0, W0) ++ #bufSeg(BUF, S1, W1) => #bufSeg(BUF, S0, W0 +Int W1)
+      requires S1 ==Int S0 +Int W0
+
+    rule #bufSeg(BUF, S0, W0) ++ (#bufSeg(BUF, S1, W1) ++ WS) => #bufSeg(BUF, S0, W0 +Int W1) ++ WS
+      requires S1 ==Int S0 +Int W0
+
+    rule WS ++ .WordStack => WS
+
+
+  // ########################
+  // Range
+  // ########################
+
+    rule #asWord(#bufSeg(_, _, WIDTH)) <=Int 255 => true requires WIDTH ==Int 1
 
     rule 0 <=Int (X modInt Y)         => true
     rule         (X modInt Y) <Int Y  => true  requires Y >Int 0
@@ -49,12 +77,36 @@ module VERIFICATION
     rule 0 <=Int #blockhash(_, _, _, _)             => true
     rule         #blockhash(_, _, _, _) <Int pow256 => true
 
-    rule 0 <=Int symkeccak(N)             => true
-    rule         symkeccak(N) <Int pow256 => true
+    //case 0 is never wrapped into #symEcrec(), corresponds to #ecrecEmpty(DATA) == true
+    rule 0 <Int   #symEcrec(DATA)             => true
 
-    //
-    // Simplification
-    //
+    //that's because the result in concrete semantics is trimmed to Address range.
+    rule          #symEcrec(DATA) <Int pow160 => true
+
+  // ########################
+  // Simplification
+  // ########################
+
+    rule #padToWidth(32, #asByteStack(V)) => #buf(32, V) // #asByteStackInWidth(V, 32)
+      requires 0 <=Int V andBool V <Int pow256
+
+    rule #buf(32, #asWord(#bufSeg(BUF, START, WIDTH))) => #bufSeg(BUF, START +Int WIDTH -Int 32, 32)  requires WIDTH >=Int 32
+
+    rule #asWord(#bufSeg(BUF, START, WIDTH)) &Int 255 => #asWord(#bufSeg(BUF, START +Int WIDTH -Int 1, 1))  requires WIDTH >=Int 1
+    rule 255 &Int #asWord(#bufSeg(BUF, START, WIDTH)) => #asWord(#bufSeg(BUF, START +Int WIDTH -Int 1, 1))  requires WIDTH >=Int 1
+
+    rule #asWord(WS0 ++ #buf(MASKWIDTH0, 0)) |Int #asWord(#buf(MASKWIDHT1, 0) ++ WS1)
+      => #asWord(WS0 ++ WS1)
+      requires #sizeWordStack(WS0) +Int MASKWIDTH0 ==Int 32
+       andBool #sizeWordStack(WS0) ==Int MASKWIDHT1
+       andBool MASKWIDTH0 ==Int #sizeWordStack(WS1)
+
+    // Arithmetic
+    rule I1 +Int (I2 +Int I3) => I2 +Int (I1 +Int I3) when #isConcrete(I1) andBool #isConcrete(I3)
+    rule I1 +Int (I2 +Int I3) => I3 +Int (I1 +Int I2) when #isConcrete(I1) andBool #isConcrete(I2)
+
+    rule (I1 +Int I2) +Int (I3 -Int I2) => I1 +Int I3
+    rule (I1 +Int I2) -Int (I1 +Int I3) => I2 -Int I3
 
     // TODO: move to builtin
     rule N -Int N => 0
@@ -76,81 +128,72 @@ module VERIFICATION
     rule 115792089237316195423570985007226406215939081747436879206741300988257197096960 &Int ADDR => 0
       requires #rangeAddress(ADDR)
 
-    //
-    // Abstraction
-    //
+    // x &Int (NOT 31)
+    rule X &Int 115792089237316195423570985008687907853269984665640564039457584007913129639904 => (X /Int 32) *Int 32  requires 0 <=Int X
 
-    //Rule doesn't apply. Why?
-    syntax Int ::= symkeccak ( Int ) [function, smtlib(smt_symkeccak)]
-    rule keccak(WS) => symkeccak(#asWord(WS))
-      requires notBool #isConcrete(WS)
-               //to avoid collision with rule keccak(WS) => keccakIntList(...)
-               andBool #sizeWordStack(WS) =/=Int 32 andBool #sizeWordStack(WS) =/=Int 64
+    rule (X /Int 32) *Int 32 => X  requires X modInt 32 ==Int 0
 
-    //
-    // Unification
-    //
+    rule #ceil32(X) => X requires X modInt 32 ==Int 0
 
- // rule   #signed(X) ==K   #signed(Y) => X ==K Y requires #rangeUInt(256,X) orBool #rangeUInt(256,Y)
- // rule #unsigned(X) ==K #unsigned(Y) => X ==K Y requires #rangeSInt(256,X) orBool #rangeSInt(256,Y)
+    rule #buf(32, #asWord(WS)) => WS  requires #sizeWordStack(WS) ==Int 32
 
+    rule #buf(32, DATA) => #padToWidth(32, #asByteStack(DATA))  [concrete]
 
-// Reading symbolic WordStack from memory, then extracting bytes from it. General case (stack size can be != 32)
-//========================================================================
-    //decoding nthbyteof(#asWord())
-    rule nthbyteof(#asWord(W : WS), I       , N       )
-      => nthbyteof(#asWord(    WS), I -Int 1, N -Int 1)
-      requires 0 <Int I andBool I <Int N andBool N <=Int 32 andBool N ==Int #sizeWordStack(W : WS)
+    // 0xff..ff00..00 (16 1's followed by 240 0's)
+    rule 115790322390251417039241401711187164934754157181743688420499462401711837020160 &Int #asWord(WS1 ++ WS2)
+        => #asWord(WS1 ++ #buf(30, 0))
+      requires #sizeWordStack(WS1) ==Int 2
+       andBool #sizeWordStack(WS2) ==Int 30
 
-    rule nthbyteof(#asWord(W : WS), 0, N) => W
-      requires N <=Int 32 andBool N ==Int #sizeWordStack(W : WS)
+    // following lemmma is required for solidty 0.4.25
+    rule (X *Int 32) +Int 192 ==K (Y *Int 32) +Int 160 => X +Int 1 ==K Y
 
-    //decoding nthbyteof(#asWord() &Int MASK)
-    rule nthbyteof(#asWord(W : WS) &Int MASK, I       , N       )
-      => nthbyteof(#asWord(    WS) &Int MASK, I -Int 1, N -Int 1)
-      requires 0 <Int I andBool I <Int N andBool N <=Int 32 andBool N ==Int #sizeWordStack(W : WS)
+    rule (X *Int 32) +Int 32 ==K Y *Int 32             => X +Int 1 ==K Y
 
-    rule nthbyteof(#asWord(W : WS) &Int MASK, 0, N) => W &Int (MASK >>Byte #sizeWordStack(WS))
-      requires N <=Int 32 andBool N ==Int #sizeWordStack(W : WS)
+    rule 192 ==K (X *Int 32) +Int 160                  => X ==K 1
 
-    //decoding nthbyteof() &Int MASK
-    rule MASK &Int nthbyteof(WS, I, N) => nthbyteof(WS, I, N) &Int MASK
-      requires #isConcrete(MASK)
+    rule maxInt(maxInt(A, B), C) => maxInt(A, C)  requires B <=Int C
 
-    rule nthbyteof(_, _, _)  &Int (MASK => MASK &Int 255)
-      requires #isConcrete(MASK) andBool MASK >Int 255
+    rule (31 +Int X) /Int 32 *Int 32 => #ceil32(X)
 
-    rule nthbyteof(WS, I, N) &Int 255 => nthbyteof(WS, I, N)
+    rule (X +Int 31) /Int 32 *Int 32 => #ceil32(X)
 
-    //decoding #asWord() &Int MASK
-    rule MASK &Int #asWord(WS) => #asWord(WS) &Int MASK
-      requires #isConcrete(MASK)
-      //version below doesn't work
-      //requires notBool (getKLabel(MASK) ==K #klabel(`#asWord`))
+    rule #asWord(WS) &Int 115792089237316195423570985008687907853269984665640564039457584007913129639935 => #asWord(WS)
 
-    //#asWord(...) & 255 is the last byte.
-    rule #asWord( X : Y : WS => Y : WS ) &Int 255
-    rule #asWord( X : .WordStack       ) &Int 255 => X
+    rule powmod(256, X, pow256) >=Int 1 => true  requires 0 <=Int X andBool X <Int 32
 
-    // #asWord only keeps 32 bytes and chops the rest.
-    rule #asWord(W : WS => WS)
-      requires #sizeWordStack(W : WS) >Int 32
+    rule powmod(256, X, pow256) <Int pow256 => true  requires 0 <=Int X
 
+    rule 0 <=Int 32 -Int ( X -Int (X /Int 32) *Int 32 ) => true  requires 0 <=Int X
 
-    syntax WordStack ::= #bytesSegment (Int, Int, Int, Int) [function] //DATA, START, RANGE_LEN, DATA_LEN
- // ===============================================================
-    rule #bytesSegment(DATA, START, LEN, N)
-         => nthbyteof(DATA, START, N) : #bytesSegment(DATA, START +Int 1, LEN -Int 1, N)
-      requires #range ( 0 <= START < N ) andBool #range( 1 <= START +Int LEN <= N ) andBool LEN >Int 0
+    rule 32 -Int ( X -Int (X /Int 32) *Int 32 ) <Int 32 => true requires 0 <=Int X andBool X modInt 32 =/=Int 0
 
-    rule #bytesSegment(_, _, 0, _) => .WordStack
+    rule 0 <=Int X -Int 1 => true      requires X >=Int 1
 
-// Range for #symEcrec
-//========================================================================
-    //case 0 is never wrapped into #symEcrec(), corresponds to #ecrecEmpty(DATA) == true
-    rule 0 <Int   #symEcrec(DATA)             => true
+    rule X -Int 1 <Int pow256 => true  requires X <Int pow256
 
-    //that's because the result in concrete semantics is trimmed to Address range.
-    rule          #symEcrec(DATA) <Int pow160 => true
+    rule 0 <=Int X xorInt 115792089237316195423570985008687907853269984665640564039457584007913129639935 => true      requires 0<=Int X andBool X <Int pow256
+
+    rule X xorInt 115792089237316195423570985008687907853269984665640564039457584007913129639935 <Int pow256 => true  requires 0<=Int X andBool X <Int pow256 
+
+    rule #sizeWordStack(selectRange(_, _, WIDTH), SIZE) => SIZE +Int WIDTH
+
+    rule (I1 +Int I2) -Int (I3 +Int I1) => I2 -Int I3
+
+    rule I1 -Int (I1 -Int I2) => I2
+
+    rule I1 +Int (I2 -Int I1) => I2
+
+    // Left mask
+    rule #asWord(WS1 ++ WS2) &Int ((powmod(256, MASKWIDTH, pow256) -Int 1) xorInt 115792089237316195423570985008687907853269984665640564039457584007913129639935)
+        => #asWord(WS1 ++ #buf(MASKWIDTH, 0))
+      requires 0 <=Int MASKWIDTH
+       andBool #sizeWordStack(WS1) +Int #sizeWordStack(WS2) ==Int 32
+       andBool #sizeWordStack(WS2) ==Int MASKWIDTH
+
+    // Right mask
+    rule #asWord(selectRange(M, START, 32)) &Int (powmod(256, MASKWIDTH, pow256) -Int 1) => #asWord(#buf(32 -Int MASKWIDTH, 0) ++ selectRange(M, START +Int 32 -Int MASKWIDTH, MASKWIDTH))
+      requires 0 <=Int MASKWIDTH
+       andBool MASKWIDTH <=Int 32
 
 endmodule

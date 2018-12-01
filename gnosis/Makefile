@@ -8,6 +8,7 @@ SPEC_NAMES:=encodeTransactionData-data32 \
             signatureSplit-pos0 \
             signatureSplit-pos1 \
             signatureSplit-pos2 \
+            checkSignatures \
             checkSignatures-threshold-too-large \
             checkSignatures-threshold-1-sigv-2-empty \
             checkSignatures-threshold-1-sigv-2-ne-success \
