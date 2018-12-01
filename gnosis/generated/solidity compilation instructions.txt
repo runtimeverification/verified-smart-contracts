@@ -14,3 +14,4 @@ Hex files on this repo were cleared up. They only contain the fragment that was 
 
 To generate .evm files:
     Use --asm option instead of --bin-runtime
+.
