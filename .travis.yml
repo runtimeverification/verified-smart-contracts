@@ -9,11 +9,10 @@ before_install:
   - export PATH=$PATH:$PWD/z3-4.6.0-x64-ubuntu-14.04/bin
   - z3 --version
   - nproc
+  - cat /proc/meminfo
   - export BRANCH=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then echo $TRAVIS_BRANCH; else echo $TRAVIS_PULL_REQUEST_BRANCH; fi)
   - echo ${BRANCH#travis-test-}
   - travis_wait 30 sleep 1800 &
-  - echo $JAVA_OPTS
-  - export JAVA_OPTS=-Xmx7g
 
 language: java
 script: make all test MODE=${BRANCH#travis-test-}
