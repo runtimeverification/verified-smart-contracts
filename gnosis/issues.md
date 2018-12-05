@@ -41,3 +41,43 @@ Considering the [current max block gas limit] (~8M) and the gas cost for the loc
 
 
 [current max block gas limit]: <https://etherscan.io/blocks>
+
+
+### Specification
+
+We first define `the-first-invalid-signature-index` as follows:
+- A1:  for all `i < the-first-invalid-signature-index`,  `signatures[i]` is valid.
+- A2:  `signatures[the-first-invalid-signature-index]` is NOT valid.
+
+Now we formulate the behavior of `checkSignatures` as follows:
+- T1:  `checkSignatures` returns true if `the-first-invalid-signature-index >= threshold`.
+- T2:  otherwise, returns false.
+
+To prove that, we need the loop invariant as follows:
+For some `i` such that `0 <= i < threshold` and `i <= the-first-invalid-signature-index`:
+- L1:  if `i < threshold <= the-first-invalid-signature-index`, then return true.
+- L1:  else (i.e., if `i <= the-first-invalid-signature-index < threshold`), then return false.
+
+====
+
+Proof sketch.
+
+The top level specification:
+- T1:  by L1 with `i = 0`.
+- T2:  by L2 with `i = 0`.
+
+The loop invariant:
+- L1:
+  By A1, signatures[i] is valid.  Then by M1, it goes back to the loop head, and we have two cases:
+  - Case 1: `i + 1 = threshold`: it jumps out of the loop, and return true.
+  - Case 2: `i + 1 < threshold`: by circular reasoning with L1.
+- L2:
+  - Case 1: `i = the-first-invalid-signature-index`:
+    By A2, signatures[i] is NOT valid.  Then, by M2, we conclude.
+  - Case 2: `i < the-first-invalid-signature-index`:
+    By A1, signatures[i] is valid. Then, by M1, it goes to the loop head, and by the circular reasoning with L2, we conclude (since we know that `i + 1 <= the-first-invalid-signature-index < threshold`).
+
+
+We need to prove the following claims, but it can be done with looking at the loop body only.
+- M1:  if signatures[i] is valid, it continues to the next iteration (i.e., goes back to the loop head).
+- M2:  if signatures[i] is NOT valid, it returns false.
