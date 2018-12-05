@@ -6,7 +6,7 @@ TMPLS:=../gnosis/module-tmpl.k ../gnosis/test/spec-tmpl.k
 SPEC_GROUP:=gnosis-imap
 SPEC_INI:=gnosis-imap-spec.ini
 
-KPROVE_OPTS:=--smt-prelude $(abspath $(dir $(THIS_FILE))/../gnosis/evm.smt2)
+KPROVE_OPTS:=--smt-prelude $(abspath $(dir $(abspath $(lastword $(MAKEFILE_LIST))))/../gnosis/evm.smt2)
 
 SPEC_NAMES:=encodeTransactionData
 
