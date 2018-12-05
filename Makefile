@@ -21,7 +21,7 @@ ifneq (,$(or $(findstring all,$(MODE)),$(findstring bihu,$(MODE))))
 endif
 
 ifneq (,$(or $(findstring all,$(MODE)),$(findstring gnosis,$(MODE))))
-SUBDIRS+=gnosis gnosis/test
+SUBDIRS+=gnosis gnosis/test gnosis-imap
 endif
 
 ifneq (,$(or $(findstring all,$(MODE)),$(findstring dom,$(MODE))))
