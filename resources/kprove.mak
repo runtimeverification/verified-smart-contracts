@@ -57,7 +57,7 @@ TANGLER:=$(PANDOC_TANGLE_SUBMODULE)/tangle.lua
 LUA_PATH:=$(PANDOC_TANGLE_SUBMODULE)/?.lua;;
 export LUA_PATH
 
-K_OPTS:=-Xmx12g
+K_OPTS?=-Xmx12g
 export K_OPTS
 
 #
