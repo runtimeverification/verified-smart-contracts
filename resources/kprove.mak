@@ -72,7 +72,7 @@ clean:
 	rm -rf $(SPECS_DIR)
 
 clean-deps:
-	rm -rf $(SPECS_DIR) $(BUILD_DIR)/*
+	rm -rf $(SPECS_DIR) $(K_REPO_DIR) $(KEVM_REPO_DIR)
 
 deps: $(K_REPO_DIR) $(KEVM_REPO_DIR) $(TANGLER)
 
