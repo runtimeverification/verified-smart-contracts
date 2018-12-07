@@ -27,6 +27,7 @@ TMPLS?=module-tmpl.k spec-tmpl.k
 
 # additional options to kprove command
 KPROVE_OPTS?=
+KPROVE_OPTS+=$(EXT_KPROVE_OPTS)
 
 #
 # Settings
