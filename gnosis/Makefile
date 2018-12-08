@@ -1,13 +1,15 @@
-BUILD_DIR:=../.build
+BUILD_DIR:=test/.build
+
+LOCAL_LEMMAS:=abstract-semantics.k test/verification.k
+TMPLS:=module-tmpl.k test/spec-tmpl.k
 
 SPEC_GROUP:=gnosis
 SPEC_INI:=gnosis-spec.ini
 
-SPEC_NAMES:=encodeTransactionData-data32 \
-            encodeTransactionData-data33 \
-            signatureSplit-pos0 \
-            signatureSplit-pos1 \
-            signatureSplit-pos2 \
+KPROVE_OPTS:=--smt-prelude $(abspath $(dir $(abspath $(lastword $(MAKEFILE_LIST))))/evm.smt2)
+
+SPEC_NAMES:=encodeTransactionData \
+            signatureSplit \
             checkSignatures-thres-too-large \
             checkSignatures-thres-1-sig-v2-ec0 \
             checkSignatures-thres-1-sig-v2-not-ec0-success \

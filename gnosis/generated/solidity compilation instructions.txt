@@ -1,13 +1,13 @@
-Solidity version: v0.4.24+commit.e67f0147.js
+Solidity version: 0.5.1-develop.2018.11.29+commit.f6d01323.Linux.g++
 Gnosis version: https://github.com/denis-bogdanas/safe-contracts
     branch `rv`
-    At the moment it is v0.0.2-alpha with some functions marked public.
+    At the moment it is v0.1.0 with some functions marked public.
 
 Instructions to produce hex files:
 
 $ cd <gnosis project root>
-$ solc --bin-runtime contracts/proxies/Proxy.sol  > gnosis-Proxy-0.0.2.hex
-$ solc --bin-runtime contracts/GnosisSafe.sol > gnosis-Master-0.0.2.hex
+$ solc --bin-runtime contracts/proxies/Proxy.sol  > gnosis-Proxy-0.1.0.hex
+$ solc --bin-runtime contracts/GnosisSafe.sol > gnosis-GnosisSafe-0.1.0.hex
 
 Resulting files are bigger than .hex files in this repo. They contain the bytecode for multiple solidity classes.
 Hex files on this repo were cleared up. They only contain the fragment that was used in gnosis-spec.ini

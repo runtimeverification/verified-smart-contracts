@@ -39,6 +39,15 @@ module VERIFICATION
       requires #isBuf(BUF) andBool MW0 ==Int BW0 andBool MW1 ==Int BW1
        andBool MS1 ==Int MS0 +Int MW0 andBool BS1 ==Int BS0 +Int BW0
 
+    // select/store key equality
+
+    rule hash2(_,_) ==Int I => false
+      requires #isConcrete(I)
+
+    rule I ==Int hash2(_,_) => false
+      requires #isConcrete(I)
+
+		rule hash2(A1,B1) ==Int hash2(A2,B2) => A1 ==Int A2 andBool B1 ==Int B2
 
   // ########################
   // Buffer Reasoning
@@ -60,7 +69,8 @@ module VERIFICATION
   // Range
   // ########################
 
-    rule #asWord(#bufSeg(_, _, WIDTH)) <=Int 255 => true requires WIDTH ==Int 1
+    //todo should not be needed since #bufSeg(_,_,1) is converted to #bufElm
+    rule #asWord(#bufSeg(_, _, WIDTH)) <Int 256 => true requires WIDTH ==Int 1
 
     rule 0 <=Int (X modInt Y)         => true
     rule         (X modInt Y) <Int Y  => true  requires Y >Int 0
@@ -83,6 +93,9 @@ module VERIFICATION
     //that's because the result in concrete semantics is trimmed to Address range.
     rule          #symEcrec(DATA) <Int pow160 => true
 
+    rule 0 <=Int #bufElm(_, _)  => true
+    rule #bufElm(_, _) <Int 256 => true
+
   // ########################
   // Simplification
   // ########################
@@ -94,6 +107,8 @@ module VERIFICATION
 
     rule #asWord(#bufSeg(BUF, START, WIDTH)) &Int 255 => #asWord(#bufSeg(BUF, START +Int WIDTH -Int 1, 1))  requires WIDTH >=Int 1
     rule 255 &Int #asWord(#bufSeg(BUF, START, WIDTH)) => #asWord(#bufSeg(BUF, START +Int WIDTH -Int 1, 1))  requires WIDTH >=Int 1
+
+    rule #bufSeg(BUF, START, 1) => #bufElm(BUF, START) : .WordStack
 
     rule #asWord(WS0 ++ #buf(MASKWIDTH0, 0)) |Int #asWord(#buf(MASKWIDHT1, 0) ++ WS1)
       => #asWord(WS0 ++ WS1)
