@@ -85,7 +85,7 @@ $(K_REPO_DIR):
 $(KEVM_REPO_DIR):
 	git clone $(KEVM_REPO_URL) $(KEVM_REPO_DIR)
 	cd $(KEVM_REPO_DIR) \
-	    && git clean -fx \
+		&& git clean -fdx \
 		&& git reset --hard $(KEVM_VERSION) \
 		&& make tangle-deps \
 		&& make defn \
