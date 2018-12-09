@@ -6,7 +6,8 @@ TMPLS:=../module-tmpl.k spec-tmpl.k
 SPEC_GROUP:=gnosis-test
 SPEC_INI:=api-test.ini
 
-KPROVE_OPTS:=--smt-prelude $(abspath $(dir $(abspath $(lastword $(MAKEFILE_LIST))))/../evm.smt2) --deterministic-functions
+KPROVE_OPTS:=--smt-prelude $(abspath $(dir $(abspath $(lastword $(MAKEFILE_LIST))))/../evm.smt2) \
+						 --deterministic-functions --cache-func-optimized
 
 SPEC_NAMES:=testKeccak-1 \
             testKeccak-2 \

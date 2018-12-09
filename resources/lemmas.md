@@ -158,7 +158,6 @@ These rules help to improve the performance of the underlying theorem prover’s
 Below are universal simplification rules that are free to be used in any context.
 
 ```k
-    rule 0 +Int N => N
     rule N +Int 0 => N
 
     rule N -Int 0 => N
@@ -184,12 +183,19 @@ The rules are applied only when the side-conditions are met.
 These rules are specific to reasoning about EVM programs.
 
 ```k
-    rule (I1 +Int I2) +Int I3 => I1 +Int (I2 +Int I3) when #isConcrete(I2) andBool #isConcrete(I3)
-    rule (I1 +Int I2) -Int I3 => I1 +Int (I2 -Int I3) when #isConcrete(I2) andBool #isConcrete(I3)
-    rule (I1 -Int I2) +Int I3 => I1 -Int (I2 -Int I3) when #isConcrete(I2) andBool #isConcrete(I3)
-    rule (I1 -Int I2) -Int I3 => I1 -Int (I2 +Int I3) when #isConcrete(I2) andBool #isConcrete(I3)
+    //orienting symbolic term to be first, converting -Int to +Int
+    rule I +Int B => B          +Int I when #isConcrete(I) andBool notBool #isConcrete(B)
+    rule I -Int B => (0 -Int B) +Int I when #isConcrete(I) andBool notBool #isConcrete(B) andBool I =/=Int 0
+    rule A -Int I => A +Int (0 -Int I) when notBool #isConcrete(A) andBool #isConcrete(I)
+    rule 0 -Int (0 -Int X) => X
 
-    rule I1 &Int (I2 &Int I3) => (I1 &Int I2) &Int I3 when #isConcrete(I1) andBool #isConcrete(I2)
+    rule (A +Int I2) +Int I3 => A +Int (I2 +Int I3) when notBool #isConcrete(A) andBool #isConcrete(I2) andBool #isConcrete(I3)
+    rule I1 +Int (B +Int I3) => B +Int (I1 +Int I3) when #isConcrete(I1) andBool notBool #isConcrete(B) andBool #isConcrete(I3)    
+
+    rule I  +Int (0 -Int C) => (0 -Int C) +Int I when         #isConcrete(I) andBool notBool #isConcrete(C)
+    rule A  +Int (0 -Int C) =>  A -Int C         when notBool #isConcrete(A) andBool notBool #isConcrete(C)
+
+    rule I1 &Int (I2 &Int C) => (I1 &Int I2) &Int C when #isConcrete(I1) andBool #isConcrete(I2) andBool notBool #isConcrete(C)
 
     // 0xffff...f &Int N = N
     rule MASK &Int N => N  requires MASK ==Int (2 ^Int (log2Int(MASK) +Int 1)) -Int 1 // MASK = 0xffff...f
@@ -319,8 +325,11 @@ These lemmas abstract some properties about `#sizeWordStack`:
 
 ```k
     rule 0 <=Int #sizeWordStack ( _ , _ ) => true [smt-lemma]
-    rule #sizeWordStack ( WS , N:Int )
+    /*rule #sizeWordStack ( WS , N:Int )
       => #sizeWordStack ( WS , 0 ) +Int N
+      requires N =/=K 0*/
+    rule #sizeWordStack ( WS , N:Int )
+      => N +Int #sizeWordStack ( WS , 0 )
       requires N =/=K 0
       [lemma]
 

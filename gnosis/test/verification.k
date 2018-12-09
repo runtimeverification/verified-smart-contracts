@@ -15,10 +15,12 @@ module VERIFICATION
  // -------------------------------------
     rule #infinity +Int _ => #infinity
     rule #infinity -Int _ => #infinity
-    rule #infinity >=Int _ => true
-    rule _ <=Int #infinity => true
-    rule #infinity <Int _ => false
+    rule A <=Int #infinity => true
+      requires #getKLabelString(A) =/=String "#infinity_VERIFICATION"
+    rule #infinity <Int A => false
+      requires #getKLabelString(A) =/=String "#infinity_VERIFICATION"
 
+    rule minInt(#infinity, #infinity) => #infinity
 
   // ########################
   // Account Map
@@ -41,13 +43,14 @@ module VERIFICATION
 
     // select/store key equality
 
-    rule hash2(_,_) ==Int I => false
+    rule hash2(A,B) ==K I => false
+      requires         notBool #isConcrete(hash2(A,B)) andBool #isConcrete(I)
+               andBool I <Int 1000000000 //random small-ish number bigger than any fixed storage location
+
+    rule I ==K hash2(A,B) => hash2(A,B) ==K I
       requires #isConcrete(I)
 
-    rule I ==Int hash2(_,_) => false
-      requires #isConcrete(I)
-
-		rule hash2(A1,B1) ==Int hash2(A2,B2) => A1 ==Int A2 andBool B1 ==Int B2
+    rule hash2(A1,B1) ==K hash2(A2,B2) => A1 ==Int A2 andBool B1 ==Int B2
 
   // ########################
   // Buffer Reasoning
@@ -117,14 +120,13 @@ module VERIFICATION
        andBool MASKWIDTH0 ==Int #sizeWordStack(WS1)
 
     // Arithmetic
-    rule I1 +Int (I2 +Int I3) => I2 +Int (I1 +Int I3) when #isConcrete(I1) andBool #isConcrete(I3)
-    rule I1 +Int (I2 +Int I3) => I3 +Int (I1 +Int I2) when #isConcrete(I1) andBool #isConcrete(I2)
-
-    rule (I1 +Int I2) +Int (I3 -Int I2) => I1 +Int I3
-    rule (I1 +Int I2) -Int (I1 +Int I3) => I2 -Int I3
+    rule (A +Int I2) +Int (I3 -Int A) => I2 +Int I3
+    rule (A +Int I2) -Int (A +Int I3) => I2 -Int I3
+    rule (A +Int I2) -Int (I3 +Int A) => I2 -Int I3
 
     // TODO: move to builtin
     rule N -Int N => 0
+      requires #getKLabelString(N) =/=String "#infinity_VERIFICATION"
 
     rule 2 ^%Int X pow256 => 2 ^Int X
       requires 0 <=Int X andBool X <Int 256
@@ -133,6 +135,7 @@ module VERIFICATION
       requires 0 <=Int X andBool X <Int Y
 
     rule ((X *Int Y) /Int Z) /Int Y => X /Int Z
+      requires Y =/=Int 0
 
     rule 1 |Int chop(A xorInt maxUInt256) => 1
 
