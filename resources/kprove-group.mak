@@ -30,3 +30,19 @@ $(SUBPROOF): %.proof:
 
 $(SUBTEST): %.test:
 	$(MAKE) -C $* test
+
+#
+# For Jenkins Build
+#
+
+NPROCS?=1
+
+.PHONY: jenkins
+
+jenkins:
+	set -e; \
+	for i in $(SUBDIRS); do \
+		$(MAKE) -C $$i all; \
+		$(MAKE) -C $$i test -j$(NPROCS); \
+		$(MAKE) -C $$i clean-deps; \
+	done
