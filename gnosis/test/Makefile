@@ -1,7 +1,7 @@
-BUILD_DIR:=.build
+BUILD_DIR:=../.build
 
-LOCAL_LEMMAS:=../abstract-semantics.k verification.k
-TMPLS:=../module-tmpl.k spec-tmpl.k
+LOCAL_LEMMAS:=../abstract-semantics.k ../verification.k
+TMPLS:=../module-tmpl.k ../spec-tmpl.k
 
 SPEC_GROUP:=gnosis-test
 SPEC_INI:=api-test.ini
