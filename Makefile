@@ -25,7 +25,7 @@ SUBDIRS+=gnosis gnosis/test gnosis-imap
 endif
 
 ifneq (,$(or $(findstring all,$(MODE)),$(findstring dom,$(MODE))))
-SUBDIRS+=proxied-token
+#SUBDIRS+=proxied-token
 ERC20+=gno
 endif
 
