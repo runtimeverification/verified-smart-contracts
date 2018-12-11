@@ -3,7 +3,7 @@
     <k> {K} </k>
     <exit-code> 1 </exit-code>
     <mode> NORMAL </mode>
-    <schedule> BYZANTIUM </schedule>
+    <schedule> {SCHEDULE} </schedule>
     <analysis> .Map </analysis> // not part of evm
 
     <ethereum>
@@ -91,3 +91,4 @@
      andBool 0 <=Int ORIGIN_ID  andBool ORIGIN_ID  <Int (2 ^Int 160)
      andBool 0 <=Int CALL_DEPTH andBool CALL_DEPTH <Int 1024
      {REQUIRES}
+     {ENSURES}

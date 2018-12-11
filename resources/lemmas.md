@@ -173,6 +173,9 @@ It reduces the reasoning efforts of the underlying theorem prover, factoring out
     rule byteStack2IntList ( WS ) => byteStack2IntList ( WS , #sizeWordStack(WS) /Int 32 ) requires #sizeWordStack(WS) %Int 32 ==Int 0
     rule byteStack2IntList ( WS , N ) => #asWord ( WS [ 0 .. 32 ] ) byteStack2IntList ( #drop(32, WS) , N -Int 1 ) requires N >Int 1
     rule byteStack2IntList ( WS , 1 ) => #asWord ( WS [ 0 .. 32 ] ) .IntList
+
+    rule hash2(K1,V1) =/=Int hash2(K2,V2) => K1 =/=Int K2 orBool V1 =/=Int V2
+    rule hash2(K1,V1) ==Int hash2(K2,V2) => K1 ==Int K2 andBool V1 ==Int V2
 ```
 
 ### Integer Expression Simplification Rules
@@ -324,6 +327,37 @@ These lemmas abstract some properties about `#sizeWordStack`:
     rule #sizeWordStack ( _ , _ ) >=Int 0 => true [smt-lemma]
 
     rule WS ++ .WordStack => WS
+```
+
+### IMAP 
+
+```k
+syntax Bool ::= IMap "==IMap" IMap [function, smtlib(=)]
+
+syntax Bool ::= IMap "==IMap" IMap "except" Set [function]
+
+rule store(M1, K, _) ==IMap M2 except Ks
+  =>       M1        ==IMap M2 except Ks
+  requires K in Ks
+
+rule M1 ==IMap store(M2, K, _) except Ks
+  => M1 ==IMap       M2        except Ks
+  requires K in Ks
+
+rule M1 ==IMap M2 except _ => true
+  requires M1 ==K M2  // structural equality
+
+syntax Set ::= keys(IMap) [function]
+
+rule K1 in keys(store(M, K2, _)) => true          requires K1  ==Int K2
+rule K1 in keys(store(M, K2, _)) => K1 in keys(M) requires K1 =/=Int K2
+    
+//Reduces IMaps where multiple entries share the same key
+rule store(store(M, K0, V0), K1, V1) => store(M, K0, V1)
+        requires K0 ==Int K1
+
+rule store(store(M, K0, V0), K1, V1) => store(store(M, K1, V1), K0, V0)
+        requires K0 =/=Int K1 andBool K1 in keys(M)
 
 endmodule
 ```
