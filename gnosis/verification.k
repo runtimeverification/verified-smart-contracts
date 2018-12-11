@@ -44,8 +44,8 @@ module VERIFICATION
     // select/store key equality
 
     rule hash2(A,B) ==K I => false
-      requires         notBool #isConcrete(hash2(A,B)) andBool #isConcrete(I)
-               andBool I <Int 1000000000 //random small-ish number bigger than any fixed storage location
+      requires #isConcrete(I)
+       andBool I <Int 20 //random small-ish number bigger than any fixed storage location
 
     rule I ==K hash2(A,B) => hash2(A,B) ==K I
       requires #isConcrete(I)
