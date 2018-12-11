@@ -183,17 +183,20 @@ The rules are applied only when the side-conditions are met.
 These rules are specific to reasoning about EVM programs.
 
 ```k
-    //orienting symbolic term to be first, converting -Int to +Int
+    //orienting symbolic term to be first, converting -Int to +Int for concrete values.
     rule I +Int B => B          +Int I when #isConcrete(I) andBool notBool #isConcrete(B)
-    rule I -Int B => (0 -Int B) +Int I when #isConcrete(I) andBool notBool #isConcrete(B) andBool I =/=Int 0
     rule A -Int I => A +Int (0 -Int I) when notBool #isConcrete(A) andBool #isConcrete(I)
-    rule 0 -Int (0 -Int X) => X
 
     rule (A +Int I2) +Int I3 => A +Int (I2 +Int I3) when notBool #isConcrete(A) andBool #isConcrete(I2) andBool #isConcrete(I3)
-    rule I1 +Int (B +Int I3) => B +Int (I1 +Int I3) when #isConcrete(I1) andBool notBool #isConcrete(B) andBool #isConcrete(I3)    
 
-    rule I  +Int (0 -Int C) => (0 -Int C) +Int I when         #isConcrete(I) andBool notBool #isConcrete(C)
-    rule A  +Int (0 -Int C) =>  A -Int C         when notBool #isConcrete(A) andBool notBool #isConcrete(C)
+    rule I1 +Int (B +Int I3) => B +Int (I1 +Int I3) when #isConcrete(I1) andBool notBool #isConcrete(B) andBool #isConcrete(I3)
+    rule I1 -Int (B +Int I3) => (I1 -Int I3) -Int B when #isConcrete(I1) andBool notBool #isConcrete(B) andBool #isConcrete(I3)
+    rule (I1 -Int B) +Int I3 => (I1 +Int I3) -Int B when #isConcrete(I1) andBool notBool #isConcrete(B) andBool #isConcrete(I3)
+
+    rule I1 +Int (I2 +Int C) => (I1 +Int I2) +Int C when #isConcrete(I1) andBool #isConcrete(I2) andBool notBool #isConcrete(C)
+    rule I1 +Int (I2 -Int C) => (I1 +Int I2) -Int C when #isConcrete(I1) andBool #isConcrete(I2) andBool notBool #isConcrete(C)
+    rule I1 -Int (I2 +Int C) => (I1 -Int I2) -Int C when #isConcrete(I1) andBool #isConcrete(I2) andBool notBool #isConcrete(C)
+    rule I1 -Int (I2 -Int C) => (I1 -Int I2) +Int C when #isConcrete(I1) andBool #isConcrete(I2) andBool notBool #isConcrete(C)
 
     rule I1 &Int (I2 &Int C) => (I1 &Int I2) &Int C when #isConcrete(I1) andBool #isConcrete(I2) andBool notBool #isConcrete(C)
 
