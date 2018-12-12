@@ -172,7 +172,7 @@ module VERIFICATION
 
     rule (I1 +Int I2) -Int (I3 +Int I1) => I2 -Int I3
 
-    rule A -Int (A -Int I1) => I2
+    rule A -Int (A -Int I1) => I1
 
     // Simplify Cmem(_,_) - Cmem(_, _)
     rule A +Int (I1 -Int A) => I1
