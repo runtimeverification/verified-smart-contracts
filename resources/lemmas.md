@@ -328,13 +328,6 @@ These lemmas abstract some properties about `#sizeWordStack`:
 
 ```k
     rule 0 <=Int #sizeWordStack ( _ , _ ) => true [smt-lemma]
-    /*rule #sizeWordStack ( WS , N:Int )
-      => #sizeWordStack ( WS , 0 ) +Int N
-      requires N =/=K 0*/
-    rule #sizeWordStack ( WS , N:Int )
-      => N +Int #sizeWordStack ( WS , 0 )
-      requires N =/=K 0
-      [lemma]
 
 endmodule
 ```

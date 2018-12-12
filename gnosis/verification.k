@@ -7,20 +7,34 @@ module VERIFICATION
     imports LEMMAS
 
   // ########################
+  // Memory Usage
+  // ########################
+
+    rule #memoryUsageUpdate(#memoryUsageUpdate(MU, START0, WIDTH0), START1, WIDTH1) => #memoryUsageUpdate(MU, START0, WIDTH0)
+      requires START1 +Int WIDTH1 <Int START0 +Int WIDTH0
+
+    rule #memoryUsageUpdate(#memoryUsageUpdate(MU, START0, WIDTH0), START1, WIDTH1) => #memoryUsageUpdate(MU, START1, WIDTH1)
+      requires START0 +Int WIDTH0 <=Int START1 +Int WIDTH1
+
+    rule 0 <=Int #memoryUsageUpdate(MU, START, WIDTH) => true
+
+    rule pow256 <=Int #memoryUsageUpdate(MU, START, WIDTH) => false  requires START +Int WIDTH <Int 3705346855594118253554271520278013051304639509300498049262642688253220148477921
+    rule #memoryUsageUpdate(MU, START, WIDTH) <Int  pow256 => true   requires START +Int WIDTH <Int 3705346855594118253554271520278013051304639509300498049262642688253220148477921
+
+
+  // ########################
   // Gas
   // ########################
 
-    // Temporary solution to avoid reasoning about gas
-    syntax Int ::= "#infinity" [function]
- // -------------------------------------
-    rule #infinity +Int _ => #infinity
-    rule #infinity -Int _ => #infinity
-    rule A <=Int #infinity => true
-      requires #getKLabelString(A) =/=String "#infinity_VERIFICATION"
-    rule #infinity <Int A => false
-      requires #getKLabelString(A) =/=String "#infinity_VERIFICATION"
+    syntax Int ::= #gas ( Int , Int ) [function]
+ // --------------------------------------------
+    rule #gas(NONMEM, MEM) -Int #symCmem(MEM') => #gas(NONMEM, MEM +Int MEM')
+    rule #gas(NONMEM, MEM) +Int NONMEM' => #gas(NONMEM -Int NONMEM', MEM)  requires #getKLabelString(NONMEM') =/=String "#symCmem"
+    rule #gas(NONMEM, MEM) -Int NONMEM' => #gas(NONMEM +Int NONMEM', MEM)  requires #getKLabelString(NONMEM') =/=String "#symCmem"
 
-    rule minInt(#infinity, #infinity) => #infinity
+    rule G <=Int #gas(_,_)  => true  requires #getKLabelString(G) =/=String "#gas"
+    rule #gas(_, _) <Int G  => false requires #getKLabelString(G) =/=String "#gas"
+
 
   // ########################
   // Account Map
@@ -67,13 +81,16 @@ module VERIFICATION
 
     rule WS ++ .WordStack => WS
 
+    rule sizeWordStackAux(WS, N) <Int SIZE => sizeWordStackAux(WS, 0) +Int N <Int SIZE  requires N =/=Int 0
+    rule SIZELIMIT <Int sizeWordStackAux(WS, N) +Int DELTA  => SIZELIMIT <Int (sizeWordStackAux(WS, 0) +Int N) +Int DELTA  requires N =/=Int 0
+    rule SIZELIMIT <Int sizeWordStackAux(WS, N) => SIZELIMIT <Int sizeWordStackAux(WS, 0) +Int N  requires N =/=Int 0
+
+    rule #sizeWordStack(selectRange(_, _, WIDTH), SIZE) => SIZE +Int WIDTH
+
 
   // ########################
   // Range
   // ########################
-
-    //todo should not be needed since #bufSeg(_,_,1) is converted to #bufElm
-    rule #asWord(#bufSeg(_, _, WIDTH)) <Int 256 => true requires WIDTH ==Int 1
 
     rule 0 <=Int (X modInt Y)         => true
     rule         (X modInt Y) <Int Y  => true  requires Y >Int 0
@@ -99,19 +116,33 @@ module VERIFICATION
     rule 0 <=Int #bufElm(_, _)  => true
     rule #bufElm(_, _) <Int 256 => true
 
+    rule 0 <=Int X xorInt 115792089237316195423570985008687907853269984665640564039457584007913129639935 => true      requires 0<=Int X andBool X <Int pow256
+
+    rule X xorInt 115792089237316195423570985008687907853269984665640564039457584007913129639935 <Int pow256 => true  requires 0<=Int X andBool X <Int pow256 
+
+
   // ########################
   // Simplification
   // ########################
 
-    rule #padToWidth(32, #asByteStack(V)) => #buf(32, V) // #asByteStackInWidth(V, 32)
-      requires 0 <=Int V andBool V <Int pow256
+    rule (X +Int 31) /Int 32 *Int 32 => #ceil32(X)
+    rule (31 +Int X) /Int 32 *Int 32 => #ceil32(X)
 
+    rule #asWord(#buf(32, DATA)) => DATA  requires #rangeUInt(256, DATA)
+
+    rule #padToWidth(32, #asByteStack(V)) => #buf(32, V) // #asByteStackInWidth(V, 32)
+      requires 0 <=Int V andBool V <Int pow256 andBool #getKLabelString(V) =/=String "#asWord"
+
+    rule #buf(32, #asWord(WS)) => WS  requires #sizeWordStack(WS) ==Int 32
     rule #buf(32, #asWord(#bufSeg(BUF, START, WIDTH))) => #bufSeg(BUF, START +Int WIDTH -Int 32, 32)  requires WIDTH >=Int 32
 
     rule #asWord(#bufSeg(BUF, START, WIDTH)) &Int 255 => #asWord(#bufSeg(BUF, START +Int WIDTH -Int 1, 1))  requires WIDTH >=Int 1
     rule 255 &Int #asWord(#bufSeg(BUF, START, WIDTH)) => #asWord(#bufSeg(BUF, START +Int WIDTH -Int 1, 1))  requires WIDTH >=Int 1
 
     rule #bufSeg(BUF, START, 1) => #bufElm(BUF, START) : .WordStack
+    rule #asWord(#bufElm(BUF, INDEX) : .WordStack) => #bufElm(BUF, INDEX)
+
+    rule #buf(32, DATA) => #padToWidth(32, #asByteStack(DATA))  [concrete]
 
     rule #asWord(WS0 ++ #buf(MASKWIDTH0, 0)) |Int #asWord(#buf(MASKWIDHT1, 0) ++ WS1)
       => #asWord(WS0 ++ WS1)
@@ -119,10 +150,34 @@ module VERIFICATION
        andBool #sizeWordStack(WS0) ==Int MASKWIDHT1
        andBool MASKWIDTH0 ==Int #sizeWordStack(WS1)
 
-    // Arithmetic
+    rule #asWord(WS) &Int 115792089237316195423570985008687907853269984665640564039457584007913129639935 => #asWord(WS)
+
+    // 2^256 - 2^160 = 0xff..ff00..00 (96 1's followed by 160 0's)
+    rule 115792089237316195423570985007226406215939081747436879206741300988257197096960 &Int ADDR => 0
+      requires #rangeAddress(ADDR)
+
+    rule 1 |Int chop(A xorInt maxUInt256) => 1
+
+    rule chop((ADDR &Int maxUInt160) modInt pow160) => ADDR
+      requires #rangeAddress(ADDR)
+
+
+  // ########################
+  // Arithmetic
+  // ########################
+
     rule (A +Int I2) +Int (I3 -Int A) => I2 +Int I3
     rule (A +Int I2) -Int (A +Int I3) => I2 -Int I3
     rule (A +Int I2) -Int (I3 +Int A) => I2 -Int I3
+
+    rule (I1 +Int I2) -Int (I3 +Int I1) => I2 -Int I3
+
+    rule A -Int (A -Int I1) => I2
+
+    // Simplify Cmem(_,_) - Cmem(_, _)
+    rule A +Int (I1 -Int A) => I1
+    rule (I1 +Int (A -Int I0)) +Int (I2 -Int A) => I1 +Int (I2 -Int I0)
+
 
     // TODO: move to builtin
     rule N -Int N => 0
@@ -137,14 +192,11 @@ module VERIFICATION
     rule ((X *Int Y) /Int Z) /Int Y => X /Int Z
       requires Y =/=Int 0
 
-    rule 1 |Int chop(A xorInt maxUInt256) => 1
-
-    rule chop((ADDR &Int maxUInt160) modInt pow160) => ADDR
-      requires #rangeAddress(ADDR)
-
-    // 2^256 - 2^160 = 0xff..ff00..00 (96 1's followed by 160 0's)
-    rule 115792089237316195423570985007226406215939081747436879206741300988257197096960 &Int ADDR => 0
-      requires #rangeAddress(ADDR)
+    // 0xff..ff00..00 (16 1's followed by 240 0's)
+    rule 115790322390251417039241401711187164934754157181743688420499462401711837020160 &Int #asWord(WS1 ++ WS2)
+        => #asWord(WS1 ++ #buf(30, 0))
+      requires #sizeWordStack(WS1) ==Int 2
+       andBool #sizeWordStack(WS2) ==Int 30
 
     // x &Int (NOT 31)
     rule X &Int 115792089237316195423570985008687907853269984665640564039457584007913129639904 => (X /Int 32) *Int 32  requires 0 <=Int X
@@ -152,66 +204,5 @@ module VERIFICATION
     rule (X /Int 32) *Int 32 => X  requires X modInt 32 ==Int 0
 
     rule #ceil32(X) => X requires X modInt 32 ==Int 0
-
-    rule #buf(32, #asWord(WS)) => WS  requires #sizeWordStack(WS) ==Int 32
-
-    rule #buf(32, DATA) => #padToWidth(32, #asByteStack(DATA))  [concrete]
-
-    // 0xff..ff00..00 (16 1's followed by 240 0's)
-    rule 115790322390251417039241401711187164934754157181743688420499462401711837020160 &Int #asWord(WS1 ++ WS2)
-        => #asWord(WS1 ++ #buf(30, 0))
-      requires #sizeWordStack(WS1) ==Int 2
-       andBool #sizeWordStack(WS2) ==Int 30
-
-    // following lemmma is required for solidty 0.4.25
-    rule (X *Int 32) +Int 192 ==K (Y *Int 32) +Int 160 => X +Int 1 ==K Y
-
-    rule (X *Int 32) +Int 32 ==K Y *Int 32             => X +Int 1 ==K Y
-
-    rule 192 ==K (X *Int 32) +Int 160                  => X ==K 1
-
-    rule maxInt(maxInt(A, B), C) => maxInt(A, C)  requires B <=Int C
-
-    rule (31 +Int X) /Int 32 *Int 32 => #ceil32(X)
-
-    rule (X +Int 31) /Int 32 *Int 32 => #ceil32(X)
-
-    rule #asWord(WS) &Int 115792089237316195423570985008687907853269984665640564039457584007913129639935 => #asWord(WS)
-
-    rule powmod(256, X, pow256) >=Int 1 => true  requires 0 <=Int X andBool X <Int 32
-
-    rule powmod(256, X, pow256) <Int pow256 => true  requires 0 <=Int X
-
-    rule 0 <=Int 32 -Int ( X -Int (X /Int 32) *Int 32 ) => true  requires 0 <=Int X
-
-    rule 32 -Int ( X -Int (X /Int 32) *Int 32 ) <Int 32 => true requires 0 <=Int X andBool X modInt 32 =/=Int 0
-
-    rule 0 <=Int X -Int 1 => true      requires X >=Int 1
-
-    rule X -Int 1 <Int pow256 => true  requires X <Int pow256
-
-    rule 0 <=Int X xorInt 115792089237316195423570985008687907853269984665640564039457584007913129639935 => true      requires 0<=Int X andBool X <Int pow256
-
-    rule X xorInt 115792089237316195423570985008687907853269984665640564039457584007913129639935 <Int pow256 => true  requires 0<=Int X andBool X <Int pow256 
-
-    rule #sizeWordStack(selectRange(_, _, WIDTH), SIZE) => SIZE +Int WIDTH
-
-    rule (I1 +Int I2) -Int (I3 +Int I1) => I2 -Int I3
-
-    rule I1 -Int (I1 -Int I2) => I2
-
-    rule I1 +Int (I2 -Int I1) => I2
-
-    // Left mask
-    rule #asWord(WS1 ++ WS2) &Int ((powmod(256, MASKWIDTH, pow256) -Int 1) xorInt 115792089237316195423570985008687907853269984665640564039457584007913129639935)
-        => #asWord(WS1 ++ #buf(MASKWIDTH, 0))
-      requires 0 <=Int MASKWIDTH
-       andBool #sizeWordStack(WS1) +Int #sizeWordStack(WS2) ==Int 32
-       andBool #sizeWordStack(WS2) ==Int MASKWIDTH
-
-    // Right mask
-    rule #asWord(selectRange(M, START, 32)) &Int (powmod(256, MASKWIDTH, pow256) -Int 1) => #asWord(#buf(32 -Int MASKWIDTH, 0) ++ selectRange(M, START +Int 32 -Int MASKWIDTH, MASKWIDTH))
-      requires 0 <=Int MASKWIDTH
-       andBool MASKWIDTH <=Int 32
 
 endmodule
