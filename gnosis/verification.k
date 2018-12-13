@@ -113,8 +113,15 @@ module VERIFICATION
     //that's because the result in concrete semantics is trimmed to Address range.
     rule          #symEcrec(DATA) <Int pow160 => true
 
-    rule 0 <=Int #bufElm(_, _)  => true
-    rule #bufElm(_, _) <Int 256 => true
+    // Lemmas implied by the above, but still required to match side conditions of #padToWidth rule in lemmas.md
+    // General range conversion lemmas like below are not an option, dramatic performance decrease:
+    //    rule A < pow256 => true requires A < pow160
+    rule 0 <=Int  #symEcrec(DATA)             => true
+    rule          #symEcrec(DATA) <Int pow256 => true
+
+    rule 0 <=Int #bufElm(_, _)     => true
+    rule #bufElm(_, _) <Int 256    => true
+    rule #bufElm(_, _) <Int pow256 => true
 
     rule 0 <=Int X xorInt 115792089237316195423570985008687907853269984665640564039457584007913129639935 => true      requires 0<=Int X andBool X <Int pow256
 
