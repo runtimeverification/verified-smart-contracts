@@ -269,9 +269,10 @@ from their concrete semantics.
 Below are the most common such range matching lemmas.
 
 ```k
-    rule 0 <=Int nthbyteof(V, I, N)          => true
-    rule         nthbyteof(V, I, N) <Int 256 => true
-    
+    rule 0 <=Int nthbyteof(V, I, N)             => true
+    rule         nthbyteof(V, I, N) <Int 256    => true
+    rule         nthbyteof(V, I, N) <Int pow256 => true
+
     rule 0 <=Int #asWord(WS)          => true
     rule #asWord(WS) <Int pow256      => true
     
@@ -304,16 +305,23 @@ The other rules are similar.
     rule X <=Int maxUInt256 => X <Int pow256
     rule X <=Int maxUInt160 => X <Int pow160
     rule X <=Int 255        => X <Int 256
-    
-    //Range transformation, required for example for chop reduction rules below.
-    rule X <Int pow256 => true
+```
+
+Range transformation, required for example for chop reduction rules below.
+
+WARNING: Denis: I suspect these 3 lemmas were all necessary since I introduced #symEcrec construct which
+pretty much caused most query build operations to fail and thus rendered z3 unusable.
+Now since Z3 translation was fixed in K they must not be needd.
+They cause a major increase in the number of Z3 queries and slowdown.
+```k
+    /*rule X <Int pow256 => true
       requires X <Int 256
       
     rule X <Int pow256 => true
       requires X <Int pow160
       
     rule 0 <=Int X => true
-      requires 0 <Int X
+      requires 0 <Int X*/
 ```
 
 ### `chop` Reduction
