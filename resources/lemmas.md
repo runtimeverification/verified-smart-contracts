@@ -175,7 +175,6 @@ It reduces the reasoning efforts of the underlying theorem prover, factoring out
     rule byteStack2IntList ( WS , 1 ) => #asWord ( WS [ 0 .. 32 ] ) .IntList
 
     rule hash2(K1,V1) =/=Int hash2(K2,V2) => K1 =/=Int K2 orBool V1 =/=Int V2
-    rule hash2(K1,V1) ==Int hash2(K2,V2) => K1 ==Int K2 andBool V1 ==Int V2
 ```
 
 ### Integer Expression Simplification Rules
