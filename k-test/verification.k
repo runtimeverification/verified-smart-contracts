@@ -6,6 +6,11 @@ module VERIFICATION
     imports EDSL
     imports LEMMAS
 
+    rule #sizeWordStack ( WS , N:Int )
+      => N +Int #sizeWordStack ( WS , 0 )
+      requires N =/=K 0
+      [lemma]
+
     //Rules for #padToWidth with regular symbolic arguments.
     //Same as for concrete #padToWidth, when WordStack is of regular form "A:B ... :.WordStack"
     //Not clear why KEVM rules for #padToWidth were marked [concrete]. If they were general, rules below would not be necessary.

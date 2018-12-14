@@ -14,6 +14,11 @@ module VERIFICATION
     imports EDSL
     imports LEMMAS
 
+    rule #sizeWordStack ( WS , N:Int )
+      => N +Int #sizeWordStack ( WS , 0 )
+      requires N =/=K 0
+      [lemma]
+
     syntax Map ::= "sumTo" "(" Int ")" [function]
  // ---------------------------------------------
     rule sumTo(N)
