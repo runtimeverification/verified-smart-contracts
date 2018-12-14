@@ -11,6 +11,17 @@ module LEMMAS
     imports K-REFLECTION
 ```
 
+### Gas Abstraction
+```k
+    // Temporary solution to avoid reasoning about gas
+    syntax Int ::= "#infinity" [function]
+ // -------------------------------------
+    rule #infinity -Int _ => #infinity
+    rule #infinity >=Int _ => true
+    rule #infinity <Int _ => false
+
+```
+
 ### Memory Abstraction
 
 We present an abstraction for the EVM memory to allow the word-level reasoning.
@@ -69,10 +80,13 @@ They capture the essential mechanisms used by the two instructions: splitting a 
                 : nthbyteof(V, 31, 32)
                 : .WordStack ) => V
       requires 0 <=Int V andBool V <Int pow256
-      
-    rule #asWord( 0 : W1 : WS  =>  W1 : WS )
-      
-    rule nthbyteof(N, 0, 1) => N
+
+    rule 0 <=Int #asWord(#bufSeg(_, _, _))                 => true
+    rule         #asWord(#bufSeg(_, _, WIDTH)) <Int pow256 => true
+
+    rule         #asWord(#bufSeg(_, _, WIDTH)) <=Int 255 => true requires WIDTH ==Int 1
+
+    rule #buf(32, #asWord(#bufSeg(BUF, START, WIDTH))) => #bufSeg(BUF, START +Int WIDTH -Int 32, 32)  requires WIDTH >=Int 32
 ```
 
 Another type of byte-array manipulating operation is used to extract the function signature from the call data.
@@ -86,10 +100,8 @@ The following lemmas essentially capture the signature extraction mechanisms.
 It reduces the reasoning efforts of the underlying theorem prover, factoring out the essence of the byte-twiddling operations.
 
 ```k
-    syntax Bool ::= #isRegularWordStack ( WordStack ) [function]
- // -------------------------------------------------------
-    rule #isRegularWordStack(N : WS => WS)
-    rule #isRegularWordStack(.WordStack) => true
+    rule #padToWidth(32, #asByteStack(V)) => #buf(32, V) // #asByteStackInWidth(V, 32)
+      requires 0 <=Int V andBool V <Int pow256
 
     // for Vyper
     rule #padToWidth(N, #asByteStack(#asWord(WS))) => WS
@@ -112,6 +124,9 @@ It reduces the reasoning efforts of the underlying theorem prover, factoring out
 
     rule #noOverflowAux(W : WS)     => 0 <=Int W andBool W <Int 256 andBool #noOverflowAux(WS)
     rule #noOverflowAux(.WordStack) => true
+
+    rule #noOverflowAux(BUF) => true requires #isBuf(BUF)
+    rule #noOverflowAux(WS1 ++ WS2) => #noOverflowAux(WS1) andBool #noOverflowAux(WS2)
 
     syntax WordStack ::= #asByteStackInWidth    ( Int, Int )                 [function]
                        | #asByteStackInWidthAux ( Int, Int, Int, WordStack ) [function]
@@ -148,6 +163,15 @@ It reduces the reasoning efforts of the underlying theorem prover, factoring out
     rule keccak(WS) => keccakIntList(byteStack2IntList(WS))
       requires ( notBool #isConcrete(WS) )
        andBool ( #sizeWordStack(WS) ==Int 32 orBool #sizeWordStack(WS) ==Int 64 )
+
+    // inverse of intList2ByteStack of edsl.md
+    syntax IntList ::= byteStack2IntList ( WordStack )       [function]
+                     | byteStack2IntList ( WordStack , Int ) [function]
+    rule byteStack2IntList ( WS ) => byteStack2IntList ( WS , #sizeWordStack(WS) /Int 32 ) requires #sizeWordStack(WS) %Int 32 ==Int 0
+    rule byteStack2IntList ( WS , N ) => #asWord ( WS [ 0 .. 32 ] ) byteStack2IntList ( #drop(32, WS) , N -Int 1 ) requires N >Int 1
+    rule byteStack2IntList ( WS , 1 ) => #asWord ( WS [ 0 .. 32 ] ) .IntList
+
+    rule hash2(K1,V1) =/=Int hash2(K2,V2) => K1 =/=Int K2 orBool V1 =/=Int V2
 ```
 
 ### Integer Expression Simplification Rules
@@ -193,12 +217,13 @@ These rules are specific to reasoning about EVM programs.
     rule I1 -Int (B +Int I3) => (I1 -Int I3) -Int B when #isConcrete(I1) andBool notBool #isConcrete(B) andBool #isConcrete(I3)
     rule (I1 -Int B) +Int I3 => (I1 +Int I3) -Int B when #isConcrete(I1) andBool notBool #isConcrete(B) andBool #isConcrete(I3)
 
-    rule I1 +Int (I2 +Int C) => (I1 +Int I2) +Int C when #isConcrete(I1) andBool #isConcrete(I2) andBool notBool #isConcrete(C)
-    rule I1 +Int (I2 -Int C) => (I1 +Int I2) -Int C when #isConcrete(I1) andBool #isConcrete(I2) andBool notBool #isConcrete(C)
-    rule I1 -Int (I2 +Int C) => (I1 -Int I2) -Int C when #isConcrete(I1) andBool #isConcrete(I2) andBool notBool #isConcrete(C)
-    rule I1 -Int (I2 -Int C) => (I1 -Int I2) +Int C when #isConcrete(I1) andBool #isConcrete(I2) andBool notBool #isConcrete(C)
+    rule I1 +Int (I2 +Int I3) => I2 +Int (I1 +Int I3) when #isConcrete(I1) andBool #isConcrete(I3)
+    rule I1 +Int (I2 +Int I3) => I3 +Int (I1 +Int I2) when #isConcrete(I1) andBool #isConcrete(I2)
 
-    rule I1 &Int (I2 &Int C) => (I1 &Int I2) &Int C when #isConcrete(I1) andBool #isConcrete(I2) andBool notBool #isConcrete(C)
+    rule (I1 +Int I2) +Int (I3 -Int I2) => I1 +Int I3
+    rule (I1 +Int I2) -Int (I1 +Int I3) => I2 -Int I3
+
+    rule I1 &Int (I2 &Int I3) => (I1 &Int I2) &Int I3 when #isConcrete(I1) andBool #isConcrete(I2)
 
     // 0xffff...f &Int N = N
     rule MASK &Int N => N  requires MASK ==Int (2 ^Int (log2Int(MASK) +Int 1)) -Int 1 // MASK = 0xffff...f
@@ -208,6 +233,9 @@ These rules are specific to reasoning about EVM programs.
     rule N &Int MASK => N  requires MASK ==Int (2 ^Int (log2Int(MASK) +Int 1)) -Int 1 // MASK = 0xffff...f
                             andBool 0 <=Int N andBool N <=Int MASK
 
+
+    rule #asWord(#bufSeg(BUF, START, WIDTH)) &Int 255 => #asWord(#bufSeg(BUF, START +Int WIDTH -Int 1, 1))  requires WIDTH >=Int 1
+    rule 255 &Int #asWord(#bufSeg(BUF, START, WIDTH)) => #asWord(#bufSeg(BUF, START +Int WIDTH -Int 1, 1))  requires WIDTH >=Int 1
 
 
     // for gas calculation
@@ -327,14 +355,40 @@ The other rules are similar.
 These lemmas abstract some properties about `#sizeWordStack`:
 
 ```k
-    rule 0 <=Int #sizeWordStack ( _ , _ ) => true [smt-lemma]
-    /*rule #sizeWordStack ( WS , N:Int )
-      => #sizeWordStack ( WS , 0 ) +Int N
-      requires N =/=K 0*/
-    rule #sizeWordStack ( WS , N:Int )
-      => N +Int #sizeWordStack ( WS , 0 )
-      requires N =/=K 0
-      [lemma]
+    rule #sizeWordStack ( _ , _ ) >=Int 0 => true [smt-lemma]
+
+    rule WS ++ .WordStack => WS
+```
+
+### IMAP 
+
+```k
+syntax Bool ::= IMap "==IMap" IMap [function, smtlib(=)]
+
+syntax Bool ::= IMap "==IMap" IMap "except" Set [function]
+
+rule store(M1, K, _) ==IMap M2 except Ks
+  =>       M1        ==IMap M2 except Ks
+  requires K in Ks
+
+rule M1 ==IMap store(M2, K, _) except Ks
+  => M1 ==IMap       M2        except Ks
+  requires K in Ks
+
+rule M1 ==IMap M2 except _ => true
+  requires M1 ==K M2  // structural equality
+
+syntax Set ::= keys(IMap) [function]
+
+rule K1 in keys(store(M, K2, _)) => true          requires K1  ==Int K2
+rule K1 in keys(store(M, K2, _)) => K1 in keys(M) requires K1 =/=Int K2
+    
+//Reduces IMaps where multiple entries share the same key
+rule store(store(M, K0, V0), K1, V1) => store(M, K0, V1)
+        requires K0 ==Int K1
+
+rule store(store(M, K0, V0), K1, V1) => store(store(M, K1, V1), K0, V0)
+        requires K0 =/=Int K1 andBool K1 in keys(M)
 
 endmodule
 ```
