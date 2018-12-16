@@ -11,6 +11,15 @@ module VERIFICATION
       requires N =/=K 0
       [lemma]
 
+    rule X <Int pow256 => true
+       requires X <Int 256
+
+    rule X <Int pow256 => true
+       requires X <Int pow160
+
+    rule 0 <=Int X => true
+       requires 0 <Int X
+
     //Rules for #padToWidth with regular symbolic arguments.
     //Same as for concrete #padToWidth, when WordStack is of regular form "A:B ... :.WordStack"
     //Not clear why KEVM rules for #padToWidth were marked [concrete]. If they were general, rules below would not be necessary.

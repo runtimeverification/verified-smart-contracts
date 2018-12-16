@@ -9,7 +9,7 @@ ERC20+=vyper zeppelin
 endif
 
 ifneq (,$(or $(findstring all,$(MODE)),$(findstring k-test,$(MODE))))
-#SUBDIRS+=k-test
+SUBDIRS+=k-test
 endif
 
 ifneq (,$(or $(findstring all,$(MODE)),$(findstring erc20,$(MODE))))
