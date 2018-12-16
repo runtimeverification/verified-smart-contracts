@@ -6,8 +6,6 @@ TMPLS:=../module-tmpl.k ../spec-tmpl.k
 SPEC_GROUP:=zeppelin-erc20
 SPEC_INI:=zeppelin-erc20-spec.ini
 
-KPROVE_OPTS+= --smt-prelude $(KEVM_REPO_DIR)/evm.smt2
-
 SPEC_NAMES:=totalSupply \
             balanceOf \
             allowance \
