@@ -12,28 +12,18 @@ module VERIFICATION
 
     rule #memoryUsageUpdate(#memoryUsageUpdate(MU, START0, WIDTH0), START1, WIDTH1) => #memoryUsageUpdate(MU, START0, WIDTH0)
       requires START1 +Int WIDTH1 <Int START0 +Int WIDTH0
+        andBool 0 <Int WIDTH0
+        andBool 0 <Int WIDTH1
 
     rule #memoryUsageUpdate(#memoryUsageUpdate(MU, START0, WIDTH0), START1, WIDTH1) => #memoryUsageUpdate(MU, START1, WIDTH1)
       requires START0 +Int WIDTH0 <=Int START1 +Int WIDTH1
+        andBool 0 <Int WIDTH0
+        andBool 0 <Int WIDTH1
 
     rule 0 <=Int #memoryUsageUpdate(MU, START, WIDTH) => true
 
     rule pow256 <=Int #memoryUsageUpdate(MU, START, WIDTH) => false  requires START +Int WIDTH <Int 3705346855594118253554271520278013051304639509300498049262642688253220148477921
     rule #memoryUsageUpdate(MU, START, WIDTH) <Int  pow256 => true   requires START +Int WIDTH <Int 3705346855594118253554271520278013051304639509300498049262642688253220148477921
-
-
-  // ########################
-  // Gas
-  // ########################
-
-    syntax Int ::= #gas ( Int , Int ) [function]
- // --------------------------------------------
-    rule #gas(NONMEM, MEM) -Int #symCmem(MEM') => #gas(NONMEM, MEM +Int MEM')
-    rule #gas(NONMEM, MEM) +Int NONMEM' => #gas(NONMEM -Int NONMEM', MEM)  requires #getKLabelString(NONMEM') =/=String "#symCmem"
-    rule #gas(NONMEM, MEM) -Int NONMEM' => #gas(NONMEM +Int NONMEM', MEM)  requires #getKLabelString(NONMEM') =/=String "#symCmem"
-
-    rule G <=Int #gas(_,_)  => true  requires #getKLabelString(G) =/=String "#gas"
-    rule #gas(_, _) <Int G  => false requires #getKLabelString(G) =/=String "#gas"
 
 
   // ########################
@@ -81,9 +71,9 @@ module VERIFICATION
 
     rule WS ++ .WordStack => WS
 
-    rule sizeWordStackAux(WS, N) <Int SIZE => sizeWordStackAux(WS, 0) +Int N <Int SIZE  requires N =/=Int 0
-    rule SIZELIMIT <Int sizeWordStackAux(WS, N) +Int DELTA  => SIZELIMIT <Int (sizeWordStackAux(WS, 0) +Int N) +Int DELTA  requires N =/=Int 0
-    rule SIZELIMIT <Int sizeWordStackAux(WS, N) => SIZELIMIT <Int sizeWordStackAux(WS, 0) +Int N  requires N =/=Int 0
+    rule #sizeWordStack(WS, N) <Int SIZE => #sizeWordStack(WS, 0) +Int N <Int SIZE  requires N =/=Int 0
+    rule SIZELIMIT <Int #sizeWordStack(WS, N) +Int DELTA  => SIZELIMIT <Int (#sizeWordStack(WS, 0) +Int N) +Int DELTA  requires N =/=Int 0
+    rule SIZELIMIT <Int #sizeWordStack(WS, N)             => SIZELIMIT <Int #sizeWordStack(WS, 0) +Int N               requires N =/=Int 0
 
     rule #sizeWordStack(selectRange(_, _, WIDTH), SIZE) => SIZE +Int WIDTH
 
@@ -163,8 +153,6 @@ module VERIFICATION
     rule 115792089237316195423570985007226406215939081747436879206741300988257197096960 &Int ADDR => 0
       requires #rangeAddress(ADDR)
 
-    rule 1 |Int chop(A xorInt maxUInt256) => 1
-
     rule chop((ADDR &Int maxUInt160) modInt pow160) => ADDR
       requires #rangeAddress(ADDR)
 
@@ -180,6 +168,8 @@ module VERIFICATION
     rule (I1 +Int I2) -Int (I3 +Int I1) => I2 -Int I3
 
     rule A -Int (A -Int I1) => I1
+
+    rule (A +Int I1) -Int A => I1
 
     // Simplify Cmem(_,_) - Cmem(_, _)
     rule A +Int (I1 -Int A) => I1
