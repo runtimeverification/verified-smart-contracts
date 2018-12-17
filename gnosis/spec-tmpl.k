@@ -34,7 +34,7 @@
           <refund> {REFUND} </refund>
         </substate>
         <gasPrice> _ </gasPrice>
-        <origin> ORIGIN_ID </origin> // tx.origin
+        <origin> #ORIGIN_ID </origin> // tx.origin
         <previousHash> _ </previousHash>
         <ommersHash> _ </ommersHash>
         <coinbase> {COINBASE} </coinbase> // block.coinbase
@@ -106,16 +106,11 @@
     requires #rangeAddress(#MASTER_COPY_ID)
      andBool #rangeAddress(#PROXY_ID)
      andBool #rangeAddress(#ORIGIN_ID)
-     andBool #rangeUInt(256, MASTER_BAL)
-     andBool #rangeUInt(256, PROXY_BAL)
-     andBool #rangeUInt(256, ORIGIN_BAL)
      andBool #rangeUInt(256, NOW)
      andBool #rangeUInt(128, BLOCK_NUM) // Solidity
-     //
-     andBool #MASTER_COPY_ID =/=Int #PROXY_ID
-     andBool #MASTER_COPY_ID =/=Int #ORIGIN_ID
-     andBool #PROXY_ID       =/=Int #ORIGIN_ID
+
      andBool #PROXY_ID       =/=Int 1
+
      // Account address normality
      andBool #MASTER_COPY_ID >Int 0 andBool (notBool #MASTER_COPY_ID in #precompiledAccounts(BYZANTIUM))
      andBool #PROXY_ID       >Int 0 andBool (notBool #PROXY_ID       in #precompiledAccounts(BYZANTIUM))

@@ -9,13 +9,24 @@ SPEC_INI:=gnosis-imap-spec.ini
 KPROVE_OPTS:=--smt-prelude $(abspath $(dir $(abspath $(lastword $(MAKEFILE_LIST))))/../gnosis/evm.smt2) \
              --deterministic-functions --cache-func-optimized
 
-SPEC_NAMES:=encodeTransactionData-1 \
-            encodeTransactionData-2 \
-            signatureSplit-proof \
-            removeOwner-success-1 \
-            removeOwner-success-2 \
-            removeOwner-failure-1-a \
-            removeOwner-failure-1-b \
-            removeOwner-failure-2 \
+SPEC_NAMES_GNOSIS_SAFE:=encodeTransactionData-1 \
+                        encodeTransactionData-2 \
+                        signatureSplit-proof \
+                        handlePayment-arithmetic-overflow-1 \
+                        handlePayment-arithmetic-overflow-2 \
+                        handlePayment-send-success-origin \
+                        handlePayment-send-success-receiver \
+
+SPEC_NAMES_OWNER_MANAGER:=removeOwner-success-1 \
+                          removeOwner-success-2 \
+                          removeOwner-failure-1-a \
+                          removeOwner-failure-1-b \
+                          removeOwner-failure-2 \
+
+SPEC_NAMES_MODULE_MANAGER:=
+
+SPEC_NAMES:=$(SPEC_NAMES_GNOSIS_SAFE) \
+            $(SPEC_NAMES_OWNER_MANAGER) \
+            $(SPEC_NAMES_MODULE_MANAGER)
 
 include ../resources/kprove.mak
