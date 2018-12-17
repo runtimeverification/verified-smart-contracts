@@ -22,9 +22,6 @@ module VERIFICATION
 
     rule 0 <=Int #memoryUsageUpdate(MU, START, WIDTH) => true
 
-    rule pow256 <=Int #memoryUsageUpdate(MU, START, WIDTH) => false  requires START +Int WIDTH <Int 3705346855594118253554271520278013051304639509300498049262642688253220148477921
-    rule #memoryUsageUpdate(MU, START, WIDTH) <Int  pow256 => true   requires START +Int WIDTH <Int 3705346855594118253554271520278013051304639509300498049262642688253220148477921
-
 
   // ########################
   // Account Map
@@ -113,9 +110,9 @@ module VERIFICATION
     rule #bufElm(_, _) <Int 256    => true
     rule #bufElm(_, _) <Int pow256 => true
 
-    rule 0 <=Int X xorInt 115792089237316195423570985008687907853269984665640564039457584007913129639935 => true      requires 0<=Int X andBool X <Int pow256
-
-    rule X xorInt 115792089237316195423570985008687907853269984665640564039457584007913129639935 <Int pow256 => true  requires 0<=Int X andBool X <Int pow256 
+    // X xorInt (pow256 - 1)
+    rule 0 <=Int X xorInt 115792089237316195423570985008687907853269984665640564039457584007913129639935             => true  requires 0<=Int X andBool X <Int pow256
+    rule         X xorInt 115792089237316195423570985008687907853269984665640564039457584007913129639935 <Int pow256 => true  requires 0<=Int X andBool X <Int pow256
 
 
   // ########################
@@ -147,6 +144,7 @@ module VERIFICATION
        andBool #sizeWordStack(WS0) ==Int MASKWIDHT1
        andBool MASKWIDTH0 ==Int #sizeWordStack(WS1)
 
+    // #asWord(WS) &Int (pow256 - 1)
     rule #asWord(WS) &Int 115792089237316195423570985008687907853269984665640564039457584007913129639935 => #asWord(WS)
 
     // 2^256 - 2^160 = 0xff..ff00..00 (96 1's followed by 160 0's)
