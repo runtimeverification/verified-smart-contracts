@@ -5,6 +5,8 @@ SPEC_INI:=proxied-token-spec.ini
 
 SPEC_NAMES:=sum-to-n
 
+KPROVE_OPTS+= --smt-prelude $(KEVM_REPO_DIR)/evm.smt2
+
 LOCAL_LEMMAS:=
 TMPLS:=
 
