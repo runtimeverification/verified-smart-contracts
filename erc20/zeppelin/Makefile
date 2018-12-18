@@ -6,7 +6,8 @@ TMPLS:=../module-tmpl.k ../spec-tmpl.k
 SPEC_GROUP:=zeppelin-erc20
 SPEC_INI:=zeppelin-erc20-spec.ini
 
-KPROVE_OPTS+= --smt-prelude $(KEVM_REPO_DIR)/evm.smt2
+KPROVE_OPTS:=--smt-prelude $(abspath $(dir $(abspath $(lastword $(MAKEFILE_LIST))))/../evm.smt2) \
+             --deterministic-functions --cache-func-optimized
 
 SPEC_NAMES:=totalSupply \
             balanceOf \

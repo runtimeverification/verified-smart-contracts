@@ -46,6 +46,9 @@ The following lemmas are used for symbolic reasoning about `MLOAD` and `MSTORE` 
 They capture the essential mechanisms used by the two instructions: splitting a word into the byte-array and merging it back to the word.
 
 ```k
+    rule 0 <=Int nthbyteof(V, I, N)          => true
+    rule         nthbyteof(V, I, N) <Int 256 => true
+
     rule #asWord( nthbyteof(V,  0, 32)
                 : nthbyteof(V,  1, 32)
                 : nthbyteof(V,  2, 32)
@@ -100,8 +103,10 @@ The following lemmas essentially capture the signature extraction mechanisms.
 It reduces the reasoning efforts of the underlying theorem prover, factoring out the essence of the byte-twiddling operations.
 
 ```k
-    rule #padToWidth(32, #asByteStack(V)) => #buf(32, V) // #asByteStackInWidth(V, 32)
-      requires 0 <=Int V andBool V <Int pow256
+    
+    //Rules for #padToWidth with non-regular symbolic arguments.
+    rule #padToWidth(32, #asByteStack(V)) =>  #buf(32, V) // #asByteStackInWidth(V, 32)
+      requires 0 <=Int V andBool V <Int pow256 andBool #getKLabelString(V) =/=String "#asWord"
 
     // for Vyper
     rule #padToWidth(N, #asByteStack(#asWord(WS))) => WS
@@ -182,6 +187,7 @@ These rules help to improve the performance of the underlying theorem prover’s
 Below are universal simplification rules that are free to be used in any context.
 
 ```k
+    rule 0 +Int N => N
     rule N +Int 0 => N
 
     rule N -Int 0 => N
@@ -207,15 +213,10 @@ The rules are applied only when the side-conditions are met.
 These rules are specific to reasoning about EVM programs.
 
 ```k
-    //orienting symbolic term to be first, converting -Int to +Int for concrete values.
-    rule I +Int B => B          +Int I when #isConcrete(I) andBool notBool #isConcrete(B)
-    rule A -Int I => A +Int (0 -Int I) when notBool #isConcrete(A) andBool #isConcrete(I)
-
-    rule (A +Int I2) +Int I3 => A +Int (I2 +Int I3) when notBool #isConcrete(A) andBool #isConcrete(I2) andBool #isConcrete(I3)
-
-    rule I1 +Int (B +Int I3) => B +Int (I1 +Int I3) when #isConcrete(I1) andBool notBool #isConcrete(B) andBool #isConcrete(I3)
-    rule I1 -Int (B +Int I3) => (I1 -Int I3) -Int B when #isConcrete(I1) andBool notBool #isConcrete(B) andBool #isConcrete(I3)
-    rule (I1 -Int B) +Int I3 => (I1 +Int I3) -Int B when #isConcrete(I1) andBool notBool #isConcrete(B) andBool #isConcrete(I3)
+    rule (I1 +Int I2) +Int I3 => I1 +Int (I2 +Int I3) when #isConcrete(I2) andBool #isConcrete(I3)
+    rule (I1 +Int I2) -Int I3 => I1 +Int (I2 -Int I3) when #isConcrete(I2) andBool #isConcrete(I3)
+    rule (I1 -Int I2) +Int I3 => I1 -Int (I2 -Int I3) when #isConcrete(I2) andBool #isConcrete(I3)
+    rule (I1 -Int I2) -Int I3 => I1 -Int (I2 +Int I3) when #isConcrete(I2) andBool #isConcrete(I3)
 
     rule I1 +Int (I2 +Int I3) => I2 +Int (I1 +Int I3) when #isConcrete(I1) andBool #isConcrete(I3)
     rule I1 +Int (I2 +Int I3) => I3 +Int (I1 +Int I2) when #isConcrete(I1) andBool #isConcrete(I2)
@@ -242,18 +243,6 @@ These rules are specific to reasoning about EVM programs.
     rule A -Int (#if C #then B1 #else B2 #fi) => #if C #then (A -Int B1) #else (A -Int B2) #fi
     rule (#if C #then B1 #else B2 #fi) -Int A => #if C #then (B1 -Int A) #else (B2 -Int A) #fi
 ```
-
-Operator direction normalization rules. Required to reduce the number of forms of inequalities that can be matched by 
-general lemmas. We chose to keep `<Int` and `<=Int` because those operators are used in all range lemmas and in
-`#range` macros. Operators `>Int` and `>=Int` are still allowed anywhere except rules LHS.
-In all other places they will be matched and rewritten by rules below.
-```k
-    rule X >Int Y => Y <Int X
-    rule X >=Int Y => Y <=Int X
-    
-    rule notBool (X <Int Y) => Y <=Int X
-    rule notBool (X <=Int Y) => Y <Int X
-``` 
 
 ### Boolean
 
@@ -297,12 +286,6 @@ from their concrete semantics.
 Below are the most common such range matching lemmas.
 
 ```k
-    rule 0 <=Int nthbyteof(V, I, N)          => true
-    rule         nthbyteof(V, I, N) <Int 256 => true
-    
-    rule 0 <=Int #asWord(WS)          => true
-    rule #asWord(WS) <Int pow256      => true
-    
     rule 0 <=Int hash1(_)             => true
     rule         hash1(_) <Int pow256 => true
 
@@ -323,25 +306,12 @@ Because lemmas are applied as plain K rewrite rule, they have to match exactly, 
 For example the lemma `rule A < 100 => true` won't match the side condition `requires A <= 99` or 
 `requires 100 > A`.
 To avoid such mismatching situations we need additional expression normalization rules.
-First rule below converts `maxUInt256` to `pow256`.
+At the moment we have only one, that converts `maxUInt256` to `pow256`.
 It allows side conditions that use `maxUInt256` or `#range` macros 
 match the range lemmas above. Note that lemmas above all use `<Int pow256` for the upper range.
-The other rules are similar.
 
 ```k
     rule X <=Int maxUInt256 => X <Int pow256
-    rule X <=Int maxUInt160 => X <Int pow160
-    rule X <=Int 255        => X <Int 256
-    
-    //Range transformation, required for example for chop reduction rules below.
-    rule X <Int pow256 => true
-      requires X <Int 256
-      
-    rule X <Int pow256 => true
-      requires X <Int pow160
-      
-    rule 0 <=Int X => true
-      requires 0 <Int X
 ```
 
 ### `chop` Reduction
@@ -358,6 +328,7 @@ These lemmas abstract some properties about `#sizeWordStack`:
     rule #sizeWordStack ( _ , _ ) >=Int 0 => true [smt-lemma]
 
     rule WS ++ .WordStack => WS
+
 ```
 
 ### IMAP 

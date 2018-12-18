@@ -6,7 +6,7 @@ module VERIFICATION
     imports LEMMAS
 
     //Rules for #padToWidth with non-regular symbolic arguments.
-    rule #padToWidth(32, #asByteStack(V)) => #asByteStackInWidth(V, 32)
+    rule #padToWidth(32, #asByteStack(V)) => #buf(32, V)
       requires 0 <=Int V andBool V <Int pow256 andBool #getKLabelString(V) =/=String "#asWord"
 
     rule chop ( W0:Int +Int W1:Int ) -Word W1:Int => chop ( W0 )
