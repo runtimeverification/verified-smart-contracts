@@ -7,7 +7,8 @@ SPEC_GROUP:=gnosis-test
 SPEC_INI:=api-test.ini
 
 KPROVE_OPTS:=--smt-prelude $(abspath $(dir $(abspath $(lastword $(MAKEFILE_LIST))))/../evm.smt2) \
-             --deterministic-functions --cache-func-optimized --debug --debug-z3-queries
+             --deterministic-functions --log-rules --log-rules-init --debug-z3-queries \
+             --log-cells k,output,statusCode,localMem,pc,gas,wordStack,callData,accounts,\#pc,\#result,\#initTerm,\#target
 
 SPEC_NAMES:=testAbiEncode-AndKeccak-2 \
 
