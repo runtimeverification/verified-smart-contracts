@@ -22,7 +22,6 @@ module ABSTRACT-SEMANTICS
 
   rule <k> MU':Int ~> #deductMemory => #symCmem(Cmem(SCHED, MU') -Int Cmem(SCHED, MU)) ~> #deductGas ... </k>
        <memoryUsed> MU => MU' </memoryUsed> <schedule> SCHED </schedule>
-    requires MU' <Int pow256
     [trusted]
 
    // abstract call gas
