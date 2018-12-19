@@ -36,7 +36,7 @@ module ABSTRACT-SEMANTICS
 
    rule <k> Ccallgas(SCHED, ISEMPTY:Bool, GCAP, GAVAIL, VALUE)
           => #gas(Cgascap(SCHED, GCAP, GAVAIL, Cextra(SCHED, VALUE, ISEMPTY)) +Int Gcallstipend < SCHED >, 0, 0) ... </k>
-     requires VALUE =/=Int 0
+     requires 0 <Int VALUE
       andBool #getKLabelString(GCAP) ==String "#gas"
       andBool GCAP ==Int GAVAIL
      [trusted]
