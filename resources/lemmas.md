@@ -148,6 +148,8 @@ It reduces the reasoning efforts of the underlying theorem prover, factoring out
     rule keccak(WS) => keccakIntList(byteStack2IntList(WS))
       requires ( notBool #isConcrete(WS) )
        andBool ( #sizeWordStack(WS) ==Int 32 orBool #sizeWordStack(WS) ==Int 64 )
+
+    rule hash2(K1,V1) =/=Int hash2(K2,V2) => K1 =/=Int K2 orBool V1 =/=Int V2
 ```
 
 ### Integer Expression Simplification Rules
@@ -211,8 +213,8 @@ These rules are specific to reasoning about EVM programs.
 
 
     // for gas calculation
-    rule A -Int (#if C #then B1 #else B2 #fi) => #if C #then (A -Int B1) #else (A -Int B2) #fi
-    rule (#if C #then B1 #else B2 #fi) -Int A => #if C #then (B1 -Int A) #else (B2 -Int A) #fi
+    //rule A -Int (#if C #then B1 #else B2 #fi) => #if C #then (A -Int B1) #else (A -Int B2) #fi
+    //rule (#if C #then B1 #else B2 #fi) -Int A => #if C #then (B1 -Int A) #else (B2 -Int A) #fi
 ```
 
 Operator direction normalization rules. Required to reduce the number of forms of inequalities that can be matched by 
@@ -336,5 +338,38 @@ These lemmas abstract some properties about `#sizeWordStack`:
       requires N =/=K 0
       [lemma]
 
+```
+
+### IMAP 
+
+```k
+syntax Bool ::= IMap "==IMap" IMap [function, smtlib(=)]
+
+syntax Bool ::= IMap "==IMap" IMap "except" Set [function]
+
+rule store(M1, K, _) ==IMap M2 except Ks
+  =>       M1        ==IMap M2 except Ks
+  requires K in Ks
+
+rule M1 ==IMap store(M2, K, _) except Ks
+  => M1 ==IMap       M2        except Ks
+  requires K in Ks
+
+rule M1 ==IMap M2 except _ => true
+  requires M1 ==K M2  // structural equality
+
+syntax Set ::= keys(IMap) [function]
+
+rule K1 in keys(store(M, K2, _)) => true          requires K1  ==Int K2
+rule K1 in keys(store(M, K2, _)) => K1 in keys(M) requires K1 =/=Int K2
+    
+//Reduces IMaps where multiple entries share the same key
+rule store(store(M, K0, V0), K1, V1) => store(M, K0, V1)
+        requires K0 ==Int K1
+
+rule store(store(M, K0, V0), K1, V1) => store(store(M, K1, V1), K0, V0)
+        requires K0 =/=Int K1 andBool K1 in keys(M)
+
 endmodule
 ```
+
