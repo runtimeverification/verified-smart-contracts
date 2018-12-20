@@ -53,6 +53,33 @@ module VERIFICATION
 
     rule hash2(A1,B1) ==K hash2(A2,B2) => A1 ==Int A2 andBool B1 ==Int B2
 
+    syntax Bool ::= IMap "==IMap" IMap [function, smtlib(=)]
+
+    syntax Bool ::= IMap "==IMap" IMap "except" Set [function]
+
+    rule store(M1, K, _) ==IMap M2 except Ks
+      =>       M1        ==IMap M2 except Ks
+      requires K in Ks
+
+    rule M1 ==IMap store(M2, K, _) except Ks
+      => M1 ==IMap       M2        except Ks
+      requires K in Ks
+
+    rule M1 ==IMap M2 except _ => true
+      requires M1 ==K M2  // structural equality
+
+    syntax Set ::= keys(IMap) [function]
+
+    rule K1 in keys(store(M, K2, _)) => true          requires K1  ==Int K2
+    rule K1 in keys(store(M, K2, _)) => K1 in keys(M) requires K1 =/=Int K2
+
+    //Reduces IMaps where multiple entries share the same key
+    rule store(store(M, K0, V0), K1, V1) => store(M, K0, V1)
+      requires K0 ==Int K1
+
+    rule store(store(M, K0, V0), K1, V1) => store(store(M, K1, V1), K0, V0)
+      requires K0 =/=Int K1 andBool K1 in keys(M)
+
   // ########################
   // Buffer Reasoning
   // ########################
