@@ -13,6 +13,6 @@ SPEC_NAMES:=encodeTransactionData-1 \
             encodeTransactionData-2 \
             signatureSplit-proof \
             removeOwner-success-1 \
-            version2-removeOwner-success \
+            removeOwner-success-2 \
 
 include ../resources/kprove.mak
