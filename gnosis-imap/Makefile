@@ -12,7 +12,7 @@ KPROVE_OPTS:=--smt-prelude $(abspath $(dir $(abspath $(lastword $(MAKEFILE_LIST)
 SPEC_NAMES:=encodeTransactionData-1 \
             encodeTransactionData-2 \
             signatureSplit-proof \
-			addOwnerWithThreshold-success-1
+            addOwnerWithThreshold-success-1
 
 
 include ../resources/kprove.mak
