@@ -14,6 +14,7 @@ KPROVE_OPTS:=--smt-prelude $(MAKEFILE_PATH)/smt-prelude.smt2
 
 SPEC_NAMES:=ecrecT-false-implication \
             ecrecT-false-constraint \
-            rhsOnlyVar
+            rhsOnlyVar \
+            test-getKLabelString
 
 include ../resources/kprove.mak
