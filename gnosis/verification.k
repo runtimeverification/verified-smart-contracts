@@ -216,7 +216,7 @@ module VERIFICATION
     rule #asWord(#buf(32, DATA)) => DATA  requires #rangeUInt(256, DATA)
 
     rule #padToWidth(32, #asByteStack(V)) => #buf(32, V) // #asByteStackInWidth(V, 32)
-      requires 0 <=Int V andBool V <Int pow256 andBool #getKLabelString(V) =/=String "#asWord"
+      requires 0 <=Int V andBool V <Int pow256 andBool #notKLabel(V, "#asWord")
 
     rule #buf(32, #asWord(WS)) => WS  requires #sizeWordStack(WS) ==Int 32
     rule #buf(32, #asWord(#bufSeg(BUF, START, WIDTH))) => #bufSeg(BUF, START +Int WIDTH -Int 32, 32)  requires WIDTH >=Int 32
@@ -286,7 +286,7 @@ module VERIFICATION
 
     // TODO: move to builtin
     rule N -Int N => 0
-      requires #getKLabelString(N) =/=String "#infinity_VERIFICATION"
+      requires #notKLabel(N, "#infinity_VERIFICATION")
 
     rule 2 ^%Int X pow256 => 2 ^Int X
       requires 0 <=Int X andBool X <Int 256

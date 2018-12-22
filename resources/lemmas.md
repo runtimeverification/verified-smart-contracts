@@ -330,6 +330,14 @@ They cause a major increase in the number of Z3 queries and slowdown.
     rule chop(I) => I requires 0 <=Int I andBool I <Int pow256
 ```
 
+### #getKLabelString helpers
+
+Function below returns true if the KLabel of `T` is not `L`, or if `T` is a variable.
+```k
+    syntax Bool ::= #notKLabel ( K , String ) [function]
+    rule #notKLabel(T, L) => #getKLabelString(T) =/=String L orBool #isVariable(T)
+```
+
 ### Wordstack
 
 These lemmas abstract some properties about `#sizeWordStack`:
