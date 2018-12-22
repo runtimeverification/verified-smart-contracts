@@ -174,3 +174,79 @@ Look at various strings logged to `System.err` in classes `SymbolicRewriter` and
 https://github.com/kframework/k/blob/gnosis/kernel/src/main/java/org/kframework/main/GlobalOptions.java
 
 It's better to navigate this code from an IDE, like Intellij Idea.
+
+
+# Makefile
+
+We have Makefile for each project directory, (at the time of writing) as follows:
+```
+./bihu/Makefile
+./casper/Makefile
+./erc20/ds-token/Makefile
+./erc20/gno/Makefile
+./erc20/hkg/Makefile
+./erc20/hobby/Makefile
+./erc20/vyper/Makefile
+./erc20/zeppelin/Makefile
+./gnosis/Makefile
+./gnosis/test/Makefile
+./gnosis-imap/Makefile
+./k-test/Makefile
+./proxied-token/Makefile
+./resources/Makefile
+```
+Each Makefile specifies the K & KEVM build directory, spec group name, spec init file, and spec names (not files), as follows:
+```
+BUILD_DIR:=../.build
+
+SPEC_GROUP:=gnosis
+SPEC_INI:=gnosis-spec.ini
+
+SPEC_NAMES:=encodeTransactionData-data32 \
+            encodeTransactionData-data33 \
+            signatureSplit-pos0 \
+            signatureSplit-pos1 \
+            signatureSplit-pos2 \
+            checkSignatures-threshold-too-large \
+            checkSignatures-threshold-1-sigv-2-empty \
+            checkSignatures-threshold-1-sigv-2-ne-success \
+            checkSignatures-threshold-1-sigv-2-ne-notOwner
+
+include ../resources/kprove.mak
+```
+Note that no more `-spec.k` suffix in the `SPEC_NAMES`.
+
+Also, if you need a custom K & KEVM version, you can just create a directory (say `.build`) in the current directory, and put the `.k.rev` and `.kevm.rev` files, and specify the new directory in `BUILD_DIR`.
+
+### Running Makefile
+
+In order to run all proofs, run the following at the root:
+```
+$ make all test MODE=all
+```
+`MODE=all` tests all the projects. There are also other MODE options where they test only some projects, such as `minimal`, `k-test`, `erc20`, and `gnosis`, at the time of writing. See Makefile for the up-to-date list of the MODE options, and their precise meaning.
+
+To run a specific project, run the following under the specific directory:
+```
+$ make all test
+```
+
+To run only a single spec file, run the following under the project directory: (do not forget to add the postfix `.test` for the goal)
+```
+$ make <ABSOLUTE_PATH_TO_VERIFIED_SMART_CONTRACTS_DIR>/<SPEC_GROUP>/<SPEC_NAME>-spec.k.test
+```
+For example,
+```
+$ cd erc20/zeppelin
+$ make /absolute/path/to/verified-smart-contracts/specs/zeppelin-erc20/totalSupply-spec.k.test
+```
+NOTE: The absolute path should not contain any `.` or `..` components, nor any repeated path separators (`/`). See [`abspath`](https://www.gnu.org/software/make/manual/html_node/File-Name-Functions.html#index-abspath) of Makefile.
+
+### More Notes
+
+Also, note that each Makefile corresponds to a single `*-spec.ini` file. So, if you have more than one `*-spec.ini` file, you have to put them in a separate directory.
+For example, we have two Makefiles for gnosis:
+```
+./gnosis/Makefile
+./gnosis/test/Makefile
+```
