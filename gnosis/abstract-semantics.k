@@ -17,7 +17,7 @@ module ABSTRACT-SEMANTICS
   rule <k> G ~> #deductGas => . ... </k>
        <gas> #gas(INITGAS, NONMEM, MEM) => #gas(INITGAS, NONMEM +Int G, MEM) </gas>
        <previousGas> _ => #gas(INITGAS, NONMEM, MEM) </previousGas>
-    requires #getKLabelString(G) =/=String "#symCmem"
+    requires #notKLabel(G, "#symCmem")
     [trusted, matching(#gas)]
 
   rule <k> #symCmem(MEM') ~> #deductGas => . ... </k>
