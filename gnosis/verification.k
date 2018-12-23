@@ -51,7 +51,7 @@ module VERIFICATION
     rule I ==K hash2(A,B) => hash2(A,B) ==K I
       requires #isConcrete(I)
 
-    rule hash2(A1,B1) ==K hash2(A2,B2) => A1 ==Int A2 andBool B1 ==Int B2
+//  rule hash2(A1,B1) ==K hash2(A2,B2) => A1 ==Int A2 andBool B1 ==Int B2
 
     syntax Bool ::= IMap "==IMap" IMap [function, smtlib(=)]
 
