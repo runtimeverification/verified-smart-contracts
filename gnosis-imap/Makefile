@@ -9,8 +9,10 @@ SPEC_INI:=gnosis-imap-spec.ini
 KPROVE_OPTS:=--smt-prelude $(abspath $(dir $(abspath $(lastword $(MAKEFILE_LIST))))/../gnosis/evm.smt2) \
              --deterministic-functions --cache-func-optimized
 
-SPEC_NAMES_GNOSIS_SAFE:=encodeTransactionData-1 \
-                        encodeTransactionData-2 \
+SPEC_NAMES_GNOSIS_SAFE:=encodeTransactionData-public-1 \
+                        encodeTransactionData-public-2 \
+                        encodeTransactionData-internal-1-proof \
+                        encodeTransactionData-internal-2-proof \
                         signatureSplit-proof \
                         handlePayment-arithmetic-overflow-1 \
                         handlePayment-arithmetic-overflow-2 \
@@ -46,3 +48,11 @@ SPEC_NAMES:=$(SPEC_NAMES_GNOSIS_SAFE) \
             $(SPEC_NAMES_MASTER_COPY)
 
 include ../resources/kprove.mak
+
+# non-standard spec generation
+
+$(SPECS_DIR)/$(SPEC_GROUP)/encodeTransactionData-public-1-spec.k: $(TMPLS) $(SPEC_INI)
+	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) encodeTransactionData-public-1 encodeTransactionData-internal-trusted encodeTransactionData-public-1 > $@
+
+$(SPECS_DIR)/$(SPEC_GROUP)/encodeTransactionData-public-2-spec.k: $(TMPLS) $(SPEC_INI)
+	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) encodeTransactionData-public-2 encodeTransactionData-internal-trusted encodeTransactionData-public-2 > $@

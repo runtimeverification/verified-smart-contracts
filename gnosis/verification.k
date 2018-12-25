@@ -109,6 +109,16 @@ module VERIFICATION
     rule store(store(M, K0, V0), K1, V1) => store(store(M, K1, V1), K0, V0)
       requires K0 =/=Int K1 andBool K1 in keys(M)
 
+    syntax IMap ::= "#unusedIMap" [function, smtlib(unusedIMap) ]
+
+    //Hack to delete the BuiltinMap from innermost position and help matching [encodeTransactionData-internal]
+    //Required because BuiltinMap is not translatable to Z3.
+    rule storeRange( storeRange( storeRange( storeRange( M:Map => #unusedIMap,
+                              64,                   32,       #buf(32, INIT_USED_MEM_PTR) ),
+                              DATA_LEN_LOC,         32,       #buf(32, DATA_LEN) ),
+                              DATA_BUF_LOC,         DATA_LEN, #buf(DATA_LEN, DATA) ),
+                              INIT_USED_MEM_ACTUAL, 32,       _ )
+
   // ########################
   // Buffer Reasoning
   // ########################
@@ -227,6 +237,9 @@ module VERIFICATION
 
     rule ((A +Int I1) +Int B) +Int I2 => (A +Int B) +Int (I1 +Int I2)  requires #isConcrete(I1) andBool #isConcrete(I2)
 
+    rule (A +Int I1) +Int (B +Int I2) => A +Int B +Int (I1 +Int I2)
+      requires notBool #isConcrete(A) andBool notBool #isConcrete(B) andBool #isConcrete(I1) andBool #isConcrete(I2)
+
     // Simplify Cmem(_,_) - Cmem(_, _)
     rule A +Int (I1 -Int A) => I1
     rule (I1 +Int (A -Int I0)) +Int (I2 -Int A) => I1 +Int (I2 -Int I0)
@@ -260,5 +273,7 @@ module VERIFICATION
     rule (X /Int 32) *Int 32 => X  requires X modInt 32 ==Int 0
 
     rule #ceil32(X) => X requires X modInt 32 ==Int 0
+
+    rule X <=Int #ceil32(X) => true
 
 endmodule
