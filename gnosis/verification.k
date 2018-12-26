@@ -56,6 +56,7 @@ module VERIFICATION
     rule         #REFUND_RECEIVER <Int pow160 => true
     rule         #REFUND_RECEIVER <Int pow256 => true
 
+
   // ########################
   // Memory Reasoning
   // ########################
