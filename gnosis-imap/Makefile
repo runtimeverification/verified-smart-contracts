@@ -16,6 +16,8 @@ SPEC_NAMES_GNOSIS_SAFE:=encodeTransactionData-1 \
                         handlePayment-arithmetic-overflow-2 \
                         handlePayment-send-success-origin \
                         handlePayment-send-success-receiver \
+                        handlePayment-send-failure-origin \
+                        handlePayment-send-failure-receiver \
 
 SPEC_NAMES_OWNER_MANAGER:=removeOwner-success-1 \
                           removeOwner-success-2 \

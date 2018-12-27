@@ -56,7 +56,7 @@ module ABSTRACT-SEMANTICS
   // Call
   // ########################
 
-  // send() succeed
+  // send() succeed and ACCTFROM =/=K ACCTTO
   rule <k> #exec[CALL] => . ... </k>
        <schedule> SCHED </schedule>
        <id> ACCTFROM </id>
@@ -78,6 +78,8 @@ module ABSTRACT-SEMANTICS
      andBool VALUE <=Int ORIGFROM
      andBool ORIGTO +Int VALUE <Int pow256
     [trusted, matching(#gas)]
+
+  // TODO: send() succeed and ACCTFROM ==K ACCTTO
 
   // send() fail
   rule <k> #exec[CALL] => . ... </k>

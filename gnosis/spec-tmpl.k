@@ -109,7 +109,9 @@
      andBool #rangeUInt(256, NOW)
      andBool #rangeUInt(128, BLOCK_NUM) // Solidity
 
-     andBool #PROXY_ID       =/=Int 1
+     andBool #MASTER_COPY_ID =/=Int #PROXY_ID
+     andBool #MASTER_COPY_ID =/=Int #ORIGIN_ID
+     andBool #PROXY_ID       =/=Int #ORIGIN_ID
 
      // Account address normality
      andBool #MASTER_COPY_ID >Int 0 andBool (notBool #MASTER_COPY_ID in #precompiledAccounts(BYZANTIUM))
