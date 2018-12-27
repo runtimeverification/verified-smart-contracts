@@ -56,6 +56,9 @@ module VERIFICATION
     rule         #REFUND_RECEIVER <Int pow160 => true
     rule         #REFUND_RECEIVER <Int pow256 => true
 
+    syntax Int ::= "#SENTINEL" [function]
+
+    rule #SENTINEL => 1
 
   // ########################
   // Memory Reasoning
