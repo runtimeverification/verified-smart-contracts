@@ -24,9 +24,12 @@ SPEC_NAMES_OWNER_MANAGER:=removeOwner-success-1 \
                           removeOwner-failure-2 \
                           swapOwner-success \
 
-SPEC_NAMES_MODULE_MANAGER:=disableModule-success \
+SPEC_NAMES_MODULE_MANAGER:=enableModule-success \
+                           enableModule-failure-1 \
+                           enableModule-failure-2 \
+                           disableModule-success \
                            disableModule-failure-1 \
-                           disableModule-failure-2 \
+                           disableModule-failure-2
 
 SPEC_NAMES:=$(SPEC_NAMES_GNOSIS_SAFE) \
             $(SPEC_NAMES_OWNER_MANAGER) \
