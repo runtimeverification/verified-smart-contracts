@@ -116,5 +116,6 @@
      andBool #PROXY_ID       >Int 0 andBool (notBool #PROXY_ID       in #precompiledAccounts(BYZANTIUM))
      andBool #ORIGIN_ID      >Int 0 andBool (notBool #ORIGIN_ID      in #precompiledAccounts(BYZANTIUM))
 {REQUIRES}
+    ensures true
 {ENSURES}
 {ATTRIBUTE}
