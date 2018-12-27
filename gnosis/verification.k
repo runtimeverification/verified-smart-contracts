@@ -28,7 +28,7 @@ module VERIFICATION
   // ########################
 
     rule 0 <=Int X -Int #gas(A, B, C)             => true  requires #gas(A, B, C) <=Int X
-    rule         X -Int #gas(A, B, C) <Int pow256 => true  requires X <Int pow256 
+    rule         X -Int #gas(A, B, C) <Int pow256 => true  requires X <Int pow256
 
 
   // ########################
@@ -40,19 +40,22 @@ module VERIFICATION
     syntax Int ::= "#ORIGIN_ID"       [function]
     syntax Int ::= "#REFUND_RECEIVER" [function]
 
+    rule 0 <=Int #MASTER_COPY_ID              => true
+    rule         #MASTER_COPY_ID  <Int pow160 => true
+    rule         #MASTER_COPY_ID  <Int pow256 => true
 
-    rule 0 <=Int #ORIGIN_ID             => true
-    rule         #ORIGIN_ID <Int pow160 => true
-    rule         #ORIGIN_ID <Int pow256 => true
+    rule 0 <=Int #PROXY_ID                    => true
+    rule         #PROXY_ID        <Int pow160 => true
+    rule         #PROXY_ID        <Int pow256 => true
+
+    rule 0 <=Int #ORIGIN_ID                   => true
+    rule         #ORIGIN_ID       <Int pow160 => true
+    rule         #ORIGIN_ID       <Int pow256 => true
 
     rule 0 <=Int #REFUND_RECEIVER             => true
     rule         #REFUND_RECEIVER <Int pow160 => true
     rule         #REFUND_RECEIVER <Int pow256 => true
 
-    rule 0 <=Int #PROXY_ID             => true
-    rule         #PROXY_ID <Int pow160 => true
-    rule         #PROXY_ID <Int pow256 => true
-    
   // ########################
   // Memory Reasoning
   // ########################
@@ -225,9 +228,7 @@ module VERIFICATION
 
     // safeMath mul check c / a == b where c == a * b
     rule (X *Int Y) /Int X => Y  requires X =/=Int 0
-
     rule chop(X *Int Y) /Int X ==K Y => false  requires X =/=Int 0 andBool pow256 <=Int X *Int Y
-
 
     // TODO: move to builtin
     rule N -Int N => 0
