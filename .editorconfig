@@ -1,0 +1,15 @@
+# Root-level editorconfig.
+root = true
+
+# Applies to every file:
+#   - make sure newlines are unix-stile
+#   - remove whitespace at the end of lines
+[*]
+end_of_line = lf
+trim_trailing_whitespace = true
+
+# Applies to ini, k, md and smt2 files:
+#   - indent using 4 spaces
+[*.{ini,k,md,smt2}]
+indent_style = space
+indent_size = 4
