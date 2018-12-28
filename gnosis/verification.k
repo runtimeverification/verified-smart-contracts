@@ -235,9 +235,10 @@ module VERIFICATION
 
     rule (A +Int I1) -Int A => I1
 
-    rule ((A +Int I1) +Int B) +Int I2 => (A +Int B) +Int (I1 +Int I2)  requires #isConcrete(I1) andBool #isConcrete(I2)
+    rule ((A +Int I1) +Int B) +Int I2 => (A +Int B) +Int (I1 +Int I2)
+      requires notBool #isConcrete(A) andBool notBool #isConcrete(B) andBool #isConcrete(I1) andBool #isConcrete(I2)
 
-    rule (A +Int I1) +Int (B +Int I2) => A +Int B +Int (I1 +Int I2)
+    rule (A +Int I1) +Int (B +Int I2) => (A +Int B) +Int (I1 +Int I2)
       requires notBool #isConcrete(A) andBool notBool #isConcrete(B) andBool #isConcrete(I1) andBool #isConcrete(I2)
 
     // Simplify Cmem(_,_) - Cmem(_, _)
