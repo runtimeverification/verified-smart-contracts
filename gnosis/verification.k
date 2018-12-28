@@ -56,8 +56,9 @@ module VERIFICATION
     rule         #REFUND_RECEIVER <Int pow160 => true
     rule         #REFUND_RECEIVER <Int pow256 => true
 
+    // address public constant SENTINEL_OWNERS  = address(0x1);
+    // address public constant SENTINEL_MODULES = address(0x1);
     syntax Int ::= "#SENTINEL" [function]
-
     rule #SENTINEL => 1
 
   // ########################
