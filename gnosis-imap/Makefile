@@ -33,8 +33,13 @@ SPEC_NAMES_MODULE_MANAGER:=enableModule-success \
                            disableModule-failure-1 \
                            disableModule-failure-2
 
+SPEC_NAMES_MASTER_COPY:=changeMasterCopy-success \
+                        changeMasterCopy-failure-1 \
+                        changeMasterCopy-failure-2 \
+
 SPEC_NAMES:=$(SPEC_NAMES_GNOSIS_SAFE) \
             $(SPEC_NAMES_OWNER_MANAGER) \
-            $(SPEC_NAMES_MODULE_MANAGER)
+            $(SPEC_NAMES_MODULE_MANAGER) \
+            $(SPEC_NAMES_MASTER_COPY)
 
 include ../resources/kprove.mak
