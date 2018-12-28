@@ -33,7 +33,8 @@ SPEC_NAMES_MODULE_MANAGER:=enableModule-success \
                            enableModule-failure-2 \
                            disableModule-success \
                            disableModule-failure-1 \
-                           disableModule-failure-2
+                           disableModule-failure-2 \
+                           execTransactionFromModule-failure \
 
 SPEC_NAMES_MASTER_COPY:=changeMasterCopy-success \
                         changeMasterCopy-failure-1 \
