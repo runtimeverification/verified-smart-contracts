@@ -11,8 +11,8 @@ KPROVE_OPTS:=--smt-prelude $(abspath $(dir $(abspath $(lastword $(MAKEFILE_LIST)
 
 SPEC_NAMES_GNOSIS_SAFE:=encodeTransactionData-public-1 \
                         encodeTransactionData-public-2 \
-                        encodeTransactionData-internal-1-proof \
-                        encodeTransactionData-internal-2-proof \
+                        encodeTransactionData-internal-proof-1 \
+                        encodeTransactionData-internal-proof-2 \
                         signatureSplit-proof \
                         handlePayment-arithmetic-overflow-1 \
                         handlePayment-arithmetic-overflow-2 \
