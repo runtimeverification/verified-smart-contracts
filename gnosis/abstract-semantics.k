@@ -65,6 +65,7 @@ module ABSTRACT-SEMANTICS
        <pc> PCC </pc>
        <gas> #gas(INITGAS, NONMEM, MEM) => #gas(INITGAS, NONMEM +Int #callGas(SCHED, GASCAP, ACCTTO, VALUE, true), MEM) </gas>
        <previousGas> _ => #gas(INITGAS, NONMEM, MEM) </previousGas>
+       <callDepth> CD </callDepth>
        <account>
          <acctID> ACCTFROM </acctID>
          <balance> ORIGFROM => ORIGFROM -Int VALUE </balance>
@@ -75,7 +76,8 @@ module ABSTRACT-SEMANTICS
          <balance> ORIGTO => ORIGTO +Int VALUE </balance>
          ...
        </account>
-    requires #callSuccess(PCC, ACCTTO)
+    requires #range(0 <= CD < 1023)
+     andBool #callSuccess(PCC, ACCTTO)
      andBool ACCTFROM =/=K ACCTTO
      andBool VALUE <=Int ORIGFROM
      andBool ORIGTO +Int VALUE <Int pow256
