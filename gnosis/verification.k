@@ -30,6 +30,11 @@ module VERIFICATION
     rule 0 <=Int X -Int #gas(A, B, C)             => true  requires #gas(A, B, C) <=Int X
     rule         X -Int #gas(A, B, C) <Int pow256 => true  requires X <Int pow256
 
+    rule #gas(A1, B1, C1) -Int #gas(A1, B2, C2) => (B2 +Int C2) -Int (B1 +Int C1)
+
+    rule 0 <=Int #gas(_, _, _)             => true
+    rule         #gas(_, _, _) <Int pow256 => true
+
 
   // ########################
   // Account Map
@@ -250,6 +255,8 @@ module VERIFICATION
 
     rule I1 *Int A +Int I2 *Int A => (I1 +Int I2) *Int A
 
+    rule I1 *Int A +Int B +Int C +Int I2 *Int A => (I1 +Int I2) *Int A +Int B +Int C
+
     // TODO: move to builtin
     rule N -Int N => 0
       requires #getKLabelString(N) =/=String "#infinity_VERIFICATION"
@@ -278,5 +285,14 @@ module VERIFICATION
 
     rule X <=Int #ceil32(X) => true
       requires X >=Int 0
+
+
+  // ########################
+  // Gnosis
+  // ########################
+
+    // TODO: Replace with actual constraint
+    syntax Bool ::= "#checkSigsSuccess"  [function]
+  // ----------------------------------------------
 
 endmodule

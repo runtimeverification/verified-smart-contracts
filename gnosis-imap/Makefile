@@ -21,6 +21,8 @@ SPEC_NAMES_GNOSIS_SAFE:=encodeTransactionData-public-1 \
                         handlePayment-send-failure-origin \
                         handlePayment-send-failure-receiver \
                         checkSignatures-loop-body-success-v_else \
+                        execTransaction-checkSigs1-gas1-safetxgas0-gasprice0-call1-to \
+                        execTransaction-checkSigs1-gas1-safetxgas1-call1-to-gasprice1-send1-origin
 
 SPEC_NAMES_OWNER_MANAGER:=addOwnerWithThreshold-success-1 \
                           addOwnerWithThreshold-success-2 \
@@ -64,6 +66,12 @@ $(SPECS_DIR)/$(SPEC_GROUP)/encodeTransactionData-public-1-spec.k: $(TMPLS) $(SPE
 
 $(SPECS_DIR)/$(SPEC_GROUP)/encodeTransactionData-public-2-spec.k: $(TMPLS) $(SPEC_INI)
 	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) encodeTransactionData-public-2 encodeTransactionData-internal-trusted encodeTransactionData-public-2 > $@
+
+$(SPECS_DIR)/$(SPEC_GROUP)/execTransaction-checkSigs1-gas1-safetxgas0-gasprice0-call1-to-spec.k: $(TMPLS) $(SPEC_INI)
+	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) execTransaction-checkSigs1-gas1-safetxgas0-gasprice0-call1-to encodeTransactionData-internal-trusted checkSignatures-dummy execTransaction-checkSigs1-gas1-safetxgas0-gasprice0-call1-to > $@
+
+$(SPECS_DIR)/$(SPEC_GROUP)/execTransaction-checkSigs1-gas1-safetxgas1-call1-to-gasprice1-send1-origin-spec.k: $(TMPLS) $(SPEC_INI)
+	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) execTransaction-checkSigs1-gas1-safetxgas1-call1-to-gasprice1-send1-origin encodeTransactionData-internal-trusted checkSignatures-dummy handlePayment-send-success-origin-trusted execTransaction-checkSigs1-gas1-safetxgas1-call1-to-gasprice1-send1-origin > $@
 
 # Identical execution path with execution path of encodeTransactionData-public, so no point to activate it.
 $(SPECS_DIR)/$(SPEC_GROUP)/getTransactionHash-1-spec.k: $(TMPLS) $(SPEC_INI)
