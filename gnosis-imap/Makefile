@@ -58,5 +58,8 @@ $(SPECS_DIR)/$(SPEC_GROUP)/encodeTransactionData-public-2-spec.k: $(TMPLS) $(SPE
 	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) encodeTransactionData-public-2 encodeTransactionData-internal-trusted encodeTransactionData-public-2 > $@
 
 # Identical execution path with execution path of encodeTransactionData-public, so no point to activate it.
+$(SPECS_DIR)/$(SPEC_GROUP)/getTransactionHash-1-spec.k: $(TMPLS) $(SPEC_INI)
+	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) getTransactionHash-1 encodeTransactionData-internal-trusted getTransactionHash-1 > $@
+
 $(SPECS_DIR)/$(SPEC_GROUP)/getTransactionHash-2-spec.k: $(TMPLS) $(SPEC_INI)
 	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) getTransactionHash-2 encodeTransactionData-internal-trusted getTransactionHash-2 > $@
