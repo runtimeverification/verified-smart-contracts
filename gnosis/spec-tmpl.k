@@ -73,7 +73,9 @@
             <storage>
 {PROXY_STORAGE}
             </storage>
-            <origStorage> _ </origStorage>
+            <origStorage>
+{PROXY_ORIGSTORAGE}
+            </origStorage>
             <nonce> {PROXY_NONCE} </nonce>
           </account>
           <account>

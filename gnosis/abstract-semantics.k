@@ -56,12 +56,13 @@ module ABSTRACT-SEMANTICS
   // Call
   // ########################
 
-  // send() succeed and ACCTFROM =/=K ACCTTO
+  // We only consider the case where the function call doesn't return any value (i.e, RETWIDTH == 0)
+  // call() succeed and ACCTFROM =/=K ACCTTO
   rule <k> #exec[CALL] => . ... </k>
        <schedule> SCHED </schedule>
        <id> ACCTFROM </id>
-       <wordStack> 0 : ACCTTO : VALUE : ARGSTART : 0 : RETSTART : 0 : WS => 1 : WS </wordStack>
-       <gas> #gas(INITGAS, NONMEM, MEM) => #gas(INITGAS, NONMEM +Int #sendGas(SCHED, ACCTTO, VALUE, true), MEM) </gas>
+       <wordStack> GASCAP : ACCTTO : VALUE : ARGSTART : ARGWIDTH : RETSTART : 0 : WS => 1 : WS </wordStack>
+       <gas> #gas(INITGAS, NONMEM, MEM) => #gas(INITGAS, NONMEM +Int #callGas(SCHED, GASCAP, ACCTTO, VALUE, true), MEM) </gas>
        <previousGas> _ => #gas(INITGAS, NONMEM, MEM) </previousGas>
        <account>
          <acctID> ACCTFROM </acctID>
@@ -73,7 +74,7 @@ module ABSTRACT-SEMANTICS
          <balance> ORIGTO => ORIGTO +Int VALUE </balance>
          ...
        </account>
-    requires #sendSuccess(ACCTTO)
+    requires #callSuccess(GASCAP, ACCTTO)
      andBool ACCTFROM =/=K ACCTTO
      andBool VALUE <=Int ORIGFROM
      andBool ORIGTO +Int VALUE <Int pow256
@@ -81,13 +82,13 @@ module ABSTRACT-SEMANTICS
 
   // TODO: send() succeed and ACCTFROM ==K ACCTTO
 
-  // send() fail
+  // call() fail
   rule <k> #exec[CALL] => . ... </k>
        <schedule> SCHED </schedule>
-       <wordStack> 0 : ACCTTO : VALUE : ARGSTART : 0 : RETSTART : 0 : WS => 0 : WS </wordStack>
-       <gas> #gas(INITGAS, NONMEM, MEM) => #gas(INITGAS, NONMEM +Int #sendGas(SCHED, ACCTTO, VALUE, false), MEM) </gas>
+       <wordStack> GASCAP : ACCTTO : VALUE : ARGSTART : ARGWIDTH : RETSTART : 0 : WS => 0 : WS </wordStack>
+       <gas> #gas(INITGAS, NONMEM, MEM) => #gas(INITGAS, NONMEM +Int #callGas(SCHED, GASCAP, ACCTTO, VALUE, false), MEM) </gas>
        <previousGas> _ => #gas(INITGAS, NONMEM, MEM) </previousGas>
-    requires #sendFailure(ACCTTO)
+    requires #callFailure(GASCAP, ACCTTO)
     [trusted, matching(#gas)]
 
 

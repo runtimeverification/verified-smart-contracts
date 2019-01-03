@@ -13,11 +13,11 @@ module VERIFICATION
     rule #memoryUsageUpdate(#memoryUsageUpdate(MU, START0, WIDTH0), START1, WIDTH1) => #memoryUsageUpdate(MU, START0, WIDTH0)
       requires START1 +Int WIDTH1 <Int START0 +Int WIDTH0
         andBool 0 <Int WIDTH0
-        andBool 0 <Int WIDTH1
+        andBool 0 <=Int WIDTH1
 
     rule #memoryUsageUpdate(#memoryUsageUpdate(MU, START0, WIDTH0), START1, WIDTH1) => #memoryUsageUpdate(MU, START1, WIDTH1)
       requires START0 +Int WIDTH0 <=Int START1 +Int WIDTH1
-        andBool 0 <Int WIDTH0
+        andBool 0 <=Int WIDTH0
         andBool 0 <Int WIDTH1
 
     rule 0 <=Int #memoryUsageUpdate(MU, START, WIDTH) => true
@@ -231,6 +231,8 @@ module VERIFICATION
     rule (A +Int I1) +Int (B +Int I2) => (A +Int B) +Int (I1 +Int I2)
       requires notBool #isConcrete(A) andBool notBool #isConcrete(B) andBool #isConcrete(I1) andBool #isConcrete(I2)
 
+    rule (A +Int B) +Int (C -Int B) => A +Int C
+
     // Simplify Cmem(_,_) - Cmem(_, _)
     rule A +Int (I1 -Int A) => I1
     rule (I1 +Int (A -Int I0)) +Int (I2 -Int A) => I1 +Int (I2 -Int I0)
@@ -238,6 +240,8 @@ module VERIFICATION
     // safeMath mul check c / a == b where c == a * b
     rule (X *Int Y) /Int X => Y  requires X =/=Int 0
     rule chop(X *Int Y) /Int X ==K Y => false  requires X =/=Int 0 andBool pow256 <=Int X *Int Y
+
+    rule I1 *Int A +Int I2 *Int A => (I1 +Int I2) *Int A
 
     // TODO: move to builtin
     rule N -Int N => 0
