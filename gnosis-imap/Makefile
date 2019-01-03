@@ -21,7 +21,9 @@ SPEC_NAMES_GNOSIS_SAFE:=encodeTransactionData-public-1 \
                         handlePayment-send-failure-origin \
                         handlePayment-send-failure-receiver \
 
-SPEC_NAMES_OWNER_MANAGER:=removeOwner-success-1 \
+SPEC_NAMES_OWNER_MANAGER:=addOwnerWithThreshold-success-1 \
+						  addOwnerWithThreshold-success-2 \
+						  removeOwner-success-1 \
                           removeOwner-success-2 \
                           removeOwner-failure-1-a \
                           removeOwner-failure-1-b \
