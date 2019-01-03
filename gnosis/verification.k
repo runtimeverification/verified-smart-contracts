@@ -23,18 +23,18 @@ module VERIFICATION
     rule 0 <=Int #memoryUsageUpdate(MU, START, WIDTH) => true
 
 //  rule #memoryUsageUpdate(MU, START0, WIDTH0) ==Int #memoryUsageUpdate(MU, START1, WIDTH1) => START0 +Int WIDTH0 ==Int START1 +Int WIDTH1
-    syntax Int ::= #memoryUsageUpdateAux ( Int , Int ) [function]
-
-    rule #memoryUsageUpdate(MU, START, WIDTH) => #memoryUsageUpdateAux(MU, START +Int WIDTH)
-      requires WIDTH >Int 0
-
-    rule #memoryUsageUpdateAux(#memoryUsageUpdateAux(MU, SUM0), SUM1) => #memoryUsageUpdateAux(MU, SUM0)
-      requires SUM0 >Int SUM1
-
-    rule #memoryUsageUpdateAux(#memoryUsageUpdateAux(MU, SUM0), SUM1) => #memoryUsageUpdateAux(MU, SUM1)
-      requires SUM0 <=Int SUM1
-
-    rule 0 <=Int #memoryUsageUpdateAux(MU, SUM) => true
+//    syntax Int ::= #memoryUsageUpdateAux ( Int , Int ) [function]
+//
+//    rule #memoryUsageUpdate(MU, START, WIDTH) => #memoryUsageUpdateAux(MU, START +Int WIDTH)
+//      requires WIDTH >Int 0
+//
+//    rule #memoryUsageUpdateAux(#memoryUsageUpdateAux(MU, SUM0), SUM1) => #memoryUsageUpdateAux(MU, SUM0)
+//      requires SUM0 >Int SUM1
+//
+//    rule #memoryUsageUpdateAux(#memoryUsageUpdateAux(MU, SUM0), SUM1) => #memoryUsageUpdateAux(MU, SUM1)
+//      requires SUM0 <=Int SUM1
+//
+//    rule 0 <=Int #memoryUsageUpdateAux(MU, SUM) => true
 
   // ########################
   // Gas
@@ -145,6 +145,8 @@ module VERIFICATION
     rule #sizeWordStack(WS, N) <Int SIZE => #sizeWordStack(WS, 0) +Int N <Int SIZE  requires N =/=Int 0
     rule SIZELIMIT <Int #sizeWordStack(WS, N) +Int DELTA  => SIZELIMIT <Int (#sizeWordStack(WS, 0) +Int N) +Int DELTA  requires N =/=Int 0
     rule SIZELIMIT <Int #sizeWordStack(WS, N)             => SIZELIMIT <Int #sizeWordStack(WS, 0) +Int N               requires N =/=Int 0
+
+    rule #sizeWordStack(WS, N) <=Int SIZE => #sizeWordStack(WS, 0) +Int N <=Int SIZE requires N =/=Int 0
 
     rule #sizeWordStack(selectRange(_, _, WIDTH), SIZE) => SIZE +Int WIDTH
 

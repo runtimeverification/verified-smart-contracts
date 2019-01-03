@@ -21,7 +21,7 @@ SPEC_NAMES_GNOSIS_SAFE:=encodeTransactionData-public-1 \
                         handlePayment-send-failure-origin \
                         handlePayment-send-failure-receiver \
                         checkSignatures-dummy \
-                        checkSignatures-loop-body-success \
+                        checkSignatures-loop-body-success-v_else \
 
 SPEC_NAMES_OWNER_MANAGER:=addOwnerWithThreshold-success-1 \
                           addOwnerWithThreshold-success-2 \
@@ -74,5 +74,5 @@ $(SPECS_DIR)/$(SPEC_GROUP)/getTransactionHash-2-spec.k: $(TMPLS) $(SPEC_INI)
 	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) getTransactionHash-2 encodeTransactionData-internal-trusted getTransactionHash-2 > $@
 
 
-$(SPECS_DIR)/$(SPEC_GROUP)/checkSignatures-loop-body-success-spec.k: $(TMPLS) $(SPEC_INI)
-	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) checkSignatures-loop-body-success signatureSplit-trusted checkSignatures-loop-body-success > $@
+$(SPECS_DIR)/$(SPEC_GROUP)/checkSignatures-loop-body-success-v_else-spec.k: $(TMPLS) $(SPEC_INI)
+	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) checkSignatures-loop-body-success-v_else signatureSplit-trusted checkSignatures-loop-body-success-v_else > $@
