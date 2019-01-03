@@ -39,6 +39,7 @@ module VERIFICATION
     syntax Int ::= "#PROXY_ID"        [function]
     syntax Int ::= "#ORIGIN_ID"       [function]
     syntax Int ::= "#REFUND_RECEIVER" [function]
+    syntax Int ::= "#EXEC_ACCT_TO"    [function]
 
     rule 0 <=Int #MASTER_COPY_ID              => true
     rule         #MASTER_COPY_ID  <Int pow160 => true
@@ -55,6 +56,10 @@ module VERIFICATION
     rule 0 <=Int #REFUND_RECEIVER             => true
     rule         #REFUND_RECEIVER <Int pow160 => true
     rule         #REFUND_RECEIVER <Int pow256 => true
+
+    rule 0 <=Int #EXEC_ACCT_TO             => true
+    rule         #EXEC_ACCT_TO <Int pow160 => true
+    rule         #EXEC_ACCT_TO <Int pow256 => true
 
     // address public constant SENTINEL_OWNERS  = address(0x1);
     // address public constant SENTINEL_MODULES = address(0x1);

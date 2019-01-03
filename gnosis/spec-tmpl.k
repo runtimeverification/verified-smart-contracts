@@ -34,7 +34,7 @@
           <refund> {REFUND} </refund>
         </substate>
         <gasPrice> _ </gasPrice>
-        <origin> #ORIGIN_ID </origin> // tx.origin
+        <origin> ORIGIN_ID </origin> // tx.origin
         <previousHash> _ </previousHash>
         <ommersHash> _ </ommersHash>
         <coinbase> {COINBASE} </coinbase> // block.coinbase
@@ -63,9 +63,12 @@
             <storage>
 {MASTER_COPY_STORAGE}
             </storage>
-            <origStorage> _ </origStorage>
+            <origStorage>
+{MASTER_COPY_ORIGSTORAGE}
+            </origStorage>
             <nonce> {MASTER_COPY_NONCE} </nonce>
           </account>
+
           <account>
             <acctID> #PROXY_ID </acctID>
             <balance> {PROXY_BAL} </balance>
@@ -78,16 +81,46 @@
             </origStorage>
             <nonce> {PROXY_NONCE} </nonce>
           </account>
+
           <account>
             <acctID> #ORIGIN_ID </acctID>
             <balance> {ORIGIN_BAL} </balance>
-            <code> #parseByteStack({ORIGIN_CODE}) </code>
+            <code> {ORIGIN_CODE} </code>
             <storage>
 {ORIGIN_STORAGE}
             </storage>
-            <origStorage> _ </origStorage>
+            <origStorage>
+{ORIGIN_ORIGSTORAGE}
+            </origStorage>
             <nonce> {ORIGIN_NONCE} </nonce>
           </account>
+
+          <account>
+            <acctID> #EXEC_ACCT_TO </acctID>
+            <balance> {ACCT_TO_BAL} </balance>
+            <code> {ACCT_TO_CODE} </code>
+            <storage>
+{ACCT_TO_STORAGE}
+            </storage>
+            <origStorage>
+{ACCT_TO_ORIGSTORAGE}
+            </origStorage>
+            <nonce> {ACCT_TO_NONCE} </nonce>
+          </account>
+
+          <account>
+            <acctID> #REFUND_RECEIVER </acctID>
+            <balance> {RECEIVER_BAL} </balance>
+            <code> {RECEIVER_CODE} </code>
+            <storage>
+{RECEIVER_STORAGE}
+            </storage>
+            <origStorage>
+{RECEIVER_ORIGSTORAGE}
+            </origStorage>
+            <nonce> {RECEIVER_NONCE} </nonce>
+          </account>
+
           <account>
             // precompiled account for ECCREC
             <acctID> 1 </acctID>
@@ -97,6 +130,7 @@
             <origStorage> .Map </origStorage>
             <nonce> 0 </nonce>
           </account>
+
 {ACCOUNTS}
           ...
         </accounts>
@@ -105,20 +139,32 @@
         <messages> _ </messages>
       </network>
     </ethereum>
-    requires #rangeAddress(#MASTER_COPY_ID)
+    requires #rangeAddress(ORIGIN_ID)
+     andBool #rangeAddress(#MASTER_COPY_ID)
      andBool #rangeAddress(#PROXY_ID)
      andBool #rangeAddress(#ORIGIN_ID)
+     andBool #rangeAddress(#EXEC_ACCT_TO)
+     andBool #rangeAddress(#REFUND_RECEIVER)
      andBool #rangeUInt(256, NOW)
      andBool #rangeUInt(128, BLOCK_NUM) // Solidity
 
      andBool #MASTER_COPY_ID =/=Int #PROXY_ID
      andBool #MASTER_COPY_ID =/=Int #ORIGIN_ID
+     andBool #MASTER_COPY_ID =/=Int #EXEC_ACCT_TO
+     andBool #MASTER_COPY_ID =/=Int #REFUND_RECEIVER
      andBool #PROXY_ID       =/=Int #ORIGIN_ID
+     andBool #PROXY_ID       =/=Int #EXEC_ACCT_TO
+     andBool #PROXY_ID       =/=Int #REFUND_RECEIVER
+     andBool #ORIGIN_ID      =/=Int #EXEC_ACCT_TO
+     andBool #ORIGIN_ID      =/=Int #REFUND_RECEIVER
+     andBool #EXEC_ACCT_TO   =/=Int #REFUND_RECEIVER
 
      // Account address normality
-     andBool #MASTER_COPY_ID >Int 0 andBool (notBool #MASTER_COPY_ID in #precompiledAccounts(BYZANTIUM))
-     andBool #PROXY_ID       >Int 0 andBool (notBool #PROXY_ID       in #precompiledAccounts(BYZANTIUM))
-     andBool #ORIGIN_ID      >Int 0 andBool (notBool #ORIGIN_ID      in #precompiledAccounts(BYZANTIUM))
+     andBool #MASTER_COPY_ID  >Int 0 andBool (notBool #MASTER_COPY_ID  in #precompiledAccounts(BYZANTIUM))
+     andBool #PROXY_ID        >Int 0 andBool (notBool #PROXY_ID        in #precompiledAccounts(BYZANTIUM))
+     andBool #ORIGIN_ID       >Int 0 andBool (notBool #ORIGIN_ID       in #precompiledAccounts(BYZANTIUM))
+     andBool #EXEC_ACCT_TO    >Int 0 andBool (notBool #EXEC_ACCT_TO    in #precompiledAccounts(BYZANTIUM))
+     andBool #REFUND_RECEIVER >Int 0 andBool (notBool #REFUND_RECEIVER in #precompiledAccounts(BYZANTIUM))
 {REQUIRES}
     ensures true
 {ENSURES}
