@@ -26,7 +26,7 @@ SPEC_NAMES_OWNER_MANAGER:=addOwnerWithThreshold-success-1 \
                           addOwnerWithThreshold-failure-1-a \
                           addOwnerWithThreshold-failure-1-b \
                           addOwnerWithThreshold-failure-2 \
-						  removeOwner-success-1 \
+                          removeOwner-success-1 \
                           removeOwner-success-2 \
                           removeOwner-failure-1-a \
                           removeOwner-failure-1-b \
