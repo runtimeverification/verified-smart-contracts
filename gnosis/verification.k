@@ -22,19 +22,6 @@ module VERIFICATION
 
     rule 0 <=Int #memoryUsageUpdate(MU, START, WIDTH) => true
 
-//  rule #memoryUsageUpdate(MU, START0, WIDTH0) ==Int #memoryUsageUpdate(MU, START1, WIDTH1) => START0 +Int WIDTH0 ==Int START1 +Int WIDTH1
-//    syntax Int ::= #memoryUsageUpdateAux ( Int , Int ) [function]
-//
-//    rule #memoryUsageUpdate(MU, START, WIDTH) => #memoryUsageUpdateAux(MU, START +Int WIDTH)
-//      requires WIDTH >Int 0
-//
-//    rule #memoryUsageUpdateAux(#memoryUsageUpdateAux(MU, SUM0), SUM1) => #memoryUsageUpdateAux(MU, SUM0)
-//      requires SUM0 >Int SUM1
-//
-//    rule #memoryUsageUpdateAux(#memoryUsageUpdateAux(MU, SUM0), SUM1) => #memoryUsageUpdateAux(MU, SUM1)
-//      requires SUM0 <=Int SUM1
-//
-//    rule 0 <=Int #memoryUsageUpdateAux(MU, SUM) => true
 
   // ########################
   // Gas
