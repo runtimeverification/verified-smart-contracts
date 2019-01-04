@@ -15,8 +15,8 @@
         <callState>
           <program> #asMapOpCodes(#dasmOpCodes(#parseByteStack({CODE}), BYZANTIUM)) </program>
           <programBytes> #parseByteStack({CODE}) </programBytes>
-          <id> {THIS} </id> // `this`
-          <caller> {MSG_SENDER} </caller> // `msg.sender`
+          <id> {THIS} </id> // this
+          <caller> {MSG_SENDER} </caller> // msg.sender
           <callData> {CALLDATA} </callData> // msg.data
           <callValue> {CALLVALUE} </callValue> // msg.value
           <wordStack> {WORDSTACK} </wordStack>
