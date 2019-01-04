@@ -11,12 +11,12 @@ module VERIFICATION
   // ########################
 
     rule #memoryUsageUpdate(#memoryUsageUpdate(MU, START0, WIDTH0), START1, WIDTH1) => #memoryUsageUpdate(MU, START0, WIDTH0)
-      requires START1 +Int WIDTH1 <Int START0 +Int WIDTH0
+      requires START1 +Int WIDTH1 <=Int START0 +Int WIDTH0
         andBool 0 <Int WIDTH0
         andBool 0 <=Int WIDTH1
 
     rule #memoryUsageUpdate(#memoryUsageUpdate(MU, START0, WIDTH0), START1, WIDTH1) => #memoryUsageUpdate(MU, START1, WIDTH1)
-      requires START0 +Int WIDTH0 <=Int START1 +Int WIDTH1
+      requires START0 +Int WIDTH0 <Int START1 +Int WIDTH1
         andBool 0 <=Int WIDTH0
         andBool 0 <Int WIDTH1
 
