@@ -20,7 +20,6 @@ SPEC_NAMES_GNOSIS_SAFE:=encodeTransactionData-public-1 \
                         handlePayment-send-success-receiver \
                         handlePayment-send-failure-origin \
                         handlePayment-send-failure-receiver \
-                        checkSignatures-dummy \
                         checkSignatures-loop-body-success-v_else \
 
 SPEC_NAMES_OWNER_MANAGER:=addOwnerWithThreshold-success-1 \
