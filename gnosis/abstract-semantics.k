@@ -62,6 +62,7 @@ module ABSTRACT-SEMANTICS
        <schedule> SCHED </schedule>
        <id> ACCTFROM </id>
        <wordStack> GASCAP : ACCTTO : VALUE : ARGSTART : ARGWIDTH : RETSTART : 0 : WS => 1 : WS </wordStack>
+       <pc> PCC </pc>
        <gas> #gas(INITGAS, NONMEM, MEM) => #gas(INITGAS, NONMEM +Int #callGas(SCHED, GASCAP, ACCTTO, VALUE, true), MEM) </gas>
        <previousGas> _ => #gas(INITGAS, NONMEM, MEM) </previousGas>
        <account>
@@ -74,7 +75,7 @@ module ABSTRACT-SEMANTICS
          <balance> ORIGTO => ORIGTO +Int VALUE </balance>
          ...
        </account>
-    requires #callSuccess(GASCAP, ACCTTO)
+    requires #callSuccess(PCC, ACCTTO)
      andBool ACCTFROM =/=K ACCTTO
      andBool VALUE <=Int ORIGFROM
      andBool ORIGTO +Int VALUE <Int pow256
@@ -86,9 +87,10 @@ module ABSTRACT-SEMANTICS
   rule <k> #exec[CALL] => . ... </k>
        <schedule> SCHED </schedule>
        <wordStack> GASCAP : ACCTTO : VALUE : ARGSTART : ARGWIDTH : RETSTART : 0 : WS => 0 : WS </wordStack>
+       <pc> PCC </pc>
        <gas> #gas(INITGAS, NONMEM, MEM) => #gas(INITGAS, NONMEM +Int #callGas(SCHED, GASCAP, ACCTTO, VALUE, false), MEM) </gas>
        <previousGas> _ => #gas(INITGAS, NONMEM, MEM) </previousGas>
-    requires #callFailure(GASCAP, ACCTTO)
+    requires #callFailure(PCC, ACCTTO)
     [trusted, matching(#gas)]
 
 
