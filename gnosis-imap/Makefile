@@ -21,6 +21,8 @@ SPEC_NAMES_GNOSIS_SAFE:=encodeTransactionData-public-1 \
                         handlePayment-send-failure-origin \
                         handlePayment-send-failure-receiver \
                         checkSignatures-loop-body-success-v_else \
+                        checkSignatures-loop-body-failure-v_else-ecrecEmpty \
+                        checkSignatures-loop-body-failure-v_else-not-ecrecEmpty \
                         execTransaction-checkSigs1-gas1-safetxgas0-gasprice0-call1-to \
                         execTransaction-checkSigs1-gas1-safetxgas1-call1-to-gasprice1-send1-origin
 
@@ -83,3 +85,9 @@ $(SPECS_DIR)/$(SPEC_GROUP)/getTransactionHash-2-spec.k: $(TMPLS) $(SPEC_INI)
 
 $(SPECS_DIR)/$(SPEC_GROUP)/checkSignatures-loop-body-success-v_else-spec.k: $(TMPLS) $(SPEC_INI)
 	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) checkSignatures-loop-body-success-v_else signatureSplit-trusted checkSignatures-loop-body-success-v_else > $@
+
+$(SPECS_DIR)/$(SPEC_GROUP)/checkSignatures-loop-body-failure-v_else-ecrecEmpty-spec.k: $(TMPLS) $(SPEC_INI)
+	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) checkSignatures-loop-body-failure-v_else-ecrecEmpty signatureSplit-trusted checkSignatures-loop-body-failure-v_else-ecrecEmpty > $@
+
+$(SPECS_DIR)/$(SPEC_GROUP)/checkSignatures-loop-body-failure-v_else-not-ecrecEmpty-spec.k: $(TMPLS) $(SPEC_INI)
+	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) checkSignatures-loop-body-failure-v_else-not-ecrecEmpty signatureSplit-trusted checkSignatures-loop-body-failure-v_else-not-ecrecEmpty > $@
