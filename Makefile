@@ -31,4 +31,7 @@ endif
 
 SUBDIRS+=$(addprefix erc20/,$(ERC20))
 
+# FIXME: temporary
+SUBDIRS:=gnosis-imap
+
 include resources/kprove-group.mak
