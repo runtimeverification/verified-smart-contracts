@@ -22,6 +22,9 @@ SPEC_NAMES_GNOSIS_SAFE:=encodeTransactionData-public-1 \
                         handlePayment-send-failure-receiver \
                         checkSignatures-loop-body-success-v1-owner \
                         checkSignatures-loop-body-success-v1-not-owner \
+                        checkSignatures-loop-body-failure-v1-owner \
+                        checkSignatures-loop-body-failure-v1-not-owner-approved \
+                        checkSignatures-loop-body-failure-v1-not-owner-not-approved \
                         checkSignatures-loop-body-success-v_else \
                         checkSignatures-loop-body-failure-v_else-ecrecEmpty \
                         checkSignatures-loop-body-failure-v_else-not-ecrecEmpty \
@@ -89,6 +92,15 @@ $(SPECS_DIR)/$(SPEC_GROUP)/checkSignatures-loop-body-success-v1-owner-spec.k: $(
 
 $(SPECS_DIR)/$(SPEC_GROUP)/checkSignatures-loop-body-success-v1-not-owner-spec.k: $(TMPLS) $(SPEC_INI)
 	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) checkSignatures-loop-body-success-v1-not-owner signatureSplit-trusted checkSignatures-loop-body-success-v1-not-owner > $@
+
+$(SPECS_DIR)/$(SPEC_GROUP)/checkSignatures-loop-body-failure-v1-owner-spec.k: $(TMPLS) $(SPEC_INI)
+	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) checkSignatures-loop-body-failure-v1-owner signatureSplit-trusted checkSignatures-loop-body-failure-v1-owner > $@
+
+$(SPECS_DIR)/$(SPEC_GROUP)/checkSignatures-loop-body-failure-v1-not-owner-approved-spec.k: $(TMPLS) $(SPEC_INI)
+	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) checkSignatures-loop-body-failure-v1-not-owner-approved signatureSplit-trusted checkSignatures-loop-body-failure-v1-not-owner-approved > $@
+
+$(SPECS_DIR)/$(SPEC_GROUP)/checkSignatures-loop-body-failure-v1-not-owner-not-approved-spec.k: $(TMPLS) $(SPEC_INI)
+	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) checkSignatures-loop-body-failure-v1-not-owner-not-approved signatureSplit-trusted checkSignatures-loop-body-failure-v1-not-owner-not-approved > $@
 
 $(SPECS_DIR)/$(SPEC_GROUP)/checkSignatures-loop-body-success-v_else-spec.k: $(TMPLS) $(SPEC_INI)
 	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) checkSignatures-loop-body-success-v_else signatureSplit-trusted checkSignatures-loop-body-success-v_else > $@
