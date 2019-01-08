@@ -20,6 +20,8 @@ SPEC_NAMES_GNOSIS_SAFE:=encodeTransactionData-public-1 \
                         handlePayment-send-success-receiver \
                         handlePayment-send-failure-origin \
                         handlePayment-send-failure-receiver \
+                        checkSignatures-loop-body-success-v1-owner \
+                        checkSignatures-loop-body-success-v1-not-owner \
                         checkSignatures-loop-body-success-v_else \
                         checkSignatures-loop-body-failure-v_else-ecrecEmpty \
                         checkSignatures-loop-body-failure-v_else-not-ecrecEmpty \
@@ -82,6 +84,11 @@ $(SPECS_DIR)/$(SPEC_GROUP)/getTransactionHash-1-spec.k: $(TMPLS) $(SPEC_INI)
 $(SPECS_DIR)/$(SPEC_GROUP)/getTransactionHash-2-spec.k: $(TMPLS) $(SPEC_INI)
 	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) getTransactionHash-2 encodeTransactionData-internal-trusted getTransactionHash-2 > $@
 
+$(SPECS_DIR)/$(SPEC_GROUP)/checkSignatures-loop-body-success-v1-owner-spec.k: $(TMPLS) $(SPEC_INI)
+	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) checkSignatures-loop-body-success-v1-owner signatureSplit-trusted checkSignatures-loop-body-success-v1-owner > $@
+
+$(SPECS_DIR)/$(SPEC_GROUP)/checkSignatures-loop-body-success-v1-not-owner-spec.k: $(TMPLS) $(SPEC_INI)
+	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) checkSignatures-loop-body-success-v1-not-owner signatureSplit-trusted checkSignatures-loop-body-success-v1-not-owner > $@
 
 $(SPECS_DIR)/$(SPEC_GROUP)/checkSignatures-loop-body-success-v_else-spec.k: $(TMPLS) $(SPEC_INI)
 	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) checkSignatures-loop-body-success-v_else signatureSplit-trusted checkSignatures-loop-body-success-v_else > $@
