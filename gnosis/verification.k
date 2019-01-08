@@ -122,14 +122,14 @@ module VERIFICATION
     rule storeRange(storeRange(M, K0, W0, V0), K1, W1, V1) => storeRange(M, K0, W0, V1)
       requires K0 ==Int K1 andBool W0 ==Int W1
 
-    rule storeRange(storeRange(M, K0, W0, V0), K1, W1, V1) => storeRange(storeRange(M, K1, W1, V1) K0, W0, V0)
+    rule storeRange(storeRange(M, K0, W0, V0), K1, W1, V1) => storeRange(storeRange(M, K1, W1, V1), K0, W0, V0)
       requires ( (K1 +Int W1) <=Int K0 orBool (K0 +Int W0) <=Int K1 )
        andBool range(K1, W1) in keys(M)
 
     syntax KItem ::= range(Int, Int)
 
-    rule range(K1, W1) in keys(storeRange(M, K2, W2, _)) => true                requires K1 ==Int K2 andBool W1 ==Int W2
-    rule range(K1, W1) in keys(storeRange(M, K2, W2, _)) => (K1, W1) in keys(M) requires ( (K1 +Int W1) <=Int K2 orBool (K2 +Int W2) <=Int K1 )
+    rule range(K1, W1) in keys(storeRange(M, K2, W2, _)) => true                     requires K1 ==Int K2 andBool W1 ==Int W2
+    rule range(K1, W1) in keys(storeRange(M, K2, W2, _)) => range(K1, W1) in keys(M) requires ( (K1 +Int W1) <=Int K2 orBool (K2 +Int W2) <=Int K1 )
 
 
   // ########################
