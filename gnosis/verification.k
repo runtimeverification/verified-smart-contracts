@@ -266,6 +266,10 @@ module VERIFICATION
 
     rule (A +Int B) +Int (C -Int B) => A +Int C
 
+    rule (A +Int B +Int C) -Int (A +Int D) => B +Int (C -Int D)
+
+    rule (A +Int B +Int C +Int D +Int E) -Int (A +Int C +Int F) => B +Int D +Int E -Int F
+
     // Simplify Cmem(_,_) - Cmem(_, _)
     rule A +Int (I1 -Int A) => I1
     rule (I1 +Int (A -Int I0)) +Int (I2 -Int A) => I1 +Int (I2 -Int I0)
@@ -316,6 +320,8 @@ module VERIFICATION
     syntax Bool ::= "#checkSigsSuccess"  [function]
   // ----------------------------------------------
 
+    syntax Int ::= #loopGas ( Int , Int )  [function]  // startPC, endPC
+ // --------------------------------------------------------------------
 
 syntax Int  ::= #fii        ( WordStack ,       Int , WordStack , IMap , Int ) [function, smtlib(fii)] // first-invalid-signature-index
 syntax Bool ::= #isValid    ( WordStack , Int , Int , WordStack , IMap , Int , Bool ) [function, smtlib(isValid)]

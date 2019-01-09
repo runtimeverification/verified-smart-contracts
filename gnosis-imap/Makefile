@@ -25,6 +25,7 @@ SPEC_NAMES_GNOSIS_SAFE:=encodeTransactionData-public-1 \
                         checkSignatures-failure-2 \
                         checkSignatures-loop-success \
                         checkSignatures-loop-failure \
+                        checkSignatures-loop-body-success-v0 \
                         checkSignatures-loop-body-success-v1-owner \
                         checkSignatures-loop-body-success-v1-not-owner \
                         checkSignatures-loop-body-failure-v1-owner \
@@ -107,6 +108,9 @@ $(SPECS_DIR)/$(SPEC_GROUP)/checkSignatures-loop-success-spec.k: $(TMPLS) $(SPEC_
 
 $(SPECS_DIR)/$(SPEC_GROUP)/checkSignatures-loop-failure-spec.k: $(TMPLS) $(SPEC_INI)
 	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) checkSignatures-loop-failure signatureSplit-trusted checkSignatures-loop-body-success-trusted checkSignatures-loop-body-failure-trusted checkSignatures-loop-failure-now checkSignatures-loop-failure-later checkSignatures-loop-failure-trusted > $@
+
+$(SPECS_DIR)/$(SPEC_GROUP)/checkSignatures-loop-body-success-v0-spec.k: $(TMPLS) $(SPEC_INI)
+	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) checkSignatures-loop-body-success-v0 signatureSplit-trusted copy-trusted-data copy-trusted-contractSig checkSignatures-loop-body-success-v0 > $@
 
 $(SPECS_DIR)/$(SPEC_GROUP)/checkSignatures-loop-body-success-v1-owner-spec.k: $(TMPLS) $(SPEC_INI)
 	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) checkSignatures-loop-body-success-v1-owner signatureSplit-trusted checkSignatures-loop-body-success-v1-owner > $@
