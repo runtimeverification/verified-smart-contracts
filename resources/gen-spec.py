@@ -52,8 +52,9 @@ def gen(spec_template, rule_template, spec_ini, spec_name, rule_name_list):
         for config in [ inherit_get(spec_config, name)
                       , pgm_config
                       ]:
-            for key in config:
-                rule_spec = subst(rule_spec, key, config[key].strip())
+            rule_spec = subst_all(rule_spec, config)
+#           for key in config:
+#               rule_spec = subst(rule_spec, key, config[key].strip())
         rule_spec = subst(rule_spec, "rulename", name)
         rule_spec_list.append(rule_spec)
     delimeter = "\n"
@@ -69,6 +70,15 @@ def gen(spec_template, rule_template, spec_ini, spec_name, rule_name_list):
 #       for key in config:
 #           genspec = subst(genspec, key, config[key].strip())
 #   print(genspec)
+
+def subst_all(init_rule_spec, config):
+    rule_spec = init_rule_spec
+    for key in config:
+        rule_spec = subst(rule_spec, key, config[key].strip())
+    if rule_spec != init_rule_spec:
+        return subst_all(rule_spec, config)
+    else:
+        return rule_spec
 
 if __name__ == '__main__':
     if len(sys.argv) < 6:
