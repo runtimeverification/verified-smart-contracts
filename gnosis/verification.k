@@ -316,4 +316,81 @@ module VERIFICATION
     syntax Bool ::= "#checkSigsSuccess"  [function]
   // ----------------------------------------------
 
+
+syntax Int  ::= #fii        ( WordStack ,       Int , WordStack , IMap , Int ) [function, smtlib(fii)] // first-invalid-signature-index
+syntax Bool ::= #isValid    ( WordStack , Int , Int , WordStack , IMap , Int , Bool ) [function, smtlib(isValid)]
+syntax Bool ::= #isValidSig ( WordStack , Int , Int , WordStack , IMap , Int ) [function, smtlib(isValidSig)]
+syntax Bool ::= #isValidSignature ( Int , WordStack , WordStack ) [function, smtlib(isValidSignature)] // ISignatureValidator(currentOwner).isValidSignature(data, contractSignature)
+syntax Int  ::= #signer ( WordStack , Int , Int ) [function]
+syntax Int  ::= #sigR   ( WordStack , Int ) [function]
+syntax Int  ::= #sigS   ( WordStack , Int ) [function]
+syntax Int  ::= #sigV   ( WordStack , Int ) [function]
+
+rule 0 <=Int #fii(_,_,_,_,_)             => true
+rule         #fii(_,_,_,_,_) <Int pow256 => true
+
+rule 0 <=Int #signer(_,_,_)             => true
+rule         #signer(_,_,_) <Int pow160 => true
+rule         #signer(_,_,_) <Int pow256 => true
+
+// axiomatization of #fii
+
+rule #isValid(SIGS, I, DATA_HASH, DATA_BUF, STORAGE, MSG_SENDER, _) => true  requires I  <Int #fii(SIGS, DATA_HASH, DATA_BUF, STORAGE, MSG_SENDER)
+rule #isValid(SIGS, I, DATA_HASH, DATA_BUF, STORAGE, MSG_SENDER, _) => false requires I ==Int #fii(SIGS, DATA_HASH, DATA_BUF, STORAGE, MSG_SENDER)
+
+// axiomatization of #isValid
+
+rule #isValid   (SIGS, I, DATA_HASH, DATA_BUF, STORAGE, MSG_SENDER, true)
+  => #isValidSig(SIGS, I, DATA_HASH, DATA_BUF, STORAGE, MSG_SENDER)
+     andBool #signer(SIGS, I, DATA_HASH) >Int #signer(SIGS, I -Int 1, DATA_HASH)
+//   andBool select(STORAGE, #hashedLocation({COMPILER}, {OWNERS}, #signer(SIGS, I, DATA_HASH))) =/=Int 0
+     andBool select(STORAGE, #hashedLocation("Solidity", 2,        #signer(SIGS, I, DATA_HASH))) =/=Int 0
+
+rule #signer(_, I, _) => 0 requires I <Int 0  // address lastOwner = address(0);
+
+// axiomatization of #isValidSig for each signature type
+
+rule #isValidSig(SIGS, I, DATA_HASH, DATA_BUF, STORAGE, MSG_SENDER)
+  => #isValidSignature(#signer(SIGS, I, DATA_HASH),                                                     // currentOwner
+                       DATA_BUF,                                                                        // data
+                       #bufSeg(SIGS, #sigS(SIGS,I) +Int 32, #asWord(#bufSeg(SIGS, #sigS(SIGS,I), 32)))) // contractSignature
+  requires #sigV(SIGS, I) ==Int 0
+
+rule #isValidSig(SIGS, I, DATA_HASH, DATA_BUF, STORAGE, MSG_SENDER)
+  => MSG_SENDER ==Int #sigR(SIGS, I)
+//   orBool select(STORAGE, #hashedLocation({COMPILER}, {APPROVED_HASHES}, #sigR(SIGS, I) DATA_HASH)) =/=Int 0
+     orBool select(STORAGE, #hashedLocation("Solidity", 8,                 #sigR(SIGS, I) DATA_HASH)) =/=Int 0
+  requires #sigV(SIGS, I) ==Int 1
+
+/* in case the above doesn't work
+rule #isValidSig(SIGS, I, DATA_HASH, DATA_BUF, STORAGE, MSG_SENDER) => true
+  requires #sigV(SIGS, I) ==Int 1 andBool MSG_SENDER ==Int #sigR(SIGS, I)
+
+rule #isValidSig(SIGS, I, DATA_HASH, DATA_BUF, STORAGE, MSG_SENDER)
+//=> select(STORAGE, #hashedLocation({COMPILER}, {APPROVED_HASHES}, #sigR(SIGS, I) DATA_HASH)) =/=Int 0
+  => select(STORAGE, #hashedLocation("Solidity", 8,                 #sigR(SIGS, I) DATA_HASH)) =/=Int 0
+  requires #sigV(SIGS, I) ==Int 1 andBool MSG_SENDER =/=Int #sigR(SIGS, I)
+*/
+
+rule #isValidSig(SIGS, I, DATA_HASH, DATA_BUF, STORAGE, MSG_SENDER)
+  => notBool #ecrecEmpty(#ecrecData(SIGS, I, DATA_HASH))
+  requires #sigV(SIGS, I) =/=Int 0
+   andBool #sigV(SIGS, I) =/=Int 1
+
+// definition of #signer
+
+rule #signer(SIGS, I, DATA_HASH) => #symEcrec(#ecrecData(SIGS, I, DATA_HASH)) requires I >=Int 0 andBool   #sigV(SIGS, I) =/=Int 0 andBool #sigV(SIGS, I) =/=Int 1   andBool notBool #ecrecEmpty(#ecrecData(SIGS, I, DATA_HASH))
+rule #signer(SIGS, I, DATA_HASH) => 0                                         requires I >=Int 0 andBool   #sigV(SIGS, I) =/=Int 0 andBool #sigV(SIGS, I) =/=Int 1   andBool         #ecrecEmpty(#ecrecData(SIGS, I, DATA_HASH))
+rule #signer(SIGS, I, DATA_HASH) => #sigR(SIGS, I)                            requires I >=Int 0 andBool ( #sigV(SIGS, I)  ==Int 0  orBool #sigV(SIGS, I)  ==Int 1 )
+
+syntax WordStack ::= #ecrecData ( WordStack , Int , Int ) [function]
+rule #ecrecData(SIGS, I, DATA_HASH) => #encodeArgs(#bytes32(DATA_HASH), #uint8(#sigV(SIGS,I)), #bytes32(#sigR(SIGS,I)), #bytes32(#sigS(SIGS,I)))
+
+// definition of #sigR, #sigS, #sigV
+
+rule #sigR(SIGS, I) => #asWord(#bufSeg(SIGS, 65 *Int I        , 32))
+rule #sigS(SIGS, I) => #asWord(#bufSeg(SIGS, 65 *Int I +Int 32, 32))
+rule #sigV(SIGS, I) =>         #bufElm(SIGS, 65 *Int I +Int 64)
+
+
 endmodule
