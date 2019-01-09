@@ -329,9 +329,11 @@ syntax Int  ::= #sigV   ( WordStack , Int ) [function]
 rule 0 <=Int #fii(_,_,_,_,_)             => true
 rule         #fii(_,_,_,_,_) <Int pow256 => true
 
+/*
 rule 0 <=Int #signer(_,_,_)             => true
 rule         #signer(_,_,_) <Int pow160 => true
 rule         #signer(_,_,_) <Int pow256 => true
+*/
 
 // axiomatization of #fii
 
