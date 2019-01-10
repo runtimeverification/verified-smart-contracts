@@ -20,6 +20,9 @@ SPEC_NAMES_GNOSIS_SAFE:=encodeTransactionData-public-1 \
                         handlePayment-send-success-receiver \
                         handlePayment-send-failure-origin \
                         handlePayment-send-failure-receiver \
+                        checkSignatures-success \
+                        checkSignatures-failure-1 \
+                        checkSignatures-failure-2 \
                         checkSignatures-loop-success \
                         checkSignatures-loop-failure \
                         checkSignatures-loop-body-success-v1-owner \
@@ -89,11 +92,21 @@ $(SPECS_DIR)/$(SPEC_GROUP)/getTransactionHash-1-spec.k: $(TMPLS) $(SPEC_INI)
 $(SPECS_DIR)/$(SPEC_GROUP)/getTransactionHash-2-spec.k: $(TMPLS) $(SPEC_INI)
 	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) getTransactionHash-2 encodeTransactionData-internal-trusted getTransactionHash-2 > $@
 
+
+$(SPECS_DIR)/$(SPEC_GROUP)/checkSignatures-success-spec.k: $(TMPLS) $(SPEC_INI)
+	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) checkSignatures-success checkSignatures-loop-success-trusted checkSignatures-success > $@
+
+$(SPECS_DIR)/$(SPEC_GROUP)/checkSignatures-failure-1-spec.k: $(TMPLS) $(SPEC_INI)
+	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) checkSignatures-failure-1 checkSignatures-loop-failure-trusted checkSignatures-failure-1 > $@
+
+$(SPECS_DIR)/$(SPEC_GROUP)/checkSignatures-failure-2-spec.k: $(TMPLS) $(SPEC_INI)
+	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) checkSignatures-failure-2 checkSignatures-loop-failure-trusted checkSignatures-failure-2 > $@
+
 $(SPECS_DIR)/$(SPEC_GROUP)/checkSignatures-loop-success-spec.k: $(TMPLS) $(SPEC_INI)
 	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) checkSignatures-loop-success signatureSplit-trusted checkSignatures-loop-body-success-trusted checkSignatures-loop-success > $@
 
 $(SPECS_DIR)/$(SPEC_GROUP)/checkSignatures-loop-failure-spec.k: $(TMPLS) $(SPEC_INI)
-	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) checkSignatures-loop-failure signatureSplit-trusted checkSignatures-loop-body-success-trusted checkSignatures-loop-body-failure-trusted checkSignatures-loop-failure-now checkSignatures-loop-failure-later checkSignatures-loop-failure > $@
+	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) checkSignatures-loop-failure signatureSplit-trusted checkSignatures-loop-body-success-trusted checkSignatures-loop-body-failure-trusted checkSignatures-loop-failure-now checkSignatures-loop-failure-later checkSignatures-loop-failure-trusted > $@
 
 $(SPECS_DIR)/$(SPEC_GROUP)/checkSignatures-loop-body-success-v1-owner-spec.k: $(TMPLS) $(SPEC_INI)
 	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) checkSignatures-loop-body-success-v1-owner signatureSplit-trusted checkSignatures-loop-body-success-v1-owner > $@
