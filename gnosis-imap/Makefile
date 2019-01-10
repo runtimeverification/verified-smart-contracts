@@ -21,7 +21,6 @@ SPEC_NAMES_GNOSIS_SAFE:=encodeTransactionData-public-1 \
                         handlePayment-send-failure-origin \
                         handlePayment-send-failure-receiver \
                         checkSignatures-loop-success \
-                        checkSignatures-loop-body-success \
                         checkSignatures-loop-body-success-v0 \
                         checkSignatures-loop-body-success-v1-owner \
                         checkSignatures-loop-body-success-v1-not-owner \
