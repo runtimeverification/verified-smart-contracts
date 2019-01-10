@@ -28,12 +28,15 @@ SPEC_NAMES_GNOSIS_SAFE:=encodeTransactionData-public-1 \
                         checkSignatures-loop-body-success-v0 \
                         checkSignatures-loop-body-success-v1-owner \
                         checkSignatures-loop-body-success-v1-not-owner \
+                        checkSignatures-loop-body-failure-v0-1 \
+                        checkSignatures-loop-body-failure-v0-2 \
                         checkSignatures-loop-body-failure-v1-owner \
                         checkSignatures-loop-body-failure-v1-not-owner-approved \
                         checkSignatures-loop-body-failure-v1-not-owner-not-approved \
                         checkSignatures-loop-body-success-v_else \
                         checkSignatures-loop-body-failure-v_else-ecrecEmpty \
                         checkSignatures-loop-body-failure-v_else-not-ecrecEmpty \
+                        checkSignatures-loop-body-exception-v0 \
                         execTransaction-checkSigs1-gas1-safetxgas0-gasprice0-call1-to \
                         execTransaction-checkSigs1-gas1-safetxgas1-call1-to-gasprice1-send1-origin
 
@@ -118,6 +121,12 @@ $(SPECS_DIR)/$(SPEC_GROUP)/checkSignatures-loop-body-success-v1-owner-spec.k: $(
 $(SPECS_DIR)/$(SPEC_GROUP)/checkSignatures-loop-body-success-v1-not-owner-spec.k: $(TMPLS) $(SPEC_INI)
 	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) checkSignatures-loop-body-success-v1-not-owner signatureSplit-trusted checkSignatures-loop-body-success-v1-not-owner > $@
 
+$(SPECS_DIR)/$(SPEC_GROUP)/checkSignatures-loop-body-failure-v0-1-spec.k: $(TMPLS) $(SPEC_INI)
+	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) checkSignatures-loop-body-failure-v0-1 signatureSplit-trusted copy-trusted-data copy-trusted-contractSig checkSignatures-loop-body-failure-v0-1 > $@
+
+$(SPECS_DIR)/$(SPEC_GROUP)/checkSignatures-loop-body-failure-v0-2-spec.k: $(TMPLS) $(SPEC_INI)
+	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) checkSignatures-loop-body-failure-v0-2 signatureSplit-trusted copy-trusted-data copy-trusted-contractSig checkSignatures-loop-body-failure-v0-2 > $@
+
 $(SPECS_DIR)/$(SPEC_GROUP)/checkSignatures-loop-body-failure-v1-owner-spec.k: $(TMPLS) $(SPEC_INI)
 	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) checkSignatures-loop-body-failure-v1-owner signatureSplit-trusted checkSignatures-loop-body-failure-v1-owner > $@
 
@@ -135,3 +144,6 @@ $(SPECS_DIR)/$(SPEC_GROUP)/checkSignatures-loop-body-failure-v_else-ecrecEmpty-s
 
 $(SPECS_DIR)/$(SPEC_GROUP)/checkSignatures-loop-body-failure-v_else-not-ecrecEmpty-spec.k: $(TMPLS) $(SPEC_INI)
 	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) checkSignatures-loop-body-failure-v_else-not-ecrecEmpty signatureSplit-trusted checkSignatures-loop-body-failure-v_else-not-ecrecEmpty > $@
+
+$(SPECS_DIR)/$(SPEC_GROUP)/checkSignatures-loop-body-exception-v0-spec.k: $(TMPLS) $(SPEC_INI)
+	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) checkSignatures-loop-body-exception-v0 signatureSplit-trusted copy-trusted-data copy-trusted-contractSig checkSignatures-loop-body-exception-v0 > $@

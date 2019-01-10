@@ -106,7 +106,7 @@ module ABSTRACT-SEMANTICS
   rule <k> #exec[CALL] => . ... </k>
        <output> _ => _ </output>
        <schedule> SCHED </schedule>
-       <wordStack> GASCAP : ACCTTO : VALUE : ARGSTART : ARGWIDTH : RETSTART : 0 : WS => 0 : WS </wordStack>
+       <wordStack> GASCAP : ACCTTO : VALUE : ARGSTART : ARGWIDTH : RETSTART : REWIDTH : WS => 0 : WS </wordStack>
        <pc> PCC </pc>
        <gas> #gas(INITGAS, NONMEM, MEM) => #gas(INITGAS, NONMEM +Int #callGas(SCHED, GASCAP, ACCTTO, VALUE, false), MEM) </gas>
        <previousGas> _ => #gas(INITGAS, NONMEM, MEM) </previousGas>

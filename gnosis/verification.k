@@ -163,6 +163,8 @@ module VERIFICATION
 
     rule #sizeWordStack(selectRange(_, _, WIDTH), SIZE) => SIZE +Int WIDTH
 
+    rule #take(#sizeWordStack(WS, 0), WS) => WS
+
 
   // ########################
   // Range
