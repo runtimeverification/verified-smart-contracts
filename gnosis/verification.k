@@ -323,6 +323,9 @@ module VERIFICATION
     syntax Bool ::= "#enoughValidSigs"  [function]
  // ---------------------------------------------
 
+    syntax Bool ::= "#checkSignaturesException" [function]
+ // ------------------------------------------------------
+
     syntax Int ::= "#checkSigsGasNonMem"  [function]
  // ------------------------------------------------
 
