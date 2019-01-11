@@ -37,6 +37,8 @@ SPEC_NAMES_GNOSIS_SAFE:=encodeTransactionData-public-1 \
                         checkSignatures-loop-body-failure-v_else-ecrecEmpty \
                         checkSignatures-loop-body-failure-v_else-not-ecrecEmpty \
                         checkSignatures-loop-body-exception-v0 \
+                        execTransaction-checkSigs1-gas0 \
+                        execTransaction-checkSigs1-gas1-safetxgas0-gasprice0-call0 \
                         execTransaction-checkSigs1-gas1-safetxgas0-gasprice0-call1-to \
                         execTransaction-checkSigs1-gas1-safetxgas1-call1-to-gasprice1-send1-origin
 
@@ -82,6 +84,12 @@ $(SPECS_DIR)/$(SPEC_GROUP)/encodeTransactionData-public-1-spec.k: $(TMPLS) $(SPE
 
 $(SPECS_DIR)/$(SPEC_GROUP)/encodeTransactionData-public-2-spec.k: $(TMPLS) $(SPEC_INI)
 	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) encodeTransactionData-public-2 encodeTransactionData-internal-trusted encodeTransactionData-public-2 > $@
+
+$(SPECS_DIR)/$(SPEC_GROUP)/execTransaction-checkSigs1-gas0-spec.k: $(TMPLS) $(SPEC_INI)
+	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) execTransaction-checkSigs1-gas0 encodeTransactionData-internal-trusted checkSignatures_trusted-success execTransaction-checkSigs1-gas0 > $@
+
+$(SPECS_DIR)/$(SPEC_GROUP)/execTransaction-checkSigs1-gas1-safetxgas0-gasprice0-call0-spec.k: $(TMPLS) $(SPEC_INI)
+	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) execTransaction-checkSigs1-gas1-safetxgas0-gasprice0-call0 encodeTransactionData-internal-trusted checkSignatures_trusted-success execTransaction-checkSigs1-gas1-safetxgas0-gasprice0-call0 > $@
 
 $(SPECS_DIR)/$(SPEC_GROUP)/execTransaction-checkSigs1-gas1-safetxgas0-gasprice0-call1-to-spec.k: $(TMPLS) $(SPEC_INI)
 	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) execTransaction-checkSigs1-gas1-safetxgas0-gasprice0-call1-to encodeTransactionData-internal-trusted checkSignatures_trusted-success execTransaction-checkSigs1-gas1-safetxgas0-gasprice0-call1-to > $@
