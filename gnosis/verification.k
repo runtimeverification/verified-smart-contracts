@@ -340,6 +340,9 @@ module VERIFICATION
     syntax Int ::= #loopGas ( Int , Int )  [function]  // startPC, endPC
  // --------------------------------------------------------------------
 
+    syntax KItem ::= "#handlePaymentSpecApplied"
+ // --------------------------------------------
+
 syntax Int  ::= #fii        ( WordStack ,       Int , WordStack , IMap , Int ) [function, smtlib(fii)] // first-invalid-signature-index
 syntax Bool ::= #isValid    ( WordStack , Int , Int , WordStack , IMap , Int , Bool ) [function, smtlib(isValid)]
 syntax Bool ::= #isValidSig ( WordStack , Int , Int , WordStack , IMap , Int ) [function, smtlib(isValidSig)]

@@ -42,7 +42,7 @@ SPEC_NAMES_GNOSIS_SAFE:=encodeTransactionData-public-1 \
                         execTransaction-checkSigs1-gas0 \
                         execTransaction-checkSigs1-gas1-safetxgas0-gasprice0-call0 \
                         execTransaction-checkSigs1-gas1-safetxgas0-gasprice0-call1-to \
-                        execTransaction-checkSigs1-gas1-safetxgas1-call1-to-gasprice1-send1-origin
+                        execTransaction-checkSigs1-gas1-safetxgas1-call1-to-gasprice1
 
 SPEC_NAMES_OWNER_MANAGER:=addOwnerWithThreshold-success-1 \
                           addOwnerWithThreshold-success-2 \
@@ -102,8 +102,8 @@ $(SPECS_DIR)/$(SPEC_GROUP)/execTransaction-checkSigs1-gas1-safetxgas0-gasprice0-
 $(SPECS_DIR)/$(SPEC_GROUP)/execTransaction-checkSigs1-gas1-safetxgas0-gasprice0-call1-to-spec.k: $(TMPLS) $(SPEC_INI)
 	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) execTransaction-checkSigs1-gas1-safetxgas0-gasprice0-call1-to encodeTransactionData-internal-trusted checkSignatures_trusted-success execTransaction-checkSigs1-gas1-safetxgas0-gasprice0-call1-to > $@
 
-$(SPECS_DIR)/$(SPEC_GROUP)/execTransaction-checkSigs1-gas1-safetxgas1-call1-to-gasprice1-send1-origin-spec.k: $(TMPLS) $(SPEC_INI)
-	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) execTransaction-checkSigs1-gas1-safetxgas1-call1-to-gasprice1-send1-origin encodeTransactionData-internal-trusted checkSignatures_trusted-success handlePayment-send-success-origin-trusted execTransaction-checkSigs1-gas1-safetxgas1-call1-to-gasprice1-send1-origin > $@
+$(SPECS_DIR)/$(SPEC_GROUP)/execTransaction-checkSigs1-gas1-safetxgas1-call1-to-gasprice1-spec.k: $(TMPLS) $(SPEC_INI)
+	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) execTransaction-checkSigs1-gas1-safetxgas1-call1-to-gasprice1 encodeTransactionData-internal-trusted checkSignatures_trusted-success handlePayment_trusted execTransaction-checkSigs1-gas1-safetxgas1-call1-to-gasprice1 > $@
 
 # Identical execution path with execution path of encodeTransactionData-public, so no point to activate it.
 $(SPECS_DIR)/$(SPEC_GROUP)/getTransactionHash-1-spec.k: $(TMPLS) $(SPEC_INI)
