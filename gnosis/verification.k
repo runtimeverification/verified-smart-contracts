@@ -282,7 +282,7 @@ module VERIFICATION
 
     rule I1 *Int A +Int I2 *Int A => (I1 +Int I2) *Int A
 
-    rule I1 *Int A +Int B +Int C +Int I2 *Int A => (I1 +Int I2) *Int A +Int B +Int C
+    rule I1 *Int A +Int B +Int C +Int D +Int I2 *Int A => (I1 +Int I2) *Int A +Int B +Int C +Int D
 
     // TODO: move to builtin
     rule N -Int N => 0
@@ -318,9 +318,21 @@ module VERIFICATION
   // Gnosis
   // ########################
 
-    // TODO: Replace with actual constraint
-    syntax Bool ::= "#checkSigsSuccess"  [function]
-  // ----------------------------------------------
+   // checkSignatures is only called once in the executeTransaction, we implicitly assumed the arguments of the following functions
+   // have additional arguments of checkSignatures.
+    syntax Bool ::= "#enoughValidSigs"  [function]
+ // ---------------------------------------------
+
+    syntax Int ::= "#checkSigsGasNonMem"  [function]
+ // ------------------------------------------------
+
+    syntax Int ::= #checkSigsFinalMemUsed ( Int )  [function]  // previous memory used
+ // ----------------------------------------------------------------------------------
+
+   // Constant functions are ground terms in kprover. Constraints on the ground terms will not be considered when evaluating conditions only consisting of ground terms.
+   // Thus, #checkSigsNextLoc has to take an argument and this argument should not be a constant.
+    syntax Int ::= #checkSigsNextLoc ( Int )  [function]  // previous memory used
+ // -----------------------------------------------------------------------------
 
     syntax Int ::= #loopGas ( Int , Int )  [function]  // startPC, endPC
  // --------------------------------------------------------------------

@@ -84,10 +84,10 @@ $(SPECS_DIR)/$(SPEC_GROUP)/encodeTransactionData-public-2-spec.k: $(TMPLS) $(SPE
 	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) encodeTransactionData-public-2 encodeTransactionData-internal-trusted encodeTransactionData-public-2 > $@
 
 $(SPECS_DIR)/$(SPEC_GROUP)/execTransaction-checkSigs1-gas1-safetxgas0-gasprice0-call1-to-spec.k: $(TMPLS) $(SPEC_INI)
-	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) execTransaction-checkSigs1-gas1-safetxgas0-gasprice0-call1-to encodeTransactionData-internal-trusted checkSignatures_dummy execTransaction-checkSigs1-gas1-safetxgas0-gasprice0-call1-to > $@
+	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) execTransaction-checkSigs1-gas1-safetxgas0-gasprice0-call1-to encodeTransactionData-internal-trusted checkSignatures_trusted-success execTransaction-checkSigs1-gas1-safetxgas0-gasprice0-call1-to > $@
 
 $(SPECS_DIR)/$(SPEC_GROUP)/execTransaction-checkSigs1-gas1-safetxgas1-call1-to-gasprice1-send1-origin-spec.k: $(TMPLS) $(SPEC_INI)
-	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) execTransaction-checkSigs1-gas1-safetxgas1-call1-to-gasprice1-send1-origin encodeTransactionData-internal-trusted checkSignatures_dummy handlePayment-send-success-origin-trusted execTransaction-checkSigs1-gas1-safetxgas1-call1-to-gasprice1-send1-origin > $@
+	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) execTransaction-checkSigs1-gas1-safetxgas1-call1-to-gasprice1-send1-origin encodeTransactionData-internal-trusted checkSignatures_trusted-success handlePayment-send-success-origin-trusted execTransaction-checkSigs1-gas1-safetxgas1-call1-to-gasprice1-send1-origin > $@
 
 # Identical execution path with execution path of encodeTransactionData-public, so no point to activate it.
 $(SPECS_DIR)/$(SPEC_GROUP)/getTransactionHash-1-spec.k: $(TMPLS) $(SPEC_INI)
