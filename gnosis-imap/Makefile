@@ -42,6 +42,9 @@ SPEC_NAMES_GNOSIS_SAFE:=encodeTransactionData-public-1 \
                         execTransaction-checkSigs1-gas0 \
                         execTransaction-checkSigs1-gas1-safetxgas0-gasprice0-call0 \
                         execTransaction-checkSigs1-gas1-safetxgas0-gasprice0-call1-to \
+                        execTransaction-checkSigs1-gas1-safetxgas1-call0-to-gasprice0 \
+                        execTransaction-checkSigs1-gas1-safetxgas1-call0-to-gasprice1 \
+                        execTransaction-checkSigs1-gas1-safetxgas1-call1-to-gasprice0 \
                         execTransaction-checkSigs1-gas1-safetxgas1-call1-to-gasprice1
 
 SPEC_NAMES_OWNER_MANAGER:=addOwnerWithThreshold-success-1 \
@@ -101,6 +104,15 @@ $(SPECS_DIR)/$(SPEC_GROUP)/execTransaction-checkSigs1-gas1-safetxgas0-gasprice0-
 
 $(SPECS_DIR)/$(SPEC_GROUP)/execTransaction-checkSigs1-gas1-safetxgas0-gasprice0-call1-to-spec.k: $(TMPLS) $(SPEC_INI)
 	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) execTransaction-checkSigs1-gas1-safetxgas0-gasprice0-call1-to encodeTransactionData-internal-trusted checkSignatures_trusted-success execTransaction-checkSigs1-gas1-safetxgas0-gasprice0-call1-to > $@
+
+$(SPECS_DIR)/$(SPEC_GROUP)/execTransaction-checkSigs1-gas1-safetxgas1-call0-to-gasprice0-spec.k: $(TMPLS) $(SPEC_INI)
+	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) execTransaction-checkSigs1-gas1-safetxgas1-call0-to-gasprice0 encodeTransactionData-internal-trusted checkSignatures_trusted-success handlePayment_trusted execTransaction-checkSigs1-gas1-safetxgas1-call0-to-gasprice0 > $@
+
+$(SPECS_DIR)/$(SPEC_GROUP)/execTransaction-checkSigs1-gas1-safetxgas1-call0-to-gasprice1-spec.k: $(TMPLS) $(SPEC_INI)
+	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) execTransaction-checkSigs1-gas1-safetxgas1-call0-to-gasprice1 encodeTransactionData-internal-trusted checkSignatures_trusted-success handlePayment_trusted execTransaction-checkSigs1-gas1-safetxgas1-call0-to-gasprice1 > $@
+
+$(SPECS_DIR)/$(SPEC_GROUP)/execTransaction-checkSigs1-gas1-safetxgas1-call1-to-gasprice0-spec.k: $(TMPLS) $(SPEC_INI)
+	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) execTransaction-checkSigs1-gas1-safetxgas1-call1-to-gasprice0 encodeTransactionData-internal-trusted checkSignatures_trusted-success handlePayment_trusted execTransaction-checkSigs1-gas1-safetxgas1-call1-to-gasprice0 > $@
 
 $(SPECS_DIR)/$(SPEC_GROUP)/execTransaction-checkSigs1-gas1-safetxgas1-call1-to-gasprice1-spec.k: $(TMPLS) $(SPEC_INI)
 	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) execTransaction-checkSigs1-gas1-safetxgas1-call1-to-gasprice1 encodeTransactionData-internal-trusted checkSignatures_trusted-success handlePayment_trusted execTransaction-checkSigs1-gas1-safetxgas1-call1-to-gasprice1 > $@
