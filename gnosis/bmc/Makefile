@@ -4,7 +4,7 @@ LOCAL_LEMMAS:=../abstract-semantics.k ../verification.k
 TMPLS:=../module-tmpl.k ../spec-tmpl.k
 
 SPEC_GROUP:=gnosis-bmc
-SPEC_INI:=gnosis-spec.ini
+SPEC_INI:=gnosis-bmc-spec.ini
 
 KPROVE_OPTS:=--smt-prelude $(abspath $(dir $(abspath $(lastword $(MAKEFILE_LIST))))/../evm.smt2) \
              --deterministic-functions --cache-func-optimized
