@@ -1,12 +1,12 @@
-BUILD_DIR:=.build
+BUILD_DIR:=../.build
 
-LOCAL_LEMMAS:=abstract-semantics.k verification.k
-TMPLS:=module-tmpl.k spec-tmpl.k
+LOCAL_LEMMAS:=../abstract-semantics.k ../verification.k
+TMPLS:=../module-tmpl.k ../spec-tmpl.k
 
-SPEC_GROUP:=gnosis
+SPEC_GROUP:=gnosis-bmc
 SPEC_INI:=gnosis-spec.ini
 
-KPROVE_OPTS:=--smt-prelude $(abspath $(dir $(abspath $(lastword $(MAKEFILE_LIST))))/evm.smt2) \
+KPROVE_OPTS:=--smt-prelude $(abspath $(dir $(abspath $(lastword $(MAKEFILE_LIST))))/../evm.smt2) \
              --deterministic-functions --cache-func-optimized
 
 SPEC_NAMES:=encodeTransactionData \
@@ -21,4 +21,4 @@ SPEC_NAMES:=encodeTransactionData \
             checkSignatures-thres-2-sig-v2-o0-neq-o1-success \
             checkSignatures-thres-2-sig-v2-o0-neq-o1-failure
 
-include ../resources/kprove.mak
+include ../../resources/kprove.mak
