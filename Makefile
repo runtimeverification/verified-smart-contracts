@@ -21,7 +21,7 @@ ifneq (,$(or $(findstring all,$(MODE)),$(findstring bihu,$(MODE))))
 endif
 
 ifneq (,$(or $(findstring all,$(MODE)),$(findstring gnosis,$(MODE))))
-SUBDIRS+=gnosis/test gnosis-imap
+SUBDIRS+=gnosis gnosis/bmc gnosis/test
 endif
 
 ifneq (,$(or $(findstring all,$(MODE)),$(findstring dom,$(MODE))))
@@ -32,6 +32,6 @@ endif
 SUBDIRS+=$(addprefix erc20/,$(ERC20))
 
 # FIXME: temporary
-SUBDIRS:=gnosis-imap
+SUBDIRS:=gnosis
 
 include resources/kprove-group.mak
