@@ -14,6 +14,7 @@ SPEC_NAMES_GNOSIS_SAFE:=encodeTransactionData-public-1 \
                         encodeTransactionData-internal-proof-1 \
                         encodeTransactionData-internal-proof-2 \
                         signatureSplit-proof \
+                        signatureSplit_external \
                         handlePayment-arithmetic-overflow-1 \
                         handlePayment-arithmetic-overflow-2 \
                         handlePayment-send-success-origin \
@@ -27,6 +28,7 @@ SPEC_NAMES_GNOSIS_SAFE:=encodeTransactionData-public-1 \
                         handlePayment-transferToken-failure-call_failure \
                         handlePayment-transferToken-failure-default-call_success \
                         handlePayment-transferToken-failure-default-call_failure \
+                        handlePayment_external \
                         checkSignatures-success \
                         checkSignatures-failure-1 \
                         checkSignatures-failure-2 \
@@ -44,6 +46,7 @@ SPEC_NAMES_GNOSIS_SAFE:=encodeTransactionData-public-1 \
                         checkSignatures-loop-body-failure-v_else-ecrecEmpty \
                         checkSignatures-loop-body-failure-v_else-not-ecrecEmpty \
                         checkSignatures-loop-body-exception-v0 \
+                        checkSignatures_external \
                         execTransaction-checkSigs-exception \
                         execTransaction-checkSigs0 \
                         execTransaction-checkSigs1-gas0 \
