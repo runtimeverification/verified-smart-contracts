@@ -286,7 +286,6 @@ module VERIFICATION
 
     // TODO: move to builtin
     rule N -Int N => 0
-      requires #notKLabel(N, "#infinity_VERIFICATION")
 
     rule 2 ^%Int X pow256 => 2 ^Int X
       requires 0 <=Int X andBool X <Int 256
