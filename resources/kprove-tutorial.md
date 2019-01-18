@@ -7,7 +7,7 @@ If you are an external contributor, then fork `verified-smart-contracts` first t
 Use these branches (unless you got other instructions): K: `gnosis`, evm-semantics: `gnosis`, verified-smart-contracts: `master`. 
 DO NOT follow build instructions in `evm-semantics` projects as they are known to be incomplete.
 
-Right now these 3 projects depend on each other in git level, like evm-smart-contracts has a git submodule for evm-semantics wich have a git submodule for k, but it's better not to use these dependencies but have them checked out separately. This way there are less chances you'll have issues when one of them gets updated on git.
+Right now these 3 projects depend on each other in git level, like evm-smart-contracts has a git submodule for evm-semantics which have a git submodule for k, but it's better not to use these dependencies but have them checked out separately. This way there are less chances you'll have issues when one of them gets updated on git.
 
 Let's consider you have 3 path variables for home dir of the 3 projects: `$K_HOME`, `$KEVM`, `$VSC`.
 
