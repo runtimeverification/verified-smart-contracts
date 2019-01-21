@@ -3,8 +3,8 @@
 ## Methodology
 
 In this section we analyzed for security issues the core GnosisSafe contract.
-The version audited is [this](https://github.com/gnosis/safe-contracts/commit/14495428954366dcf812acfa11e54c81b186332d)
-compiled with Solidity v0.5.0. 
+The version audited is [commit 14495428954366dcf812acfa11e54c81b186332d](https://github.com/gnosis/safe-contracts/commit/14495428954366dcf812acfa11e54c81b186332d)
+, compiled with Solidity v0.5.0. 
 We only analyzed the core contract, without extensions, e.g. 
 [Proxy.sol](https://github.com/gnosis/safe-contracts/blob/14495428954366dcf812acfa11e54c81b186332d/contracts/proxies/Proxy.sol)
 acting as proxy for [GnosisSafe.sol](https://github.com/gnosis/safe-contracts/blob/bfb8abac580d76dd44f68307a5356a919c6cfb9b/contracts/GnosisSafe.sol) .
@@ -15,7 +15,23 @@ In addition, we inspected the code for vulnerabilities not present in the list,
 with focus on external contract calls.
 
 Next we present the list of discovered security issues, followed by our 
-assessment of vulnerabilities from Sigmaprime Collection.
+assessment of vulnerabilities.
+
+## Disclaimers
+
+This report does not constitute legal or investment advice. The preparers of this report
+present it as an informational exercise documenting the due diligence involved in the secure
+development of the target contract only, and make no material claims or guarantees concerning
+the contract’s operation post-deployment. The preparers of this report assume no
+liability for any and all potential consequences of the deployment or use of this contract.
+
+Smart contracts are still a nascent software arena, and their deployment and public
+offering carries substantial risk. This report makes no claims that its analysis is fully comprehensive,
+and recommends always seeking multiple opinions and audits.
+
+The possibility of human error in the manual review process is very real, and we recommend
+seeking multiple independent opinions on any claims which impact a large number of
+funds.
 
 ## Security Vulnerabilities
 
@@ -24,12 +40,13 @@ assessment of vulnerabilities from Sigmaprime Collection.
 To protect from reentrancy attacks, GnosisSafe uses storage field `nonce`, 
 which is incremented during each transaction. 
 However, there are 3 external calls performed during a transaction, 
-which all have to be guarded by reentrancy.
+which all have to be guarded from reentrancy.
 The main external call managed by this transaction (hereafter referred as "payload") is performed 
 [here](https://github.com/gnosis/safe-contracts/blob/bfb8abac580d76dd44f68307a5356a919c6cfb9b/contracts/GnosisSafe.sol#L95).
 After payload is executed, the original caller or another account specified in transaction data is refunded for gas cost
 [here](https://github.com/gnosis/safe-contracts/blob/bfb8abac580d76dd44f68307a5356a919c6cfb9b/contracts/GnosisSafe.sol#L102).
-Both these calls are performed after the nonce is incremented, thus it is not possible execute same transaction multiple times
+Both these calls are performed after the nonce is incremented.
+Consequently, it is not possible to execute the same transaction multiple times
 from within these calls.
 
 However, there is one more external call possible during 
@@ -48,9 +65,6 @@ thus the malicious owner will call this transaction with a lot of gas allocated.
 The most likely beneficiary of this attack is the owner who initiated the transaction.
 Yet if a benign owner calls another malicious contract for the signature validation, 
 the malicious contract can exploit it even if he is not an owner.
-
-**Recommendation:**
-Increment `nonce` before calling `checkSignatures`.
 
 #### Attack Scenario
 
@@ -74,9 +88,12 @@ Conditions required for this attack to be possible:
 
 8. In the end, Owner 1 receives into his account 10X the amount of tokens approved by the other owners.
 
+**Recommendation:**
+Increment `nonce` before calling `checkSignatures`.
+
 ### `ISignatureValidator` gas and refund abuse
 The account that initiated the transaction can consume large amounts of gas for free, unnoticed by other owners, and possibly receive a refund larger than the amount of gas consumed.
-This vulnerability is specific to GnosisSafe and is not present in Sigmaprime list.
+This vulnerability is specific to GnosisSafe; it is not listed in our reference list of known vulnerabilities.
 
 The attack is possible due to a combination of factors.
 First, GnosisSafe emits a refund at the end of transaction, for the amount of gas consumed.
@@ -101,7 +118,7 @@ We again have to analyze the situation on all 3 external call sites.
 For the payload external call, gas is limited by transaction parameter `safeTxGas`.
 This parameter must be set and validated by other owners when token refund is used, thus abuse is not possible.
 For the external call that sends the refund in token, gas is limited to remaining gas for transaction minus 10000: 
-[source](https://github.com/gnosis/safe-contracts/blob/14495428954366dcf812acfa11e54c81b186332d/contracts/common/SecuredTokenTransfer.sol#L23)
+[source](https://github.com/gnosis/safe-contracts/blob/14495428954366dcf812acfa11e54c81b186332d/contracts/common/SecuredTokenTransfer.sol#L23).
 This looks like a poor limit, but in order to be abused, the transaction initiator must have control over token account,
 which looks like an unlikely scenario.
 
@@ -116,44 +133,42 @@ Thus this remains a valid vulnerability.
 Considering the specific functionality of `ISignatureValidator`, we recommend limiting the gas when calling `ISignatureValidator` to a small predetermined value. Careful gas limits on external contract calls are a common security practice. For example when tokens are sent in Solidity through `msg.sender.send(ethAmt)`, gas is automatically limited to `2300`([source](https://medium.com/@JusDev1988/reentrancy-attack-on-a-smart-contract-677eae1300f2)).
 
 ## List of Analyzed Common Attack Vectors
-In this section enumerate all attack vectors from
+In this section we enumerate all attack vectors from
 [Sigmaprime Collection](https://blog.sigmaprime.io/solidity-security.html)
 and describe how we analyzed them in GnosisSafe. The numbering correspond to that in Sigmaprime List.
 Please consult the link above for details.
 
-1. Reentrancy vulnerability in function `checkSignatures`, on external call to `ISignatureValidator`.
-
-2. ISignatureValidator gas+refund abuse.
-
-=Outcome for each attack vector=
 **1. Re-entrancy vulnerability** is present, as described in previous section.
 
-**2. Arighmetic over/undeflows**. All `+/-/*` operations in GnosisSafe are performed using `SafeMath` library,
+**2. Arithmetic over/undeflows**. All `+/-/*` operations in GnosisSafe are performed using `SafeMath` library,
 which reverts whenever an overflow/underflow occurs. Thus GnosisSafe does not have this issue.
 
 **3. Unexpected Ether.** The default function in `Proxy.sol` is payable, and Ether is used by GnosisSafe to emit refunds.
 The contract does not have issues related to presence of a specific amount of ether.
     
-**4. Delegatecall.** The external call managed by SafeContracts app can be a `delegatecall`.
-The type of the call performed is a transaction parameter which has to be approved by owners.
-However, it is a dangerous type of transaction that can alter the GnosisSafe persistent data in unexpected ways.
-This danger is properly described in GnosisSafe documentation.
-Other [security audits](https://github.com/gnosis/safe-contracts/blob/68685cd811398ef229c719de0a108732443f71c1/docs/Gnosis_Safe_Audit_Report.pdf)
-recommend disabling `delegatecall` functionality unless there is an important use case for it.
-As it currently stands, it depends on the client application user interface to properly communicate to the owners
-the type of call performed. This is outside the scope of the present audit.
+**4. Delegatecall.**
+The payload call performed by GnosisSafe may be not only the regular `call`, but also a `delegatecall` or `create`.
+The call type is managed by transaction parameter `operation`, e.g. must be signed by other owners.
+However, `delegatecall` is a dangerous type of transaction that can alter the GnosisSafe persistent data in unexpected ways.
+This danger is properly described in the GnosisSafe documentation.
+An earlier security audit [for GnosisSafe](https://github.com/gnosis/safe-contracts/blob/68685cd811398ef229c719de0a108732443f71c1/docs/Gnosis_Safe_Audit_Report.pdf)
+recommends disabling `delegatecall` and `create` entirely unless there is an important use case for it.
+As it currently stands, it depends on the GnosisSafe client application to properly communicate to the owners
+the type of call performed, and the dangers involved.
+This is outside the scope of the present audit.
 
-**5. Default Visibilities.** All functions have the visibility explicitly declared, and only functions that HAVE to be
+**5. Default Visibilities.** All functions have the visibility explicitly declared, and only functions that *must* be
     `public/external` are declared as such. Thus no functions use the default public visibility.
 
 **6. Entropy Illusion.** GnosisSafe does not try to simulate random events. Thus the issue is unrelated to GnosisSafe.
 
 **7. Delegating functionality to external contracts.** 
-GnosisSafe contracts use [proxy pattern](https://blog.gnosis.pm/solidity-delegateproxy-contracts-e09957d0f201).
+GnosisSafe uses the [proxy pattern](https://blog.gnosis.pm/solidity-delegateproxy-contracts-e09957d0f201).
 Each instantiation of the safe deploys only the lightweight `Proxy.sol` contract, which delegates (via `delegatecall`) almost all calls
 to the proper `GnosisSafe.sol` deployed in another account. This reduces the cost of instantiating the safe and allows
 future upgrades.
-In order to upgrade the implementation, the contract account has to call `changeMaterCopy` and specify the new master address.
+The contract account can upgrade the implementation by calling `GnosisSafe.changeMasterCopy()` with the address
+where the updated GnosisSafe code is deployed.
 This function can only be called from the proxy account, thus is secure.
 This pattern presents a security issue when the address of the master cannot be inspected by the contract users,
 and they have no way to audit its security.
@@ -177,7 +192,7 @@ In GnosisSafe, all the data from which refund token and amount are computed is g
 thus the issue is not present.
 
 **11. Denial of Service.**
-Users that are not owners cannot alter the persistent state of this contract, or use it to call
+Non-owners cannot alter the persistent state of this contract, or use it to call
 external contracts. Thus no external DoS attack is possible.
 In principle if an owner loses the private key to his contract and can no longer exercise his duties to
 sign transactions, this would result in some hindrance. However, the list of owners can always
