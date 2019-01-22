@@ -901,11 +901,17 @@ An external call to this function will silently terminates with no effect (and n
 #### Pre-conditions:
 
 No overflow:
-- `threshold` is small enough to avoid overflow.
 - The input stack size is small enough to avoid the stack overflow.
 - The maximum memory location accessed is small enough to avoid the integer overflow for the pointer arithmetic.
 
 Assuming the no-overflow conditions is practically reasonable. If they are not satisfied, the function will throw.
+
+No wrap-around:
+- `threshold` is small enough to avoid overflow (wrap-around).
+
+Assuming the no-wrap-around condition requires the corresponding contract invariant.
+In the current GnosisSafe contract, assuming the invariant is practically reasonable considering the resource limitation (such as gas).
+If it is not satisfied, the function may have unexpected behaviors.
 
 Well-formed input:
 - Every owner (i.e., some `o` such that `owners[o] =/= 0`) is within the range of `address`. Otherwise, the function simply truncates the higher bits when validating the signatures.
@@ -917,6 +923,15 @@ The first three conditions are satisfied in all calling contexts of the current 
 In particular, the first condition is part of the contract invariant.
 
 However, the last condition should be satisfied by the client when he calls `execTransaction`, since the current contract omits the well-formedness check of the signature encoding.
+
+Non-interfering external contract call:
+- The external contract call does not change the current (i.e., the proxy) storage.
+
+The non-interfering external contract call assumption is an under-approximation of all possible behaviors, and thus may lead to missing some behaviors, but it enables the modular reasoning of the function.
+
+NOTE:
+A conservative abstraction (i.e., an over-approximation) is possible by assuming that the external contract call may update all deployed accounts (i.e., their balance, storage, nonce, and even code!) and create some new accounts, but never delete an existing account (since the SELFDESTRUCT opcode effect is applied only after the current transaction finishes).
+However, such an abstraction is too crude and does not necessarily lead to a better reasoning either.
 
 
 
@@ -1569,6 +1584,62 @@ PC_FUN_START: 18250
 
 
 ### Function execTransaction
+
+`execTransaction` is an external function that executes the given transaction.
+
+We consider only the case of `Enum.Operation.Call` operation (i.e., `operation == 0`).
+The other two cases are out of the scope of the current engagement.
+
+#### Stack and memory:
+
+Since it is an external function, it starts with a fresh VM (i.e., both the stack and the memory are empty, the PC is 0, etc.)
+
+
+#### State update:
+
+The function checks the validity of `signatures`, and reverts if not valid.
+
+Then it increases `nonce`, and calls `execute` with the given transaction.
+
+It finally calls `handlePayment`.
+
+
+The function has the following non-trivial behaviors:
+- `checkSignatures` may revert, which immediately terminates the current VM, without returning to `execTransaction`.
+- `execute` does NOT reverts, even if the given transaction execution throws or reverts. The return value of the given transaction, if any, is silently ignored.
+  - However, `execute` may still throw for some cases (e.g., when `operation` is not within the range of `Enum.Operation`).
+- `handlePayment` may throw or revert, and in that case, `execTransaction` reverts (i.e., the given transaction execution is reverted as well, and no ExecutionFailed event is logged).
+
+
+#### Function visibility and modifiers:
+
+`msg.value` must be zero, since the function is not `payable`.  Otherwise, it throws.
+
+
+#### Pre-conditions:
+
+No wrap-around:
+- `nonce` is small enough to avoid overflow (wrap-around).
+
+Assuming the no-wrap-around condition requires the corresponding contract invariant.
+In the current GnosisSafe contract, assuming the invariant is practically reasonable considering the resource limitation (such as gas).
+If it is not satisfied, the function may have unexpected behaviors.
+
+Well-formed input:
+- The value of the address arguments are within the range of `address`, i.e., the first 96 (= 256 - 160) bits are zero. Otherwise, the function simply ignores (i.e., truncates) the fist 96 bits.
+- The maximum size of `data` and `signatures` is 2^32. Otherwise, it reverts. (The bound is practically reasonable considering the current block gas limit. See the buffer size limit discussion.)
+
+These conditions should be satisfied by the client when he calls `execTransaction`.
+
+Non-interfering external contract call:
+- The external contract call does not change the current (i.e., the proxy) storage.
+
+The non-interfering external contract call assumption is an under-approximation of all possible behaviors, and thus may lead to missing some behaviors, but it enables the modular reasoning of the function.
+
+NOTE:
+A conservative abstraction (i.e., an over-approximation) is possible by assuming that the external contract call may update all deployed accounts (i.e., their balance, storage, nonce, and even code!) and create some new accounts, but never delete an existing account (since the SELFDESTRUCT opcode effect is applied only after the current transaction finishes).
+However, such an abstraction is too crude and does not necessarily lead to a better reasoning either.
+
 
 
 #### Mechanized formal specification:
