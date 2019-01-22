@@ -114,14 +114,14 @@ The function does not update the storage, as it is marked `pure`.
 
 No overflow:
 - The input stack size is small enough to avoid the stack overflow.
-- The maximum memory location accessed, i.e., `SIGS_LOC + 32 + (65 * POS + 65)`, is small enough to avoid the integer overflow
+- The maximum memory location accessed, i.e., `SIGS_LOC + 32 + (65 * POS + 65)`, is small enough to avoid the integer overflow for the pointer arithmetic.
 
 Assuming the no-overflow conditions is practically reasonable. If they are not satisfied, the function will throw.
 
-Definedness:
+Well-formed input:
 - No index out of bound, i.e., `(POS + 1) * 65 <= SIGS_LEN`
 
-Currently, the definedness condition is satisfied in all calling contexts.
+The input well-formedness condition is satisfied in all calling contexts of the current GnosisSafe contract.
 
 
 ```ini
@@ -179,18 +179,18 @@ localMem: M
 
 #### Stack and memory:
 
-Although it is a public function, i.e., it can be called internally or externally, we consider only the internal use case, where the inputs are passed through the stack and the memory.
+The function is `public`, to which both internal and external calls can be made.
+One of the main differences between two types of calls is how to pass the input.
+The internal call passes the input through the stack and the memory, while the external call passes the input through the call data.
 
-The input stack consists of the following:
+For the internal call, the input stack is given as follows:
 ```
 NONCE : REFUND_RECEIVER : GAS_TOKEN : GAS_PRICE : DATA_GAS : SAFE_TX_GAS : OPERATION : DATA_LOC : VALUE : TO : RETURN_LOC : WS
 ```
-where the first ten elements are the function arguments in the reverse order, while `DATA_LEN_LOC` is a memory pointer to the actual data buffer.
+where the first ten elements are the function arguments in the reverse order, while `DATA_LOC` is a memory pointer to the actual buffer of `data`.
 Note that `OPERATION` is encoded as `unit8`.
 
-
 The memory stores the `data` buffer starting at the location `DATA_LOC`, where it first stores the size of the buffer, followed by the actual buffer bytes, as illustrated below:
-
 ```
 |<-  32  ->|<-    DATA_LEN    ->|
 +----------+--------------------+
@@ -201,15 +201,12 @@ The memory stores the `data` buffer starting at the location `DATA_LOC`, where i
 DATA_LOC   DATA_LOC + 32        DATA_LOC + 32 + DATA_LEN
 ```
 
-
-
 The output stack consists of:
 ```
 RETURN_LOC : OUT_LOC : WS
 ```
 
-The actual return value (buffer) is stored in the memory at the starting location `OUT_LOC`, as follows:
-
+For the internal call, the return value (buffer) is passed through the memory, being stored at the starting location `OUT_LOC`, as follows:
 ```
 |<- 32 ->|<- 1 ->|<- 1 ->|<-      32      ->|<-    32    ->|
 +--------+-------+-------+------------------+--------------+
@@ -219,25 +216,24 @@ The actual return value (buffer) is stored in the memory at the starting locatio
 |        |               |                  |              |
 OUT_LOC  OUT_LOC + 32    OUT_LOC + 34       OUT_LOC + 66   OUT_LOC + 98
 ```
+Here the first 32 bytes denote the size of the buffer, and the remaining 66 bytes denote the result of `abi.encodePacked(byte(0x19), byte(0x01), domainSeparator, safeTxHash)`.
+Note that the first two elements, `0x19` and `0x01`, are not aligned, because of the use of `abi.encodePacked` instead of `abi.encode`.
+Also, `SAFE_TX_HASH` is the result of `abi.encode(SAFE_TX_TYPEHASH, to, value, keccak256(data), operation, safeTxGas, dataGas, gasPrice, gasToken, refundReceiver, _nonce)`, where each argument is 32-byte aligned with zero padding on the left.
 
-The first 32 bytes denote the length of the buffer, and the remaining 66 bytes denote the result of `abi.encodePacked(byte(0x19), byte(0x01), domainSeparator, safeTxHash)`.  Note that the first two elements, `0x19` and `0x01`, are not aligned, because of the use of `abi.encodePacked` instead of `abi.encode`.
 
-Here, `SAFE_TX_HASH` is the result of `abi.encode(SAFE_TX_TYPEHASH, to, value, keccak256(data), operation, safeTxGas, dataGas, gasPrice, gasToken, refundReceiver, _nonce)`, where each argument is 32-byte aligned with zero padding on the left.
-
-
-NOTE: If this function is called externally, the return value is encoded as follows:
-
+For the external call, on the other hand, the return value (buffer) is encoded, in the ABI format, as follows:
 ```
 |<- 32 ->|<- 32 ->|<- 1 ->|<- 1 ->|<-      32      ->|<-    32    ->|<- 30 ->|
 +--------+--------+-------+-------+------------------+--------------+--------+
 |   32   |   66   |  0x19 |  0x01 | DOMAIN_SEPARATOR | SAFE_TX_HASH |    0   |
 +--------+--------+-------+-------+------------------+--------------+--------+
 ```
-Here, the prefix (the first 32 bytes) and the postfix (the last 30 bytes) are attached.  The prefix is the offset to the start of the result buffer, and the postfix is the zero padding for the alignment.
+Here the prefix (the first 32 bytes) and the postfix (the last 30 bytes) are attached, compared to that of the internal call.
+The prefix is the offset to the start of the return value buffer, and the postfix is the zero padding for the alignment.
 
 
 
-The output memory is as follows:
+For the internal call, the output memory is as follows:
 ```
 |<-  32  ->|<-    DATA_LEN    ->|<- X ->|<-               384                 ->|<- 32 ->|<- 1 ->|<- 1 ->|<-      32      ->|<-    32    ->|
 +----------+--------------------+-------+---------------------------------------+--------+-------+-------+------------------+--------------+
@@ -251,39 +247,42 @@ DATA_LOC   DATA_LOC + 32        |       DATA_LOC + 32 + ceil32(DATA_LEN)        
                                                                                 OUTPUT_LOC
 ```
 where `X = ceil32(DATA_LEN) - DATA_LEN`.
+Here the function writes to the memory starting from `DATA_LOC + 32 + ceil32(DATA_LEN)`.
+The first 384 bytes are used for executing `keccak256` to compute `safeTxHash`, i.e., 352 bytes for preparing for 11 arguments (= 32 * 11), and 32 bytes for holding the return value.
+The next 98 bytes are used for passing the return value, as described above.
 
-The function writes to the memory starting from `DATA_LOC + 32 + ceil32(DATA_LEN)`.  The first 384 bytes are used for executing `keccak256` to compute `safeTxHash`, i.e., 352 bytes for preparing for 11 arguments (= 32 * 11), and 32 bytes for holding the return value.  The next 98 bytes are used for passing the return value, as described above.
 
-
-
-#### Other Behaviors
-
-The function does not update the storage, as it is specified as a view function.
-
-`msg.value` must be zero, since the function is not payable.
-Otherwise, it throws.
+Note that the external call results in the same output memory, but the memory is not shared by the caller, and does not affect the caller's memory.
 
 
 
-#### Pre-condition
+#### Function visibility and modifiers:
 
+The function does not update the storage, as it is marked `view`.
 
-We assume that:
-- the call depth is small enough to avoid the call depth overflow
-- the size of stack is small enough to avoid the stack overflow
-- the maximum memory location accessed, i.e., `DATA_LOC + 32 + ceil32(DATA_LEN) + 482`, is small enough to avoid the integer overflow
-
-The above assumptions are practically reasonable. If they are not satisfied, the function will throw.
-
-
-We also assume that:
-- the `to`, `gasToken`, and `refundReceiver` argument values are all within the range of addresses, i.e., its first 96 (= 256 - 160) bits are zero. Otherwise, the fist 96 bits are simply ignored.
-- the `operation` is either 0, 1, or 2.
-- the maximum size of `data` is 2^32. (This is practically reasonable bound considering the current block gas limit. See the size limit discussion.)
+For the external call, `msg.value` must be zero, since the function is not `payable`.  Otherwise, it throws.
 
 
 
+#### Pre-conditions:
 
+No overflow:
+- For the external call, the call depth is small enough to avoid the call depth overflow.
+- For the internal call, the input stack size is small enough to avoid the stack overflow.
+- The maximum memory location accessed, i.e., `DATA_LOC + 32 + ceil32(DATA_LEN) + 482`, is small enough to avoid the integer overflow for the pointer arithmetic.
+
+Assuming the no-overflow conditions is practically reasonable. If they are not satisfied, the function will throw.
+
+
+Well-formed input:
+- The `to`, `gasToken`, and `refundReceiver` argument values are all within the range of `address`, i.e., the first 96 (= 256 - 160) bits are zero. Otherwise, the function simply ignores (i.e., truncates) the fist 96 bits.
+- The `operation` is either 0, 1, or 2.  Otherwise, the `execute` function (defined at `Executor.sol`) will throw.
+- The maximum size of `data` is 2^32. Otherwise, it reverts. (The bound is practically reasonable considering the current block gas limit. See the buffer size limit discussion.)
+
+The input well-formedness conditions are satisfied in all calling contexts of the current GnosisSafe contract.
+
+
+Below is the specification for the internal call.
 
 ```ini
 [encodeTransactionData-internal]
@@ -439,7 +438,11 @@ localMem: INIT_MEM =>
     andBool DATA_BUF          ==K           selectRange(INIT_MEM, DATA_BUF_LOC,         DATA_LEN)
     andBool #buf(32, 0)       ==K           selectRange(INIT_MEM, INIT_USED_MEM_ACTUAL, 32)
 +attribute: [trusted, matching(#gas)]
+```
 
+Below is the specification for the external call.
+
+```ini
 [encodeTransactionData-public]
 ; output = bytes32(32) bytes32(66) bytes1(0x19) bytes1(0x1) bytes32(DOMAIN_SEPARATOR) bytes32(SAFE_TX_HASH) bytes30(0)
 ; size = 160
@@ -517,7 +520,13 @@ proxy_storage:
 [encodeTransactionData-public-2]
 +requires:
     andBool 0 <Int DATA_LEN
+```
 
+### Function getTransactionHash
+
+Although it is not in the scope of the current engagement, we provide the specification of `getTransactionHash` for a future reference.
+
+```ini
 [getTransactionHash]
 k: (#execute => #halt) ~> _
 output: _ => #padToWidth(32, #asByteStack(keccak(TRANSACTION_DATA)) )
@@ -591,41 +600,66 @@ proxy_storage:
 [getTransactionHash-2]
 +requires:
     andBool 0 <Int DATA_LEN
+```
 
-; Simplified handlePayment
-[handlePayment_trusted]
-k: (#execute => #handlePaymentSpecApplied) ~> _
-output: _
-statusCode: _
-callStack: _
-this: #PROXY_ID
-msg_sender: MSG_SENDER
-callData: _
-callValue: 0
-wordStack: REFUND_RECEIVER : GAS_TOKEN : GAS_PRICE : DATA_GAS : START_GAS : RETURN_LOC : WS
-localMem: _
-pc: 19729
-gas: _
-memoryUsed: _
-log: _
-refund: _
-coinbase: _
-+requires:
-    andBool #rangeAddress(MSG_SENDER)
-    andBool #rangeUInt(256, START_GAS)
-    andBool #rangeUInt(256, DATA_GAS)
-    andBool #rangeUInt(256, GAS_PRICE)
-    andBool #rangeAddress(GAS_TOKEN)
-    andBool #rangeAddress(REFUND_RECEIVER)
+### Function handlePayment
 
-    andBool #range(0 <= #sizeWordStack(WS) <= 1000)
-    // call send() in the handlePayment
-    andBool #range(0 <= CD < 1023)
-    ; GAS_LEFT <Int START_GAS is always satisfied in the context of execTransction
-    ;andBool GAS_LEFT <Int START_GAS
-    andBool 0 <Int GAS_PRICE
-+attribute: [trusted]
+`handlePayment` is a private function that pays the gas cost to the receiver in either Ether or tokens.
 
+Here we consider only the case of payment in Ether. The token payment is out of the scope of the current engagement.
+
+#### Stack and memory:
+
+All of the input arguments are passed through the stack, and no memory is required since they are all fixed-size:
+```
+REFUND_RECEIVER : GAS_TOKEN : GAS_PRICE : DATA_GAS : START_GAS : RETURN_LOC : WS
+```
+
+The function has no return value, and thus the output stack, if succeeds, is as follows:
+```
+RETURN_LOC : WS
+```
+
+#### State update:
+
+The payment amount is calculated by the following formula:
+```
+((START_GAS - GAS_LEFT) + DATA_GAS) * GAS_PRICE
+```
+where `GAS_LEFT` is the result of `gasleft()` at line 115.
+
+If the arithmetic overflow occurs when evaluating the above formula, the function reverts.
+
+
+If no overflow occurs, `receiver` is set to `tx.origin` if `refundReceiver` is zero, otherwise it is set to `refundReceiver`. Thus `receiver` is non-zero.
+
+Finally, the amount of Ether is sent to `receiver`.
+If `send` succeeds, then the function returns (with no return value). Otherwise it reverts.
+
+
+Here, we have little concern about the reentrancy for `send`, since there is no critical statement after `send`, and also the function is private.
+
+
+#### Function visibility and modifiers:
+
+The function cannot be directly called from outside, as it is `private`.
+An external call to this function will silently terminates with no effect (and no exception).
+
+
+#### Pre-conditions:
+
+No overflow:
+- The input stack size is small enough to avoid the stack overflow.
+
+Assuming the no-overflow conditions is practically reasonable. If they are not satisfied, the function will throw.
+
+Well-formed input:
+- The value of the address arguments are within the range of `address`, i.e., the first 96 (= 256 - 160) bits are zero. Otherwise, the function simply ignores (i.e., truncates) the fist 96 bits.
+
+The input well-formedness conditions are satisfied in all calling contexts of the current GnosisSafe contract.
+
+
+```ini
 [handlePayment]
 callStack: _
 this: #PROXY_ID
@@ -753,7 +787,44 @@ gas: #gas(INITGAS, NONMEMGAS, MEMGAS) => #gas(INITGAS, NONMEMGAS +Int #callGas(B
     andBool REFUND_RECEIVER ==Int #REFUND_RECEIVER
     andBool #callFailure(CALL_PC, #REFUND_RECEIVER)
 
+; Simplified handlePayment
+[handlePayment_trusted]
+k: (#execute => #handlePaymentSpecApplied) ~> _
+output: _
+statusCode: _
+callStack: _
+this: #PROXY_ID
+msg_sender: MSG_SENDER
+callData: _
+callValue: 0
+wordStack: REFUND_RECEIVER : GAS_TOKEN : GAS_PRICE : DATA_GAS : START_GAS : RETURN_LOC : WS
+localMem: _
+pc: 19729
+gas: _
+memoryUsed: _
+log: _
+refund: _
+coinbase: _
++requires:
+    andBool #rangeAddress(MSG_SENDER)
+    andBool #rangeUInt(256, START_GAS)
+    andBool #rangeUInt(256, DATA_GAS)
+    andBool #rangeUInt(256, GAS_PRICE)
+    andBool #rangeAddress(GAS_TOKEN)
+    andBool #rangeAddress(REFUND_RECEIVER)
 
+    andBool #range(0 <= #sizeWordStack(WS) <= 1000)
+    // call send() in the handlePayment
+    andBool #range(0 <= CD < 1023)
+    ; GAS_LEFT <Int START_GAS is always satisfied in the context of execTransction
+    ;andBool GAS_LEFT <Int START_GAS
+    andBool 0 <Int GAS_PRICE
++attribute: [trusted]
+```
+
+### Function checkSignatures
+
+```ini
 [checkSignatures_trusted_exception]
 k: (#execute => #halt) ~> _
 output: _ => _
@@ -1344,7 +1415,11 @@ dynamic_start: SIGS_LOC +Int #sigS({SIGS_BUF}, I) +Int 32
 contract_sig_len: #asWord(#bufSeg({SIGS_BUF}, #sigS({SIGS_BUF}, I), 32))
 trailing_zero_start: NEXT_LOC +Int #ceil32(TX_DATA_LEN) +Int 132 +Int {CONTRACT_SIG_LEN}
 ensures:
+```
 
+### Function execTransaction
+
+```ini
 [execTransaction]
 k: (#execute => #halt) ~> _
 callStack: _
@@ -1595,11 +1670,13 @@ statusCode: _ => _
 pc: 0 => 19729
 +requires:
     andBool 0 <Int GAS_PRICE
+```
 
-;
-; OwnerManager
-;
+## OwnerManager contract
 
+### Function addOwnerWithThreshold
+
+```ini
 [addOwnerWithThreshold]
 k: (#execute => #halt) ~> _
 callStack: _
@@ -1770,7 +1847,11 @@ statusCode: _ => EVMC_REVERT
     ;   andBool NEW_THRESHOLD <=Int OWNERCOUNT
     ;   There has to be at least one safe owner
     ;   andBool NEW_THRESHOLD >=Int 1
+```
 
+### Function removeOwner
+
+```ini
 [removeOwner]
 k: (#execute => #halt) ~> _
 output: _ => _
@@ -1905,7 +1986,11 @@ log: _ => _
     ; Requirements from code that don't hold
     ; andBool NEW_THRESHOLD >Int OWNERCOUNT -Int 1 // negation of this req. in the pre-condition
     andBool NEW_THRESHOLD ==Int 0
+```
 
+### Function swapOwner
+
+```ini
 [swapOwner]
 k: (#execute => #halt) ~> _
 output: _ => _
@@ -1994,11 +2079,13 @@ log: _
        orBool OLD_OWNER ==Int 0
        orBool OLD_OWNER ==Int #SENTINEL
        orBool INIT_PREV_OWNER =/=Int OLD_OWNER )
+```
 
-;
-; ModuleManager
-;
+## ModuleManager contract
 
+### Function enableModule
+
+```ini
 [enableModule]
 k: (#execute => #halt) ~> _
 output: _ => _
@@ -2063,7 +2150,11 @@ log: _
     andBool ( MODULE ==Int 0
        orBool MODULE ==Int #SENTINEL
        orBool INIT_MODULE =/=Int 0 )
+```
 
+### Function disableModule
+
+```ini
 [disableModule]
 k: (#execute => #halt) ~> _
 output: _ => _
@@ -2128,7 +2219,11 @@ log: _
     andBool ( MODULE ==Int 0
        orBool MODULE ==Int #SENTINEL
        orBool INIT_PREV_MODULE =/=Int MODULE )
+```
 
+### Function execTransactionFromModule
+
+```ini
 [execTransactionFromModule]
 k: (#execute => #halt) ~> _
 output: _ => _
@@ -2170,11 +2265,13 @@ output: _ => _
 +requires:
     ; only added modules can execute the transaction
     andBool INIT_MSG_SENDER ==Int 0
+```
 
-;
-; MasterCopy
-;
+## MasterCopy contract
 
+### Function changeMasterCopy
+
+```ini
 [changeMasterCopy]
 k: (#execute => #halt) ~> _
 output: _ => _
@@ -2226,9 +2323,11 @@ statusCode: _ => EVMC_REVERT
 +requires:
     andBool MSG_SENDER ==Int #PROXY_ID
     andBool NEW_MASTER_COPY ==Int 0
+```
 
+## Important constants
 
-
+```ini
 [pgm]
 compiler: "Solidity"
 ; address masterCopy
