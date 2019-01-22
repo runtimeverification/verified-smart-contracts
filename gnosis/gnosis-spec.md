@@ -124,6 +124,10 @@ Well-formed input:
 The input well-formedness condition is satisfied in all calling contexts of the current GnosisSafe contract.
 
 
+#### Mechanized formal specification:
+
+Below is the specification to be verified against the GnosisSafe contract bytecode.
+
 ```ini
 [signatureSplit]
 k: #execute ~> _
@@ -163,7 +167,11 @@ localMem: storeRange(storeRange(M, SIGS_LOC        , 32      , #buf(32, SIGS_LEN
                                    SIGS_LOC +Int 32, SIGS_LEN, #buf(SIGS_LEN, SIGNATURES))
 +requires:
     andBool SIGS_BUF ==K #buf(SIGS_LEN, SIGNATURES)
+```
 
+Below is the specification to be used when verifying other (caller) functions.
+
+```ini
 [signatureSplit-trusted]
 localMem: M
 +requires:
@@ -282,7 +290,11 @@ Well-formed input:
 The input well-formedness conditions are satisfied in all calling contexts of the current GnosisSafe contract.
 
 
-Below is the specification for the internal call.
+#### Mechanized formal specification:
+
+##### For internal call:
+
+Below is the specification to be verified against the GnosisSafe contract bytecode.
 
 ```ini
 [encodeTransactionData-internal]
@@ -411,7 +423,11 @@ proxy_storage: STORAGE
 [encodeTransactionData-internal-proof-2]
 +requires:
     andBool 0 <Int DATA_LEN
+```
 
+Below is the specification to be used when verifying other (caller) functions.
+
+```ini
 [encodeTransactionData-internal-trusted]
 localMem: INIT_MEM =>
   storeRange( storeRange( storeRange( storeRange( storeRange( storeRange(
@@ -440,7 +456,9 @@ localMem: INIT_MEM =>
 +attribute: [trusted, matching(#gas)]
 ```
 
-Below is the specification for the external call.
+##### For external call:
+
+Below is the specification to be verified against the GnosisSafe contract bytecode.
 
 ```ini
 [encodeTransactionData-public]
@@ -659,6 +677,10 @@ Well-formed input:
 The input well-formedness conditions are satisfied in all calling contexts of the current GnosisSafe contract.
 
 
+#### Mechanized formal specification:
+
+Below is the specification to be verified against the GnosisSafe contract bytecode.
+
 ```ini
 [handlePayment]
 callStack: _
@@ -786,7 +808,11 @@ gas: #gas(INITGAS, NONMEMGAS, MEMGAS) => #gas(INITGAS, NONMEMGAS +Int #callGas(B
 +requires:
     andBool REFUND_RECEIVER ==Int #REFUND_RECEIVER
     andBool #callFailure(CALL_PC, #REFUND_RECEIVER)
+```
 
+Below is the specification to be used when verifying other (caller) functions.
+
+```ini
 ; Simplified handlePayment
 [handlePayment_trusted]
 k: (#execute => #handlePaymentSpecApplied) ~> _
@@ -824,135 +850,127 @@ coinbase: _
 
 ### Function checkSignatures
 
+`checkSignatures` is an internal function that checks validity of the given signatures.
+
+#### Stack and memory:
+
+The input arguments are passed through the stack as follows:
+```
+CONSUME_HASH : SIGS_LOC : DATA_LOC : DATA_HASH : RETURN_LOC : WS
+```
+
+where `data` and `signatures` are stored in the memory:
+```
+|<-  32  ->|<-    DATA_LEN    ->|         |<-  32  ->|<-    DATA_LEN    ->|
++----------+--------------------+         +----------+--------------------+
+| DATA_LEN |      DATA_BUF      |   ...   | SIGS_LEN |      SIGS_BUF      |
++----------+--------------------+         +----------+--------------------+
+^          ^                    ^         ^          ^                    ^
+|          |                    |         |          |                    |
+DATA_LOC   DATA_LOC + 32        |         SIGS_LOC   SIGS_LOC + 32        SIGS_LOC + 32 + SIGS_LEN
+                                |
+                                DATA_LOC + 32 + DATA_LEN
+```
+
+
+The function returns true if:
+- the number of signatures is more than equal to `threshold`, and
+- the first `threshold` number of signatures are valid, signed by owners, and sorted by their owner address.
+
+where a signature is valid if:
+- case v = 0: `r`'s isValidSignature returns true.
+- case v = 1: `r` == msg.sender or `dataHash` is already approved.
+- otherwise:  it is a valid ECDSA signature.
+
+
+Otherwise, the function returns false, unless `isValidSignature` throws (or reverts).
+
+If `isValidSignature` throws or reverts, `checkSignatures` reverts, immediately terminating without returning to `execTransaction`.
+
+
+Also, if `consumeHash = true`, the function may update `approvedHashes[currentOwner][dataHash]` to zero.
+
+
+#### Function visibility and modifiers:
+
+The function cannot be directly called from outside, as it is `internal`.
+An external call to this function will silently terminates with no effect (and no exception).
+
+
+
+#### Pre-conditions:
+
+No overflow:
+- `threshold` is small enough to avoid overflow.
+- The input stack size is small enough to avoid the stack overflow.
+- The maximum memory location accessed is small enough to avoid the integer overflow for the pointer arithmetic.
+
+Assuming the no-overflow conditions is practically reasonable. If they are not satisfied, the function will throw.
+
+Well-formed input:
+- Every owner (i.e., some `o` such that `owners[o] =/= 0`) is within the range of `address`. Otherwise, the function simply truncates the higher bits when validating the signatures.
+- The maximum size of `data` is 2^32. Otherwise, it reverts. (The bound is practically reasonable considering the current block gas limit. See the buffer size limit discussion.)
+- No overlap between two memory chunks of `data` and `signatures`, i.e., `DATA_LOC + 32 + DATA_LEN <= SIGS_LOC`. Otherwise, the function becomes nondeterministic.
+- Every signature encoding is well-formed. Otherwise, the function becomes nondeterministic.
+
+The first three conditions are satisfied in all calling contexts of the current GnosisSafe contract.
+In particular, the first condition is part of the contract invariant.
+
+However, the last condition should be satisfied by the client when he calls `execTransaction`, since the current contract omits the well-formedness check of the signature encoding.
+
+
+
+#### Mechanized formal specification:
+
+
+We formalize the validity of (arbitrary number of) signatures in a way that we can avoid explicit quantifier reasoning during the mechanized formal verification, as follows.
+
+
+We first define `the-first-invalid-signature-index` as follows:
+(The mechanized definition is [here][fii].)
+- A1:  For all `i < the-first-invalid-signature-index`,  `signatures[i]` is valid.
+- A2:  `signatures[the-first-invalid-signature-index]` is NOT valid.
+
+Now we can formulate the behavior of `checkSignatures` using the above definition (with no quantifiers!) as follows:
+- T1:  `checkSignatures` returns true if `the-first-invalid-signature-index >= threshold`.
+- T2:  Otherwise, returns false.
+
+To prove the above top-level specifications, T1 and T2, we need the following loop invariant:
+
+For some `i` such that `0 <= i < threshold` and `i <= the-first-invalid-signature-index`:
+- L1:  If `i < threshold <= the-first-invalid-signature-index`, then the function returns true once the loop terminates.
+- L1:  Else (i.e., if `i <= the-first-invalid-signature-index < threshold`), then the function eventually returns false.
+
+To prove the above loop invariant, L1 and L2, we need the following claims for a single loop iteration:
+- M1:  If `signatures[i]` is valid, it continues to the next iteration (i.e., goes back to the loop head).
+- M2:  If `signatures[i]` is NOT valid, it returns false.
+
+
+##### Proof sketch:
+
+The top level specification:
+- T1:  By L1 with `i = 0`.
+- T2:  By L2 with `i = 0`.
+
+The loop invariant:
+- L1:
+  By A1, `signatures[i]` is valid.
+  Then by M1, it goes back to the loop head, and we have two cases:
+  - Case 1: `i + 1 = threshold`: It jumps out of the loop, and return true.
+  - Case 2: `i + 1 < threshold`: By the circular reasoning with L1.
+- L2:
+  - Case 1: `i = the-first-invalid-signature-index`:
+    By A2, `signatures[i]` is NOT valid.  Then, by M2, we conclude.
+  - Case 2: `i < the-first-invalid-signature-index`:
+    By A1, `signatures[i]` is valid. Then, by M1, it goes to the loop head, and by the circular reasoning with L2, we conclude (since we know that `i + 1 <= the-first-invalid-signature-index < threshold`).
+
+The single loop iteration claim does not involve the recursive structure, and thus can be verified in the similar way as other specifications.
+
+
+
+Below is the specification to be verified against the GnosisSafe contract bytecode.
+
 ```ini
-[checkSignatures_trusted_exception]
-k: (#execute => #halt) ~> _
-output: _ => _
-statusCode: _ => EVMC_REVERT
-callStack: _
-this: #PROXY_ID
-msg_sender: _
-callData: _
-callValue: _
-log: _ => _
-refund: _ => _
-coinbase: _
-pc: {PC_FUN_START} => 18693
-gas: #gas(_, _ => _, _ => _)
-memoryUsed: _ => _
-wordStack: _ => _
-localMem: _ => _
-+requires:
-    ; enough signatures
-    andBool THRESHOLD *Int 65 <=Int SIGS_LEN
-    andBool #checkSignaturesException
-attribute: [trusted, matching(#gas)]
-PC_FUN_START: 18250
-
-[checkSignatures_trusted]
-k: #execute ~> _
-output: _ => _
-statusCode: _ => _
-callStack: _
-this: #PROXY_ID
-msg_sender: MSG_SENDER
-callData: _
-callValue: 0
-log: _
-refund: _
-coinbase: _
-pc: {PC_FUN_START} => {PC_FUN_END}
-gas: #gas(INITGAS,
-          NONMEMGAS => NONMEMGAS +Int #checkSigsGasNonMem,
-          MEMGAS    => MEMGAS +Int (Cmem(BYZANTIUM, FINAL_MEM_USAGE) -Int Cmem(BYZANTIUM, MU)))
-memoryUsed: MU => FINAL_MEM_USAGE
-wordStack:
-    ; parameters
-    {CONSUME_HASH} : SIGS_LOC : TX_DATA_LOC : TX_DATA_HASH :
-    ; return address
-    RETURN_LOC : WS
-    =>
-    {WORD_STACK_RHS}
-localMem: M1 =>
-    storeRange(storeRange(storeRange(storeRange(storeRange(M2,
-      TX_DATA_LOC        , 32         , #buf(32, TX_DATA_LEN)),
-      TX_DATA_LOC +Int 32, TX_DATA_LEN, TX_DATA_BUF),
-      SIGS_LOC           , 32         , #buf(32, SIGS_LEN)),
-      SIGS_LOC +Int 32   , SIGS_LEN   , SIGS_BUF),
-      64                 , 32         , #buf(32, #checkSigsNextLoc(MU)))
-proxy_storage:
-   S:IMap
-+requires:
-    ; elements
-    andBool FINAL_MEM_USAGE ==Int #checkSigsFinalMemUsed(MU)
-    andBool THRESHOLD       ==Int select(S, #hashedLocation({COMPILER}, {THRESHOLD}, .IntList))
-    andBool TX_DATA_LEN     ==Int #asWord(selectRange(M1, TX_DATA_LOC, 32))
-    andBool SIGS_LEN        ==Int #asWord(selectRange(M1, SIGS_LOC,    32))
-
-    andBool TX_DATA_BUF ==K selectRange(M1, TX_DATA_LOC +Int 32, TX_DATA_LEN)
-    andBool SIGS_BUF    ==K selectRange(M1, SIGS_LOC +Int 32, SIGS_LEN)
-
-    ; no overflow
-    andBool #rangeUInt(256, THRESHOLD *Int 65)
-
-    ; ranges
-    andBool #range(0 <= #sizeWordStack(WS) <= 1000 -Int 12)
-
-    andBool #range(0 <= CD < 1023)
-    ; bool consumeHash
-    andBool #range(0 <= {CONSUME_HASH} <= 1)
-    ; bytes memory signatures
-    andBool #rangeUInt(256, SIGS_LOC)
-    ; bytes memory data
-    andBool #rangeUInt(256, TX_DATA_LOC)
-    ; bytes32 dataHash
-    andBool #rangeUInt(256, TX_DATA_HASH)
-    andBool #rangeUInt(256, THRESHOLD)
-    andBool #rangeUInt(256, TX_DATA_LEN)
-    andBool #rangeUInt(256, SIGS_LEN)
-    andBool #rangeAddress(MSG_SENDER)
-
-    ; practical bounds for localMem address
-    andBool #range(96 <= SIGS_LOC          < 2 ^Int 32)
-    andBool #range(96 <= TX_DATA_LOC       < 2 ^Int 32)
-    ; rough bounds for lengths related to localMem address
-    andBool TX_DATA_LEN <Int 2 ^Int 16
-    andBool SIGS_LEN    <Int 2 ^Int 16
-    andBool THRESHOLD   <Int 2 ^Int 32
-
-    ; no overlap between data and sigatures
-    andBool TX_DATA_LOC +Int 32 +Int TX_DATA_LEN <=Int SIGS_LOC
-
-    ; contract invariants
-    andBool 1 <=Int THRESHOLD
-+ensures:
-    andBool #rangeUInt(256, #checkSigsNextLoc(MU))
-    andBool #range(96 <= #checkSigsNextLoc(MU) < 2 ^Int 32)
-    andBool #range(SIGS_LOC +Int 32 +Int #ceil32(SIGS_LEN) <= #checkSigsNextLoc(MU) < 2 ^Int 32)
-
-+attribute: [trusted, matching(#gas)]
-
-CONSUME_HASH: 1
-
-PC_FUN_START: 18250
-PC_FUN_END:   19453
-
-[checkSignatures_trusted-success]
-+requires:
-    ; enough signatures
-    andBool THRESHOLD *Int 65 <=Int SIGS_LEN
-    ; valid signatures
-    andBool #enoughValidSigs
-WORD_STACK_RHS: RETURN_LOC : 1 : WS
-
-
-[checkSignatures_trusted-failure]
-+requires:
-    ; not enough signaures or invalid signatures
-    andBool ( SIGS_LEN <Int THRESHOLD *Int 65
-       orBool notBool #enoughValidSigs )
-WORD_STACK_RHS: RETURN_LOC : 0 : WS
-
 ; internal
 [checkSignatures]
 k: #execute ~> _
@@ -1417,7 +1435,145 @@ trailing_zero_start: NEXT_LOC +Int #ceil32(TX_DATA_LEN) +Int 132 +Int {CONTRACT_
 ensures:
 ```
 
+Below is the specification to be used when verifying other (caller) functions.
+
+```ini
+[checkSignatures_trusted]
+k: #execute ~> _
+output: _ => _
+statusCode: _ => _
+callStack: _
+this: #PROXY_ID
+msg_sender: MSG_SENDER
+callData: _
+callValue: 0
+log: _
+refund: _
+coinbase: _
+pc: {PC_FUN_START} => {PC_FUN_END}
+gas: #gas(INITGAS,
+          NONMEMGAS => NONMEMGAS +Int #checkSigsGasNonMem,
+          MEMGAS    => MEMGAS +Int (Cmem(BYZANTIUM, FINAL_MEM_USAGE) -Int Cmem(BYZANTIUM, MU)))
+memoryUsed: MU => FINAL_MEM_USAGE
+wordStack:
+    ; parameters
+    {CONSUME_HASH} : SIGS_LOC : TX_DATA_LOC : TX_DATA_HASH :
+    ; return address
+    RETURN_LOC : WS
+    =>
+    {WORD_STACK_RHS}
+localMem: M1 =>
+    storeRange(storeRange(storeRange(storeRange(storeRange(M2,
+      TX_DATA_LOC        , 32         , #buf(32, TX_DATA_LEN)),
+      TX_DATA_LOC +Int 32, TX_DATA_LEN, TX_DATA_BUF),
+      SIGS_LOC           , 32         , #buf(32, SIGS_LEN)),
+      SIGS_LOC +Int 32   , SIGS_LEN   , SIGS_BUF),
+      64                 , 32         , #buf(32, #checkSigsNextLoc(MU)))
+proxy_storage:
+   S:IMap
++requires:
+    ; elements
+    andBool FINAL_MEM_USAGE ==Int #checkSigsFinalMemUsed(MU)
+    andBool THRESHOLD       ==Int select(S, #hashedLocation({COMPILER}, {THRESHOLD}, .IntList))
+    andBool TX_DATA_LEN     ==Int #asWord(selectRange(M1, TX_DATA_LOC, 32))
+    andBool SIGS_LEN        ==Int #asWord(selectRange(M1, SIGS_LOC,    32))
+
+    andBool TX_DATA_BUF ==K selectRange(M1, TX_DATA_LOC +Int 32, TX_DATA_LEN)
+    andBool SIGS_BUF    ==K selectRange(M1, SIGS_LOC +Int 32, SIGS_LEN)
+
+    ; no overflow
+    andBool #rangeUInt(256, THRESHOLD *Int 65)
+
+    ; ranges
+    andBool #range(0 <= #sizeWordStack(WS) <= 1000 -Int 12)
+
+    andBool #range(0 <= CD < 1023)
+    ; bool consumeHash
+    andBool #range(0 <= {CONSUME_HASH} <= 1)
+    ; bytes memory signatures
+    andBool #rangeUInt(256, SIGS_LOC)
+    ; bytes memory data
+    andBool #rangeUInt(256, TX_DATA_LOC)
+    ; bytes32 dataHash
+    andBool #rangeUInt(256, TX_DATA_HASH)
+    andBool #rangeUInt(256, THRESHOLD)
+    andBool #rangeUInt(256, TX_DATA_LEN)
+    andBool #rangeUInt(256, SIGS_LEN)
+    andBool #rangeAddress(MSG_SENDER)
+
+    ; practical bounds for localMem address
+    andBool #range(96 <= SIGS_LOC          < 2 ^Int 32)
+    andBool #range(96 <= TX_DATA_LOC       < 2 ^Int 32)
+    ; rough bounds for lengths related to localMem address
+    andBool TX_DATA_LEN <Int 2 ^Int 16
+    andBool SIGS_LEN    <Int 2 ^Int 16
+    andBool THRESHOLD   <Int 2 ^Int 32
+
+    ; no overlap between data and sigatures
+    andBool TX_DATA_LOC +Int 32 +Int TX_DATA_LEN <=Int SIGS_LOC
+
+    ; contract invariants
+    andBool 1 <=Int THRESHOLD
++ensures:
+    andBool #rangeUInt(256, #checkSigsNextLoc(MU))
+    andBool #range(96 <= #checkSigsNextLoc(MU) < 2 ^Int 32)
+    andBool #range(SIGS_LOC +Int 32 +Int #ceil32(SIGS_LEN) <= #checkSigsNextLoc(MU) < 2 ^Int 32)
+
++attribute: [trusted, matching(#gas)]
+
+CONSUME_HASH: 1
+
+PC_FUN_START: 18250
+PC_FUN_END:   19453
+
+[checkSignatures_trusted-success]
++requires:
+    ; enough signatures
+    andBool THRESHOLD *Int 65 <=Int SIGS_LEN
+    ; valid signatures
+    andBool #enoughValidSigs
+WORD_STACK_RHS: RETURN_LOC : 1 : WS
+
+
+[checkSignatures_trusted-failure]
++requires:
+    ; not enough signaures or invalid signatures
+    andBool ( SIGS_LEN <Int THRESHOLD *Int 65
+       orBool notBool #enoughValidSigs )
+WORD_STACK_RHS: RETURN_LOC : 0 : WS
+
+[checkSignatures_trusted_exception]
+k: (#execute => #halt) ~> _
+output: _ => _
+statusCode: _ => EVMC_REVERT
+callStack: _
+this: #PROXY_ID
+msg_sender: _
+callData: _
+callValue: _
+log: _ => _
+refund: _ => _
+coinbase: _
+pc: {PC_FUN_START} => 18693
+gas: #gas(_, _ => _, _ => _)
+memoryUsed: _ => _
+wordStack: _ => _
+localMem: _ => _
++requires:
+    ; enough signatures
+    andBool THRESHOLD *Int 65 <=Int SIGS_LEN
+    andBool #checkSignaturesException
+attribute: [trusted, matching(#gas)]
+PC_FUN_START: 18250
+```
+
+
 ### Function execTransaction
+
+
+#### Mechanized formal specification:
+
+Below is the specification to be verified against the GnosisSafe contract bytecode.
 
 ```ini
 [execTransaction]
@@ -2354,3 +2510,4 @@ proxy_code: "0x60806040526004361061004c576000357c0100000000000000000000000000000
 ```
 
 [v0.1.0]: <https://github.com/gnosis/safe-contracts/releases/tag/v0.1.0>
+[fii]: <https://github.com/runtimeverification/verified-smart-contracts/blob/a3ca2bcbc152cd0b597669f6d3ac067fab363e33/gnosis/verification.k#L346-L421>
