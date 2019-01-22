@@ -104,8 +104,10 @@ ifneq ($(strip $(LOCAL_LEMMAS)),)
 	cp $(LOCAL_LEMMAS) $@
 endif
 
+ifneq ($(wildcard $(SPEC_INI:.ini=.md)),)
 $(SPEC_INI): $(SPEC_INI:.ini=.md) $(TANGLER)
 	pandoc --from markdown --to "$(TANGLER)" --metadata=code:".ini" $< > $@
+endif
 
 $(SPECS_DIR)/lemmas.k: $(RESOURCES)/lemmas.md $(TANGLER)
 	pandoc --from markdown --to "$(TANGLER)" --metadata=code:".k" $< > $@
