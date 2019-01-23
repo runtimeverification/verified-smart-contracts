@@ -218,6 +218,161 @@ Thus this remains a valid vulnerability.
 **Recommendation:**
 Considering the specific functionality of `ISignatureValidator`, we recommend limiting the gas when calling `ISignatureValidator` to a small predetermined value. Careful gas limits on external contract calls are a common security practice. For example when tokens are sent in Solidity through `msg.sender.send(ethAmt)`, gas is automatically limited to `2300`([source](https://medium.com/@JusDev1988/reentrancy-attack-on-a-smart-contract-677eae1300f2)).
 
+
+# Other Issues/Recommendations
+
+
+
+## zero and precompiled contract addresses
+
+`execTransaction` does not reject the case of `to` being the zero address `0x0`, which may lead to an *internal* transaction to the zero address, via the following function call sequence:
+
+* https://github.com/gnosis/safe-contracts/blob/v0.1.0/contracts/GnosisSafe.sol#L95
+* https://github.com/gnosis/safe-contracts/blob/v0.1.0/contracts/base/Executor.sol#L17
+* https://github.com/gnosis/safe-contracts/blob/v0.1.0/contracts/base/Executor.sol#L33
+
+Unlike a regular transaction to the zero address, which creates a new account, an internal transaction to the zero address behaves the same as other transactions to non-zero addresses, i.e., sending the ether to the zero address account (which indeed exists: https://etherscan.io/address/0x0000000000000000000000000000000000000000) and executing the code associated to it (which is empty in this case).
+
+Although it is the users' responsibility that ensures correctness of the transaction data, it is quite possible that a certain user may not be aware of the difference between regular and internal transactions to the zero address, sending a transaction data to `execTransaction` with `to == 0x0`, expecting that it creates a new account.  Since an internal transaction to the zero address mostly succeeds (note that it spends a little gas, without needing to pay the `G_newaccount` (25,000) gas fee since the zero-address account already exists), it may cause the ether stuck at 0x0, which could be serious when the user attaches a large amount of ether as a startup fund for the new account.
+
+Recommendation:
+- reject `execTransaction` when `to == address(0)`.
+
+
+
+
+
+#### Minor Related Note:
+
+`handlePayment` may send the ether to `receiver`:
+
+* https://github.com/gnosis/safe-contracts/blob/v0.1.0/contracts/GnosisSafe.sol#L120
+
+where `receiver` is non-zero, since `tx.origin` cannot be zero.
+But, `receiver` could be still a non-owned account, especially one of the precompiled (0x1 - 0x8) contract addresses.
+Here `receiver.send(amount)` will succeed even with the small gas stipend 2300 for some precompiled contracts (at least, for 0x2, 0x3, 0x4, and 0x6). Below is the gas cost for executing each precompiled contract.
+
+- 0x1: ECREC: 3000
+- 0x2: SHA256: 60 + 12 * (byte-size-of-call-data)
+- 0x3: RIP160: 600 + 120 * (byte-size-of-call-data)
+- 0x4: ID: 15 + 3 * (byte-size-of-call-data)
+- 0x5: MODEXP: (complex-gas-cost-model)
+- 0x6: ECADD: 500
+- 0x7: ECMUL: 40000
+- 0x8: ECPAIRING: 100000 + ...
+
+
+## Missing check of contract existence
+
+`execTransaction` misses the contract existence check for `to`, and thus it can cause lost ethers.
+
+According to the [Solidity document](https://solidity.readthedocs.io/en/v0.5.0/control-structures.html?highlight=non-existent#error-handling-assert-require-revert-and-exceptions):
+
+> The low-level functions `call`, `delegatecall` and `staticcall` return `true` as their first return value if the called account is non-existent, as part of the design of EVM. Existence must be checked prior to calling if desired.
+
+That is, if the user transaction is supposed to call an external contract with the ether payment `value > 0`, but makes a mistakes of referring to a non-existing address, the `execute` function silently returns true after transferring `value` to the non-existing account, resulting in the loss of the ethers.
+
+However, it is understood that simply adding the contract existence check is not a solution, since there exists a use case that the user transaction is meant to send ethers to a non-contract account, in which case the existence check is not trivial.
+
+Recommendation:
+Differentiate two types of user transactions, i.e., contract call transaction and send transaction, and implement the contract existence check for the contract call transaction. For the send transaction, explicitly mention this limitation in the document of `execTransaction`, and/or implement an existence check for regular accounts at the client side.
+
+
+
+
+
+## `checkSignatures`
+
+### Local validity check
+
+`checkSignatures` checks only the first `threshold` number of signatures.
+Thus, the validity of the remaining signatures does not matter.
+Also, the sortedness of the whole signatures is not required, as long as the first `threshold` number of signatures are locally sorted.
+However, we have not found an attack exploiting this.
+
+Another questionable behavior is in the case where there are `threshold` valid signatures in total, but some of them at the beginning are invalid. Currently, `checkSignatures` fails in this case.
+A potential issue for this behavior is that a *bad* owner intentionally sends an invalid signature to *veto* the transaction. He can *always* veto if his address is the first (the smallest) among the owners. On the other hand, a *good* owner is hard to veto some bad transaction if his address is the last (the lartest) among the owners.
+Is this intended?
+
+### No explicit check for the case `2 <= v <= 26`
+
+According to the signature encoding scheme, a signature with `2 <= v <= 26` is not valid, but the code does not have an explicit check for the case, relying on `ecrecover` to implicitly reject the case.  It may be considered to have the explicit check for the robustness, if the additional gas cost is affordable, since we have not verified the underlying C implementation of secp256k1, and there might exist unknown zero-day vulnerabilities (especially for the unusual cases).
+
+
+
+### `signatures` size limit
+
+Considering the [current max block gas limit] (~8M) and the gas cost for the local memory usage (i.e., `n^2/512 + 3n` for `n` bytes), the size of `signatures` must be (much) less than 2^16 (i.e., 64KB). 
+
+
+[current max block gas limit]: <https://etherscan.io/blocks>
+
+
+
+## OwnerManager
+
+### `addOwnerWithThreshold`
+
+Although it is very unlikely, but if `ownerCount` is corrupted (possibly due to the hash collision), `ownerCount++` may have the overflow, resulting in `ownerCount` being zero, provided that `threshold == _threshold`.  In the case of `threshold != _threshold`, however, if `ownerCount++` has the overflow, `changeThreshold` will always revert since the following two requirements cannot be satisfied at the same time, where `ownerCount` is zero:
+```
+        // Validate that threshold is smaller than number of owners.
+        require(_threshold <= ownerCount, "Threshold cannot exceed owner count");
+        // There has to be at least one Safe owner.
+        require(_threshold >= 1, "Threshold needs to be greater than 0");
+```
+
+
+
+### Lazy enum type check
+
+The `operation` argument value must be with the range of `Enum.Operation`, i.e., [0,2] inclusive, and the Solidity compiler is supposed to generate the range check in the compiled bytecode.  But it turns out that the range check does not appear in the `execTransaction` function, but it appears only inside the `execute` function.  We have not found yet any exploit of this missing range check, but it is a potential vulnerability that needs an extra examination whenever the new bytecode is generated.
+
+Recommendation: examine bytecode whenever the bytecode is updated.
+
+
+### Potential overflow if contract invariant is not met
+
+There are several places where SafeMath is not used for the arithmetic operations.
+
+https://github.com/gnosis/safe-contracts/blob/v0.1.0/contracts/GnosisSafe.sol#L92
+https://github.com/gnosis/safe-contracts/blob/v0.1.0/contracts/GnosisSafe.sol#L139
+
+https://github.com/gnosis/safe-contracts/blob/v0.1.0/contracts/base/OwnerManager.sol#L62
+https://github.com/gnosis/safe-contracts/blob/v0.1.0/contracts/base/OwnerManager.sol#L79
+https://github.com/gnosis/safe-contracts/blob/v0.1.0/contracts/base/OwnerManager.sol#L85
+
+The following contract invariants are needed to rule out the possibility of overflow:
+- `nonce` is small enough to avoid overflow in `nonce++`.
+- `threshold` is small enough to avoid overflow in `threshold * 65`.
+- `ownerCount >= 1` is small enough to avoid overflow in `ownerCount++`, `ownerCount - 1`, and `ownerCount--`.
+
+In the current GnosisSafe contract, assuming the above invariants are practically reasonable considering the resource limitation (such as gas), but this assessment should be repeated whenever the contract is updated.
+
+
+### transaction reordering issue.
+
+this function allows to update `threshold`, which introduces an usability issue similar to the [ERC20 approve function issue](https://docs.google.com/document/d/1YLPtQxZu1UAvO9cZ1O2RPXBbT0mooh4DYKjA_jp-RLM).
+
+the common usage scenario of this function is to add a new owner with *increasing* the threshold value (or keeping the value as is).  it is very unlikely the case of decreasing the threshold value while adding a new owner.  if there still exists such a use case, one can split the task into two transactions: adding a new owner, and decreasing threshold. that is, we have not found a reason for such a task, if any, to be executed atomically.
+
+
+exploit scenario:
+
+suppose there are five owners with threshold of three. suppose alice proposes a transaction of `addOwnerWithThreshold(o1,4)` and immediately bob proposes a transaction of `addOwnerWithThreshold(o2,5)`. if the bob's transaction is approved before the alice's transaction, the final threshold will be 4, while it should be 5.
+
+
+recommendation:
+- reject addOwnerWithThreshold if it tries to decrease threshold
+- have two more functions: increaseThreshold and decreaseThreshold
+
+
+recommendation:
+removeOwner:
+it may be considered to check that _threshold <= threshold
+
+
+
+
 ## List of Analyzed Common Attack Vectors
 In this section we enumerate all attack vectors from our
 [reference list](https://github.com/runtimeverification/verified-smart-contracts/wiki/List-of-Security-Vulnerabilities) 
