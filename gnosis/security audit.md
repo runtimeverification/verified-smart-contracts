@@ -9,7 +9,7 @@ We only analyzed the core contract, without extensions, e.g.
 [Proxy.sol](https://github.com/gnosis/safe-contracts/blob/14495428954366dcf812acfa11e54c81b186332d/contracts/proxies/Proxy.sol)
 acting as proxy for [GnosisSafe.sol](https://github.com/gnosis/safe-contracts/blob/bfb8abac580d76dd44f68307a5356a919c6cfb9b/contracts/GnosisSafe.sol) .
 
-We used as reference the [Sigmaprime Collection](https://blog.sigmaprime.io/solidity-security.html)
+We used as reference [an extensive list](https://github.com/runtimeverification/verified-smart-contracts/wiki/List-of-Security-Vulnerabilities).
 of common security vulnerabilities and bugs in EVM and Solidity.
 In addition, we inspected the code for vulnerabilities not present in the list, 
 with focus on external contract calls.
@@ -41,19 +41,102 @@ To protect from reentrancy attacks, GnosisSafe uses storage field `nonce`,
 which is incremented during each transaction. 
 However, there are 3 external calls performed during a transaction, 
 which all have to be guarded from reentrancy.
-The main external call managed by this transaction (hereafter referred as "payload") is performed 
-[here](https://github.com/gnosis/safe-contracts/blob/bfb8abac580d76dd44f68307a5356a919c6cfb9b/contracts/GnosisSafe.sol#L95).
-After payload is executed, the original caller or another account specified in transaction data is refunded for gas cost
-[here](https://github.com/gnosis/safe-contracts/blob/bfb8abac580d76dd44f68307a5356a919c6cfb9b/contracts/GnosisSafe.sol#L102).
-Both these calls are performed after the nonce is incremented.
+
+Below is the code for `execTransacion`, the main function of GnosisSafe:
+```
+function execTransaction(
+    address to,
+    uint256 value,
+    bytes calldata data,
+    Enum.Operation operation,
+    uint256 safeTxGas,
+    uint256 dataGas,
+    uint256 gasPrice,
+    address gasToken,
+    address payable refundReceiver,
+    bytes calldata signatures
+)
+    external
+    returns (bool success)
+{
+    uint256 startGas = gasleft();
+    bytes memory txHashData = encodeTransactionData(
+        to, value, data, operation, // Transaction info
+        safeTxGas, dataGas, gasPrice, gasToken, refundReceiver, // Payment info
+        nonce
+    );
+    require(checkSignatures(keccak256(txHashData), txHashData, signatures, true), 
+        "Invalid signatures provided");
+    // Increase nonce and execute transaction.
+    nonce++;
+    require(gasleft() >= safeTxGas, "Not enough gas to execute safe transaction");
+    // If no safeTxGas has been set and the gasPrice is 
+    // 0 we assume that all available gas can be used
+    success = execute(to, value, data, operation, 
+        safeTxGas == 0 && gasPrice == 0 ? gasleft() : safeTxGas);
+    if (!success) {
+        emit ExecutionFailed(keccak256(txHashData));
+    }
+
+    // We transfer the calculated tx costs to the tx.origin 
+    // to avoid sending it to intermediate contracts that have made calls
+    if (gasPrice > 0) {
+        handlePayment(startGas, dataGas, gasPrice, gasToken, refundReceiver);
+    }
+}
+```
+
+The main external call managed by this transaction (hereafter referred as "payload") is performed in function
+[execute](https://github.com/gnosis/safe-contracts/blob/bfb8abac580d76dd44f68307a5356a919c6cfb9b/contracts/GnosisSafe.sol#L95).
+After payload is executed, the original caller or another account specified in transaction data is refunded for gas cost in 
+[handlePayment](https://github.com/gnosis/safe-contracts/blob/bfb8abac580d76dd44f68307a5356a919c6cfb9b/contracts/GnosisSafe.sol#L102).
+Both these calls are performed after the nonce
+[is incremented](https://github.com/gnosis/safe-contracts/blob/bfb8abac580d76dd44f68307a5356a919c6cfb9b/contracts/GnosisSafe.sol#L92).
 Consequently, it is not possible to execute the same transaction multiple times
 from within these calls.
 
-However, there is one more external call possible during 
-[check signatures](https://github.com/gnosis/safe-contracts/blob/bfb8abac580d76dd44f68307a5356a919c6cfb9b/contracts/GnosisSafe.sol#L90) 
-phase, which calls [an external contract](https://github.com/gnosis/safe-contracts/blob/bfb8abac580d76dd44f68307a5356a919c6cfb9b/contracts/GnosisSafe.sol#L161) 
+However, there is one more external call possible inside
+[checkSignatures](https://github.com/gnosis/safe-contracts/blob/bfb8abac580d76dd44f68307a5356a919c6cfb9b/contracts/GnosisSafe.sol#L90) 
+phase, which calls [an external contract](https://github.com/gnosis/safe-contracts/blob/bfb8abac580d76dd44f68307a5356a919c6cfb9b/contracts/GnosisSafe.sol#L161): 
 managed by an owner to validate the signature using 
-[EIP-1271](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1271.md) signature validation mechanism.
+[EIP-1271](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1271.md) signature validation mechanism:
+```
+function checkSignatures(bytes32 dataHash, bytes memory data, 
+                         bytes memory signatures, bool consumeHash)
+    public
+    returns (bool)
+{
+    for (i = 0; i < threshold; i++) {
+        (v, r, s) = signatureSplit(signatures, i);
+        // If v is 0 then it is a contract signature
+        if (v == 0) {
+            // When handling contract signatures the address of the contract 
+            // is encoded into r
+            currentOwner = address(uint256(r));
+            bytes memory contractSignature;
+            // solium-disable-next-line security/no-inline-assembly
+            assembly {
+                // The signature data for contract signatures is appended to the 
+                // concatenated signatures and the offset is stored in s
+                contractSignature := add(add(signatures, s), 0x20)
+            }
+            if (!ISignatureValidator(currentOwner)
+              .isValidSignature(data, contractSignature)) {
+                return false;
+            }
+        } else
+            ...
+        }
+        if (currentOwner <= lastOwner || owners[currentOwner] == address(0)) {
+            return false;
+        }
+        lastOwner = currentOwner;
+    }
+    return true;
+}
+```
+
+
 This call is performed BEFORE nonce is incremented 
 [here](https://github.com/gnosis/safe-contracts/blob/bfb8abac580d76dd44f68307a5356a919c6cfb9b/contracts/GnosisSafe.sol#L92),
 thus is not guarded for reentrancy.
@@ -117,13 +200,16 @@ was initially set, and (3) owners did not care to adjust the gas price because g
 We again have to analyze the situation on all 3 external call sites.
 For the payload external call, gas is limited by transaction parameter `safeTxGas`.
 This parameter must be set and validated by other owners when token refund is used, thus abuse is not possible.
-For the external call that sends the refund in token, gas is limited to remaining gas for transaction minus 10000: 
-[source](https://github.com/gnosis/safe-contracts/blob/14495428954366dcf812acfa11e54c81b186332d/contracts/common/SecuredTokenTransfer.sol#L23).
+For the external call that sends the refund in token, gas is limited to remaining gas for transaction minus 10000
+[source](https://github.com/gnosis/safe-contracts/blob/14495428954366dcf812acfa11e54c81b186332d/contracts/common/SecuredTokenTransfer.sol#L23):
+```
+ let success := call(sub(gas, 10000), token, 0, add(data, 0x20), mload(data), 0, 0)
+```
 This looks like a poor limit, but in order to be abused, the transaction initiator must have control over token account,
 which looks like an unlikely scenario.
 
 The biggest concern is again in the call to `ISingatureValidator`. This call is under the control of transaction initiator,
-and the gas for it is not limited.
+and the gas for it is not limited (see code for `checkSignatures`).
 Thus, the attacking owner may use a malicious `ISignatureValidator` that consumes almost all allocated gas, in order to receive
 a large refund. The amount of benefit the attacker my receive is limited by (1) block gas limit and (2) ratio between `gasPrice`
 and market cost of the token. However, we should allow for the possibility that block gas limit will increase in future.
@@ -212,3 +298,7 @@ thus the issue is not present.
 **15. Floating Points and Numerical Precision.** Floating point numbers are not used in GnosisSafe.
 
 **16. Tx.Origin Authentication.** In GnosisSafe `tx.origin` is not used for authentication.
+
+**17. Constantinople gas issue**
+The issue may appear only in contracts without explicit protection for re-entrancy.
+We already discussed re-entrancy on point 1.
