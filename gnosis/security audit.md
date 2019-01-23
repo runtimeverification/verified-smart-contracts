@@ -219,9 +219,10 @@ Thus this remains a valid vulnerability.
 Considering the specific functionality of `ISignatureValidator`, we recommend limiting the gas when calling `ISignatureValidator` to a small predetermined value. Careful gas limits on external contract calls are a common security practice. For example when tokens are sent in Solidity through `msg.sender.send(ethAmt)`, gas is automatically limited to `2300`([source](https://medium.com/@JusDev1988/reentrancy-attack-on-a-smart-contract-677eae1300f2)).
 
 ## List of Analyzed Common Attack Vectors
-In this section we enumerate all attack vectors from
-[Sigmaprime Collection](https://blog.sigmaprime.io/solidity-security.html)
-and describe how we analyzed them in GnosisSafe. The numbering correspond to that in Sigmaprime List.
+In this section we enumerate all attack vectors from our
+[reference list](https://github.com/runtimeverification/verified-smart-contracts/wiki/List-of-Security-Vulnerabilities) 
+of known attack vectors,
+and describe how we analyzed them in GnosisSafe. The numbering correspond to that in the reference list.
 Please consult the link above for details.
 
 **1. Re-entrancy vulnerability** is present, as described in previous section.
