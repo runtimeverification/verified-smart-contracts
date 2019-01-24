@@ -3,8 +3,7 @@ BUILD_DIR:=../.build
 SPEC_GROUP:=examples
 SPEC_INI:=proxied-token-spec.ini
 
-KPROVE_OPTS:=--smt-prelude $(abspath $(dir $(abspath $(lastword $(MAKEFILE_LIST))))/evm.smt2) \
-             --deterministic-functions --cache-func-optimized
+KPROVE_OPTS:=--smt-prelude $(abspath $(dir $(abspath $(lastword $(MAKEFILE_LIST))))/evm.smt2)
 
 SPEC_NAMES:=sum-to-n
 

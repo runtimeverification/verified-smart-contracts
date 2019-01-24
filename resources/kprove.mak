@@ -49,7 +49,7 @@ K_REPO_DIR:=$(abspath $(BUILD_DIR)/k)
 KEVM_REPO_DIR:=$(abspath $(BUILD_DIR)/evm-semantics)
 
 K_BIN:=$(abspath $(K_REPO_DIR)/k-distribution/target/release/k/bin)
-KPROVE:=$(K_BIN)/kprove -v -d $(KEVM_REPO_DIR)/.build/java -m VERIFICATION --z3-impl-timeout 500 --halt-cells k,pc $(KPROVE_OPTS)
+KPROVE:=$(K_BIN)/kprove -v -d $(KEVM_REPO_DIR)/.build/java -m VERIFICATION --z3-impl-timeout 500 $(KPROVE_OPTS)
 
 SPEC_FILES:=$(patsubst %,$(SPECS_DIR)/$(SPEC_GROUP)/%-spec.k,$(SPEC_NAMES))
 
@@ -78,7 +78,7 @@ $(K_REPO_DIR):
 	git clone $(K_REPO_URL) $(K_REPO_DIR)
 	cd $(K_REPO_DIR) \
 		&& git reset --hard $(K_VERSION) \
-		&& mvn package -DskipTests
+		&& mvn package -DskipTests -Dllvm.backend.skip
 
 $(KEVM_REPO_DIR):
 	git clone $(KEVM_REPO_URL) $(KEVM_REPO_DIR)
