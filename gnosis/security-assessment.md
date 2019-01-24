@@ -391,13 +391,13 @@ suppose there are five owners with threshold of three. suppose alice proposes a 
 
 
 recommendation:
-- reject addOwnerWithThreshold if it tries to decrease threshold
-- have two more functions: increaseThreshold and decreaseThreshold
+- reject `addOwnerWithThreshold` if it tries to decrease `threshold`
+- have two more functions: `increaseThreshold` and `decreaseThreshold`
 
 
 recommendation:
-removeOwner:
-it may be considered to check that _threshold <= threshold
+`removeOwner`:
+it may be considered to check that `_threshold <= threshold`
 
 
 
@@ -407,7 +407,7 @@ it may be considered to check that _threshold <= threshold
 if the non-contract address is set to the master copy, then the proxy fall back function will silently returns.
 
 recommend:
-implement the existence check, e.g., using EXTCODESIZE.
+implement the existence check, e.g., using `EXTCODESIZE`.
 
 
 
@@ -430,10 +430,10 @@ all the address arguments are assumed to be within the range of addresses, i.e.,
 no validity check for the signature encoding
 - when `v` is 0 or 1, the owner `r` should be within the range of `address`: otherwise, the upper bits are truncated
 - when `v` is 0,
-  - the offset `s` should be within the bound, i.e., s + 32 <= signatures.length: otherwise, it will read some garbage value from the memory
+  - the offset `s` should be within the bound, i.e., `s + 32 <= signatures.length`: otherwise, it will read some garbage value from the memory
   - the dynamic signature data pointed by `s` should be well-formed:
-    - the first 4 bytes denote the length of the dynamic data, i.e., dynamic-data-length := mload(signatures + s + 32): otherwise, it may try to read a large memory chunk
-    - the `signatures` buffer should be large enough to hold the dynamic data, i.e., signatures.length >= s + 32 + dynamic-data-length: otherwise, it will read some garbage value from the memory
+    - the first 4 bytes denote the length of the dynamic data, i.e., `dynamic-data-length := mload(signatures + s + 32)`: otherwise, it may try to read a large memory chunk
+    - the `signatures` buffer should be large enough to hold the dynamic data, i.e., `signatures.length >= s + 32 + dynamic-data-length`: otherwise, it will read some garbage value from the memory
   - (optional) each dynamic data should not be pointed by different signatures: otherwise, the same dynamic data will be used to check the validity of different signatures
   - (optional) different dynamic data should not be overlapped
 
@@ -443,6 +443,7 @@ for example,
 in general, when a `bytes`-type argument is provided, the following checks are performed:
 
 
+```
 1. CALLDATASIZE >= 4 ?  // checks if the function signature is provided
 
 2. CALLDATASIZE >= 4 + 32 * NUM_OF_ARGS  // checks if the headers of all parameters are provided
@@ -460,6 +461,7 @@ in general, when a `bytes`-type argument is provided, the following checks are p
 8. startLoc + 4 + 32 + dataLen <= CALLDATASIZE ?  // checks if the actual data is provided
 
 9. dataLen <= 2^32 ?
+```
 
 
 
