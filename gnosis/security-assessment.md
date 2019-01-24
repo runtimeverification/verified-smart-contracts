@@ -17,6 +17,23 @@ with focus on external contract calls.
 Next we present the list of discovered security issues, followed by our 
 assessment of vulnerabilities.
 
+
+## Scope
+
+The scope of the current engagement is the GnosisSafe contract without enabling any add-on modules. Specifically, this includes the following functions:
+
+* `executeTransaction` of `GnosisSafe.sol`:
+  * only for the case of `operation == CALL` and payment in Ether.
+  * including `encodeTransactionData`, `checkSignatures`, and `handlePayment` functions.
+* `changeMasterCopy` of `MasterCopy.sol`
+* `addOwner`, `removeOwner`, and `swapOwner` of `OwnerManager.sol`
+* `enableModule`, and `disableModule` of `ModuleManager.sol`
+* `execTransactionFromModule` of `ModuleManager.sol`
+  * only for the case that `modules` is empty.
+
+The security assessment is limited in scope within the boundary of the Solidity contract only.
+
+
 ## Disclaimers
 
 This report does not constitute legal or investment advice. The preparers of this report
