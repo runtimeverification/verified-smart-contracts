@@ -372,6 +372,85 @@ it may be considered to check that _threshold <= threshold
 
 
 
+### `changeMasterCopy` missing contract existence check
+
+`changeMasterCopy` misses the contract account existence check for the new master copy address.
+if the non-contract address is set to the master copy, then the proxy fall back function will silently returns.
+
+recommend:
+implement the existence check, e.g., using EXTCODESIZE.
+
+
+
+
+## signatureSplit index of ouf bound
+
+The `signatureSplit` function does not check the index is within the bound of the `signatures` sequence. Although no out-of-bound index is passed to the function throughout the current GnosisSafe contract, it is recommended to either add the index bound check or mention the implicit requirement in the document to prevent any future implementation from violating this condition.
+
+
+## address range
+
+all the address arguments are assumed to be within the range of addresses, i.e., its first 96 (= 256 - 160) bits are zero. otherwise, the fist 96 bits are simply ignored, without any exception. thus, any client of this function should check the validity of addresses before passing them to the functions.
+
+
+## signature encoding well-formedness
+
+
+
+
+no validity check for the signature encoding
+- when `v` is 0 or 1, the owner `r` should be within the range of `address`: otherwise, the upper bits are truncated
+- when `v` is 0,
+  - the offset `s` should be within the bound, i.e., s + 32 <= signatures.length: otherwise, it will read some garbage value from the memory
+  - the dynamic signature data pointed by `s` should be well-formed:
+    - the first 4 bytes denote the length of the dynamic data, i.e., dynamic-data-length := mload(signatures + s + 32): otherwise, it may try to read a large memory chunk
+    - the `signatures` buffer should be large enough to hold the dynamic data, i.e., signatures.length >= s + 32 + dynamic-data-length: otherwise, it will read some garbage value from the memory
+  - (optional) each dynamic data should not be pointed by different signatures: otherwise, the same dynamic data will be used to check the validity of different signatures
+  - (optional) different dynamic data should not be overlapped
+
+
+
+for example, 
+in general, when a `bytes`-type argument is provided, the following checks are performed:
+
+
+1. CALLDATASIZE >= 4 ?  // checks if the function signature is provided
+
+2. CALLDATASIZE >= 4 + 32 * NUM_OF_ARGS  // checks if the headers of all parameters are provided
+
+3. .... // load static type args and checks range
+
+4. startLOC := CALLDATALOAD(4 + 32 * IDX)
+
+5. startLOC <= 2^32 ?
+
+6. startLOC + 4 + 32 <= CALLDATASIZE ?  // checks if the length is provided
+
+7. dataLen := CALLDATALOAD(startLoc + 4)
+
+8. startLoc + 4 + 32 + dataLen <= CALLDATASIZE ?  // checks if the actual data is provided
+
+9. dataLen <= 2^32 ?
+
+
+
+
+## screening for `isValidSignature` of each owner
+
+
+it may be considered to scan the isValidSignature function whenever adding a new owner (either in the contract or the client side), to ensure that it has no dangerous opcode.
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## List of Analyzed Common Attack Vectors
 In this section we enumerate all attack vectors from our
