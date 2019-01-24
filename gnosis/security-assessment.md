@@ -1,6 +1,9 @@
-# Security Audit of GnosisSafe contract
+Formal Verification of GnosisSafe Contract
+==========================================
 
-## Executive Summary
+
+# Executive Summary
+
 Gnosis Safe is a smart contract which provides multisig authentication for accessing other contracts on the blockchain.
 It revolves around transactions, which wrap calls to external contracts and require the signature of multiple owners in 
 order to be executed. Multiple signature validation schemes are supported, including ECSDA, a contract-builtin approval scheme,
@@ -12,7 +15,7 @@ We found two security vulnerabilities. One of them is an instance of well-known
 re-entrancy attack. The other is an issue specific to GnosisSafe, with potential to be abused.
 Developers accepted both our issues.
 
-## Methodology
+# Methodology
 
 In this section we analyzed for security issues the core GnosisSafe contract.
 The version audited is [commit 14495428954366dcf812acfa11e54c81b186332d](https://github.com/gnosis/safe-contracts/commit/14495428954366dcf812acfa11e54c81b186332d)
@@ -30,7 +33,7 @@ Next we present the list of discovered security issues, followed by our
 assessment of vulnerabilities.
 
 
-## Scope
+# Scope
 
 The scope of the current engagement is the GnosisSafe contract without enabling any add-on modules. Specifically, this includes the following functions:
 
@@ -46,7 +49,7 @@ The scope of the current engagement is the GnosisSafe contract without enabling 
 The security assessment is limited in scope within the boundary of the Solidity contract only.
 
 
-## Disclaimers
+# Disclaimers
 
 This report does not constitute legal or investment advice. The preparers of this report
 present it as an informational exercise documenting the due diligence involved in the secure
@@ -62,9 +65,9 @@ The possibility of human error in the manual review process is very real, and we
 seeking multiple independent opinions on any claims which impact a large number of
 funds.
 
-## Security Vulnerabilities
+# Findings
 
-### Reentrancy attack in `execTransaction`
+## Reentrancy vulnerability in `execTransaction`
 
 To protect from reentrancy attacks, GnosisSafe uses storage field `nonce`, 
 which is incremented during each transaction. 
@@ -116,16 +119,16 @@ function execTransaction(
 ```
 
 The main external call managed by this transaction (hereafter referred as "payload") is performed in function
-[execute](https://github.com/gnosis/safe-contracts/blob/bfb8abac580d76dd44f68307a5356a919c6cfb9b/contracts/GnosisSafe.sol#L95).
+[`execute`](https://github.com/gnosis/safe-contracts/blob/bfb8abac580d76dd44f68307a5356a919c6cfb9b/contracts/GnosisSafe.sol#L95).
 After payload is executed, the original caller or another account specified in transaction data is refunded for gas cost in 
-[handlePayment](https://github.com/gnosis/safe-contracts/blob/bfb8abac580d76dd44f68307a5356a919c6cfb9b/contracts/GnosisSafe.sol#L102).
+[`handlePayment`](https://github.com/gnosis/safe-contracts/blob/bfb8abac580d76dd44f68307a5356a919c6cfb9b/contracts/GnosisSafe.sol#L102).
 Both these calls are performed after the nonce
 [is incremented](https://github.com/gnosis/safe-contracts/blob/bfb8abac580d76dd44f68307a5356a919c6cfb9b/contracts/GnosisSafe.sol#L92).
 Consequently, it is not possible to execute the same transaction multiple times
 from within these calls.
 
 However, there is one more external call possible inside
-[checkSignatures](https://github.com/gnosis/safe-contracts/blob/bfb8abac580d76dd44f68307a5356a919c6cfb9b/contracts/GnosisSafe.sol#L90) 
+[`checkSignatures`](https://github.com/gnosis/safe-contracts/blob/bfb8abac580d76dd44f68307a5356a919c6cfb9b/contracts/GnosisSafe.sol#L90) 
 phase, which calls [an external contract](https://github.com/gnosis/safe-contracts/blob/bfb8abac580d76dd44f68307a5356a919c6cfb9b/contracts/GnosisSafe.sol#L161) 
 managed by an owner to validate the signature using 
 [EIP-1271](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1271.md) signature validation mechanism:
@@ -203,7 +206,8 @@ Conditions required for this attack to be possible:
 **Recommendation:**
 Increment `nonce` before calling `checkSignatures`.
 
-### `ISignatureValidator` gas and refund abuse
+## `ISignatureValidator` gas and refund abuse
+
 The account that initiated the transaction can consume large amounts of gas for free, unnoticed by other owners, and possibly receive a refund larger than the amount of gas consumed.
 This vulnerability is specific to GnosisSafe; it is not listed in our reference list of known vulnerabilities.
 
@@ -248,11 +252,10 @@ Thus this remains a valid vulnerability.
 Considering the specific functionality of `ISignatureValidator`, we recommend limiting the gas when calling `ISignatureValidator` to a small predetermined value. Careful gas limits on external contract calls are a common security practice. For example when tokens are sent in Solidity through `msg.sender.send(ethAmt)`, gas is automatically limited to `2300`([source](https://medium.com/@JusDev1988/reentrancy-attack-on-a-smart-contract-677eae1300f2)).
 
 
-# Other Issues/Recommendations
 
 
 
-## zero and precompiled contract addresses
+## `execTransaction` allows a user transaction to the zero address, causing the ether locked at 0x0
 
 `execTransaction` does not reject the case of `to` being the zero address `0x0`, which may lead to an *internal* transaction to the zero address, via the following function call sequence:
 
@@ -262,22 +265,209 @@ Considering the specific functionality of `ISignatureValidator`, we recommend li
 
 Unlike a regular transaction to the zero address, which creates a new account, an internal transaction to the zero address behaves the same as other transactions to non-zero addresses, i.e., sending the ether to the zero address account (which indeed exists: https://etherscan.io/address/0x0000000000000000000000000000000000000000) and executing the code associated to it (which is empty in this case).
 
-Although it is the users' responsibility that ensures correctness of the transaction data, it is quite possible that a certain user may not be aware of the difference between regular and internal transactions to the zero address, sending a transaction data to `execTransaction` with `to == 0x0`, expecting that it creates a new account.  Since an internal transaction to the zero address mostly succeeds (note that it spends a little gas, without needing to pay the `G_newaccount` (25,000) gas fee since the zero-address account already exists), it may cause the ether stuck at 0x0, which could be serious when the user attaches a large amount of ether as a startup fund for the new account.
+Although it is the users' responsibility that ensures correctness of the transaction data, it is quite possible that a certain user may not be aware of the difference between the regular and internal transactions to the zero address, sending a transaction data to `execTransaction` with `to == 0x0`, expecting that it creates a new account.  Since an internal transaction to the zero address mostly succeeds (note that it spends a small amount of gas, without needing to pay the `G_newaccount` (25,000) fee since the zero-address account already exists), it may cause the ether stuck at 0x0, which could be serious when the user attaches a large amount of ether as a startup fund for the new account.
 
-Recommendation:
-- reject `execTransaction` when `to == address(0)`.
+### Recommendation
 
-
-
+Modify `execTransaction` to revert when `to == address(0)`.
 
 
-#### Minor Related Note:
 
-`handlePayment` may send the ether to `receiver`:
+
+
+
+
+
+## `execTransaction` missing the contract existence check for the user transaction target
+
+`execTransaction` misses the contract existence check for the user transaction target, which may cause the loss of ether.
+
+According to the [Solidity document](https://solidity.readthedocs.io/en/v0.5.0/control-structures.html?highlight=non-existent#error-handling-assert-require-revert-and-exceptions):
+
+> The low-level functions `call`, `delegatecall` and `staticcall` return `true` as their first return value if the called account is non-existent, as part of the design of EVM. Existence must be checked prior to calling if desired.
+
+That is, if a client makes a mistake of providing a non-existing target address when preparing a user transaction, then the `execute` function will silently return true with transferring the paid ether to the non-existing account, resulting in the loss of the ether.
+
+However, it is not trivial to check the existence for a non-contract account.
+
+### Recommendation
+
+In the short term, add a check for a contract account, e.g., requiring `extcodesize(to) > 0` when `data` is not empty and `operation = Call`.
+
+In the long term, differentiate the two types of user transactions, i.e., the external contract call transaction and the simple ether transfer transaction, and implement the contract existence check for the external contract call transaction. Regarding the ether transfer transaction, explicitly mention this limitation in the document of `execTransaction`, and/or implement a certain conservative existence check at the client side to give a warning message if the given address seems to refer to a non-existing account.
+
+
+
+## `changeMasterCopy` missing contract existence check
+
+`changeMasterCopy` misses the contract account existence check for the new master copy address.
+If the master copy is set to a non-contract account, then the Proxy fall-back function will silently return.
+
+### Recommendation
+
+Implement the existence check, e.g., `extcodesize(_masterCopy) > 0`.
+
+
+
+
+
+## Potential overflow if contract invariant is not met
+
+There are several places where SafeMath is not used for the arithmetic operations.
+
+- https://github.com/gnosis/safe-contracts/blob/v0.1.0/contracts/GnosisSafe.sol#L92
+- https://github.com/gnosis/safe-contracts/blob/v0.1.0/contracts/GnosisSafe.sol#L139
+
+- https://github.com/gnosis/safe-contracts/blob/v0.1.0/contracts/base/OwnerManager.sol#L62
+- https://github.com/gnosis/safe-contracts/blob/v0.1.0/contracts/base/OwnerManager.sol#L79
+- https://github.com/gnosis/safe-contracts/blob/v0.1.0/contracts/base/OwnerManager.sol#L85
+
+The following contract invariants are needed to rule out the possibility of overflow:
+- `nonce` is small enough to avoid overflow in `nonce++`.
+- `threshold` is small enough to avoid overflow in `threshold * 65`.
+- `ownerCount >= 1` is small enough to avoid overflow in `ownerCount++`, `ownerCount - 1`, and `ownerCount--`.
+
+In the current GnosisSafe contract, it is practically reasonable to assume the above invariants, considering the resource limitation (such as gas), but this assessment should be repeated whenever the contract is updated.
+
+### Recommendation
+
+Use SafeMath for all arithmetic operations.
+
+
+
+
+## Transaction reordering vulnerability in `addOwnerWithThreshold`, `removeOwner`, and `changeThreshold`
+
+The `addOwnerWithThreshold` function allows to update `threshold`, for which a race condition exists similarly to the [ERC20 approve race condition](https://docs.google.com/document/d/1YLPtQxZu1UAvO9cZ1O2RPXBbT0mooh4DYKjA_jp-RLM).
+
+A common usage scenario of `addOwnerWithThreshold` is to add a new owner with *increasing* the threshold value (or at least keeping the value as is).  It is very unlikely the case of decreasing the threshold value while adding a new owner.  If there still exists such a use case, one can split the task into two transactions: adding a new owner, and decreasing `threshold`, since there is little reason to perform two updates atomically.
+
+The `removeOwner` function also has the similar issue.
+
+### Exploit Scenario
+
+Suppose there are five owners with `threshold = 3`. Suppose Alice proposes a transaction of `addOwnerWithThreshold(o1,4)`, and immediately after that, Bob proposes a transaction of `addOwnerWithThreshold(o2,5)`. If Bob's transaction is somehow approved before Alice's transaction, the final `threshold` value will be 4, while it should be 5.
+
+
+### Recommendation
+
+- Modify `addOwnerWithThreshold` to prevent from decreasing `threshold`.
+- Modify `removeOwner ` to prevent from increasing `threshold`.
+- Make `changeThreshold` private, and add the safer alternatives, i.e., `increaseThreshold` and `decreaseThreshold`.
+
+
+
+
+
+
+
+
+
+## Potential list index out of bounds in `signatureSplit`
+
+The `signatureSplit` function does not check the index is within the bound of the `signatures` sequence.
+
+Although no out-of-bounds index is passed to the function in the current GnosisSafe contract, it is possible for a future implementation to make a mistake, passing an out-of-bound index.
+
+### Recommendation
+
+Add the index bounds check, or explicitly mention the requirement in the document of `signatureSplit` to prevent any future implementation from violating it.
+
+
+
+
+## Missing well-formedness check for signature encoding in `checkSignatures`
+
+`checkSignatures` does not explicitly check if the signature encoding is valid.
+
+The valid signature encoding should satisfy the following conditions:
+
+- When `v` is 0 or 1, the owner `r` should be within the range of `address`. Otherwise, the higher bits are truncated.
+- When `v` is 0:
+  - The offset `s` should be within the bound of the `signatures` buffer, i.e., `s + 32 <= signatures.length`. Otherwise, it will read some garbage value from the memory.
+  - The dynamic signature data pointed by `s` should be well-formed:
+    - The first 4 bytes should denote the size of the dynamic data, i.e., `dynamic-data-size := mload(signatures + s + 32)`.  Otherwise, it may try to read a large memory chunk, causing the out-of-gas exception.
+    - The `signatures` buffer should be large enough to hold the dynamic data, i.e., `signatures.length >= s + 32 + dynamic-data-size`.  Otherwise, it will read some garbage value from the memory.
+  - (Optional) Each dynamic data buffer should not be pointed by multiple signatures. Otherwise, the same dynamic data will be used to check the validity of different signatures.
+  - (Optional) Different dynamic data buffers should not be overlapped.
+
+
+
+For a reference, the following checks are inserted in the bytecode by the Solidity compiler for each `bytes`-type argument.
+
+
+```
+1. CALLDATASIZE >= 4 ?  // checks if the function signature is provided
+2. CALLDATASIZE >= 4 + 32 * NUM_OF_ARGS  // checks if the headers of all arguments are provided
+3. .... // load static type arguments and checks the range
+4. startLOC := CALLDATALOAD(4 + 32 * IDX)  // suppose the bytes-type argument is given in the IDX-th position
+5. startLOC <= 2^32 ?
+6. startLOC + 4 + 32 <= CALLDATASIZE ?  // checks if the length information is provided
+7. dataLen := CALLDATALOAD(startLoc + 4)
+8. startLoc + 4 + 32 + dataLen <= CALLDATASIZE ?  // checks if the actual data buffer is provided
+9. dataLen <= 2^32 ?
+10. ... CALLDATACOPY(..., startLoc + 4 + 32, dataLen) ...  // copy the data buffer to the memory
+```
+
+
+### Recommendation
+
+Implement the signature encoding validity check.
+
+
+
+
+## Lazy enum type check
+
+The `operation` argument value must be with the range of `Enum.Operation`, i.e., `[0,2]` inclusive, and the Solidity compiler is supposed to generate the range check in the compiled bytecode.  But it turns out that the range check does not appear in the `execTransaction` function, but it appears only inside the `execute` function.  We have not found yet any exploit of this missing range check, but it could be potentially vulnerable and requires a careful examination whenever the new bytecode is generated.
+
+### Recommendation
+
+Examine bytecode whenever the bytecode is updated.
+
+
+
+# Informative findings and recommendations
+
+
+## Address range
+
+An address argument value must be within the range of `address`, i.e., `[0, 2^160-1]` inclusive.  Otherwise, the fist 96 (= 256 - 160) bits are silently truncated (with no exception).  Thus, any client of the function that takes address arguments should check the validity of addresses before passing them to the function.
+
+
+## Scanning `isValidSignature` when adding an owner
+
+It may be considered to scan the `isValidSignature` function whenever adding a new owner (in either the contract or the client side), to ensure that the function body contains no dangerous opcode.
+
+Example:
+- Scanner: https://github.com/ethereum/casper/blob/master/casper/contracts/purity_checker.py
+- Usage (on-chain): https://github.com/ethereum/casper/blob/master/casper/contracts/simple_casper.v.py#L578
+
+
+
+## Local validity check of `checkSignatures`
+
+`checkSignatures` checks only the first `threshold` number of signatures.
+Thus, the validity of the remaining signatures is not considered.
+Also, the entire list of signatures is not required to be sorted, as long as the first `threshold` number of signatures are locally sorted.
+However, we have not found an attack exploiting this.
+
+Another questionable behavior is in the case where there are `threshold` valid signatures in total, but some of them at the beginning are invalid. Currently, `checkSignatures` fails in this case.
+A potential issue for this behavior is that a *bad* owner intentionally sends an invalid signature to *veto* the transaction. He can *always* veto if his address is the first (the smallest) among the owners. On the other hand, a *good* owner is hard to veto some bad transaction if his address is the last (the lartest) among the owners.
+Is this intended?
+
+## No explicit check for the case `2 <= v <= 26` in `checkSignatures`
+
+According to the signature encoding scheme, a signature with `2 <= v <= 26` is not valid, but the code does not have an explicit check for the case, relying on `ecrecover` to implicitly reject the case.  It may be considered to have the explicit check for the robustness, if the additional gas cost is affordable, since we have not verified the underlying C implementation of secp256k1, and there might exist unknown zero-day vulnerabilities (especially for the unusual cases).
+
+
+## `handlePayment` allows to send ether to the precompiled contract addresses
+
+`handlePayment` sends ether to `receiver` (in case of `gasToken == address(0)`):
 
 * https://github.com/gnosis/safe-contracts/blob/v0.1.0/contracts/GnosisSafe.sol#L120
 
-where `receiver` is non-zero, since `tx.origin` cannot be zero.
+where `receiver` is non-zero, provided that `tx.origin` is non-zero.
 But, `receiver` could be still a non-owned account, especially one of the precompiled (0x1 - 0x8) contract addresses.
 Here `receiver.send(amount)` will succeed even with the small gas stipend 2300 for some precompiled contracts (at least, for 0x2, 0x3, 0x4, and 0x6). Below is the gas cost for executing each precompiled contract.
 
@@ -291,56 +481,9 @@ Here `receiver.send(amount)` will succeed even with the small gas stipend 2300 f
 - 0x8: ECPAIRING: 100000 + ...
 
 
-## Missing check of contract existence
-
-`execTransaction` misses the contract existence check for `to`, and thus it can cause lost ethers.
-
-According to the [Solidity document](https://solidity.readthedocs.io/en/v0.5.0/control-structures.html?highlight=non-existent#error-handling-assert-require-revert-and-exceptions):
-
-> The low-level functions `call`, `delegatecall` and `staticcall` return `true` as their first return value if the called account is non-existent, as part of the design of EVM. Existence must be checked prior to calling if desired.
-
-That is, if the user transaction is supposed to call an external contract with the ether payment `value > 0`, but makes a mistakes of referring to a non-existing address, the `execute` function silently returns true after transferring `value` to the non-existing account, resulting in the loss of the ethers.
-
-However, it is understood that simply adding the contract existence check is not a solution, since there exists a use case that the user transaction is meant to send ethers to a non-contract account, in which case the existence check is not trivial.
-
-Recommendation:
-Differentiate two types of user transactions, i.e., contract call transaction and send transaction, and implement the contract existence check for the contract call transaction. For the send transaction, explicitly mention this limitation in the document of `execTransaction`, and/or implement an existence check for regular accounts at the client side.
 
 
-
-
-
-## `checkSignatures`
-
-### Local validity check
-
-`checkSignatures` checks only the first `threshold` number of signatures.
-Thus, the validity of the remaining signatures does not matter.
-Also, the sortedness of the whole signatures is not required, as long as the first `threshold` number of signatures are locally sorted.
-However, we have not found an attack exploiting this.
-
-Another questionable behavior is in the case where there are `threshold` valid signatures in total, but some of them at the beginning are invalid. Currently, `checkSignatures` fails in this case.
-A potential issue for this behavior is that a *bad* owner intentionally sends an invalid signature to *veto* the transaction. He can *always* veto if his address is the first (the smallest) among the owners. On the other hand, a *good* owner is hard to veto some bad transaction if his address is the last (the lartest) among the owners.
-Is this intended?
-
-### No explicit check for the case `2 <= v <= 26`
-
-According to the signature encoding scheme, a signature with `2 <= v <= 26` is not valid, but the code does not have an explicit check for the case, relying on `ecrecover` to implicitly reject the case.  It may be considered to have the explicit check for the robustness, if the additional gas cost is affordable, since we have not verified the underlying C implementation of secp256k1, and there might exist unknown zero-day vulnerabilities (especially for the unusual cases).
-
-
-
-### `signatures` size limit
-
-Considering the [current max block gas limit] (~8M) and the gas cost for the local memory usage (i.e., `n^2/512 + 3n` for `n` bytes), the size of `signatures` must be (much) less than 2^16 (i.e., 64KB). 
-
-
-[current max block gas limit]: <https://etherscan.io/blocks>
-
-
-
-## OwnerManager
-
-### `addOwnerWithThreshold`
+## `addOwnerWithThreshold` in case of contract invariant being not satisfied
 
 Although it is very unlikely, but if `ownerCount` is corrupted (possibly due to the hash collision), `ownerCount++` may have the overflow, resulting in `ownerCount` being zero, provided that `threshold == _threshold`.  In the case of `threshold != _threshold`, however, if `ownerCount++` has the overflow, `changeThreshold` will always revert since the following two requirements cannot be satisfied at the same time, where `ownerCount` is zero:
 ```
@@ -352,134 +495,16 @@ Although it is very unlikely, but if `ownerCount` is corrupted (possibly due to 
 
 
 
-### Lazy enum type check
 
-The `operation` argument value must be with the range of `Enum.Operation`, i.e., [0,2] inclusive, and the Solidity compiler is supposed to generate the range check in the compiled bytecode.  But it turns out that the range check does not appear in the `execTransaction` function, but it appears only inside the `execute` function.  We have not found yet any exploit of this missing range check, but it is a potential vulnerability that needs an extra examination whenever the new bytecode is generated.
 
-Recommendation: examine bytecode whenever the bytecode is updated.
+## `signatures` size limit
 
+Considering the [current max block gas limit] (~8M) and the gas cost for the local memory usage (i.e., `n^2/512 + 3n` for `n` bytes), the size of `signatures` (and other `bytes`-type arguments) must be (much) less than 2^16 (i.e., 64KB).
 
-### Potential overflow if contract invariant is not met
+Note that the bytecode generated by the Solidity compiler checks if a `bytes`-type argument size is less than 2^32.
 
-There are several places where SafeMath is not used for the arithmetic operations.
 
-https://github.com/gnosis/safe-contracts/blob/v0.1.0/contracts/GnosisSafe.sol#L92
-https://github.com/gnosis/safe-contracts/blob/v0.1.0/contracts/GnosisSafe.sol#L139
-
-https://github.com/gnosis/safe-contracts/blob/v0.1.0/contracts/base/OwnerManager.sol#L62
-https://github.com/gnosis/safe-contracts/blob/v0.1.0/contracts/base/OwnerManager.sol#L79
-https://github.com/gnosis/safe-contracts/blob/v0.1.0/contracts/base/OwnerManager.sol#L85
-
-The following contract invariants are needed to rule out the possibility of overflow:
-- `nonce` is small enough to avoid overflow in `nonce++`.
-- `threshold` is small enough to avoid overflow in `threshold * 65`.
-- `ownerCount >= 1` is small enough to avoid overflow in `ownerCount++`, `ownerCount - 1`, and `ownerCount--`.
-
-In the current GnosisSafe contract, assuming the above invariants are practically reasonable considering the resource limitation (such as gas), but this assessment should be repeated whenever the contract is updated.
-
-
-### transaction reordering issue.
-
-this function allows to update `threshold`, which introduces an usability issue similar to the [ERC20 approve function issue](https://docs.google.com/document/d/1YLPtQxZu1UAvO9cZ1O2RPXBbT0mooh4DYKjA_jp-RLM).
-
-the common usage scenario of this function is to add a new owner with *increasing* the threshold value (or keeping the value as is).  it is very unlikely the case of decreasing the threshold value while adding a new owner.  if there still exists such a use case, one can split the task into two transactions: adding a new owner, and decreasing threshold. that is, we have not found a reason for such a task, if any, to be executed atomically.
-
-
-exploit scenario:
-
-suppose there are five owners with threshold of three. suppose alice proposes a transaction of `addOwnerWithThreshold(o1,4)` and immediately bob proposes a transaction of `addOwnerWithThreshold(o2,5)`. if the bob's transaction is approved before the alice's transaction, the final threshold will be 4, while it should be 5.
-
-
-recommendation:
-- reject `addOwnerWithThreshold` if it tries to decrease `threshold`
-- have two more functions: `increaseThreshold` and `decreaseThreshold`
-
-
-recommendation:
-`removeOwner`:
-it may be considered to check that `_threshold <= threshold`
-
-
-
-### `changeMasterCopy` missing contract existence check
-
-`changeMasterCopy` misses the contract account existence check for the new master copy address.
-if the non-contract address is set to the master copy, then the proxy fall back function will silently returns.
-
-recommend:
-implement the existence check, e.g., using `EXTCODESIZE`.
-
-
-
-
-## signatureSplit index of ouf bound
-
-The `signatureSplit` function does not check the index is within the bound of the `signatures` sequence. Although no out-of-bound index is passed to the function throughout the current GnosisSafe contract, it is recommended to either add the index bound check or mention the implicit requirement in the document to prevent any future implementation from violating this condition.
-
-
-## address range
-
-all the address arguments are assumed to be within the range of addresses, i.e., its first 96 (= 256 - 160) bits are zero. otherwise, the fist 96 bits are simply ignored, without any exception. thus, any client of this function should check the validity of addresses before passing them to the functions.
-
-
-## signature encoding well-formedness
-
-
-
-
-no validity check for the signature encoding
-- when `v` is 0 or 1, the owner `r` should be within the range of `address`: otherwise, the upper bits are truncated
-- when `v` is 0,
-  - the offset `s` should be within the bound, i.e., `s + 32 <= signatures.length`: otherwise, it will read some garbage value from the memory
-  - the dynamic signature data pointed by `s` should be well-formed:
-    - the first 4 bytes denote the length of the dynamic data, i.e., `dynamic-data-length := mload(signatures + s + 32)`: otherwise, it may try to read a large memory chunk
-    - the `signatures` buffer should be large enough to hold the dynamic data, i.e., `signatures.length >= s + 32 + dynamic-data-length`: otherwise, it will read some garbage value from the memory
-  - (optional) each dynamic data should not be pointed by different signatures: otherwise, the same dynamic data will be used to check the validity of different signatures
-  - (optional) different dynamic data should not be overlapped
-
-
-
-for example, 
-in general, when a `bytes`-type argument is provided, the following checks are performed:
-
-
-```
-1. CALLDATASIZE >= 4 ?  // checks if the function signature is provided
-
-2. CALLDATASIZE >= 4 + 32 * NUM_OF_ARGS  // checks if the headers of all parameters are provided
-
-3. .... // load static type args and checks range
-
-4. startLOC := CALLDATALOAD(4 + 32 * IDX)
-
-5. startLOC <= 2^32 ?
-
-6. startLOC + 4 + 32 <= CALLDATASIZE ?  // checks if the length is provided
-
-7. dataLen := CALLDATALOAD(startLoc + 4)
-
-8. startLoc + 4 + 32 + dataLen <= CALLDATASIZE ?  // checks if the actual data is provided
-
-9. dataLen <= 2^32 ?
-```
-
-
-
-
-## screening for `isValidSignature` of each owner
-
-
-it may be considered to scan the isValidSignature function whenever adding a new owner (either in the contract or the client side), to ensure that it has no dangerous opcode.
-
-
-
-
-
-
-
-
-
-
+[current max block gas limit]: <https://etherscan.io/blocks>
 
 
 
