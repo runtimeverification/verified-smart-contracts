@@ -1,5 +1,17 @@
 # Security Audit of GnosisSafe contract
 
+## Executive Summary
+Gnosis Safe is a smart contract which provides multisig authentication for accessing other contracts on the blockchain.
+It revolves around transactions, which wrap calls to external contracts and require the signature of multiple owners in 
+order to be executed. Multiple signature validation schemes are supported, including ECSDA, a contract-builtin approval scheme,
+and [EIP-1271](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1271.md).
+At the end of successful transactions, transaction initiator is refunded for the gas cost. 
+
+In this report we performed an extensive security audit of the contract.
+We found two security vulnerabilities. One of them is an instance of well-known
+re-entrancy attack. The other is an issue specific to GnosisSafe, with potential to be abused.
+Developers accepted both our issues.
+
 ## Methodology
 
 In this section we analyzed for security issues the core GnosisSafe contract.
