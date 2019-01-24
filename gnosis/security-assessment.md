@@ -181,7 +181,7 @@ The most likely beneficiary of this attack is the owner who initiated the transa
 Yet if a benign owner calls another malicious contract for the signature validation, 
 the malicious contract can exploit it even if he is not an owner.
 
-#### Attack Scenario
+#### Exploit Scenario
 
 1. Suppose we have a Gnosis safe managed by several owners, which controls access to an account that holds ERC20 tokens. At some point they agree to transfer X tokens from the safe to the personal account of owner 1.
 
@@ -203,8 +203,12 @@ Conditions required for this attack to be possible:
 
 8. In the end, Owner 1 receives into his account 10X the amount of tokens approved by the other owners.
 
-**Recommendation:**
+#### Recommendation
+
 Increment `nonce` before calling `checkSignatures`.
+
+
+
 
 ## `ISignatureValidator` gas and refund abuse
 
@@ -248,7 +252,8 @@ a large refund. The amount of benefit the attacker my receive is limited by (1) 
 and market cost of the token. However, we should allow for the possibility that block gas limit will increase in future.
 Thus this remains a valid vulnerability.
 
-**Recommendation:**
+#### Recommendation
+
 Considering the specific functionality of `ISignatureValidator`, we recommend limiting the gas when calling `ISignatureValidator` to a small predetermined value. Careful gas limits on external contract calls are a common security practice. For example when tokens are sent in Solidity through `msg.sender.send(ethAmt)`, gas is automatically limited to `2300`([source](https://medium.com/@JusDev1988/reentrancy-attack-on-a-smart-contract-677eae1300f2)).
 
 
@@ -267,7 +272,7 @@ Unlike a regular transaction to the zero address, which creates a new account, a
 
 Although it is the users' responsibility that ensures correctness of the transaction data, it is quite possible that a certain user may not be aware of the difference between the regular and internal transactions to the zero address, sending a transaction data to `execTransaction` with `to == 0x0`, expecting that it creates a new account.  Since an internal transaction to the zero address mostly succeeds (note that it spends a small amount of gas, without needing to pay the `G_newaccount` (25,000) fee since the zero-address account already exists), it may cause the ether stuck at 0x0, which could be serious when the user attaches a large amount of ether as a startup fund for the new account.
 
-### Recommendation
+#### Recommendation
 
 Modify `execTransaction` to revert when `to == address(0)`.
 
@@ -290,7 +295,7 @@ That is, if a client makes a mistake of providing a non-existing target address 
 
 However, it is not trivial to check the existence for a non-contract account.
 
-### Recommendation
+#### Recommendation
 
 In the short term, add a check for a contract account, e.g., requiring `extcodesize(to) > 0` when `data` is not empty and `operation = Call`.
 
@@ -303,7 +308,7 @@ In the long term, differentiate the two types of user transactions, i.e., the ex
 `changeMasterCopy` misses the contract account existence check for the new master copy address.
 If the master copy is set to a non-contract account, then the Proxy fall-back function will silently return.
 
-### Recommendation
+#### Recommendation
 
 Implement the existence check, e.g., `extcodesize(_masterCopy) > 0`.
 
@@ -329,7 +334,7 @@ The following contract invariants are needed to rule out the possibility of over
 
 In the current GnosisSafe contract, it is practically reasonable to assume the above invariants, considering the resource limitation (such as gas), but this assessment should be repeated whenever the contract is updated.
 
-### Recommendation
+#### Recommendation
 
 Use SafeMath for all arithmetic operations.
 
@@ -344,12 +349,12 @@ A common usage scenario of `addOwnerWithThreshold` is to add a new owner with *i
 
 The `removeOwner` function also has the similar issue.
 
-### Exploit Scenario
+#### Exploit Scenario
 
 Suppose there are five owners with `threshold = 3`. Suppose Alice proposes a transaction of `addOwnerWithThreshold(o1,4)`, and immediately after that, Bob proposes a transaction of `addOwnerWithThreshold(o2,5)`. If Bob's transaction is somehow approved before Alice's transaction, the final `threshold` value will be 4, while it should be 5.
 
 
-### Recommendation
+#### Recommendation
 
 - Modify `addOwnerWithThreshold` to prevent from decreasing `threshold`.
 - Modify `removeOwner ` to prevent from increasing `threshold`.
@@ -369,7 +374,7 @@ The `signatureSplit` function does not check the index is within the bound of th
 
 Although no out-of-bounds index is passed to the function in the current GnosisSafe contract, it is possible for a future implementation to make a mistake, passing an out-of-bound index.
 
-### Recommendation
+#### Recommendation
 
 Add the index bounds check, or explicitly mention the requirement in the document of `signatureSplit` to prevent any future implementation from violating it.
 
@@ -410,7 +415,7 @@ For a reference, the following checks are inserted in the bytecode by the Solidi
 ```
 
 
-### Recommendation
+#### Recommendation
 
 Implement the signature encoding validity check.
 
@@ -421,7 +426,7 @@ Implement the signature encoding validity check.
 
 The `operation` argument value must be with the range of `Enum.Operation`, i.e., `[0,2]` inclusive, and the Solidity compiler is supposed to generate the range check in the compiled bytecode.  But it turns out that the range check does not appear in the `execTransaction` function, but it appears only inside the `execute` function.  We have not found yet any exploit of this missing range check, but it could be potentially vulnerable and requires a careful examination whenever the new bytecode is generated.
 
-### Recommendation
+#### Recommendation
 
 Examine bytecode whenever the bytecode is updated.
 
@@ -471,14 +476,16 @@ where `receiver` is non-zero, provided that `tx.origin` is non-zero.
 But, `receiver` could be still a non-owned account, especially one of the precompiled (0x1 - 0x8) contract addresses.
 Here `receiver.send(amount)` will succeed even with the small gas stipend 2300 for some precompiled contracts (at least, for 0x2, 0x3, 0x4, and 0x6). Below is the gas cost for executing each precompiled contract.
 
-- 0x1: ECREC: 3000
-- 0x2: SHA256: 60 + 12 * (byte-size-of-call-data)
-- 0x3: RIP160: 600 + 120 * (byte-size-of-call-data)
-- 0x4: ID: 15 + 3 * (byte-size-of-call-data)
-- 0x5: MODEXP: (complex-gas-cost-model)
-- 0x6: ECADD: 500
-- 0x7: ECMUL: 40000
-- 0x8: ECPAIRING: 100000 + ...
+| Address | Contract | Gas Cost |
+| --- | ----------- | ----------------------------------------- |
+| 0x1 | ECREC       | 3000                                      |
+| 0x2 | SHA256      | 60 + 12 * (byte-size-of-call-data)        |
+| 0x3 | RIP160      | 600 + 120 * (byte-size-of-call-data)      |
+| 0x4 | ID          | 15 + 3 * (byte-size-of-call-data)         |
+| 0x5 | MODEXP      | ...                                       |
+| 0x6 | ECADD       | 500                                       |
+| 0x7 | ECMUL       | 40000                                     |
+| 0x8 | ECPAIRING   | 100000 + ...                              |
 
 
 
@@ -508,7 +515,8 @@ Note that the bytecode generated by the Solidity compiler checks if a `bytes`-ty
 
 
 
-## List of Analyzed Common Attack Vectors
+# Anti-pattern analysis
+
 In this section we enumerate all attack vectors from our
 [reference list](https://github.com/runtimeverification/verified-smart-contracts/wiki/List-of-Security-Vulnerabilities) 
 of known attack vectors,
