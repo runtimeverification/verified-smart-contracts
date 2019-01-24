@@ -4,6 +4,14 @@ This presents a formal specification of the GnosisSafe contract.
 The specification is against the code from commit ID [`427d6f7`][v0.1.0] of the `gnosis/safe-contracts` Github repository.
 
 
+#### Statistics:
+
+* Size of the mechanized formal specification: ~2,000 LOC
+* Verification time: 29,103s (~8h) @ Intel i7-4960X CPU 3.60GHz
+* Average number of (semantics) steps: 5,050  (max: 11,635)
+
+
+
 ## GnosisSafe contract
 
 The GnosisSafe contract provides the main function `execTransaction` as the main entry point of the whole contract.
