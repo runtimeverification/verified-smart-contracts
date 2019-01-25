@@ -3,13 +3,8 @@
 This presents a formal specification of the GnosisSafe contract.
 The specification is against the code from commit ID [`427d6f7`][v0.1.0] of the `gnosis/safe-contracts` Github repository.
 
-
-#### Statistics:
-
-* Size of the mechanized formal specification: ~2,000 LOC
-* Verification time: 29,103s (~8h) @ Intel i7-4960X CPU 3.60GHz
-* Average number of (semantics) steps: 5,050  (max: 11,635)
-
+The specifications are written in [eDSL], a domain-specific language for EVM specifications, which must be known in order to thoroughly understand our EVM-level specifications.
+Refer to [resources] for background on our technology.
 
 
 ## GnosisSafe contract
@@ -18,11 +13,9 @@ The GnosisSafe contract provides the main function `execTransaction` as the main
 The function takes a user transaction as input, and executes it if its signatures are valid.
 
 
-#### Pre-conditions of accounts and call depth:
+#### Pre-conditions of accounts:
 
 We first assume that there are more than or equal to five accounts deployed on-chain: the master copy account, the proxy account, the transaction sender (`tx.origin`) account, the transaction target (`to`) account, and the payment receiver (`refundReceiver`) account. Note that the master copy, the proxy, and the transaction sender accounts must be distinct, since a transaction cannot be sent from a contract account, while the transaction target and the payment receiver accounts may be the same with another. We assume nothing about their balances but their values being within the range of `uint256` (i.e., 0 to 2^256 - 1, inclusive).
-
-We also assume that the call depth at the beginning of `execTransaction` is less than 1023, since the nested depth of external contract calls of `execTransaction` is at least 1.
 
 ```ini
 [root]
@@ -73,7 +66,7 @@ attribute:
 
 ### Function signatureSplit
 
-`signatureSplit` is an internal function that takes a sequence of signatures and an index, and returns the indexed signature as a tuple of its `v`, `r`, and `s` fields.
+[`signatureSplit`] is an internal function that takes a sequence of signatures and an index, and returns the indexed signature as a tuple of its `v`, `r`, and `s` fields.
 
 #### Stack and memory:
 
@@ -2770,3 +2763,5 @@ proxy_code: "0x60806040526004361061004c576000357c0100000000000000000000000000000
 
 [v0.1.0]: <https://github.com/gnosis/safe-contracts/releases/tag/v0.1.0>
 [fii]: <https://github.com/runtimeverification/verified-smart-contracts/blob/a3ca2bcbc152cd0b597669f6d3ac067fab363e33/gnosis/verification.k#L346-L421>
+[resources]: </README.md#resources>
+[eDSL]: </resources/edsl.md>
