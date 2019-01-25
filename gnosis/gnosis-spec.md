@@ -105,7 +105,7 @@ where
 #### Function visibility and modifiers:
 
 The function cannot be directly called from outside, as it is `internal`.
-An external call to this function will silently terminates with no effect (and no exception).
+An external call to this function will silently terminate with no effect (and no exception).
 
 The function does not update the storage, as it is marked `pure`.
 
@@ -117,17 +117,17 @@ No overflow:
 - The input stack size is small enough to avoid the stack overflow.
 - The maximum memory location accessed, i.e., `SIGS_LOC + 32 + (65 * POS + 65)`, is small enough to avoid the integer overflow for the pointer arithmetic.
 
-Assuming the no-overflow conditions is practically reasonable. If they are not satisfied, the function will throw.
+It is practically reasonable to assume that the no-overflow conditions are met. If they are not satisfied, the function will throw.
 
 Well-formed input:
-- No index out of bound, i.e., `(POS + 1) * 65 <= SIGS_LEN`
+- No index out of bounds, i.e., `(POS + 1) * 65 <= SIGS_LEN`
 
 The input well-formedness condition is satisfied in all calling contexts of the current GnosisSafe contract.
 
 
 #### Mechanized formal specification:
 
-Below is the specification to be verified against the GnosisSafe contract bytecode.
+Below is the specification that we verified against the GnosisSafe contract bytecode.
 
 ```ini
 [signatureSplit]
@@ -184,19 +184,19 @@ localMem: M
 
 ### Function encodeTransactionData
 
-`encodeTransactionData` is a public function that calculates the hash value of the given transaction data.
+[`encodeTransactionData`] is a public function that calculates the hash value of the given transaction data.
 
 #### Stack and memory:
 
 The function is `public`, to which both internal and external calls can be made.
-One of the main differences between two types of calls is how to pass the input.
+One of the main differences between the two types of calls is how to pass the input.
 The internal call passes the input through the stack and the memory, while the external call passes the input through the call data.
 
 For the internal call, the input stack is given as follows:
 ```
 NONCE : REFUND_RECEIVER : GAS_TOKEN : GAS_PRICE : DATA_GAS : SAFE_TX_GAS : OPERATION : DATA_LOC : VALUE : TO : RETURN_LOC : WS
 ```
-where the first ten elements are the function arguments in the reverse order, while `DATA_LOC` is a memory pointer to the actual buffer of `data`.
+where the first ten elements are the function arguments in reverse order, while `DATA_LOC` is a memory pointer to the actual buffer of `data`.
 Note that `OPERATION` is encoded as `unit8`.
 
 The memory stores the `data` buffer starting at the location `DATA_LOC`, where it first stores the size of the buffer, followed by the actual buffer bytes, as illustrated below:
@@ -280,7 +280,7 @@ No overflow:
 - For the internal call, the input stack size is small enough to avoid the stack overflow.
 - The maximum memory location accessed, i.e., `DATA_LOC + 32 + ceil32(DATA_LEN) + 482`, is small enough to avoid the integer overflow for the pointer arithmetic.
 
-Assuming the no-overflow conditions is practically reasonable. If they are not satisfied, the function will throw.
+It is practically reasonable to assume that the no-overflow conditions are met. If they are not satisfied, the function will throw.
 
 
 Well-formed input:
@@ -295,7 +295,7 @@ The input well-formedness conditions are satisfied in all calling contexts of th
 
 ##### For internal call:
 
-Below is the specification to be verified against the GnosisSafe contract bytecode.
+Below is the specification that we verified against the GnosisSafe contract bytecode.
 
 ```ini
 [encodeTransactionData-internal]
@@ -459,7 +459,7 @@ localMem: INIT_MEM =>
 
 ##### For external call:
 
-Below is the specification to be verified against the GnosisSafe contract bytecode.
+Below is the specification that we verified against the GnosisSafe contract bytecode.
 
 ```ini
 [encodeTransactionData-public]
@@ -543,7 +543,7 @@ proxy_storage:
 
 ### Function getTransactionHash
 
-Although it is not in the scope of the current engagement, we provide the specification of `getTransactionHash` for a future reference.
+[`getTransactionHash`] is a simple wrapper of `encodeTransactionData` that returns the `keccak256` hash of the `encodeTransactionData` output.
 
 ```ini
 [getTransactionHash]
@@ -623,7 +623,7 @@ proxy_storage:
 
 ### Function handlePayment
 
-`handlePayment` is a private function that pays the gas cost to the receiver in either Ether or tokens.
+[`handlePayment`] is a private function that pays the gas cost to the receiver in either Ether or tokens.
 
 Here we consider only the case of payment in Ether. The token payment is out of the scope of the current engagement.
 
@@ -645,9 +645,9 @@ The payment amount is calculated by the following formula:
 ```
 ((START_GAS - GAS_LEFT) + DATA_GAS) * GAS_PRICE
 ```
-where `GAS_LEFT` is the result of `gasleft()` at line 115.
+where `GAS_LEFT` is the result of `gasleft()` at [line 115].
 
-If the arithmetic overflow occurs when evaluating the above formula, the function reverts.
+If an arithmetic overflow occurs when evaluating the above formula, the function reverts.
 
 
 If no overflow occurs, `receiver` is set to `tx.origin` if `refundReceiver` is zero, otherwise it is set to `refundReceiver`. Thus `receiver` is non-zero.
@@ -662,7 +662,7 @@ Here, we have little concern about the reentrancy for `send`, since there is no 
 #### Function visibility and modifiers:
 
 The function cannot be directly called from outside, as it is `private`.
-An external call to this function will silently terminates with no effect (and no exception).
+An external call to this function will silently terminate with no effect (and no exception).
 
 
 #### Pre-conditions:
@@ -670,7 +670,7 @@ An external call to this function will silently terminates with no effect (and n
 No overflow:
 - The input stack size is small enough to avoid the stack overflow.
 
-Assuming the no-overflow conditions is practically reasonable. If they are not satisfied, the function will throw.
+It is practically reasonable to assume that the no-overflow conditions are met. If they are not satisfied, the function will throw.
 
 Well-formed input:
 - The value of the address arguments are within the range of `address`, i.e., the first 96 (= 256 - 160) bits are zero. Otherwise, the function simply ignores (i.e., truncates) the fist 96 bits.
@@ -680,7 +680,7 @@ The input well-formedness conditions are satisfied in all calling contexts of th
 
 #### Mechanized formal specification:
 
-Below is the specification to be verified against the GnosisSafe contract bytecode.
+Below is the specification that we verified against the GnosisSafe contract bytecode.
 
 ```ini
 [handlePayment]
@@ -851,7 +851,7 @@ coinbase: _
 
 ### Function checkSignatures
 
-`checkSignatures` is an internal function that checks validity of the given signatures.
+[`checkSignatures`] is an internal function that checks the validity of the given signatures.
 
 #### Stack and memory:
 
@@ -895,7 +895,7 @@ Also, if `consumeHash = true`, the function may update `approvedHashes[currentOw
 #### Function visibility and modifiers:
 
 The function cannot be directly called from outside, as it is `internal`.
-An external call to this function will silently terminates with no effect (and no exception).
+An external call to this function will silently terminate with no effect (and no exception).
 
 
 
@@ -905,13 +905,12 @@ No overflow:
 - The input stack size is small enough to avoid the stack overflow.
 - The maximum memory location accessed is small enough to avoid the integer overflow for the pointer arithmetic.
 
-Assuming the no-overflow conditions is practically reasonable. If they are not satisfied, the function will throw.
+It is practically reasonable to assume that the no-overflow conditions are met. If they are not satisfied, the function will throw.
 
 No wrap-around:
 - `threshold` is small enough to avoid overflow (wrap-around).
 
-Assuming the no-wrap-around condition requires the corresponding contract invariant.
-In the current GnosisSafe contract, assuming the invariant is practically reasonable considering the resource limitation (such as gas).
+The no-wrap-around condition is implied by the OwnerManager contract invariant.
 If it is not satisfied, the function may have unexpected behaviors.
 
 Well-formed input:
@@ -984,7 +983,7 @@ The single loop iteration claim does not involve the recursive structure, and th
 
 
 
-Below is the specification to be verified against the GnosisSafe contract bytecode.
+Below is the specification that we verified against the GnosisSafe contract bytecode.
 
 ```ini
 ; internal
@@ -1586,7 +1585,7 @@ PC_FUN_START: 18250
 
 ### Function execTransaction
 
-`execTransaction` is an external function that executes the given transaction.
+[`execTransaction`] is an external function that executes the given transaction.
 
 We consider only the case of `Enum.Operation.Call` operation (i.e., `operation == 0`).
 The other two cases are out of the scope of the current engagement.
@@ -1622,8 +1621,8 @@ The function has the following non-trivial behaviors:
 No wrap-around:
 - `nonce` is small enough to avoid overflow (wrap-around).
 
-Assuming the no-wrap-around condition requires the corresponding contract invariant.
-In the current GnosisSafe contract, assuming the invariant is practically reasonable considering the resource limitation (such as gas).
+The no-wrap-around condition is implied by the GnosisSafe contract invariant.
+(Note that the resource limitation (such as gas) is considered to prove the contract invariant.)
 If it is not satisfied, the function may have unexpected behaviors.
 
 Well-formed input:
@@ -1645,7 +1644,7 @@ However, such an abstraction is too crude and does not necessarily lead to a bet
 
 #### Mechanized formal specification:
 
-Below is the specification to be verified against the GnosisSafe contract bytecode.
+Below is the specification that we verified against the GnosisSafe contract bytecode.
 
 ```ini
 [execTransaction]
@@ -1920,7 +1919,7 @@ The OwnerManager contract must satisfy the following contract invariant, once in
 
 ### Function addOwnerWithThreshold
 
-`addOwnerWithThreshold` is a public authorized function that adds a new owner and updates `threshold`.
+[`addOwnerWithThreshold`] is a public authorized function that adds a new owner and updates `threshold`.
 
 #### State update:
 
@@ -2122,7 +2121,7 @@ statusCode: _ => EVMC_REVERT
 
 ### Function removeOwner
 
-`removeOwner` is a public authorized function that removes the given owner and updates `threshold`.
+[`removeOwner`] is a public authorized function that removes the given owner and updates `threshold`.
 
 #### State update:
 
@@ -2288,7 +2287,7 @@ log: _ => _
 
 ### Function swapOwner
 
-`swapOwner` is a public authorized function that replaces `oldOwner` with `newOwner`.
+[`swapOwner`] is a public authorized function that replaces `oldOwner` with `newOwner`.
 
 #### State update:
 
@@ -2424,7 +2423,7 @@ Note that the set of modules could be empty, while the set of owners cannot.
 
 ### Function enableModule
 
-`enableModule` is a public authorized function that adds a new module.
+[`enableModule`] is a public authorized function that adds a new module.
 
 #### State update:
 
@@ -2512,7 +2511,7 @@ log: _
 
 ### Function disableModule
 
-`disableModule` is a public authorized function that removes the given module.
+[`disableModule`] is a public authorized function that removes the given module.
 
 #### State update:
 
@@ -2601,7 +2600,7 @@ log: _
 
 ### Function execTransactionFromModule
 
-`execTransactionFromModule` is a public function that executes the given transaction.
+[`execTransactionFromModule`] is a public function that executes the given transaction.
 
 Here we consider only the case that `modules` denotes the empty set.
 The case for a non-empty set of modules is out of the scope of the current engagement.
@@ -2656,7 +2655,7 @@ output: _ => _
 
 ### Function changeMasterCopy
 
-`changeMasterCopy` is a public authorized function that updates `masterCopy`.
+[`changeMasterCopy`] is a public authorized function that updates `masterCopy`.
 
 #### State update:
 
@@ -2765,3 +2764,20 @@ proxy_code: "0x60806040526004361061004c576000357c0100000000000000000000000000000
 [fii]: <https://github.com/runtimeverification/verified-smart-contracts/blob/a3ca2bcbc152cd0b597669f6d3ac067fab363e33/gnosis/verification.k#L346-L421>
 [resources]: </README.md#resources>
 [eDSL]: </resources/edsl.md>
+
+[`signatureSplit`]: <https://github.com/gnosis/safe-contracts/blob/v0.1.0/contracts/common/SignatureDecoder.sol#L32>
+[`encodeTransactionData`]: <https://github.com/gnosis/safe-contracts/blob/v0.1.0/contracts/GnosisSafe.sol#L284>
+[`getTransactionHash`]: <https://github.com/gnosis/safe-contracts/blob/v0.1.0/contracts/GnosisSafe.sol#L318>
+[`handlePayment`]: <https://github.com/gnosis/safe-contracts/blob/v0.1.0/contracts/GnosisSafe.sol#L106>
+[`checkSignatures`]: <https://github.com/gnosis/safe-contracts/blob/v0.1.0/contracts/GnosisSafe.sol#L134>
+[`execTransaction`]: <https://github.com/gnosis/safe-contracts/blob/v0.1.0/contracts/GnosisSafe.sol#L69>
+[`addOwnerWithThreshold`]: <https://github.com/gnosis/safe-contracts/blob/v0.1.0/contracts/base/OwnerManager.sol#L52>
+[`removeOwner`]: <https://github.com/gnosis/safe-contracts/blob/v0.1.0/contracts/base/OwnerManager.sol#L74>
+[`swapOwner`]: <https://github.com/gnosis/safe-contracts/blob/v0.1.0/contracts/base/OwnerManager.sol#L97>
+[`enableModule`]: <https://github.com/gnosis/safe-contracts/blob/v0.1.0/contracts/base/ModuleManager.sol#L33>
+[`disableModule`]: <https://github.com/gnosis/safe-contracts/blob/v0.1.0/contracts/base/ModuleManager.sol#L50>
+[`execTransactionFromModule`]: <https://github.com/gnosis/safe-contracts/blob/v0.1.0/contracts/base/ModuleManager.sol#L67>
+[`changeMasterCopy`]: <https://github.com/gnosis/safe-contracts/blob/v0.1.0/contracts/common/MasterCopy.sol#L14>
+
+[line 115]: <https://github.com/gnosis/safe-contracts/blob/v0.1.0/contracts/GnosisSafe.sol#L115>
+
