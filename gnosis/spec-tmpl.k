@@ -122,6 +122,19 @@
           </account>
 
           <account>
+            <acctID> #TOKEN_CONTRACT </acctID>
+            <balance> {TOKEN_CONTRACT_BAL} </balance>
+            <code> {TOKEN_CONTRACT_CODE} </code>
+            <storage>
+{TOKEN_CONTRACT_STORAGE}
+            </storage>
+            <origStorage>
+{TOKEN_CONTRACT_ORIGSTORAGE}
+            </origStorage>
+            <nonce> {TOKEN_CONTRACT_NONCE} </nonce>
+          </account>
+
+          <account>
             // precompiled account for ECCREC
             <acctID> 1 </acctID>
             <balance> 0 </balance>
@@ -145,19 +158,25 @@
      andBool #rangeAddress(#ORIGIN_ID)
      andBool #rangeAddress(#EXEC_ACCT_TO)
      andBool #rangeAddress(#REFUND_RECEIVER)
+     andBool #rangeAddress(#TOKEN_CONTRACT)
      andBool #rangeUInt(256, NOW)
      andBool #rangeUInt(128, BLOCK_NUM) // Solidity
 
-     andBool #MASTER_COPY_ID =/=Int #PROXY_ID
-     andBool #MASTER_COPY_ID =/=Int #ORIGIN_ID
-     andBool #MASTER_COPY_ID =/=Int #EXEC_ACCT_TO
-     andBool #MASTER_COPY_ID =/=Int #REFUND_RECEIVER
-     andBool #PROXY_ID       =/=Int #ORIGIN_ID
-     andBool #PROXY_ID       =/=Int #EXEC_ACCT_TO
-     andBool #PROXY_ID       =/=Int #REFUND_RECEIVER
-     andBool #ORIGIN_ID      =/=Int #EXEC_ACCT_TO
-     andBool #ORIGIN_ID      =/=Int #REFUND_RECEIVER
-     andBool #EXEC_ACCT_TO   =/=Int #REFUND_RECEIVER
+     andBool #MASTER_COPY_ID  =/=Int #PROXY_ID
+     andBool #MASTER_COPY_ID  =/=Int #ORIGIN_ID
+     andBool #MASTER_COPY_ID  =/=Int #EXEC_ACCT_TO
+     andBool #MASTER_COPY_ID  =/=Int #REFUND_RECEIVER
+     andBool #MASTER_COPY_ID  =/=Int #TOKEN_CONTRACT
+     andBool #PROXY_ID        =/=Int #ORIGIN_ID
+     andBool #PROXY_ID        =/=Int #EXEC_ACCT_TO
+     andBool #PROXY_ID        =/=Int #REFUND_RECEIVER
+     andBool #PROXY_ID        =/=Int #TOKEN_CONTRACT
+     andBool #ORIGIN_ID       =/=Int #EXEC_ACCT_TO
+     andBool #ORIGIN_ID       =/=Int #REFUND_RECEIVER
+     andBool #ORIGIN_ID       =/=Int #TOKEN_CONTRACT
+     andBool #EXEC_ACCT_TO    =/=Int #REFUND_RECEIVER
+     andBool #EXEC_ACCT_TO    =/=Int #TOKEN_CONTRACT
+     andBool #REFUND_RECEIVER =/=Int #TOKEN_CONTRACT
 
      // Account address normality
      andBool #MASTER_COPY_ID  >Int 0 andBool (notBool #MASTER_COPY_ID  in #precompiledAccounts(BYZANTIUM))
@@ -165,6 +184,7 @@
      andBool #ORIGIN_ID       >Int 0 andBool (notBool #ORIGIN_ID       in #precompiledAccounts(BYZANTIUM))
      andBool #EXEC_ACCT_TO    >Int 0 andBool (notBool #EXEC_ACCT_TO    in #precompiledAccounts(BYZANTIUM))
      andBool #REFUND_RECEIVER >Int 0 andBool (notBool #REFUND_RECEIVER in #precompiledAccounts(BYZANTIUM))
+     andBool #TOKEN_CONTRACT  >Int 0 andBool (notBool #TOKEN_CONTRACT  in #precompiledAccounts(BYZANTIUM))
 {REQUIRES}
     ensures true
 {ENSURES}
