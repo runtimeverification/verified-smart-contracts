@@ -309,7 +309,7 @@ It is practically reasonable to assume that the no-overflow conditions are met. 
 
 
 Well-formed input:
-- The `to`, `gasToken`, and `refundReceiver` argument values are all within the range of `address`, i.e., the first 96 (= 256 - 160) bits are zero. Otherwise, the function simply ignores (i.e., truncates) the fist 96 bits.
+- The `to`, `gasToken`, and `refundReceiver` argument values are all within the range of `address`, i.e., the first 96 (= 256 - 160) bits are zero. Otherwise, the function simply ignores (i.e., truncates) the first 96 bits.
 - The `operation` is either 0, 1, or 2.  Otherwise, the `execute` function (defined at `Executor.sol`) will throw.
 - The maximum size of `data` is 2^32. Otherwise, it reverts. (The bound is practically reasonable considering the current block gas limit. See the buffer size limit discussion.)
 
@@ -727,7 +727,7 @@ No overflow:
 It is practically reasonable to assume that the no-overflow conditions are met. If they are not satisfied, the function will throw.
 
 Well-formed input:
-- The value of the address arguments are within the range of `address`, i.e., the first 96 (= 256 - 160) bits are zero. Otherwise, the function simply ignores (i.e., truncates) the fist 96 bits.
+- The value of the address arguments are within the range of `address`, i.e., the first 96 (= 256 - 160) bits are zero. Otherwise, the function simply ignores (i.e., truncates) the first 96 bits.
 
 The input well-formedness conditions are satisfied in all calling contexts of the current GnosisSafe contract.
 
@@ -1014,7 +1014,7 @@ To prove the above top-level specifications, T1 and T2, we need the following lo
 
 For some `i` such that `0 <= i < threshold` and `i <= the-first-invalid-signature-index`:
 - L1:  If `i < threshold <= the-first-invalid-signature-index`, then the function returns true once the loop terminates.
-- L1:  Else (i.e., if `i <= the-first-invalid-signature-index < threshold`), then the function eventually returns false.
+- L2:  Else (i.e., if `i <= the-first-invalid-signature-index < threshold`), then the function eventually returns false.
 
 To prove the above loop invariant, L1 and L2, we need the following claims for a single loop iteration:
 - M1:  If `signatures[i]` is valid, it continues to the next iteration (i.e., goes back to the loop head).
@@ -1703,7 +1703,7 @@ The no-wrap-around condition is implied by the GnosisSafe contract invariant.
 If it is not satisfied, the function may have unexpected behaviors.
 
 Well-formed input:
-- The value of the address arguments are within the range of `address`, i.e., the first 96 (= 256 - 160) bits are zero. Otherwise, the function simply ignores (i.e., truncates) the fist 96 bits.
+- The value of the address arguments are within the range of `address`, i.e., the first 96 (= 256 - 160) bits are zero. Otherwise, the function simply ignores (i.e., truncates) the first 96 bits.
 - The maximum size of `data` and `signatures` is 2^32. Otherwise, it reverts. (The bound is practically reasonable considering the current block gas limit. See the buffer size limit discussion.)
 
 These conditions should be satisfied by the client when he calls `execTransaction`.
