@@ -8,7 +8,8 @@ SUBDIRS+=resources
 ERC20+=vyper zeppelin
 endif
 
-ifneq (,$(or $(findstring all,$(MODE)),$(findstring k-test,$(MODE))))
+#ifneq (,$(or $(findstring all,$(MODE)),$(findstring k-test,$(MODE))))
+ifneq (,$(findstring k-test,$(MODE)))
 SUBDIRS+=k-test
 endif
 
