@@ -6,3 +6,6 @@
 /specs/*
 
 *.html
+
+__pycache__/
+venv/

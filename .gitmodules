@@ -2,3 +2,6 @@
 	path = .build/pandoc-tangle
 	url = https://github.com/ehildenb/pandoc-tangle
 	ignore = untracked
+[submodule "resources/ethereum-etl"]
+	path = resources/ethereum-etl
+	url = https://github.com/blockchain-etl/ethereum-etl

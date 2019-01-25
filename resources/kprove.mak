@@ -113,7 +113,7 @@ $(SPECS_DIR)/lemmas.k: $(RESOURCES)/lemmas.md $(TANGLER)
 	pandoc --from markdown --to "$(TANGLER)" --metadata=code:".k" $< > $@
 
 $(SPECS_DIR)/$(SPEC_GROUP)/%-spec.k: $(TMPLS) $(SPEC_INI)
-	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) $* $* > $@
+	python3 $(RESOURCES)/gen_spec.py $(TMPLS) $(SPEC_INI) $* $* > $@
 
 #
 # Kprove
