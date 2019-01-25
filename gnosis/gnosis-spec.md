@@ -68,6 +68,13 @@ attribute:
 
 [`signatureSplit`] is an internal function that takes a sequence of signatures and an index, and returns the indexed signature as a tuple of its `v`, `r`, and `s` fields.
 
+```
+    function signatureSplit(bytes memory signatures, uint256 pos)
+        internal
+        pure
+        returns (uint8 v, bytes32 r, bytes32 s)
+```
+
 #### Stack and memory:
 
 The function takes two inputs, `signatures` and `pos`, where `signatures` is passed through the memory while `pos` is through the stack.
@@ -185,6 +192,24 @@ localMem: M
 ### Function encodeTransactionData
 
 [`encodeTransactionData`] is a public function that calculates the hash value of the given transaction data.
+
+```
+    function encodeTransactionData(
+        address to,
+        uint256 value,
+        bytes memory data,
+        Enum.Operation operation,
+        uint256 safeTxGas,
+        uint256 dataGas,
+        uint256 gasPrice,
+        address gasToken,
+        address refundReceiver,
+        uint256 _nonce
+    )
+        public
+        view
+        returns (bytes memory)
+```
 
 #### Stack and memory:
 
@@ -545,6 +570,24 @@ proxy_storage:
 
 [`getTransactionHash`] is a simple wrapper of `encodeTransactionData` that returns the `keccak256` hash of the `encodeTransactionData` output.
 
+```
+    function getTransactionHash(
+        address to,
+        uint256 value,
+        bytes memory data,
+        Enum.Operation operation,
+        uint256 safeTxGas,
+        uint256 dataGas,
+        uint256 gasPrice,
+        address gasToken,
+        address refundReceiver,
+        uint256 _nonce
+    )
+        public
+        view
+        returns (bytes32)
+```
+
 ```ini
 [getTransactionHash]
 k: (#execute => #halt) ~> _
@@ -624,6 +667,17 @@ proxy_storage:
 ### Function handlePayment
 
 [`handlePayment`] is a private function that pays the gas cost to the receiver in either Ether or tokens.
+
+```
+    function handlePayment(
+        uint256 startGas,
+        uint256 dataGas,
+        uint256 gasPrice,
+        address gasToken,
+        address payable refundReceiver
+    )
+        private
+```
 
 Here we consider only the case of payment in Ether. The token payment is out of the scope of the current engagement.
 
@@ -852,6 +906,12 @@ coinbase: _
 ### Function checkSignatures
 
 [`checkSignatures`] is an internal function that checks the validity of the given signatures.
+
+```
+    function checkSignatures(bytes32 dataHash, bytes memory data, bytes memory signatures, bool consumeHash)
+        internal
+        returns (bool)
+```
 
 #### Stack and memory:
 
@@ -1587,6 +1647,23 @@ PC_FUN_START: 18250
 
 [`execTransaction`] is an external function that executes the given transaction.
 
+```
+    function execTransaction(
+        address to,
+        uint256 value,
+        bytes calldata data,
+        Enum.Operation operation,
+        uint256 safeTxGas,
+        uint256 dataGas,
+        uint256 gasPrice,
+        address gasToken,
+        address payable refundReceiver,
+        bytes calldata signatures
+    )
+        external
+        returns (bool success)
+```
+
 We consider only the case of `Enum.Operation.Call` operation (i.e., `operation == 0`).
 The other two cases are out of the scope of the current engagement.
 
@@ -1921,6 +1998,12 @@ The OwnerManager contract must satisfy the following contract invariant, once in
 
 [`addOwnerWithThreshold`] is a public authorized function that adds a new owner and updates `threshold`.
 
+```
+    function addOwnerWithThreshold(address owner, uint256 _threshold)
+        public
+        authorized
+```
+
 #### State update:
 
 Suppose `owners` represents `(o_0, o_1, ..., o_N)` and the contract invariant holds before calling the function.
@@ -2123,6 +2206,12 @@ statusCode: _ => EVMC_REVERT
 
 [`removeOwner`] is a public authorized function that removes the given owner and updates `threshold`.
 
+```
+    function removeOwner(address prevOwner, address owner, uint256 _threshold)
+        public
+        authorized
+```
+
 #### State update:
 
 Suppose `owners` represents `(o_0, o_1, ..., o_N)` and the contract invariant holds before calling the function.
@@ -2289,6 +2378,12 @@ log: _ => _
 
 [`swapOwner`] is a public authorized function that replaces `oldOwner` with `newOwner`.
 
+```
+    function swapOwner(address prevOwner, address oldOwner, address newOwner)
+        public
+        authorized
+```
+
 #### State update:
 
 Suppose `owners` represents `(o_0, o_1, ..., o_N)` and the contract invariant holds before calling the function.
@@ -2425,6 +2520,12 @@ Note that the set of modules could be empty, while the set of owners cannot.
 
 [`enableModule`] is a public authorized function that adds a new module.
 
+```
+    function enableModule(Module module)
+        public
+        authorized
+```
+
 #### State update:
 
 Suppose `modules` represents `(m_0, m_1, ..., m_N)` and the contract invariant holds before calling the function.
@@ -2512,6 +2613,12 @@ log: _
 ### Function disableModule
 
 [`disableModule`] is a public authorized function that removes the given module.
+
+```
+    function disableModule(Module prevModule, Module module)
+        public
+        authorized
+```
 
 #### State update:
 
@@ -2602,6 +2709,12 @@ log: _
 
 [`execTransactionFromModule`] is a public function that executes the given transaction.
 
+```
+    function execTransactionFromModule(address to, uint256 value, bytes memory data, Enum.Operation operation)
+        public
+        returns (bool success)
+```
+
 Here we consider only the case that `modules` denotes the empty set.
 The case for a non-empty set of modules is out of the scope of the current engagement.
 
@@ -2656,6 +2769,12 @@ output: _ => _
 ### Function changeMasterCopy
 
 [`changeMasterCopy`] is a public authorized function that updates `masterCopy`.
+
+```
+    function changeMasterCopy(address _masterCopy)
+        public
+        authorized
+```
 
 #### State update:
 
