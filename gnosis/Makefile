@@ -9,7 +9,7 @@ SPEC_INI:=gnosis-spec.ini
 KPROVE_OPTS:=--smt-prelude $(abspath $(dir $(abspath $(lastword $(MAKEFILE_LIST))))/evm.smt2) \
              --deterministic-functions --cache-func-optimized --log-rules --debug-z3-queries
 
-SPEC_NAMES_GNOSIS_SAFE:=handlePayment-arithmetic-overflow-2
+SPEC_NAMES_GNOSIS_SAFE:=handlePayment-send-success-origin
 
 SPEC_NAMES_OWNER_MANAGER:=addOwnerWithThreshold-success-1 \
                           addOwnerWithThreshold-success-2 \
