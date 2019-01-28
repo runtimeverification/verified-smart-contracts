@@ -18,24 +18,25 @@ pipeline {
         ansiColor('xterm') {
           sh '''
             cd .build
-            rm -rf evm-semantics k
-            krev=$(cat .k.rev)
-            kevmrev=$(cat .kevm.rev)
 
+            rm -rf k
+            krev=$(cat .k.rev)
             git clone https://github.com/kframework/k
             cd k
-            git reset --hard $krev
+            git checkout $krev
             mvn package -DskipTests -Dllvm.backend.skip
 
-            cd ../
+            cd ..
+            rm -rf evm-semantics
+            kevmrev=$(cat .kevm.rev)
             git clone https://github.com/kframework/evm-semantics
             cd evm-semantics
+            git checkout $kevmrev
             git clean -fdx
-            git reset --hard $kevmrev
             make tangle-deps
             make defn
-            ../.build/k/k-distribution/target/release/k/bin/kompile -v --debug --backend java -I .build/java -d .build/java \
-                                 --main-module ETHEREUM-SIMULATION --syntax-module ETHEREUM-SIMULATION .build/java/driver.k
+            ../k/k-distribution/target/release/k/bin/kompile -v --debug --backend java -I .build/java -d .build/java \
+                          --main-module ETHEREUM-SIMULATION --syntax-module ETHEREUM-SIMULATION .build/java/driver.k
 
             cd ../../
             for subdir in k-test gnosis erc20; do
