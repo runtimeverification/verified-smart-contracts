@@ -18,7 +18,7 @@ pipeline {
         ansiColor('xterm') {
           sh '''
             nprocs=$(nproc)
-            [ "$nprocs" -gt '6' ] && nprocs='6'
+            [ "$nprocs" -gt '1' ] && nprocs='1'
             export K_OPTS=-Xmx12g
             make jenkins MODE=all NPROCS="$nprocs"
           '''
