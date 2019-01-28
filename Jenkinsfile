@@ -25,6 +25,7 @@ pipeline {
             cd k
             git checkout $krev
             mvn package -DskipTests -Dllvm.backend.skip
+            z3 --version
 
             cd ..
             rm -rf evm-semantics
