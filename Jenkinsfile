@@ -18,10 +18,13 @@ pipeline {
         ansiColor('xterm') {
           sh '''
             cd .build
+            rm -rf evm-semantics k
+
             git clone https://github.com/kframework/k
             cd k
             git reset --hard f9ec1ac0b4457021cb89439777078659bf4f852b
             mvn package -DskipTests -Dllvm.backend.skip
+
             cd ../
             git clone https://github.com/kframework/evm-semantics
             cd evm-semantics
@@ -34,6 +37,7 @@ pipeline {
 
             cd ../../
             for subdir in k-test gnosis erc20; do
+                rm -rf $subdir/.build/k $subdir/.build/evm-semantics
                 ln --symbolic --force --no-dereference $(pwd)/.build/k             $subdir/.build/k
                 ln --symbolic --force --no-dereference $(pwd)/.build/evm-semantics $subdir/.build/evm-semantics
             done
