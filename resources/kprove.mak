@@ -78,7 +78,8 @@ $(K_REPO_DIR):
 	git clone $(K_REPO_URL) $(K_REPO_DIR)
 	cd $(K_REPO_DIR) \
 		&& git reset --hard $(K_VERSION) \
-		&& mvn package -DskipTests -Dllvm.backend.skip
+		&& mvn package -DskipTests -Dllvm.backend.skip \
+		&& z3 --version
 
 $(KEVM_REPO_DIR):
 	git clone $(KEVM_REPO_URL) $(KEVM_REPO_DIR)
