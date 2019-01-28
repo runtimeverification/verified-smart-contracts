@@ -19,17 +19,19 @@ pipeline {
           sh '''
             cd .build
             rm -rf evm-semantics k
+            krev=$(cat .k.rev)
+            kevmrev=$(cat .kevm.rev)
 
             git clone https://github.com/kframework/k
             cd k
-            git reset --hard f9ec1ac0b4457021cb89439777078659bf4f852b
+            git reset --hard $krev
             mvn package -DskipTests -Dllvm.backend.skip
 
             cd ../
             git clone https://github.com/kframework/evm-semantics
             cd evm-semantics
             git clean -fdx
-            git reset --hard f0a8d473676232c404ef3439260984505922a8e5
+            git reset --hard $kevmrev
             make tangle-deps
             make defn
             ../.build/k/k-distribution/target/release/k/bin/kompile -v --debug --backend java -I .build/java -d .build/java \
