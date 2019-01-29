@@ -170,6 +170,10 @@ module VERIFICATION
 
     rule #take(#sizeWordStack(WS, 0), WS) => WS
 
+    rule #bufSeg(BUF, N, WIDTH) => BUF requires WIDTH ==Int #sizeBuffer(BUF)
+
+    rule selectRange(storeRange(M, START1, WIDTH1, BUF), START2, WIDTH2) => BUF
+      requires START1 ==Int START2 andBool WIDTH1 ==Int WIDTH2
 
   // ########################
   // Range

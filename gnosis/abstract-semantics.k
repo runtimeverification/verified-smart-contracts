@@ -114,7 +114,8 @@ module ABSTRACT-SEMANTICS
     [trusted, matching(#gas)]
 
   rule <k> #exec[CALL] => . ... </k>
-       <output> _ => #buf(RETURNSIZE, RETURNVALUE) </output>
+       /* <output> _ => #buf(RETURNSIZE, RETURNVALUE) </output> */
+       <output> _ => #buf(#tokenTransferCallReturnSize(PCC, ACCTTO, NOW), #tokenTransferCallReturnValue(PCC, ACCTTO, NOW)) </output>
        <schedule> SCHED </schedule>
        <id> ACCTFROM </id>
        <wordStack> GASCAP : ACCTTO : 0 : ARGSTART : ARGWIDTH : 0 : 0 : WS => 1 : WS </wordStack>
@@ -122,17 +123,19 @@ module ABSTRACT-SEMANTICS
        <gas> #gas(INITGAS, NONMEM, MEM) => #gas(INITGAS, NONMEM +Int #callGas(SCHED, GASCAP, ACCTTO, VALUE, true), MEM) </gas>
        <previousGas> _ => #gas(INITGAS, NONMEM, MEM) </previousGas>
        <callDepth> CD </callDepth>
+       <timestamp> NOW </timestamp>
        <account>
          <acctID> ACCTTO </acctID>
          <storage> _ => _ </storage>
          ...
        </account>
     requires #range(0 <= CD < 1023)
-     andBool #tokenTransferCallSuccess(PCC, ACCTTO, RETURNSIZE, RETURNVALUE)
+     andBool #tokenTransferCallSuccess(PCC, ACCTTO)
     [trusted, matching(#gas)]
 
   rule <k> #exec[CALL] => . ... </k>
-       <output> _ => #buf(RETURNSIZE, RETURNVALUE) </output>
+       /* <output> _ => #buf(RETURNSIZE, RETURNVALUE) </output> */
+       <output> _ => #buf(#tokenTransferCallReturnSize(PCC, ACCTTO, NOW), #tokenTransferCallReturnValue(PCC, ACCTTO, NOW)) </output>
        <schedule> SCHED </schedule>
        <id> ACCTFROM </id>
        <wordStack> GASCAP : ACCTTO : 0 : ARGSTART : ARGWIDTH : 0 : 0 : WS => 0 : WS </wordStack>
@@ -140,13 +143,14 @@ module ABSTRACT-SEMANTICS
        <gas> #gas(INITGAS, NONMEM, MEM) => #gas(INITGAS, NONMEM +Int #callGas(SCHED, GASCAP, ACCTTO, VALUE, true), MEM) </gas>
        <previousGas> _ => #gas(INITGAS, NONMEM, MEM) </previousGas>
        <callDepth> CD </callDepth>
+       <timestamp> NOW </timestamp>
        <account>
          <acctID> ACCTTO </acctID>
          <storage> _ => _ </storage>
          ...
        </account>
     requires #range(0 <= CD < 1023)
-     andBool #tokenTransferCallFailure(PCC, ACCTTO, RETURNSIZE, RETURNVALUE)
+     andBool #tokenTransferCallFailure(PCC, ACCTTO)
     [trusted, matching(#gas)]
 
   // ########################
