@@ -49,7 +49,7 @@ K_REPO_DIR:=$(abspath $(BUILD_DIR)/k)
 KEVM_REPO_DIR:=$(abspath $(BUILD_DIR)/evm-semantics)
 
 K_BIN:=$(abspath $(K_REPO_DIR)/k-distribution/target/release/k/bin)
-KPROVE:=$(K_BIN)/kprove -v -d $(KEVM_REPO_DIR)/.build/java -m VERIFICATION --z3-impl-timeout 500 --halt-cells k,pc $(KPROVE_OPTS)
+KPROVE:=$(K_BIN)/kprove -v -d $(KEVM_REPO_DIR)/.build/java -m VERIFICATION --z3-impl-timeout 500 --halt-cells k,pc $(KPROVE_OPTS) --log-rules --debug-z3-queries
 
 SPEC_FILES:=$(patsubst %,$(SPECS_DIR)/$(SPEC_GROUP)/%-spec.k,$(SPEC_NAMES))
 

@@ -8,27 +8,27 @@ SUBDIRS+=resources
 ERC20+=vyper zeppelin
 endif
 
-ifneq (,$(or $(findstring all,$(MODE)),$(findstring k-test,$(MODE))))
+#ifneq (,$(or $(findstring all,$(MODE)),$(findstring k-test,$(MODE))))
 #SUBDIRS+=k-test
-endif
+#endif
 
-ifneq (,$(or $(findstring all,$(MODE)),$(findstring erc20,$(MODE))))
-ERC20+=hkg hobby ds-token
-endif
+#ifneq (,$(or $(findstring all,$(MODE)),$(findstring erc20,$(MODE))))
+#ERC20+=hkg hobby ds-token
+#endif
 
-ifneq (,$(or $(findstring all,$(MODE)),$(findstring bihu,$(MODE))))
+#ifneq (,$(or $(findstring all,$(MODE)),$(findstring bihu,$(MODE))))
 #SUBDIRS+=bihu
-endif
+#endif
 
-ifneq (,$(or $(findstring all,$(MODE)),$(findstring gnosis,$(MODE))))
+#ifneq (,$(or $(findstring all,$(MODE)),$(findstring gnosis,$(MODE))))
 #SUBDIRS+=gnosis gnosis/test
 #SUBDIRS+=gnosis/bmc
-endif
+#endif
 
-ifneq (,$(or $(findstring all,$(MODE)),$(findstring dom,$(MODE))))
+#ifneq (,$(or $(findstring all,$(MODE)),$(findstring dom,$(MODE))))
 #SUBDIRS+=proxied-token
-ERC20+=gno
-endif
+#ERC20+=gno
+#endif
 
 SUBDIRS+=$(addprefix erc20/,$(ERC20))
 
