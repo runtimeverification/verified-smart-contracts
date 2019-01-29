@@ -20,6 +20,7 @@ SPEC_NAMES_GNOSIS_SAFE:=encodeTransactionData-public-1 \
                         handlePayment-send-success-receiver \
                         handlePayment-send-failure-origin \
                         handlePayment-send-failure-receiver \
+                        handlePayment-transferToken-success-no_return \
                         handlePayment-transferToken-success-return_nonzero \
                         checkSignatures-success \
                         checkSignatures-failure-1 \

@@ -13,3 +13,6 @@ trim_trailing_whitespace = true
 [*.{ini,k,md,smt2}]
 indent_style = space
 indent_size = 4
+
+[*.{patch,diff}]
+trim_trailing_whitespace = false
