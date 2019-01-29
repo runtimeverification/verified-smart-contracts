@@ -114,7 +114,6 @@ module ABSTRACT-SEMANTICS
     [trusted, matching(#gas)]
 
   rule <k> #exec[CALL] => . ... </k>
-       /* <output> _ => #buf(RETURNSIZE, RETURNVALUE) </output> */
        <output> _ => #buf(#tokenTransferCallReturnSize(PCC, ACCTTO, NOW), #tokenTransferCallReturnValue(PCC, ACCTTO, NOW)) </output>
        <schedule> SCHED </schedule>
        <id> ACCTFROM </id>
@@ -134,7 +133,6 @@ module ABSTRACT-SEMANTICS
     [trusted, matching(#gas)]
 
   rule <k> #exec[CALL] => . ... </k>
-       /* <output> _ => #buf(RETURNSIZE, RETURNVALUE) </output> */
        <output> _ => #buf(#tokenTransferCallReturnSize(PCC, ACCTTO, NOW), #tokenTransferCallReturnValue(PCC, ACCTTO, NOW)) </output>
        <schedule> SCHED </schedule>
        <id> ACCTFROM </id>

@@ -69,9 +69,9 @@ They capture the essential mechanisms used by the two instructions: splitting a 
                 : nthbyteof(V, 31, 32)
                 : .WordStack ) => V
       requires 0 <=Int V andBool V <Int pow256
-      
+
     rule #asWord( 0 : W1 : WS  =>  W1 : WS )
-      
+
     rule nthbyteof(N, 0, 1) => N
 ```
 
@@ -215,17 +215,17 @@ These rules are specific to reasoning about EVM programs.
     rule (#if C #then B1 #else B2 #fi) -Int A => #if C #then (B1 -Int A) #else (B2 -Int A) #fi
 ```
 
-Operator direction normalization rules. Required to reduce the number of forms of inequalities that can be matched by 
+Operator direction normalization rules. Required to reduce the number of forms of inequalities that can be matched by
 general lemmas. We chose to keep `<Int` and `<=Int` because those operators are used in all range lemmas and in
 `#range` macros. Operators `>Int` and `>=Int` are still allowed anywhere except rules LHS.
 In all other places they will be matched and rewritten by rules below.
 ```k
     rule X >Int Y => Y <Int X
     rule X >=Int Y => Y <=Int X
-    
+
     rule notBool (X <Int Y) => Y <=Int X
     rule notBool (X <=Int Y) => Y <Int X
-``` 
+```
 
 ### Boolean
 
@@ -236,16 +236,22 @@ In EVM, no boolean value exist but instead, 1 and 0 are used to represent true a
     rule bool2Word(A) |Int bool2Word(B) => bool2Word(A  orBool B)
     rule bool2Word(A) &Int bool2Word(B) => bool2Word(A andBool B)
 
+    rule 1 |Int bool2Word(B) => 1
+    rule 1 &Int bool2Word(B) => bool2Word(B)
+
+    rule bool2Word(B) |Int 1 => 1
+    rule bool2Word(B) &Int 1 => bool2Word(B)
+
     rule bool2Word(A)  ==K 0 => notBool(A)
     rule bool2Word(A)  ==K 1 => A
     rule bool2Word(A) =/=K 0 => A
     rule bool2Word(A) =/=K 1 => notBool(A)
 
     rule chop(bool2Word(B)) => bool2Word(B)
-    
-    rule #asWord(0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 
-                   : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : nthbyteof(bool2Word( E ), I, N) : .WordStack) 
-         => bool2Word( E ) 
+
+    rule #asWord(0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0
+                   : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : nthbyteof(bool2Word( E ), I, N) : .WordStack)
+         => bool2Word( E )
 ```
 
 Some lemmas over the comparison operators are also provided.
@@ -263,7 +269,7 @@ This can generally happen in 3 ways.
 - Otherwise, side condition can be matched by an inequality in the term constraint (path condition).
 If side condition cannot be matched exactly, Z3 will be invoked and can still deduct it indirectly from the entire constraint,
 through boolean and arithmetic reasoning.
-- Otherwise, we can extend the semantics with specific "lemma" rules for symbolic expression that can be proved true 
+- Otherwise, we can extend the semantics with specific "lemma" rules for symbolic expression that can be proved true
 from their concrete semantics.
 
 Below are the most common such range matching lemmas.
@@ -275,7 +281,7 @@ Below are the most common such range matching lemmas.
 
     rule 0 <=Int #asWord(WS)          => true
     rule #asWord(WS) <Int pow256      => true
-    
+
     rule 0 <=Int hash1(_)             => true
     rule         hash1(_) <Int pow256 => true
 
@@ -293,11 +299,11 @@ Below are the most common such range matching lemmas.
 ```
 
 Because lemmas are applied as plain K rewrite rule, they have to match exactly, without any deductive reasoning.
-For example the lemma `rule A < 100 => true` won't match the side condition `requires A <= 99` or 
+For example the lemma `rule A < 100 => true` won't match the side condition `requires A <= 99` or
 `requires 100 > A`.
 To avoid such mismatching situations we need additional expression normalization rules.
 First rule below converts `maxUInt256` to `pow256`.
-It allows side conditions that use `maxUInt256` or `#range` macros 
+It allows side conditions that use `maxUInt256` or `#range` macros
 match the range lemmas above. Note that lemmas above all use `<Int pow256` for the upper range.
 The other rules are similar.
 
@@ -316,10 +322,10 @@ They cause a major increase in the number of Z3 queries and slowdown.
 ```k
     /*rule X <Int pow256 => true
       requires X <Int 256
-      
+
     rule X <Int pow256 => true
       requires X <Int pow160
-      
+
     rule 0 <=Int X => true
       requires 0 <Int X*/
 ```
