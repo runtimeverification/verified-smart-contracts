@@ -4,8 +4,8 @@ SUBDIRS:=
 ERC20:=
 
 ifneq (,$(or $(findstring all,$(MODE)),$(findstring minimal,$(MODE))))
-SUBDIRS+=resources
-ERC20+=vyper zeppelin
+#SUBDIRS+=resources
+#ERC20+=vyper zeppelin
 endif
 
 #ifneq (,$(or $(findstring all,$(MODE)),$(findstring k-test,$(MODE))))
@@ -20,10 +20,11 @@ endif
 #SUBDIRS+=bihu
 #endif
 
-#ifneq (,$(or $(findstring all,$(MODE)),$(findstring gnosis,$(MODE))))
-#SUBDIRS+=gnosis gnosis/test
+ifneq (,$(or $(findstring all,$(MODE)),$(findstring gnosis,$(MODE))))
+SUBDIRS+=gnosis
+#SUBDIRS+=SUBDIRS+=gnosis
 #SUBDIRS+=gnosis/bmc
-#endif
+endif
 
 #ifneq (,$(or $(findstring all,$(MODE)),$(findstring dom,$(MODE))))
 #SUBDIRS+=proxied-token
