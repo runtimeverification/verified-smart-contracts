@@ -7,47 +7,9 @@ SPEC_GROUP:=gnosis
 SPEC_INI:=gnosis-spec.ini
 
 KPROVE_OPTS:=--smt-prelude $(abspath $(dir $(abspath $(lastword $(MAKEFILE_LIST))))/evm.smt2) \
-             --deterministic-functions --cache-func-optimized
+             --deterministic-functions --cache-func-optimized --log-rules --debug-z3-queries
 
-SPEC_NAMES_GNOSIS_SAFE:=encodeTransactionData-public-1 \
-                        encodeTransactionData-public-2 \
-                        encodeTransactionData-internal-proof-1 \
-                        encodeTransactionData-internal-proof-2 \
-                        signatureSplit-proof \
-                        handlePayment-arithmetic-overflow-1 \
-                        handlePayment-arithmetic-overflow-2 \
-                        handlePayment-send-success-origin \
-                        handlePayment-send-success-receiver \
-                        handlePayment-send-failure-origin \
-                        handlePayment-send-failure-receiver \
-                        checkSignatures-success \
-                        checkSignatures-failure-1 \
-                        checkSignatures-failure-2 \
-                        checkSignatures-loop-success \
-                        checkSignatures-loop-failure \
-                        checkSignatures-loop-body-success-v0 \
-                        checkSignatures-loop-body-success-v1-owner \
-                        checkSignatures-loop-body-success-v1-not-owner \
-                        checkSignatures-loop-body-failure-v0-1 \
-                        checkSignatures-loop-body-failure-v0-2 \
-                        checkSignatures-loop-body-failure-v1-owner \
-                        checkSignatures-loop-body-failure-v1-not-owner-approved \
-                        checkSignatures-loop-body-failure-v1-not-owner-not-approved \
-                        checkSignatures-loop-body-success-v_else \
-                        checkSignatures-loop-body-failure-v_else-ecrecEmpty \
-                        checkSignatures-loop-body-failure-v_else-not-ecrecEmpty \
-                        checkSignatures-loop-body-exception-v0 \
-                        execTransaction-checkSigs-exception \
-                        execTransaction-checkSigs0 \
-                        execTransaction-checkSigs1-gas0 \
-                        execTransaction-checkSigs1-gas1-safetxgas0-gasprice0-call0 \
-                        execTransaction-checkSigs1-gas1-safetxgas0-gasprice0-call1-to \
-                        execTransaction-checkSigs1-gas1-safetxgas0-gasprice1-call0 \
-                        execTransaction-checkSigs1-gas1-safetxgas0-gasprice1-call1-to \
-                        execTransaction-checkSigs1-gas1-safetxgas1-call0-to-gasprice0 \
-                        execTransaction-checkSigs1-gas1-safetxgas1-call0-to-gasprice1 \
-                        execTransaction-checkSigs1-gas1-safetxgas1-call1-to-gasprice0 \
-                        execTransaction-checkSigs1-gas1-safetxgas1-call1-to-gasprice1
+SPEC_NAMES_GNOSIS_SAFE:=execTransaction-checkSigs1-gas0
 
 SPEC_NAMES_OWNER_MANAGER:=addOwnerWithThreshold-success-1 \
                           addOwnerWithThreshold-success-2 \
@@ -77,10 +39,7 @@ SPEC_NAMES_MASTER_COPY:=changeMasterCopy-success \
                         changeMasterCopy-failure-1 \
                         changeMasterCopy-failure-2 \
 
-SPEC_NAMES:=$(SPEC_NAMES_GNOSIS_SAFE) \
-            $(SPEC_NAMES_OWNER_MANAGER) \
-            $(SPEC_NAMES_MODULE_MANAGER) \
-            $(SPEC_NAMES_MASTER_COPY)
+SPEC_NAMES:=$(SPEC_NAMES_GNOSIS_SAFE)
 
 include ../resources/kprove.mak
 
