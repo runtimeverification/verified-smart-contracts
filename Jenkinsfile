@@ -14,7 +14,27 @@ pipeline {
         }
       }
     }
+    stage('Check revisions') {
+      steps {
+        when { changeRequest() }
+        ansiColor('xterm') {
+          sh '''
+            krev=$(cat .build/.k.rev)
+            for krev_file in $(find -name '.k.rev'); do
+                current_krev=$(cat $krev_file)
+                [ "$krev" == "$current_krev" ] || exit 1
+            done
+            kevmrev=$(cat .build/.kevm.rev)
+            for kevmrev_file in $(find -name '.kevm.rev'); do
+                current_kevmrev=$(cat $kevmrev_file)
+                [ "$kevmrev" == "$current_kevmrev" ] || exit 1
+            done
+          '''
+        }
+      }
+    }
     stage('Run Proofs') {
+      when { changeRequest() }
       steps {
         ansiColor('xterm') {
           sh '''
@@ -22,6 +42,31 @@ pipeline {
             [ "$nprocs" -gt '6' ] && nprocs='6'
             export K_OPTS=-Xmx12g
             make jenkins MODE=all NPROCS="$nprocs"
+          '''
+        }
+      }
+    }
+    stage('Update Git Tags') {
+      when {
+        not { changeRequest() }
+        branch 'master'
+      }
+      steps {
+        ansiColor('xterm') {
+          sh '''
+            krev=$(cat .build/.k.rev)
+            cd .build/k
+            git tag --force vsc $krev
+            git push --delete origin vsc || true
+            git push origin vsc:vsc
+
+            cd ../..
+
+            kevmrev=$(cat .build/.kevm.rev)
+            cd .build/evm-semantics
+            git tag --force vsc $kevmrev
+            git push --delete origin vsc || true
+            git push origin vsc:vsc
           '''
         }
       }
