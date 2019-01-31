@@ -15,8 +15,8 @@ pipeline {
       }
     }
     stage('Check revisions') {
+      when { changeRequest() }
       steps {
-        when { changeRequest() }
         ansiColor('xterm') {
           sh '''
             krev=$(cat .build/.k.rev)
