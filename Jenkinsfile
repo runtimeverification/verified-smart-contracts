@@ -22,12 +22,12 @@ pipeline {
             krev=$(cat .build/.k.rev)
             for krev_file in $(find -name '.k.rev'); do
                 current_krev=$(cat $krev_file)
-                [ "$krev" == "$current_krev" ] || exit 1
+                [ "$krev" = "$current_krev" ] || exit 1
             done
             kevmrev=$(cat .build/.kevm.rev)
             for kevmrev_file in $(find -name '.kevm.rev'); do
                 current_kevmrev=$(cat $kevmrev_file)
-                [ "$kevmrev" == "$current_kevmrev" ] || exit 1
+                [ "$kevmrev" = "$current_kevmrev" ] || exit 1
             done
           '''
         }
