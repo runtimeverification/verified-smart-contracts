@@ -53,9 +53,16 @@ pipeline {
       }
       steps {
         ansiColor('xterm') {
+          dir('.build/k') {
+            git credentialsId: 'rv-jenkins', url: 'git@github.com:kframework/k.git'
+          }
+          dir('.build/evm-semantics') {
+            git credentialsId: 'rv-jenkins', url: 'git@github.com:kframework/evm-semantics.git'
+          }
           sh '''
             krev=$(cat .build/.k.rev)
             cd .build/k
+            git fetch
             git tag --force vsc $krev
             git push --delete origin vsc || true
             git push origin vsc:vsc
@@ -64,6 +71,7 @@ pipeline {
 
             kevmrev=$(cat .build/.kevm.rev)
             cd .build/evm-semantics
+            git fetch
             git tag --force vsc $kevmrev
             git push --delete origin vsc || true
             git push origin vsc:vsc
