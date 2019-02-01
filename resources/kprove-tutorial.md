@@ -85,9 +85,24 @@ Thus, in order for a spec to be proved, it should be proved on all branches.
 
 If a function rule cannot match all possible symbolic values, then it won't apply, and symbolic term will be carried on to the next step until the end or until some additional path condition after a branching makes the evaluation possible. Thus only regular rules can cause branchings.
 
-There's another difference between spec rules and regular rules. The side condition of rules (of all 3 kinds) is allowed to match the path condition only during a "spec rule" step, but not during a "regular rule" step.
+For each step, after the regular rule or spec rule has applied, evaluation of 
+functional terms proceeds as following:
+- Kprove attempts to rewrite the term as much as possible, applying functional rules.
+- If a rule has side conditions, kprove will attempt to solve them by applying other functional rules, until all side conditions eventually evaluate to true. These new rewrite attempts may in turn have new side conditions.
+- If a side condition `f` can no longer be evaluated through rewriting, kprove will attempt to solve it through Z3, by proving the implication:
+```
+    path condition -> f
+```
 
-Execution of a path ends when when it either:
+More precisely, Z3 tries to prove that negation of this implication, which is
+`<path condition> /\ !f` is `unsat`.
+If a query cannot be proved because it's too complex of because of timeout, Z3 returns
+the output `unknown`, which is treated similarly with `sat`, e.g. proof failed.
+This is the main source of Z3 implication queries. Other implication queries are generated
+for attempts to match spec rules, and for final implication.
+The translation to Z3 is implemented in `SMTOperations.impliesSMT()`.
+
+Execution of a path ends when it either:
 - Matches the implication
 - No other spec/regular rule can match.
 - `<k>` cell matches the `<k>` cell of the target term (but only for cases when initial term was not matching the target `<k>`). This is a customization in `gnosis` branch of K, to avoid further evaluation when it is clear that this path cannot be proved.
@@ -129,6 +144,34 @@ In K branch `gnosis`, there are a number of command-line options for debugging K
 To see all the options run `kprove --help` and loog at options that start with `--log` and `--debug`. The simple option `--debug` is not recommended.
 
 `--log-rules` Log all applied rules.
+
+## Finding the address of an opcode
+Sometimes you need exact address of opcodes, for example for specifications of 
+internal functions, or for loop invariants.
+One way to find them is from pretty-printed program cell.
+To generate the whole pretty-printed initial configuration, run kprove with the following option:
+
+```
+  --log-cells "k,output,statusCode,localMem,pc,gas,wordStack,callData,accounts,#pc,#result,(#initTerm)"
+```
+
+[This is](https://github.com/runtimeverification/verified-smart-contracts/blob/257df4365260fe553719898ff1e2c1f195fd37c7/gnosis/generated/gnosis-GnosisSafe-program-cell.txt) 
+an example of how program cell looks like. All comments are manually added.
+Pretty printing is VERY SLOW. For Gnosis, it takes ~40 minutes.
+
+To find the code correspondence for opcodes, compare the program cell with the
+solidity assembly code, generated with command:
+
+```
+solc --asm <contract file>
+```
+
+This is how I search the opcode address corresponding to a line of code in Solidity:
+- Generate Solidity assembly file and pretty-printed program cell.
+- Find the line of interest in assembly file. Comments help making the correspondence with Solidity code.
+- Starting from `sub_0: assembly` in assembly file, count the `jumpi` instructions
+up to the line of interest.
+- Count the same number of `JUMPI` opcodes in the program cell.
 
 # Debugging tips
 
