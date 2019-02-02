@@ -78,6 +78,7 @@ $(K_REPO_DIR):
 	git clone $(K_REPO_URL) $(K_REPO_DIR)
 	cd $(K_REPO_DIR) \
 		&& git reset --hard $(K_VERSION) \
+		&& git submodule update --init --recursive \
 		&& mvn package -DskipTests -Dllvm.backend.skip
 
 $(KEVM_REPO_DIR):
