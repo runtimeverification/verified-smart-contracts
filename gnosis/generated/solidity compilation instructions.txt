@@ -9,6 +9,9 @@ $ cd <gnosis project root>
 $ solc --bin-runtime contracts/proxies/Proxy.sol  > gnosis-Proxy-0.1.0.hex
 $ solc --bin-runtime contracts/GnosisSafe.sol > gnosis-GnosisSafe-0.1.0.hex
 
+When compiling Solidity code which contains multiple contracts and libraries, the output bytecode will be split in multiple strings, one for each contract/library.
+If one of the contracts inherits the others, then its bytecode will contain the bytecode of the inherited contracts and libraries as well.
+
 Resulting files are bigger than .hex files in this repo. They contain the bytecode for multiple solidity classes.
 Hex files on this repo were cleared up. They only contain the fragment that was used in gnosis-spec.ini
 

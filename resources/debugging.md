@@ -24,7 +24,7 @@ $ kprove tests/proofs/specs/vyper-erc20/totalSupply-spec.k -d .build/java -m VER
    2. Enter
       * Main class: `org.kframework.main.Main`
       * VM options: `-Xms64m -Xmx4g -Xss32m -XX:+TieredCompilation -ea`
-      * Program aruguemnts: `-kprove /path/to/spec.k -d .build/java -m VERIFICATION --z3-executable`
+      * Program arguments: `-kprove /path/to/spec.k -d .build/java -m VERIFICATION <additional-arguments>` see [kprove tutorial](https://github.com/runtimeverification/verified-smart-contracts/blob/master/resources/kprove-tutorial.md)
       * Working dir: `/path/to/evm-semantics`
       * Env Variables: 
         * `LD_LIBRARY_PATH` : `$LD_LIBRARY_PATH:$MODULE_DIR$/../k-distribution/target/release/k/lib/native/linux64`
@@ -39,3 +39,6 @@ $ kprove tests/proofs/specs/vyper-erc20/totalSupply-spec.k -d .build/java -m VER
      ((KList) ((KItem) ((KList) ((KItem) term.term()).kList()).get(0)).kList()).get(0).toString().startsWith("#KSequence(#exec[_]")
      ```
      You can also add `step >= N` to constrain the number of steps.
+   * More recent versions of K have updated versions of the method `proveRule()`. You can move the breakpoint to one of the first lines of `for (ConstrainedTerm term : queue)`, such as `v++`, and use the same condition as above.
+2. Using the debugger
+   * The debugger should stop at each opcode. You can see the current opcode at the top of the `<k>` cell of the current configuration. The current configuration is stored in the `term` variable.
