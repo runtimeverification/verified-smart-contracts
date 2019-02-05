@@ -14,7 +14,7 @@ pipeline {
         }
       }
     }
-    stage('Check revisions') {
+/*    stage('Check revisions') {
       when { changeRequest() }
       steps {
         ansiColor('xterm') {
@@ -33,6 +33,7 @@ pipeline {
         }
       }
     }
+*/
     stage('Run Proofs') {
       when { changeRequest() }
       steps {
