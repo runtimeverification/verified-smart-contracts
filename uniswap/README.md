@@ -32,22 +32,17 @@ The symbolic execution results are provided in the [results] directory.  For eac
 
 * Install [KEVM] and [K]
 ```sh
-make kevm
+$ make -C uniswap deps
 ```
 
 * Generate specifications
 ```sh
-make uniswap
+$ make -C uniswap split-proof-tests
 ```
 
 * Produce symbolic execution results
 ```sh
-cd ./build/evm-semantics
-./kevm prove ../../specs/uniswap/addLiquidity-1-spec.k
-./kevm prove ../../specs/uniswap/addLiquidity-2-spec.k
-./kevm prove ../../specs/uniswap/removeLiquidity-spec.k
-./kevm prove ../../specs/uniswap/ethToTokenSwapInput-spec.k
-./kevm prove ../../specs/uniswap/ethToTokenSwapOutput-spec.k
+$ make -C uniswap test
 ```
 
 See these [instructions] for more details of running the verifier.
