@@ -79,7 +79,7 @@ $(K_REPO_DIR):
 	cd $(K_REPO_DIR) \
 		&& git reset --hard $(K_VERSION) \
 		&& git submodule update --init --recursive \
-		&& mvn package -DskipTests -Dllvm.backend.skip
+		&& mvn package -DskipTests -Dllvm.backend.skip -Dhaskell.backend.skip
 
 $(KEVM_REPO_DIR):
 	git clone $(KEVM_REPO_URL) $(KEVM_REPO_DIR)
