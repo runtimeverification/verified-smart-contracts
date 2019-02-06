@@ -7,46 +7,27 @@ The full [K] [reachability logic] specifications are automatically derived by in
 
 #### Generating Full Reachability Logic Specifications
 
-Run the following command in the root directory of this repository, and it will generate the full [reachability logic] specifications, under the directory `specs`, for all of the verified contracts presented in this repository:
+Run the following command in the root directory of this repository, and it will generate the full [reachability logic] specifications, under the directory `specs`, for the smart contract(s) in the `<project>` directory:
 
 ```
-$ make
+$ make -C <project> split-proof-tests
 ```
 
 #### Reproducing Proofs
 
-To prove that the specifications are satisfied by (the compiled EVM bytecode of) the target contracts, run the EVM verifier <!-- (under the [KEVM] root directory, see below) --> as follows:
+To prove that the specifications are satisfied by (the compiled EVM bytecode of) the target contracts, run the EVM verifier as follows:
 
 ```
-$ .build/evm-semantics/kevm prove specs/<project>/<target>-spec.k
+$ make -C <project> test
 ```
-
-where `<project>/<target>` is the target contract (or function) to verify.
-
-<!--
-The above command essentially executes the following command:
-
-```
-$ kprove specs/<project>/<target>-spec.k -m VERIFICATION --z3-executable -d /path/to/evm-semantics/.build/java
-```
--->
 
 #### Installing the EVM Verifier
 
 The EVM verifier is part of the [KEVM] project.  The following commands will successfully install it, provided that all of the dependencies are installed.
 
 ```
-$ make kevm
+$ make -C <project> deps
 ```
-
-<!--
-```
-$ git clone git@github.com:kframework/evm-semantics.git
-$ cd evm-semantics
-$ make deps
-$ make
-```
--->
 
 For detailed instructions on installing and running the EVM verifier, see [KEVM]'s [Installing/Building](https://github.com/kframework/evm-semantics/blob/master/README.md#installingbuilding) and [Example Usage](https://github.com/kframework/evm-semantics/blob/master/README.md#example-usage) pages.
 
