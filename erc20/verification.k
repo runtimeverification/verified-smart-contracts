@@ -53,10 +53,11 @@ module VERIFICATION
   // Memory Reasoning
   // ########################
 
-    syntax Bool ::= IMap "==IMap" IMap [function, smtlib(=)]
+    rule store(M, K, select(M, K)) => M
 
-    syntax Bool ::= IMap "==IMap" IMap "except" Set [function]
-
+    syntax Bool ::= Map "==IMap" Map [function, smtlib(=)]
+    syntax Bool ::= Map "==IMap" Map "except" Set [function]
+ // --------------------------------------------------------
     rule store(M1, K, _) ==IMap M2 except Ks
       =>       M1        ==IMap M2 except Ks
       requires K in Ks
@@ -68,8 +69,8 @@ module VERIFICATION
     rule M1 ==IMap M2 except _ => true
       requires M1 ==K M2  // structural equality
 
-    syntax Set ::= keys(IMap) [function]
-
+    syntax Set ::= keys(Map) [function]
+ // -----------------------------------
     rule K1 in keys(store(M, K2, _)) => true          requires K1  ==Int K2
     rule K1 in keys(store(M, K2, _)) => K1 in keys(M) requires K1 =/=Int K2
 
@@ -81,5 +82,13 @@ module VERIFICATION
       requires K0 =/=Int K1 andBool K1 in keys(M)
 
     rule notBool( hash2(K1,V1) ==K hash2(K2,V2) ) => K1 =/=Int K2 orBool V1 =/=Int V2
+
+
+  // ########################
+  // Arithmetic
+  // ########################
+
+    rule A -Int B +Int B => A
+    rule A +Int B -Int B => A
 
 endmodule

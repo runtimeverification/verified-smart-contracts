@@ -1,6 +1,6 @@
 BUILD_DIR:=../../.build
 
-LOCAL_LEMMAS:=../abstract-semantics.k ../verification.k
+LOCAL_LEMMAS:=../abstract-semantics.k ../verification.k ../../resources/evm-symbolic.k
 TMPLS:=../module-tmpl.k ../spec-tmpl.k
 
 SPEC_GROUP:=zeppelin-erc20
