@@ -10,9 +10,5 @@
 ; bool to int
 (define-fun smt_bool2int ((b Bool)) Int (ite b 1 0))
 
-; IMap
-(define-sort IMap () (Array Int Int))
-(define-fun emptyIMap () IMap ((as const IMap) 0))
-
 ; ceil32
 (define-fun ceil32 ((x Int)) Int ( * ( div ( + x 31 ) 32 ) 32 ) )
