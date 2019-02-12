@@ -26,7 +26,7 @@ $ kprove tests/proofs/specs/vyper-erc20/totalSupply-spec.k -d .build/java -m VER
       * VM options: `-Xms64m -Xmx4g -Xss32m -XX:+TieredCompilation -ea`
       * Program arguments: `-kprove /path/to/spec.k -d .build/java -m VERIFICATION <additional-arguments>` see [kprove tutorial](https://github.com/runtimeverification/verified-smart-contracts/blob/master/resources/kprove-tutorial.md)
       * Working dir: `/path/to/evm-semantics`
-      * Env Variables: 
+      * Env Variables:
         * `LD_LIBRARY_PATH` : `$LD_LIBRARY_PATH:$MODULE_DIR$/../k-distribution/target/release/k/lib/native/linux64`
         * `PATH`            : `$PATH:$MODULE_DIR$/../k-distribution/target/release/k/bin:$MODULE_DIR$/../k-distribution/target/release/k/lib/native/linux:$MODULE_DIR$/../k-distribution/target/release/k/lib/native/linux64:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin`
       * Use classpath of module: `k-distribution`
@@ -42,3 +42,10 @@ $ kprove tests/proofs/specs/vyper-erc20/totalSupply-spec.k -d .build/java -m VER
    * More recent versions of K have updated versions of the method `proveRule()`. You can move the breakpoint to one of the first lines of `for (ConstrainedTerm term : queue)`, such as `v++`, and use the same condition as above.
 2. Using the debugger
    * The debugger should stop at each opcode. You can see the current opcode at the top of the `<k>` cell of the current configuration. The current configuration is stored in the `term` variable.
+
+### FAQ
+**Q:** The following error was thrown while I was trying to run the debugger. What should I do?
+```
+java.lang.OutOfMemoryError: GC overhead limit exceeded
+```
+**A:** This error was thrown most likely because the memory heap size of the VM was not big enough. In order to fix this error try to increase the heap size by editing the current configuration and replace in the `VM Options` the `-Xmx4g` with `-Xmx12g`. This will allocate 12GB for the VM memory heap.
