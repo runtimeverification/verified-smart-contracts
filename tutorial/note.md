@@ -6,6 +6,9 @@ https://github.com/ethereum/solidity/releases/tag/v0.5.0
 
 * `--asm`
 * `--bin`, `--bin-runtime`
+
+bin-runtime:                                                                 608060405260043610610057576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff16806360fe47b11461005c5780636d4ce63c146100975780637cf5dab0146100c2575b600080fd5b34801561006857600080fd5b506100956004803603602081101561007f57600080fd5b81019080803590602001909291905050506100fd565b005b3480156100a357600080fd5b506100ac610107565b6040518082815260200191505060405180910390f35b3480156100ce57600080fd5b506100fb600480360360208110156100e557600080fd5b8101908080359060200190929190505050610110565b005b8060008190555050565b60008054905090565b8060008082825401925050819055505056fea165627a7a72305820e30770ef5b3fb7eeee92c4394717956ee394de33dbf703938cc833a35582f1cc0029
+bin :        608060405234801561001057600080fd5b5061014e806100206000396000f3fe608060405260043610610057576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff16806360fe47b11461005c5780636d4ce63c146100975780637cf5dab0146100c2575b600080fd5b34801561006857600080fd5b506100956004803603602081101561007f57600080fd5b81019080803590602001909291905050506100fd565b005b3480156100a357600080fd5b506100ac610107565b6040518082815260200191505060405180910390f35b3480156100ce57600080fd5b506100fb600480360360208110156100e557600080fd5b8101908080359060200190929190505050610110565b005b8060008190555050565b60008054905090565b8060008082825401925050819055505056fea165627a7a72305820e30770ef5b3fb7eeee92c4394717956ee394de33dbf703938cc833a35582f1cc0029
 * `--hashes`
 
 ## getting opcodes
@@ -49,39 +52,61 @@ may ignore super-contracts section, as all of the codes are already in the sub-c
 
 ## stack ops
 
-* draw the stack
-
-
 # EVM bytecode details: `Coin.sol`
 
 ## Inheritance
 
+## public variable
+
 ## fallback
-
-## External & internal functions
-
-## Storage
-
-* 2^256 slots, 256bits for each.
-* slot calculation
-
-## Some redundancies
 
 ## array
 
+`addOwners`
+
+```
+     108 : 70 : 162 : 197 :
+ 0|  #buf ( 32 , 32 ) ++
+32|  #buf ( 32 , 2 ) ++
+64|  #buf ( 32 , A ) ++
+96|  #buf ( 32 , B )
+
+0   4                    36  68
+|sig|head1(offset to arr)|len| ......|
+    0                    32  64
+```
+
+https://solidity.readthedocs.io/en/develop/abi-spec.html, `#abiCallData`
+
+exercise: `setupOwners`, `getOwners`
+
 ## Memory
 
-* not slot. byte addressable
-* no `malloc`, `free`, ...
-* NEXT_LOC: mload(0x40)
+0x40
 
-## ~~packing~~
+## External & internal functions
+
+`addOwners`, SafeMath ...
+
+## maps
+
+`isOwner`
+
+`#hashedLocation`
+
+exercise: `mint`
+
+## call, transfer, send
+
+`withdrawEther`
+
+exercise: function with calldata
+
+## packing
+
+## event
+
+`#abiEventLog`
 
 # More KEVM semantics
-
-## `#call`
-
-## More internal ops
-
-# writing lemmas
 

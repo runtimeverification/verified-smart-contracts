@@ -45,7 +45,8 @@ contract Owned {
 contract Coin is Owned {
     using SafeArithmetic for uint;
 
-    address master;
+    address public master;   // 20 bytes
+    bool public placeholder; // 1 byte -> two vars packed in to one location
     mapping (address => uint) public balances;
     mapping (address => mapping (address => uint256)) public minted;
 
