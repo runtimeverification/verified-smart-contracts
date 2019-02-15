@@ -62,14 +62,36 @@ may ignore super-contracts section, as all of the codes are already in the sub-c
 
 ## array
 
-`addOwners`
+`set(123)`
+```
+     _ : _ : _ : _ :
+ 0|  #buf ( 32 , 123 )
+```
+
+f(uint[] a, uint[] b)
+cd[4:36] = 64
+cd[36:68] = 64 + size of a
 
 ```
-     108 : 70 : 162 : 197 :
- 0|  #buf ( 32 , 32 ) ++
-32|  #buf ( 32 , 2 ) ++
-64|  #buf ( 32 , A ) ++
-96|  #buf ( 32 , B )
+     _ : _ : _ : _ :
+ 0|  #buf ( 32 , 64 )
+32|  #buf ( 32 , 64 + (length of a)*32 + 32 )
+64|  #buf ( 32 , length )
+96|  #buf ( 32 , first elem of a )
+..|  #buf ( 32 , second elem of a )
+....
+```
+
+`addOwners([A ,B])`
+
+```
+   0|108 : 70 : 162 : 197 :
+ 0+4|  #buf ( 32 , 32 ) ++
+32+4|  #buf ( 32 , 2 ) ++
+64+4|  #buf ( 32 , A ) ++
+96+4|  #buf ( 32 , B )
+
+2 * 32
 
 0   4                    36  68
 |sig|head1(offset to arr)|len| ......|

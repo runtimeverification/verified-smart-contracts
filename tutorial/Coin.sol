@@ -25,6 +25,7 @@ contract Owned {
             address owner = _owners[i];
             require(owner != address(0) && owner != SENTINEL && owners[owner] == address(0),
                     "Invalid owner address");
+            // storage location of owners[owner]: #hashedLocation("Solidity", 0, owner)
             owners[owner] = owners[SENTINEL];
             owners[SENTINEL] = owner;
         }
@@ -45,8 +46,11 @@ contract Owned {
 contract Coin is Owned {
     using SafeArithmetic for uint;
 
+    // 32 bytes in one storage slot
     address public master;   // 20 bytes
     bool public placeholder; // 1 byte -> two vars packed in to one location
+    // [0....0][placeholder][master]
+    // 11 bytes| 1byte      | 20 bytes
     mapping (address => uint) public balances;
     mapping (address => mapping (address => uint256)) public minted;
 
@@ -57,6 +61,10 @@ contract Coin is Owned {
     }
 
     function addOwners(address[] memory _owners) public {
+        // localMem: ... [len]   [1st]      [2nd]...
+        //               _owners _owners+32 .....
+        // ........[len][1st][2nd].....[last elem]
+        //         ^ NEXT_LOC                     ^ NEXT_LOC+size
         require(msg.sender == master);
         // internal
         super.addOwners(_owners);
@@ -66,6 +74,9 @@ contract Coin is Owned {
     function mint(address receiver, uint amount) public onlyOwner {
         // equivalent to add(..., ...), syntatic sugar enabled by `using ... for ...`
         balances[receiver] = balances[receiver].add(amount);
+        // #hashedLocation("Solidity", 3, owner receiver)
+        // => #hashedLocation("Solidity", keccakIntList(3 owner), receiver)
+        // => #hashedLocation("Solidity", keccakIntList(keccakIntList(3 owner) receiver))
         minted[msg.sender][receiver] = minted[msg.sender][receiver].add(amount);
     }
 
@@ -76,7 +87,7 @@ contract Coin is Owned {
         emit Sent(msg.sender, receiver, amount);
     }
 
-    function () external payable {}
+    function () external payable {} //fallback
 
     function withdrawEther() public onlyOwner {
         msg.sender.transfer(address(this).balance);

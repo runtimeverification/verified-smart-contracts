@@ -385,7 +385,7 @@ sub_0: assembly {
         /* "--CODEGEN--":2:4   */
       iszero
       tag_28
-      jumpi         // (cds-4) 4 tag
+      jumpi         // (cds-4) 4 tag_27
         /* "--CODEGEN--":29:30   */
       0x0
         /* "--CODEGEN--":26:27   */
@@ -400,7 +400,7 @@ sub_0: assembly {
       swap1         // 4 cds tag
       dup1
       dup1          // 4 4 4 cds tag
-      calldataload  // cd[4:36](offset) 4 4 cds tag
+      calldataload  // cd[4:36](offset=32) 4 4 cds tag
       swap1         // 4 offset 4 cds tag
       0x20          //
       add           // 36 offset 4 cds tag
@@ -450,7 +450,7 @@ sub_0: assembly {
     tag_30:
         /* "Coin.sol":1567:1719  function addOwners(address[] memory _owners) public {... */
       dup1          // (4+offset) (4+offset) 36 4 cds tag
-      calldataload  // cd[4+offset:4+offset+32] (4+offset) 36 4 cds tag
+      calldataload  // cd[4+offset:4+offset+32](length of _owners) (4+offset) 36 4 cds tag
       swap1         // (4+offset) len 36 4 cds tag
       0x20
       add           // (4+offset+32) len 36 4 cds tag
@@ -502,8 +502,9 @@ sub_0: assembly {
       swap1        // size NEXT_LOC len len (4+offset+32) 36 4 cds tag
       dup2         // NEXT_LOC size NEXT_LOC len len (4+offset+32) 36 4 cds tag
       add          // (NEXT_LOC+size) NEXT_LOC len len (4+offset+32) 36 4 cds tag
-      0x40
+      0x40         // 0x40 (NEXT_LOC+size) NEXT_LOC len len (4+offset+32) 36 4 cds tag
       mstore       // NEXT_LOC len len (4+offset+32) 36 4 cds tag
+
       dup1         // NEXT_LOC NEXT_LOC len len (4+offset+32) 36 4 cds tag
       swap4        // (4+offset+32) NEXT_LOC len len NEXT_LOC 36 4 cds tag
       swap3        // len NEXT_LOC len (4+offset+32) NEXT_LOC 36 4 cds tag
@@ -512,6 +513,7 @@ sub_0: assembly {
       dup2         // len NEXT_LOC len len (4+offset+32) NEXT_LOC 36 4 cds tag
       dup2         // NEXT_LOC len NEXT_LOC len len (4+offset+32) NEXT_LOC 36 4 cds tag
       mstore       // NEXT_LOC len len (4+offset+32) NEXT_LOC 36 4 cds tag
+
       0x20         // 32 NEXT_LOC len len (4+offset+32) NEXT_LOC 36 4 cds tag
       add          // (NEXT_LOC+32) len len (4+offset+32) NEXT_LOC 36 4 cds tag
       dup4         // (4+offset+32) (NEXT_LOC+32) len len (4+offset+32) NEXT_LOC 36 4 cds tag
@@ -519,8 +521,8 @@ sub_0: assembly {
       0x20         // 32 len   (4+offset+32) (NEXT_LOC+32) len len (4+offset+32) NEXT_LOC 36 4 cds tag
       mul          // (len*32) (4+offset+32) (NEXT_LOC+32) len len (4+offset+32) NEXT_LOC 36 4 cds tag
       dup1         // (len*32) (len*32) (4+offset+32) (NEXT_LOC+32) len len (4+offset+32) NEXT_LOC 36 4 cds tag
-      dup3         // (4*offset+32) (len*32) (len*32) (4+offset+32) (NEXT_LOC+32) len len (4+offset+32) NEXT_LOC 36 4 cds tag
-      dup5         // (NEXT_LOC+32) (4*offset+32) (len*32) (len*32) (4+offset+32) (NEXT_LOC+32) len len (4+offset+32) NEXT_LOC 36 4 cds tag
+      dup3         // (4+offset+32) (len*32) (len*32) (4+offset+32) (NEXT_LOC+32) len len (4+offset+32) NEXT_LOC 36 4 cds tag
+      dup5         // (NEXT_LOC+32) (4+offset+32) (len*32) (len*32) (4+offset+32) (NEXT_LOC+32) len len (4+offset+32) NEXT_LOC 36 4 cds tag
       calldatacopy // (len*32) (4+offset+32) (NEXT_LOC+32) len len (4+offset+32) NEXT_LOC 36 4 cds tag
       0x0          // 0 (len*32) (4+offset+32) (NEXT_LOC+32) len len (4+offset+32) NEXT_LOC 36 4 cds tag
       dup2         // (len*32) 0 (len*32) (4+offset+32) (NEXT_LOC+32) len len (4+offset+32) NEXT_LOC 36 4 cds tag
@@ -1187,17 +1189,17 @@ sub_0: assembly {
         /* "Coin.sol":1567:1719  function addOwners(address[] memory _owners) public {... */
     tag_32:
         /* "Coin.sol":1651:1657  master */
-      0x2
-      0x0
-      swap1
-      sload
-      swap1
-      0x100
-      exp
-      swap1
-      div
-      0xffffffffffffffffffffffffffffffffffffffff
-      and
+      0x2      // 2 _owners
+      0x0      // 0 2 _owners
+      swap1    // 2 0 _owners
+      sload    // sload(2) 0 _owners
+      swap1    // 0 sload(2) _owners
+      0x100    // 0x100 0 sload(2) _owners
+      exp      // 1 sload(2) _owners
+      swap1    // sload(2) 1 _owners
+      div      // sload(2) _owners
+      0xffffffffffffffffffffffffffffffffffffffff  // 20 bytes of 1's
+      and      // master _owners
         /* "Coin.sol":1637:1657  msg.sender == master */
       0xffffffffffffffffffffffffffffffffffffffff
       and
@@ -1219,7 +1221,7 @@ sub_0: assembly {
         /* "Coin.sol":1688:1712  super.addOwners(_owners) */
       tag_64
         /* "Coin.sol":1704:1711  _owners */
-      dup2
+      dup2   // _owners
         /* "Coin.sol":1688:1703  super.addOwners */
       tag_65
         /* "Coin.sol":1688:1712  super.addOwners(_owners) */
@@ -1365,15 +1367,16 @@ sub_0: assembly {
       jump	// out
         /* "Coin.sol":1302:1325  bool public placeholder */
     tag_42:
-      0x2
-      0x14
-      swap1
-      sload
-      swap1
+      0x2     // 2
+      0x14    // 20 2
+      swap1   // 2 20
+      sload   // sload(2) 20
+      swap1   // 20 sload(2)
       0x100
-      exp
+      exp    // (2^8)^20 sload(2)  (= [0....0][placeholder][master])
       swap1
-      div
+      div    // (sload(2) >> 20bytes) (= [0......0][placeholder])
+             //                            31bytes   1 byte
       0xff
       and
       dup2
@@ -1787,27 +1790,35 @@ sub_0: assembly {
       0xffffffffffffffffffffffffffffffffffffffff
       and
         /* "Coin.sol":746:752  owners */
-      0x0
+      0x0                      // 0
         /* "Coin.sol":746:759  owners[owner] */
-      dup1
+      dup1                     // 0 0
         /* "Coin.sol":753:758  owner */
-      dup4
-        /* "Coin.sol":746:759  owners[owner] */
+      dup4                     // owner 0 0
+        /* "Coin.sol":746:759  owners[owner] #hashedLocation("Solidity", 0, owner) */
+      // [0..0][0..0|owner]
+      // p     p+32        p+64
+      // -> keccak256(p, 64)
       0xffffffffffffffffffffffffffffffffffffffff
       and
       0xffffffffffffffffffffffffffffffffffffffff
-      and
-      dup2
-      mstore
+      and        // owner 0 0
+      dup2       // 0 owner 0 0
+      // 0x00: owner
+      // 0x20: ???????? -> used to compute keccak256
+      // 0x40: NEXT_LOC
+      mstore     // 0 0
+      0x20       /
+      add        // 32 0
+      swap1      // 0 32
+      dup2       // 32 0 32
+      mstore     // 32
+      // 0x00: owner
+      // 0x20: 0
       0x20
-      add
-      swap1
-      dup2
-      mstore
-      0x20
-      add
-      0x0
-      keccak256
+      add        // 64
+      0x0        // 0 64
+      keccak256  // #hashedLocation("Solidity", 0, owner)
       0x0
       swap1
       sload
