@@ -1,0 +1,9 @@
+make
+
+export K_OPTS=-Xmx8G
+
+.build/k/k-distribution/target/release/k/bin/kprove -v -d .build/evm-semantics/.build/java -m VERIFICATION --z3-impl-timeout 500 --smt-prelude evm.smt2 --deterministic-functions --cache-func-optimized  \
+../specs/tutorial/getCoffee-spec.k \
+--log \
+--log-cells "k,pc,id,wordStack,localMem,accounts,gas,memoryUsed,(#initTerm),#pc,(#result)" \
+&> log.k

@@ -1,0 +1,682 @@
+
+======= Calls.sol:Cafe =======
+EVM assembly:
+    /* "Calls.sol":25:167  contract Cafe { // at 0xcafe... */
+  mstore(0x40, 0x80)
+  callvalue
+    /* "--CODEGEN--":8:17   */
+  dup1
+    /* "--CODEGEN--":5:7   */
+  iszero
+  tag_1
+  jumpi
+    /* "--CODEGEN--":30:31   */
+  0x0
+    /* "--CODEGEN--":27:28   */
+  dup1
+    /* "--CODEGEN--":20:32   */
+  revert
+    /* "--CODEGEN--":5:7   */
+tag_1:
+    /* "Calls.sol":25:167  contract Cafe { // at 0xcafe... */
+  pop
+  dataSize(sub_0)
+  dup1
+  dataOffset(sub_0)
+  0x0
+  codecopy
+  0x0
+  return
+stop
+
+sub_0: assembly {
+        /* "Calls.sol":25:167  contract Cafe { // at 0xcafe... */
+      mstore(0x40, 0x80)
+      jumpi(tag_1, lt(calldatasize, 0x4))
+      calldataload(0x0)
+      0x100000000000000000000000000000000000000000000000000000000
+      swap1
+      div
+      0xffffffff
+      and
+      dup1
+      0xaf325da2
+      eq
+      tag_2
+      jumpi
+    tag_1:
+      stop
+        /* "Calls.sol":56:131  function make(bytes memory what) public returns (uint) { return 0xc0ffee; } */
+    tag_2:
+      callvalue
+        /* "--CODEGEN--":8:17   */
+      dup1
+        /* "--CODEGEN--":5:7   */
+      iszero
+      tag_5
+      jumpi
+        /* "--CODEGEN--":30:31   */
+      0x0
+        /* "--CODEGEN--":27:28   */
+      dup1
+        /* "--CODEGEN--":20:32   */
+      revert
+        /* "--CODEGEN--":5:7   */
+    tag_5:
+        /* "Calls.sol":56:131  function make(bytes memory what) public returns (uint) { return 0xc0ffee; } */
+      pop
+      tag_6
+      0x4
+      dup1
+      calldatasize
+      sub
+        /* "--CODEGEN--":13:15   */
+      0x20
+        /* "--CODEGEN--":8:11   */
+      dup2
+        /* "--CODEGEN--":5:16   */
+      lt
+        /* "--CODEGEN--":2:4   */
+      iszero
+      tag_7
+      jumpi
+        /* "--CODEGEN--":29:30   */
+      0x0
+        /* "--CODEGEN--":26:27   */
+      dup1
+        /* "--CODEGEN--":19:31   */
+      revert
+        /* "--CODEGEN--":2:4   */
+    tag_7:
+        /* "Calls.sol":56:131  function make(bytes memory what) public returns (uint) { return 0xc0ffee; } */
+      dup2
+      add
+      swap1
+      dup1
+      dup1
+      calldataload
+      swap1
+      0x20
+      add
+      swap1
+        /* "--CODEGEN--":21:32   */
+      0x100000000
+        /* "--CODEGEN--":8:19   */
+      dup2
+        /* "--CODEGEN--":5:33   */
+      gt
+        /* "--CODEGEN--":2:4   */
+      iszero
+      tag_8
+      jumpi
+        /* "--CODEGEN--":46:47   */
+      0x0
+        /* "--CODEGEN--":43:44   */
+      dup1
+        /* "--CODEGEN--":36:48   */
+      revert
+        /* "--CODEGEN--":2:4   */
+    tag_8:
+        /* "Calls.sol":56:131  function make(bytes memory what) public returns (uint) { return 0xc0ffee; } */
+      dup3
+      add
+        /* "--CODEGEN--":35:44   */
+      dup4
+        /* "--CODEGEN--":28:32   */
+      0x20
+        /* "--CODEGEN--":12:26   */
+      dup3
+        /* "--CODEGEN--":8:33   */
+      add
+        /* "--CODEGEN--":5:45   */
+      gt
+        /* "--CODEGEN--":2:4   */
+      iszero
+      tag_9
+      jumpi
+        /* "--CODEGEN--":58:59   */
+      0x0
+        /* "--CODEGEN--":55:56   */
+      dup1
+        /* "--CODEGEN--":48:60   */
+      revert
+        /* "--CODEGEN--":2:4   */
+    tag_9:
+        /* "Calls.sol":56:131  function make(bytes memory what) public returns (uint) { return 0xc0ffee; } */
+      dup1
+      calldataload
+      swap1
+      0x20
+      add
+      swap2
+        /* "--CODEGEN--":100:109   */
+      dup5
+        /* "--CODEGEN--":95:96   */
+      0x1
+        /* "--CODEGEN--":81:93   */
+      dup4
+        /* "--CODEGEN--":77:97   */
+      mul
+        /* "--CODEGEN--":67:75   */
+      dup5
+        /* "--CODEGEN--":63:98   */
+      add
+        /* "--CODEGEN--":60:110   */
+      gt
+        /* "--CODEGEN--":39:50   */
+      0x100000000
+        /* "--CODEGEN--":25:37   */
+      dup4
+        /* "--CODEGEN--":22:51   */
+      gt
+        /* "--CODEGEN--":11:118   */
+      or
+        /* "--CODEGEN--":8:10   */
+      iszero
+      tag_10
+      jumpi
+        /* "--CODEGEN--":131:132   */
+      0x0
+        /* "--CODEGEN--":128:129   */
+      dup1
+        /* "--CODEGEN--":121:133   */
+      revert
+        /* "--CODEGEN--":8:10   */
+    tag_10:
+        /* "Calls.sol":56:131  function make(bytes memory what) public returns (uint) { return 0xc0ffee; } */
+      swap2
+      swap1
+      dup1
+      dup1
+      0x1f
+      add
+      0x20
+      dup1
+      swap2
+      div
+      mul
+      0x20
+      add
+      mload(0x40)
+      swap1
+      dup2
+      add
+      0x40
+      mstore
+      dup1
+      swap4
+      swap3
+      swap2
+      swap1
+      dup2
+      dup2
+      mstore
+      0x20
+      add
+      dup4
+      dup4
+        /* "--CODEGEN--":30:33   */
+      dup1
+        /* "--CODEGEN--":22:28   */
+      dup3
+        /* "--CODEGEN--":14:20   */
+      dup5
+        /* "--CODEGEN--":1:34   */
+      calldatacopy
+        /* "--CODEGEN--":99:100   */
+      0x0
+        /* "--CODEGEN--":93:96   */
+      dup2
+        /* "--CODEGEN--":85:91   */
+      dup5
+        /* "--CODEGEN--":81:97   */
+      add
+        /* "--CODEGEN--":74:101   */
+      mstore
+        /* "--CODEGEN--":137:141   */
+      0x1f
+        /* "--CODEGEN--":133:142   */
+      not
+        /* "--CODEGEN--":126:130   */
+      0x1f
+        /* "--CODEGEN--":121:124   */
+      dup3
+        /* "--CODEGEN--":117:131   */
+      add
+        /* "--CODEGEN--":113:143   */
+      and
+        /* "--CODEGEN--":106:143   */
+      swap1
+      pop
+        /* "--CODEGEN--":169:172   */
+      dup1
+        /* "--CODEGEN--":161:167   */
+      dup4
+        /* "--CODEGEN--":157:173   */
+      add
+        /* "--CODEGEN--":147:173   */
+      swap3
+      pop
+        /* "Calls.sol":56:131  function make(bytes memory what) public returns (uint) { return 0xc0ffee; } */
+      pop
+      pop
+      pop
+      pop
+      pop
+      pop
+      swap2
+      swap3
+      swap2
+      swap3
+      swap1
+      pop
+      pop
+      pop
+      jump(tag_11)
+    tag_6:
+      mload(0x40)
+      dup1
+      dup3
+      dup2
+      mstore
+      0x20
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      return
+    tag_11:
+        /* "Calls.sol":105:109  uint */
+      0x0
+        /* "Calls.sol":120:128  0xc0ffee */
+      0xc0ffee
+        /* "Calls.sol":113:128  return 0xc0ffee */
+      swap1
+      pop
+        /* "Calls.sol":56:131  function make(bytes memory what) public returns (uint) { return 0xc0ffee; } */
+      swap2
+      swap1
+      pop
+      jump	// out
+
+    auxdata: 0xa165627a7a7230582018d381a3161075f6e102ba6bc7f90d5c473b1fcab5468343760b20b0526bf53a0029
+}
+
+
+======= Calls.sol:Person =======
+EVM assembly:
+    /* "Calls.sol":169:426  contract Person {... */
+  mstore(0x40, 0x80)
+  callvalue
+    /* "--CODEGEN--":8:17   */
+  dup1
+    /* "--CODEGEN--":5:7   */
+  iszero
+  tag_1
+  jumpi
+    /* "--CODEGEN--":30:31   */
+  0x0
+    /* "--CODEGEN--":27:28   */
+  dup1
+    /* "--CODEGEN--":20:32   */
+  revert
+    /* "--CODEGEN--":5:7   */
+tag_1:
+    /* "Calls.sol":169:426  contract Person {... */
+  pop
+  dataSize(sub_0)
+  dup1
+  dataOffset(sub_0)
+  0x0
+  codecopy
+  0x0
+  return
+stop
+
+sub_0: assembly {
+        /* "Calls.sol":169:426  contract Person {... */
+      mstore(0x40, 0x80)
+      jumpi(tag_1, lt(calldatasize, 0x4))
+      calldataload(0x0)
+      0x100000000000000000000000000000000000000000000000000000000
+      swap1
+      div
+      0xffffffff
+      and
+      dup1
+      0x1d134704
+      eq
+      tag_2
+      jumpi
+      dup1
+      0x6cee6d77
+      eq
+      tag_3
+      jumpi
+      dup1
+      0xcbedbf5a
+      eq
+      tag_4
+      jumpi
+    tag_1:
+      0x0
+      dup1
+      revert
+        /* "Calls.sol":189:284  function getCoffee() public payable returns (uint) {... */
+    tag_2:
+      tag_5
+      jump(tag_6)
+    tag_5:
+      mload(0x40)
+      dup1
+      dup3
+      dup2
+      mstore
+      0x20
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      return
+        /* "Calls.sol":353:424  function transferMoney() public {... */
+    tag_3:
+      callvalue
+        /* "--CODEGEN--":8:17   */
+      dup1
+        /* "--CODEGEN--":5:7   */
+      iszero
+      tag_7
+      jumpi
+        /* "--CODEGEN--":30:31   */
+      0x0
+        /* "--CODEGEN--":27:28   */
+      dup1
+        /* "--CODEGEN--":20:32   */
+      revert
+        /* "--CODEGEN--":5:7   */
+    tag_7:
+        /* "Calls.sol":353:424  function transferMoney() public {... */
+      pop
+      tag_8
+      jump(tag_9)
+    tag_8:
+      stop
+        /* "Calls.sol":287:350  function sendMoney() public {... */
+    tag_4:
+      callvalue
+        /* "--CODEGEN--":8:17   */
+      dup1
+        /* "--CODEGEN--":5:7   */
+      iszero
+      tag_10
+      jumpi
+        /* "--CODEGEN--":30:31   */
+      0x0
+        /* "--CODEGEN--":27:28   */
+      dup1
+        /* "--CODEGEN--":20:32   */
+      revert
+        /* "--CODEGEN--":5:7   */
+    tag_10:
+        /* "Calls.sol":287:350  function sendMoney() public {... */
+      pop
+      tag_11
+      jump(tag_12)
+    tag_11:
+      stop
+        /* "Calls.sol":189:284  function getCoffee() public payable returns (uint) {... */
+    tag_6:
+        /* "Calls.sol":234:238  uint */
+      0x0
+        /* "Calls.sol":258:264  0xcafe */
+      0xcafe
+        /* "Calls.sol":253:270  Cafe(0xcafe).make */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+      0xaf325da2           // sig
+        /* "Calls.sol":253:279  Cafe(0xcafe).make("latte") */
+        // call data encoding
+      mload(0x40)
+      dup2
+      0xffffffff
+      and
+      0x100000000000000000000000000000000000000000000000000000000
+      mul
+      dup2
+      mstore
+      0x4
+      add
+      dup1
+      dup1
+      0x20
+      add
+      dup3
+      dup2
+      sub
+      dup3
+      mstore
+      0x5
+      dup2
+      mstore
+      0x20
+      add
+      dup1
+      0x6c61747465000000000000000000000000000000000000000000000000000000
+      dup2
+      mstore
+      pop
+      0x20
+      add
+      swap2
+      pop
+      pop
+      0x20
+      mload(0x40)
+      dup1
+      dup4
+      sub
+      dup2
+      0x0
+      dup8
+      dup1
+      extcodesize
+      iszero
+        /* "--CODEGEN--":8:17   */
+      dup1
+        /* "--CODEGEN--":5:7   */
+      iszero
+      tag_14
+      jumpi
+        /* "--CODEGEN--":30:31   */
+      0x0
+        /* "--CODEGEN--":27:28   */
+      dup1
+        /* "--CODEGEN--":20:32   */
+      revert
+        /* "--CODEGEN--":5:7   */
+    tag_14:
+        /* "Calls.sol":253:279  Cafe(0xcafe).make("latte") */
+      pop
+      gas
+      call
+      iszero
+        /* "--CODEGEN--":8:17   */
+      dup1
+        /* "--CODEGEN--":5:7   */
+      iszero
+      tag_15
+      jumpi
+        /* "--CODEGEN--":45:61   */
+      returndatasize
+        /* "--CODEGEN--":42:43   */
+      0x0
+        /* "--CODEGEN--":39:40   */
+      dup1
+        /* "--CODEGEN--":24:62   */
+      returndatacopy
+        /* "--CODEGEN--":77:93   */
+      returndatasize
+        /* "--CODEGEN--":74:75   */
+      0x0
+        /* "--CODEGEN--":67:94   */
+      revert
+        /* "--CODEGEN--":5:7   */
+    tag_15:
+        /* "Calls.sol":253:279  Cafe(0xcafe).make("latte") */
+      pop
+      pop
+      pop
+      pop
+      mload(0x40)
+      returndatasize
+        /* "--CODEGEN--":13:15   */
+      0x20
+        /* "--CODEGEN--":8:11   */
+      dup2
+        /* "--CODEGEN--":5:16   */
+      lt
+        /* "--CODEGEN--":2:4   */
+      iszero
+      tag_16
+      jumpi
+        /* "--CODEGEN--":29:30   */
+      0x0
+        /* "--CODEGEN--":26:27   */
+      dup1
+        /* "--CODEGEN--":19:31   */
+      revert
+        /* "--CODEGEN--":2:4   */
+    tag_16:
+        /* "Calls.sol":253:279  Cafe(0xcafe).make("latte") */
+      dup2
+      add
+      swap1
+      dup1
+      dup1
+      mload
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      pop
+      pop
+      pop
+        /* "Calls.sol":246:279  return Cafe(0xcafe).make("latte") */
+      swap1
+      pop
+        /* "Calls.sol":189:284  function getCoffee() public payable returns (uint) {... */
+      swap1
+      jump	// out
+        /* "Calls.sol":353:424  function transferMoney() public {... */
+    tag_9:
+        /* "Calls.sol":399:405  0xcafe */
+      0xcafe
+        /* "Calls.sol":391:415  address(0xcafe).transfer */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+        /* "Calls.sol":391:419  address(0xcafe).transfer(16) */
+      0x8fc   // 2300
+        /* "Calls.sol":416:418  16 */
+      0x10
+        /* "Calls.sol":391:419  address(0xcafe).transfer(16) */
+      swap1
+      dup2
+      iszero
+      mul
+      swap1
+      mload(0x40)
+      0x0
+      mload(0x40)
+      dup1
+      dup4
+      sub
+      dup2
+      dup6
+      dup9
+      dup9
+      call
+      swap4
+      pop
+      pop
+      pop
+      pop
+      iszero
+        /* "--CODEGEN--":8:17   */
+      dup1
+        /* "--CODEGEN--":5:7   */
+      iszero
+      tag_18
+      jumpi
+        /* "--CODEGEN--":45:61   */
+      returndatasize
+        /* "--CODEGEN--":42:43   */
+      0x0
+        /* "--CODEGEN--":39:40   */
+      dup1
+        /* "--CODEGEN--":24:62   */
+      returndatacopy
+        /* "--CODEGEN--":77:93   */
+      returndatasize
+        /* "--CODEGEN--":74:75   */
+      0x0
+        /* "--CODEGEN--":67:94   */
+      revert
+        /* "--CODEGEN--":5:7   */
+    tag_18:
+        /* "Calls.sol":391:419  address(0xcafe).transfer(16) */
+      pop
+        /* "Calls.sol":353:424  function transferMoney() public {... */
+      jump	// out
+        /* "Calls.sol":287:350  function sendMoney() public {... */
+    tag_12:
+        /* "Calls.sol":329:335  0xcafe */
+      0xcafe
+        /* "Calls.sol":321:341  address(0xcafe).send */
+      0xffffffffffffffffffffffffffffffffffffffff
+      and
+        /* "Calls.sol":321:345  address(0xcafe).send(16) */
+      0x8fc
+        /* "Calls.sol":342:344  16 */
+      0x10
+        /* "Calls.sol":321:345  address(0xcafe).send(16) */
+      swap1
+      dup2
+      iszero
+      mul
+      swap1
+      mload(0x40)
+      0x0
+      mload(0x40)
+      dup1
+      dup4
+      sub
+      dup2
+      dup6
+      dup9
+      dup9
+      call
+      swap4
+      pop
+      pop
+      pop
+      pop
+      pop
+        /* "Calls.sol":287:350  function sendMoney() public {... */
+      jump	// out
+
+    auxdata: 0xa165627a7a723058205b1df9ccde29ec29bea02cf7af2f0cad151a82b08096add01aac1a971aff39690029
+}
+

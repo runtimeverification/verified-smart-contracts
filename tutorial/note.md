@@ -122,7 +122,7 @@ exercise: `mint`
 
 `withdrawEther`
 
-exercise: function with calldata
+exercise: function with calldata, Proxy, SecuredTokenTransfer
 
 ## packing
 
@@ -132,3 +132,4 @@ exercise: function with calldata
 
 # More KEVM semantics
 
+## reading logs
