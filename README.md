@@ -52,7 +52,7 @@ We refer the reader to the following resources for background knowledge about th
   * [K editor support]
 * [KEVM]: an executable formal semantics of the EVM in K
   * [Jellopaper]: reader-friendly formatting of KEVM
-  * [KEVM technical report]
+  * [KEVM research paper]
 * [K reachability logic prover]
   * [eDSL]: domain-specific language for EVM-level specifications
 * [ERC20-K]: a formal specification of the high-level business logic of [ERC20]
@@ -82,6 +82,7 @@ The possibility of human error in the manual review process is very real, and we
 [K editor support]: <https://github.com/kframework/k-editor-support>
 [Jellopaper]: <https://jellopaper.org/>
 [KEVM technical report]: <https://www.ideals.illinois.edu/handle/2142/97207>
+[KEVM research paper]: <http://fsl.cs.illinois.edu/FSL/papers/2018/hildenbrandt-saxena-zhu-rodrigues-daian-guth-moore-zhang-park-rosu-2018-csf/hildenbrandt-saxena-zhu-rodrigues-daian-guth-moore-zhang-park-rosu-2018-csf-public.pdf>
 [Z3]: <https://github.com/Z3Prover/z3>
 [eDSL]: </resources/edsl.md>
 [ERC20]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md>
