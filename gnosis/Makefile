@@ -87,10 +87,12 @@ SPEC_NAMES_MASTER_COPY:=changeMasterCopy-success \
                         changeMasterCopy-failure-1 \
                         changeMasterCopy-failure-2 \
 
-SPEC_NAMES:=$(SPEC_NAMES_GNOSIS_SAFE) \
-            $(SPEC_NAMES_OWNER_MANAGER) \
-            $(SPEC_NAMES_MODULE_MANAGER) \
-            $(SPEC_NAMES_MASTER_COPY)
+#SPEC_NAMES:=$(SPEC_NAMES_GNOSIS_SAFE) \
+#            $(SPEC_NAMES_OWNER_MANAGER) \
+#            $(SPEC_NAMES_MODULE_MANAGER) \
+#            $(SPEC_NAMES_MASTER_COPY)
+
+SPEC_NAMES:=checkSignatures-loop-failure
 
 include ../resources/kprove.mak
 
