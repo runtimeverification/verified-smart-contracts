@@ -6,8 +6,7 @@ TMPLS:=module-tmpl.k spec-tmpl.k
 SPEC_GROUP:=gnosis
 SPEC_INI:=gnosis-spec.ini
 
-KPROVE_OPTS:=--smt-prelude $(abspath $(dir $(abspath $(lastword $(MAKEFILE_LIST))))/evm.smt2) \
-             --deterministic-functions --cache-func-optimized
+KPROVE_OPTS:=--smt-prelude $(abspath $(dir $(abspath $(lastword $(MAKEFILE_LIST))))/evm.smt2)
 
 SPEC_NAMES_GNOSIS_SAFE:=encodeTransactionData-public-1 \
                         encodeTransactionData-public-2 \
