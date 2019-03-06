@@ -35,7 +35,7 @@ module VERIFICATION
 
     //1-byte ByteStack.
     rule #asByteStack(W) => W : .WordStack
-      requires #rangeUInt(8, W)
+      requires #rangeUInt(8, W) andBool 0 <Int W
 
     // Byte arrays with concrete size
     // Code sugar to represent byte arrays with concrete size but symbolic data.
