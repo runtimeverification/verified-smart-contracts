@@ -59,7 +59,8 @@ K_BIN:=$(abspath $(K_REPO_DIR)/k-distribution/target/release/k/bin)
 
 KPROVE:=$(K_BIN)/kprove -v --debug -d $(KEVM_REPO_DIR)/.build/java -m VERIFICATION --z3-impl-timeout 500 \
         --deterministic-functions --no-exc-wrap \
-        --cache-func-optimized --no-alpha-renaming --format-failures --boundary-cells k,pc \
+        --cache-func false \
+        --no-alpha-renaming --format-failures --boundary-cells k,pc \
         --log-cells k,output,statusCode,localMem,pc,gas,wordStack,callData,accounts,memoryUsed,\#pc,\#result \
         $(KPROVE_OPTS)
 
