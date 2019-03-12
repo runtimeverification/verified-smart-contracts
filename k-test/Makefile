@@ -1,4 +1,4 @@
-BUILD_DIR:=.build
+BUILD_DIR:=../erc20/.build
 
 # verification.k is required to import evm-symbolic.k
 LOCAL_LEMMAS:=abstract-semantics.k verification.k
