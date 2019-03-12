@@ -5,10 +5,11 @@ module VERIFICATION
     imports EDSL
     imports LEMMAS
 
-    rule #sizeWordStack ( WS , N:Int )
-      => N +Int #sizeWordStack ( WS , 0 )
-      requires N =/=K 0
-      [lemma]
+    rule #sizeWordStack(WS, N) <Int SIZE => #sizeWordStack(WS, 0) +Int N <Int SIZE  requires N =/=Int 0
+    rule SIZELIMIT <Int #sizeWordStack(WS, N) +Int DELTA  => SIZELIMIT <Int (#sizeWordStack(WS, 0) +Int N) +Int DELTA  requires N =/=Int 0
+    rule SIZELIMIT <Int #sizeWordStack(WS, N)             => SIZELIMIT <Int #sizeWordStack(WS, 0) +Int N               requires N =/=Int 0
+
+    rule #sizeWordStack(WS, N) <=Int SIZE => #sizeWordStack(WS, 0) +Int N <=Int SIZE requires N =/=Int 0
 
     //Rules for #padToWidth with non-regular symbolic arguments.
     rule #padToWidth(32, #asByteStack(V)) => #asByteStackInWidth(V, 32)
