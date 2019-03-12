@@ -6,7 +6,9 @@ ERC20_DIRS:=     erc20/hkg erc20/hobby erc20/ds-token
 GNOSIS_DIRS:=    gnosis gnosis/test
 GNOSIS_BMC_DIRS:=gnosis/bmc
 BIHU_DIRS:=      bihu
-DOM_DIRS:=       erc20/gno proxied-token
+DOM_DIRS:=       erc20/gno
+# fails
+#DOM_DIRS+=       proxied-token
 CASPER_DIRS:=    casper
 UNISWAP_DIRS:=   uniswap
 
