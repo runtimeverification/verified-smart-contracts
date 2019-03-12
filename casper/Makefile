@@ -1,4 +1,4 @@
-BUILD_DIR:=../.build
+BUILD_DIR:=../erc20/.build
 
 SPEC_GROUP:=casper
 SPEC_INI:=casper-spec.ini
