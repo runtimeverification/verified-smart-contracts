@@ -5,10 +5,11 @@ module VERIFICATION
     imports EDSL
     imports LEMMAS
 
-    rule #sizeWordStack ( WS , N:Int )
-      => N +Int #sizeWordStack ( WS , 0 )
-      requires N =/=K 0
-      [lemma]
+    rule #sizeWordStack(WS, N) <Int SIZE => #sizeWordStack(WS, 0) +Int N <Int SIZE  requires N =/=Int 0
+    rule SIZELIMIT <Int #sizeWordStack(WS, N) +Int DELTA  => SIZELIMIT <Int (#sizeWordStack(WS, 0) +Int N) +Int DELTA  requires N =/=Int 0
+    rule SIZELIMIT <Int #sizeWordStack(WS, N)             => SIZELIMIT <Int #sizeWordStack(WS, 0) +Int N               requires N =/=Int 0
+
+    rule #sizeWordStack(WS, N) <=Int SIZE => #sizeWordStack(WS, 0) +Int N <=Int SIZE requires N =/=Int 0
 
     //Rules for #padToWidth with non-regular symbolic arguments.
     rule #padToWidth(32, #asByteStack(V)) => #asByteStackInWidth(V, 32)
@@ -90,14 +91,6 @@ module VERIFICATION
     rule (0 <=Int #blockhash(_, _, _, _)) => true
 
     rule (#blockhash(_, _, _, _) <Int pow256) => true
-
-    syntax Int ::= symkeccak ( Int ) [function, smtlib(smt_symkeccak)]
- // -------------------------------------------------------------------
-    rule keccak(WS) => symkeccak(#asWord(WS))  requires notBool #isConcrete(WS)
-
-    rule 0 <=Int symkeccak(N) => true
-
-    rule symkeccak(N) <Int pow256 => true
 
     rule   #signed(X) ==K   #signed(Y) => X ==K Y requires #rangeUInt(256,X) orBool #rangeUInt(256,Y)
     rule #unsigned(X) ==K #unsigned(Y) => X ==K Y requires #rangeSInt(256,X) orBool #rangeSInt(256,Y)

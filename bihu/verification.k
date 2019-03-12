@@ -51,7 +51,7 @@ module VERIFICATION
       requires  ACC >=Int 0 andBool ACC <Int 2 ^Int 256
         andBool BASEN >Int 0 andBool BASED >=Int BASEN andBool EXPONENT >=Int 0
 
-    rule ACC >=Int #roundpower(ACC, BASEN, BASED, EXPONENT) => true
+    rule #roundpower(ACC, BASEN, BASED, EXPONENT) <=Int ACC => true
       requires  ACC >=Int 0
         andBool BASEN >Int 0 andBool BASED >=Int BASEN andBool EXPONENT >=Int 0
 
