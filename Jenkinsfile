@@ -42,7 +42,7 @@ pipeline {
             nprocs=$(nproc)
             [ "$nprocs" -gt '6' ] && nprocs='6'
             export K_OPTS=-Xmx12g
-            make jenkins MODE=all NPROCS="$nprocs"
+            make jenkins MODE=jenkins NPROCS="$nprocs"
           '''
         }
       }
