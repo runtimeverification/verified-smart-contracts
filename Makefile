@@ -13,51 +13,7 @@ UNISWAP_DIRS:=   uniswap
 JENKINS_DIRS:=$(MINIMAL_DIRS) $(KTEST_DIRS) $(ERC20_DIRS) $(GNOSIS_DIRS)
 ALL_DIRS:=    $(JENKINS_DIRS) $(GNOSIS_BMC_DIRS) $(BIHU_DIRS) $(DOM_DIRS) $(CASPER_DIRS) $(UNISWAP_DIRS)
 
-SUBDIRS:=
-
-ifneq (,$(findstring minimal,$(MODE)))
-SUBDIRS+=$(MINIMAL_DIRS)
-endif
-
-ifneq (,$(findstring k-test,$(MODE)))
-SUBDIRS+=$(KTEST_DIRS)
-endif
-
-ifneq (,$(findstring erc20,$(MODE)))
-SUBDIRS+=$(ERC20_DIRS)
-endif
-
-ifneq (,$(findstring gnosis,$(MODE)))
-SUBDIRS+=$(GNOSIS_DIRS)
-endif
-
-ifneq (,$(findstring gnosis_bmc,$(MODE)))
-SUBDIRS+=$(GNOSIS_BMC_DIRS)
-endif
-
-ifneq (,$(findstring bihu,$(MODE)))
-SUBDIRS+=$(BIHU_DIRS)
-endif
-
-ifneq (,$(findstring dom,$(MODE)))
-SUBDIRS+=$(DOM_DIRS)
-endif
-
-ifneq (,$(findstring casper,$(MODE)))
-SUBDIRS+=$(CASPER_DIRS)
-endif
-
-ifneq (,$(findstring uniswap,$(MODE)))
-SUBDIRS+=$(UNISWAP_DIRS)
-endif
-
-ifneq (,$(findstring jenkins,$(MODE)))
-SUBDIRS+=$(JENKINS_DIRS)
-endif
-
-ifneq (,$(findstring all,$(MODE)))
-SUBDIRS+=$(ALL_DIRS)
-endif
-
+# For MODE=foo, SUBDIRS will be FOO_DIRS
+SUBDIRS:=$($(shell echo $(MODE) | tr a-z A-Z)_DIRS)
 
 include resources/kprove-group.mak
