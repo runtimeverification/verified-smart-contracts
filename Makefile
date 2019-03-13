@@ -8,14 +8,14 @@ GNOSIS_BMC_DIRS:=gnosis/bmc
 BIHU_DIRS:=      bihu
 DOM_DIRS:=       erc20/gno
 # fails
-#DOM_DIRS+=       proxied-token
+DOM_DIRS+=       proxied-token
 # fails
 CASPER_DIRS:=    casper
 # fails
 UNISWAP_DIRS:=   uniswap
 
 #JENKINS_DIRS:=$(MINIMAL_DIRS) $(KTEST_DIRS) $(ERC20_DIRS) $(GNOSIS_DIRS)
-JENKINS_DIRS:=$(GNOSIS_BMC_DIRS) $(BIHU_DIRS) $(DOM_DIRS) $(CASPER_DIRS)
+JENKINS_DIRS:=$(GNOSIS_BMC_DIRS) $(BIHU_DIRS) $(DOM_DIRS)
 ALL_DIRS:=    $(JENKINS_DIRS) $(GNOSIS_BMC_DIRS) $(BIHU_DIRS) $(DOM_DIRS) $(CASPER_DIRS) $(UNISWAP_DIRS)
 
 # For MODE=foo, SUBDIRS will be FOO_DIRS
