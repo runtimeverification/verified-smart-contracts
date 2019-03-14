@@ -17,7 +17,7 @@ Let's consider you have 3 path variables for home dir of the 3 projects: `$K_HOM
 
 ```
   $ cd $K_HOME
-  $ mvn package -DskipTests
+  $ mvn package -DskipTests -Dllvm.backend.skip -Dhaskell.backend.skip
 ```
 
 - To kompile kevm:
