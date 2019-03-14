@@ -29,6 +29,12 @@ TMPLS?=module-tmpl.k spec-tmpl.k
 KPROVE_OPTS?=
 KPROVE_OPTS+=$(EXT_KPROVE_OPTS)
 
+# Define variable DEBUG to enable debug options below
+# DEBUG=true
+ifdef DEBUG
+KPROVE_OPTS+=--debug-z3-queries --log-rules
+endif
+
 #
 # Settings
 #
@@ -50,7 +56,6 @@ KEVM_REPO_DIR:=$(abspath $(BUILD_DIR)/evm-semantics)
 
 K_BIN:=$(abspath $(K_REPO_DIR)/k-distribution/target/release/k/bin)
 
-# For debug add: --log-rules --debug-z3-queries
 KPROVE:=$(K_BIN)/kprove -v --debug -d $(KEVM_REPO_DIR)/.build/java -m VERIFICATION --z3-impl-timeout 500 \
         --deterministic-functions --no-exc-wrap \
         --cache-func-optimized --no-alpha-renaming --format-failures --boundary-cells k,pc \
