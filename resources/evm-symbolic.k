@@ -48,4 +48,15 @@ module EVM-SYMBOLIC     [symbolic]
     syntax Int ::= #extCodeSize ( Int )  [function]
  // -----------------------------------------------
 
+ // ERC20 transfer(address,uint256)
+ // pc, to addr
+    syntax Bool ::= #tokenTransferCallSuccess ( Int , Int ) [function]
+                  | #tokenTransferCallFailure ( Int , Int ) [function]
+ // ------------------------------------------------------------------
+
+ // 3rd argument: <timestamp> NOW </timestamp> variable hack to force to generate Z3 query
+    syntax Int ::= #tokenTransferCallReturnSize  ( Int , Int , Int ) [function]
+                 | #tokenTransferCallReturnValue ( Int , Int , Int ) [function]
+ // ---------------------------------------------------------------------------
+
 endmodule
