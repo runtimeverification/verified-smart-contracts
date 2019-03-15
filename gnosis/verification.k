@@ -97,10 +97,11 @@ module VERIFICATION
 
     rule hash2(A1,B1) ==K hash2(A2,B2) => A1 ==Int A2 andBool B1 ==Int B2
 
-    syntax Bool ::= IMap "==IMap" IMap [function, smtlib(=)]
+    rule store(M, K, select(M, K)) => M
 
-    syntax Bool ::= IMap "==IMap" IMap "except" Set [function]
-
+    syntax Bool ::= Map "==IMap" Map [function, smtlib(=)]
+    syntax Bool ::= Map "==IMap" Map "except" Set [function]
+ // --------------------------------------------------------
     rule store(M1, K, _) ==IMap M2 except Ks
       =>       M1        ==IMap M2 except Ks
       requires K in Ks
@@ -112,12 +113,12 @@ module VERIFICATION
     rule M1 ==IMap M2 except _ => true
       requires M1 ==K M2  // structural equality
 
-    syntax Set ::= keys(IMap) [function]
+    syntax Set ::= keys(Map) [function]
 
     rule K1 in keys(store(M, K2, _)) => true          requires K1  ==Int K2
     rule K1 in keys(store(M, K2, _)) => K1 in keys(M) requires K1 =/=Int K2
 
-    //Reduces IMaps where multiple entries share the same key
+    //Reduces symbolic Maps where multiple entries share the same key
     rule store(store(M, K0, V0), K1, V1) => store(M, K0, V1)
       requires K0 ==Int K1
 
@@ -351,9 +352,9 @@ module VERIFICATION
     syntax KItem ::= "#handlePaymentSpecApplied"
  // --------------------------------------------
 
-syntax Int  ::= #fii        ( WordStack ,       Int , WordStack , IMap , Int ) [function, smtlib(fii)] // first-invalid-signature-index
-syntax Bool ::= #isValid    ( WordStack , Int , Int , WordStack , IMap , Int , Bool ) [function, smtlib(isValid)]
-syntax Bool ::= #isValidSig ( WordStack , Int , Int , WordStack , IMap , Int ) [function, smtlib(isValidSig)]
+syntax Int  ::= #fii        ( WordStack ,       Int , WordStack , Map , Int ) [function, smtlib(fii)] // first-invalid-signature-index
+syntax Bool ::= #isValid    ( WordStack , Int , Int , WordStack , Map , Int , Bool ) [function, smtlib(isValid)]
+syntax Bool ::= #isValidSig ( WordStack , Int , Int , WordStack , Map , Int ) [function, smtlib(isValidSig)]
 syntax Bool ::= #isValidSignature ( Int , WordStack , WordStack ) [function, smtlib(isValidSignature)] // ISignatureValidator(currentOwner).isValidSignature(data, contractSignature)
 syntax Int  ::= #signer ( WordStack , Int , Int ) [function]
 syntax Int  ::= #sigR   ( WordStack , Int ) [function]
