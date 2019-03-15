@@ -1,3 +1,5 @@
+requires "evm-symbolic.k"
+
 module ABSTRACT-SEMANTICS
   imports EVM
   imports EVM-SYMBOLIC
@@ -33,24 +35,18 @@ module ABSTRACT-SEMANTICS
    // normal functiona call GCAP == GAVAIL
    // call chain == 1
    rule <k> Ccallgas(SCHED, ISEMPTY:Bool, GCAP, GAVAIL, VALUE)
-          => #gas(Cgascap(SCHED, GCAP, GAVAIL, Cextra(SCHED, VALUE, ISEMPTY)), 0, 0) ... </k>
+          => #gas(Cgascap(SCHED, GCAP, GAVAIL, Cextra(SCHED, ISEMPTY, VALUE)), 0, 0) ... </k>
      requires VALUE ==Int 0
       andBool #getKLabelString(GAVAIL) ==String "#gas"
       andBool GCAP ==Int GAVAIL
      [trusted]
 
    rule <k> Ccallgas(SCHED, ISEMPTY:Bool, GCAP, GAVAIL, VALUE)
-          => #gas(Cgascap(SCHED, GCAP, GAVAIL, Cextra(SCHED, VALUE, ISEMPTY)) +Int Gcallstipend < SCHED >, 0, 0) ... </k>
+          => #gas(Cgascap(SCHED, GCAP, GAVAIL, Cextra(SCHED, ISEMPTY, VALUE)) +Int Gcallstipend < SCHED >, 0, 0) ... </k>
      requires 0 <Int VALUE
       andBool #getKLabelString(GAVAIL) ==String "#gas"
       andBool GCAP ==Int GAVAIL
      [trusted]
-
-   rule <k> #refund #gas(CALLEEINITGAS, CALLEENONMEM, CALLEEMEM) => . ... </k>
-        <gas> #gas(CALLERINITGAS, CALLERNONMEM, CALLERMEM) => #gas(CALLERINITGAS, CALLERNONMEM -Int CALLEEINITGAS +Int CALLEENONMEM, CALLERMEM +Int CALLEEMEM)  </gas>
-     requires #getKLabelString(CALLEEINITGAS) ==String "Cgascap"
-     [trusted, matching(#gas)]
-
 
   // ########################
   // Call
@@ -168,11 +164,28 @@ module ABSTRACT-SEMANTICS
   // andBool selectRange(LM, ARGSTART, ARGWIDTH) ==K #abiCallData("transfer", (#address(RECEIVER), #uint256(AMOUNT)))
     [trusted, matching(#gas)]
 
+
   // ########################
   // EXTCODESIZE
   // ########################
 
   rule <k> EXTCODESIZE ACCT => #extCodeSize(ACCT) ~> #push ... </k>  [trusted]
 
+
+  // ########################
+  // ECRECOVER
+  // ########################
+
+  rule <k> ECREC => #end EVMC_SUCCESS ... </k>
+       <callData> DATA </callData>
+       <output> _ => #ecrec(#symEcrec(DATA)) </output>
+    requires notBool #isConcrete(DATA) andBool #sizeWordStack(DATA) ==Int 128 andBool notBool #ecrecEmpty(DATA)
+    [trusted]
+
+  rule <k> ECREC => #end EVMC_SUCCESS ... </k>
+       <callData> DATA </callData>
+       <output> _ => #ecrec(.Account) </output>
+    requires notBool #isConcrete(DATA) andBool #sizeWordStack(DATA) ==Int 128 andBool #ecrecEmpty(DATA)
+    [trusted]
 
 endmodule
