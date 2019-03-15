@@ -1,3 +1,5 @@
+requires "evm-symbolic.k"
+
 module ABSTRACT-SEMANTICS
   imports EVM
   imports EVM-SYMBOLIC
