@@ -168,11 +168,28 @@ module ABSTRACT-SEMANTICS
   // andBool selectRange(LM, ARGSTART, ARGWIDTH) ==K #abiCallData("transfer", (#address(RECEIVER), #uint256(AMOUNT)))
     [trusted, matching(#gas)]
 
+
   // ########################
   // EXTCODESIZE
   // ########################
 
   rule <k> EXTCODESIZE ACCT => #extCodeSize(ACCT) ~> #push ... </k>  [trusted]
 
+
+  // ########################
+  // ECRECOVER
+  // ########################
+
+  rule <k> ECREC => #end EVMC_SUCCESS ... </k>
+       <callData> DATA </callData>
+       <output> _ => #ecrec(#symEcrec(DATA)) </output>
+    requires notBool #isConcrete(DATA) andBool #sizeWordStack(DATA) ==Int 128 andBool notBool #ecrecEmpty(DATA)
+    [trusted]
+
+  rule <k> ECREC => #end EVMC_SUCCESS ... </k>
+       <callData> DATA </callData>
+       <output> _ => #ecrec(.Account) </output>
+    requires notBool #isConcrete(DATA) andBool #sizeWordStack(DATA) ==Int 128 andBool #ecrecEmpty(DATA)
+    [trusted]
 
 endmodule
