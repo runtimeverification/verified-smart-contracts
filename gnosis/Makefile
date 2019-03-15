@@ -31,8 +31,6 @@ SPEC_NAMES_GNOSIS_SAFE:=encodeTransactionData-public-1 \
                         checkSignatures-success \
                         checkSignatures-failure-1 \
                         checkSignatures-failure-2 \
-                        checkSignatures-loop-success \
-                        checkSignatures-loop-failure \
                         checkSignatures-loop-body-success-v0 \
                         checkSignatures-loop-body-success-v1-owner \
                         checkSignatures-loop-body-success-v1-not-owner \
@@ -57,6 +55,10 @@ SPEC_NAMES_GNOSIS_SAFE:=encodeTransactionData-public-1 \
                         execTransaction-checkSigs1-gas1-safetxgas1-call0-to-gasprice1 \
                         execTransaction-checkSigs1-gas1-safetxgas1-call1-to-gasprice0 \
                         execTransaction-checkSigs1-gas1-safetxgas1-call1-to-gasprice1
+
+# Excluded:
+#                        checkSignatures-loop-success \
+#                        checkSignatures-loop-failure \
 
 SPEC_NAMES_OWNER_MANAGER:=addOwnerWithThreshold-success-1 \
                           addOwnerWithThreshold-success-2 \
