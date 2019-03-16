@@ -48,12 +48,6 @@ module ABSTRACT-SEMANTICS
       andBool GCAP ==Int GAVAIL
      [trusted]
 
-   rule <k> #refund #gas(CALLEEINITGAS, CALLEENONMEM, CALLEEMEM) => . ... </k>
-        <gas> #gas(CALLERINITGAS, CALLERNONMEM, CALLERMEM) => #gas(CALLERINITGAS, CALLERNONMEM -Int CALLEEINITGAS +Int CALLEENONMEM, CALLERMEM +Int CALLEEMEM)  </gas>
-     requires #getKLabelString(CALLEEINITGAS) ==String "Cgascap"
-     [trusted, matching(#gas)]
-
-
   // ########################
   // Call
   // ########################

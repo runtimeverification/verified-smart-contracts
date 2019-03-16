@@ -27,6 +27,8 @@ module VERIFICATION
   // Gas
   // ########################
 
+    rule #gas(A1, B1, C1) +Int #gas(A2, B2, C2) => #gas(A1, B1 -Int A2 +Int B2, C1 +Int C2)
+
     rule 0 <=Int X -Int #gas(A, B, C)             => true  requires #gas(A, B, C) <=Int X
     rule         X -Int #gas(A, B, C) <Int pow256 => true  requires X <Int pow256
 
