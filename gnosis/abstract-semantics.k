@@ -1,8 +1,10 @@
 requires "evm-symbolic.k"
+requires "ecrec-symbolic.k"
 
 module ABSTRACT-SEMANTICS
   imports EVM
   imports EVM-SYMBOLIC
+  imports ECREC-SYMBOLIC
 
   // to avoid unnecessary case analyses
   rule <k> LT W0 W1 => bool2Word(W0  <Int W1) ~> #push ... </k> [trusted]
@@ -170,22 +172,5 @@ module ABSTRACT-SEMANTICS
   // ########################
 
   rule <k> EXTCODESIZE ACCT => #extCodeSize(ACCT) ~> #push ... </k>  [trusted]
-
-
-  // ########################
-  // ECRECOVER
-  // ########################
-
-  rule <k> ECREC => #end EVMC_SUCCESS ... </k>
-       <callData> DATA </callData>
-       <output> _ => #ecrec(#symEcrec(DATA)) </output>
-    requires notBool #isConcrete(DATA) andBool #sizeWordStack(DATA) ==Int 128 andBool notBool #ecrecEmpty(DATA)
-    [trusted]
-
-  rule <k> ECREC => #end EVMC_SUCCESS ... </k>
-       <callData> DATA </callData>
-       <output> _ => #ecrec(.Account) </output>
-    requires notBool #isConcrete(DATA) andBool #sizeWordStack(DATA) ==Int 128 andBool #ecrecEmpty(DATA)
-    [trusted]
 
 endmodule
