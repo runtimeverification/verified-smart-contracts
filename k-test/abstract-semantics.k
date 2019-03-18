@@ -1,5 +1,8 @@
+requires "ecrec-symbolic.k"
+
 module ABSTRACT-SEMANTICS
   imports EVM
+  imports ECREC-SYMBOLIC
   // to avoid unnecessary case analyses
   rule <k> LT W0 W1 => bool2Word(W0  <Int W1) ~> #push ... </k> [trusted]
   rule <k> GT W0 W1 => bool2Word(W0  >Int W1) ~> #push ... </k> [trusted]
