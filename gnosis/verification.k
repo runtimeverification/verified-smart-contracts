@@ -198,18 +198,6 @@ module VERIFICATION
     rule 0 <=Int #blockhash(_, _, _, _)             => true
     rule         #blockhash(_, _, _, _) <Int pow256 => true
 
-    //case 0 is never wrapped into #symEcrec(), corresponds to #ecrecEmpty(DATA) == true
-    rule 0 <Int   #symEcrec(DATA)             => true
-
-    //that's because the result in concrete semantics is trimmed to Address range.
-    rule          #symEcrec(DATA) <Int pow160 => true
-
-    // Lemmas implied by the above, but still required to match side conditions of #padToWidth rule in lemmas.md
-    // General range conversion lemmas like below are not an option, dramatic performance decrease:
-    //    rule A < pow256 => true requires A < pow160
-    rule 0 <=Int  #symEcrec(DATA)             => true
-    rule          #symEcrec(DATA) <Int pow256 => true
-
     rule 0 <=Int #bufElm(_, _)     => true
     rule #bufElm(_, _) <Int 256    => true
     rule #bufElm(_, _) <Int pow256 => true
