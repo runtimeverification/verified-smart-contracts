@@ -31,6 +31,9 @@ SPEC_NAMES_GNOSIS_SAFE:=encodeTransactionData-public-1 \
                         checkSignatures-success \
                         checkSignatures-failure-1 \
                         checkSignatures-failure-2 \
+                        checkSignatures-loop-success-middle \
+                        checkSignatures-loop-success-end \
+                        checkSignatures-loop-failure \
                         checkSignatures-loop-body-success-v0 \
                         checkSignatures-loop-body-success-v1-owner \
                         checkSignatures-loop-body-success-v1-not-owner \
@@ -55,11 +58,6 @@ SPEC_NAMES_GNOSIS_SAFE:=encodeTransactionData-public-1 \
                         execTransaction-checkSigs1-gas1-safetxgas1-call0-to-gasprice1 \
                         execTransaction-checkSigs1-gas1-safetxgas1-call1-to-gasprice0 \
                         execTransaction-checkSigs1-gas1-safetxgas1-call1-to-gasprice1
-
-# Former specs that need split(), not working yet:
-#                        checkSignatures-loop-success-middle \
-#                        checkSignatures-loop-success-end \
-#                        checkSignatures-loop-failure \
 
 SPEC_NAMES_OWNER_MANAGER:=addOwnerWithThreshold-success-1 \
                           addOwnerWithThreshold-success-2 \
@@ -155,7 +153,7 @@ $(SPECS_DIR)/$(SPEC_GROUP)/checkSignatures-failure-2-spec.k: $(TMPLS) $(SPEC_INI
 	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) checkSignatures-failure-2 checkSignatures-loop-failure-trusted checkSignatures-failure-2 > $@
 
 $(SPECS_DIR)/$(SPEC_GROUP)/checkSignatures-loop-success-middle-spec.k: $(TMPLS) $(SPEC_INI)
-	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) checkSignatures-loop-success-middle signatureSplit-trusted checkSignatures-loop-body-success-trusted checkSignatures-loop-success-middle > $@
+	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) checkSignatures-loop-success-middle signatureSplit-trusted checkSignatures-loop-body-success-trusted checkSignatures-loop-success-trusted checkSignatures-loop-success-middle > $@
 
 $(SPECS_DIR)/$(SPEC_GROUP)/checkSignatures-loop-success-end-spec.k: $(TMPLS) $(SPEC_INI)
 	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) checkSignatures-loop-success-end signatureSplit-trusted checkSignatures-loop-body-success-trusted checkSignatures-loop-success-end > $@
