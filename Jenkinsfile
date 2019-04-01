@@ -43,6 +43,20 @@ pipeline {
             [ "$nprocs" -gt '6' ] && nprocs='6'
             export K_OPTS=-Xmx12g
             make jenkins MODE=jenkins NPROCS="$nprocs"
+
+          '''
+        }
+      }
+    }
+    stage('Check K revision') {
+      steps {
+        ansiColor('xterm') {
+          dir('.build/k') {
+            git credentialsId: 'rv-jenkins', url: 'git@github.com:kframework/k.git'
+          }
+          sh '''
+            cd .build/k
+            git branch --contains $(cat ../.k.rev) | grep -q master
           '''
         }
       }
@@ -54,9 +68,6 @@ pipeline {
       }
       steps {
         ansiColor('xterm') {
-          dir('.build/k') {
-            git credentialsId: 'rv-jenkins', url: 'git@github.com:kframework/k.git'
-          }
           dir('.build/evm-semantics') {
             git credentialsId: 'rv-jenkins', url: 'git@github.com:kframework/evm-semantics.git'
           }
