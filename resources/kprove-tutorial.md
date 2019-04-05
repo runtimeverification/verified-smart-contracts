@@ -190,7 +190,10 @@ up to the line of interest.
 The error `<localMem> non-map format, aborting` happens when a certain function that is part of writing to memory gets stuck due to some symbolic term inside. Then the content of `<localMem>` gets stuck in a state that is not a map. Look at the content of `<localMem>`, particularly unevaluated functions.
 
 ## Z3 error
-This means Z3 query was generated, but it was not correct and Z3 threw an error. Run again with `--debug-z3-queries` and see what caused the error. Often this happens when a SPEC variable is not constraint to expected bounds or is of incorrect K sort.
+This means Z3 query was generated, but it was not correct and Z3 threw an error. Run again with `--debug-z3-queries` and see what caused the error. 
+
+Most often this happens when a SPEC variable is not constrained to expected bounds or is of incorrect K sort.
+K infers the sort to be for example `KItem`, while we expect it to be more restrained, like `Int`. First double-check all int vars from the spec and make sure they have the right range constraint. If the problem is more subtle, you can run kprove with option `-w all`. This will display all compiler hidden warnings, including variables that are not explicitly sorted, and their assumed sort. The list will include variables from KEVM as well, so look at source and location to find the vars from your spec.
 
 ## Z3 Warning
 These are most often not an issue. These happen when a certain term cannot be encoded into Z3, the query is not built for that formula and formula is considered not proved. In most cases we don't want that formula to be proved in the first place.
