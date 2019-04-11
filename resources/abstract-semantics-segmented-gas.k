@@ -17,13 +17,13 @@ module ABSTRACT-SEMANTICS-SEGMENTED-GAS
   // accumulate the gas cost and never run out of gas
   rule <k> G ~> #deductGas => . ... </k>
        <gas> #gas(INITGAS, NONMEM, MEM) => #gas(INITGAS, NONMEM +Int G, MEM) </gas>
-       <previousGas> _ => #gas(INITGAS, NONMEM, MEM) </previousGas>
+       <callGas> _ => #gas(INITGAS, NONMEM, MEM) </callGas>
     requires #notKLabel(G, "#symCmem")
     [trusted, matching(#gas)]
 
   rule <k> #symCmem(MEM') ~> #deductGas => . ... </k>
        <gas> #gas(INITGAS, NONMEM, MEM) => #gas(INITGAS, NONMEM, MEM +Int MEM') </gas>
-       <previousGas> _ => #gas(INITGAS, NONMEM, MEM) </previousGas>
+       <callGas> _ => #gas(INITGAS, NONMEM, MEM) </callGas>
     [trusted, matching(#symCmem,#gas)]
 
   rule <k> G ~> #deductGas ... </k>

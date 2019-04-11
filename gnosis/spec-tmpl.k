@@ -24,7 +24,7 @@
           <pc> {PC} </pc>
           <gas> {GAS} </gas>
           <memoryUsed> {MEMORYUSED} </memoryUsed>
-          <previousGas> _ => _ </previousGas>
+          <callGas> _ => _ </callGas>
           <static> false </static> // NOTE: non-static call
           <callDepth> {CALLDEPTH} </callDepth>
         </callState>

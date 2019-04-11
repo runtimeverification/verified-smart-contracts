@@ -45,7 +45,7 @@ Note that there are only a few of parameters, meaning that the larger part of th
           <localMem> {LOCALMEM} </localMem>
           <pc> {PC} </pc>
           <gas> {GAS} </gas>
-          <previousGas> _ => _ </previousGas>
+          <callGas> _ => _ </callGas>
           <static> false </static> // NOTE: non-static call
         </txExecState>
         <substate>
