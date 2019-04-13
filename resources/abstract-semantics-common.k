@@ -1,4 +1,6 @@
-module ABSTRACT-SEMANTICS
+requires "evm-symbolic.k"
+
+module ABSTRACT-SEMANTICS-COMMON
   imports EVM
   imports EVM-SYMBOLIC
 
@@ -7,7 +9,6 @@ module ABSTRACT-SEMANTICS
   rule <k> GT W0 W1 => bool2Word(W0  >Int W1) ~> #push ... </k> [trusted]
   rule <k> EQ W0 W1 => bool2Word(W0 ==Int W1) ~> #push ... </k> [trusted]
   rule <k> ISZERO W => bool2Word(W  ==Int 0 ) ~> #push ... </k> [trusted]
-
 
   // ########################
   // Gas
@@ -25,9 +26,12 @@ module ABSTRACT-SEMANTICS
        <previousGas> _ => #gas(INITGAS, NONMEM, MEM) </previousGas>
     [trusted, matching(#symCmem,#gas)]
 
+  rule <k> G ~> #deductGas ... </k>
+       <gas> INITGAS => #gas(INITGAS, 0, 0) </gas>
+    requires #notKLabel(INITGAS, "#gas")
+    [trusted]
+
   rule <k> MU':Int ~> #deductMemory => #symCmem(Cmem(SCHED, MU') -Int Cmem(SCHED, MU)) ~> #deductGas ... </k>
        <memoryUsed> MU => MU' </memoryUsed> <schedule> SCHED </schedule>
     [trusted]
-
-
 endmodule

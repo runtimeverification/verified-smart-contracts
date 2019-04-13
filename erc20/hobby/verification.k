@@ -1,7 +1,9 @@
+requires "evm-symbolic.k"
 requires "edsl.k"
 requires "../lemmas.k"
 
 module VERIFICATION
+    imports EVM-SYMBOLIC
     imports EDSL
     imports LEMMAS
 

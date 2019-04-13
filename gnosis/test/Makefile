@@ -1,7 +1,8 @@
 BUILD_DIR:=../../.build
 
 LOCAL_LEMMAS:=../abstract-semantics.k ../verification.k ../../resources/evm-symbolic.k \
-			  ../../resources/evm-data-symbolic.k ../../resources/ecrec-symbolic.k
+			  ../../resources/evm-data-symbolic.k ../../resources/ecrec-symbolic.k \
+			  ../../resources/abstract-semantics-common.k
 TMPLS:=../module-tmpl.k ../spec-tmpl.k
 
 SPEC_GROUP:=gnosis-test

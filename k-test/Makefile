@@ -1,10 +1,12 @@
 BUILD_DIR:=../erc20/.build
 
 # verification.k is required to import evm-symbolic.k
-LOCAL_LEMMAS:=abstract-semantics.k verification.k ../resources/evm-symbolic.k ../resources/ecrec-symbolic.k
+LOCAL_LEMMAS:=abstract-semantics.k verification.k \
+			  ../resources/evm-symbolic.k ../resources/ecrec-symbolic.k \
+			  ../resources/abstract-semantics-common.k
 
 # Just to have the simplest initial config
-TMPLS:=../erc20/module-tmpl.k spec-tmpl.k
+TMPLS:=../gnosis/module-tmpl.k spec-tmpl.k
 
 SPEC_GROUP:=k-test
 SPEC_INI:=k-test-spec.ini

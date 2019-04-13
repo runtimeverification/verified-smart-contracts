@@ -1,4 +1,5 @@
 BUILD_DIR:=../erc20/.build
+LOCAL_LEMMAS:=abstract-semantics.k verification.k
 
 SPEC_GROUP:=casper
 SPEC_INI:=casper-spec.ini

@@ -1,11 +1,8 @@
+requires "abstract-semantics-common.k"
 requires "ecrec-symbolic.k"
 
 module ABSTRACT-SEMANTICS
+  imports ABSTRACT-SEMANTICS-COMMON
   imports EVM
   imports ECREC-SYMBOLIC
-  // to avoid unnecessary case analyses
-  rule <k> LT W0 W1 => bool2Word(W0  <Int W1) ~> #push ... </k> [trusted]
-  rule <k> GT W0 W1 => bool2Word(W0  >Int W1) ~> #push ... </k> [trusted]
-  rule <k> EQ W0 W1 => bool2Word(W0 ==Int W1) ~> #push ... </k> [trusted]
-  rule <k> ISZERO W => bool2Word(W  ==Int 0 ) ~> #push ... </k> [trusted]
 endmodule
