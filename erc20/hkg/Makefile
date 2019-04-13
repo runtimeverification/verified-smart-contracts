@@ -1,6 +1,7 @@
 BUILD_DIR:=../.build
 
-LOCAL_LEMMAS:=abstract-semantics.k verification.k
+LOCAL_LEMMAS:=verification.k \
+			  ../../resources/evm-symbolic.k ../../resources/abstract-semantics-common.k
 TMPLS:=../module-tmpl.k ../spec-tmpl.k
 
 SPEC_GROUP:=hkg-erc20
