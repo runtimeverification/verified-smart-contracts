@@ -1,6 +1,6 @@
 requires "edsl.k"
 
-module EVM-DATA-SYMBOLIC [symbolic]
+module EVM-DATA-MAP-SYMBOLIC [symbolic]
     imports K-REFLECTION
     imports EVM-DATA
     imports EDSL
