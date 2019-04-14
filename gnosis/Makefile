@@ -1,8 +1,11 @@
 BUILD_DIR:=../.build
 
-LOCAL_LEMMAS:=abstract-semantics.k verification.k \
-			  ../resources/evm-symbolic.k ../resources/evm-data-symbolic.k ../resources/ecrec-symbolic.k \
-			  ../resources/abstract-semantics-segmented-gas.k
+LOCAL_LEMMAS:=verification.k \
+			  abstract-semantics.k \
+			  ../resources/abstract-semantics-segmented-gas.k \
+			  ../resources/evm-symbolic.k \
+			  ../resources/evm-data-map-symbolic.k \
+			  ../resources/ecrec-symbolic.k
 TMPLS:=module-tmpl.k spec-tmpl.k
 
 SPEC_GROUP:=gnosis
