@@ -4,9 +4,9 @@ requires "ecrec-symbolic.k"
 
 module ABSTRACT-SEMANTICS
   imports ABSTRACT-SEMANTICS-SEGMENTED-GAS
-  imports EVM
   imports EVM-SYMBOLIC
   imports ECREC-SYMBOLIC
+  imports EVM
 
   // ########################
   // Gas - in addition to ABSTRACT-SEMANTICS-COMMON
