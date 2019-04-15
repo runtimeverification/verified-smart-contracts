@@ -1,11 +1,11 @@
-requires "evm-symbolic.k"
+requires "evm-direct-gas.k"
 requires "edsl.k"
 requires "../lemmas.k"
 
 module VERIFICATION
+    imports EVM-DIRECT-GAS
     imports EDSL
     imports LEMMAS
-    imports EVM-SYMBOLIC
 
     rule #sizeWordStack(WS, N) <Int SIZE => #sizeWordStack(WS, 0) +Int N <Int SIZE  requires N =/=Int 0
     rule SIZELIMIT <Int #sizeWordStack(WS, N) +Int DELTA  => SIZELIMIT <Int (#sizeWordStack(WS, 0) +Int N) +Int DELTA  requires N =/=Int 0

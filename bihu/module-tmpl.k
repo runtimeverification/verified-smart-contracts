@@ -1,9 +1,9 @@
-requires "abstract-semantics-common.k"
+requires "abstract-semantics-direct-gas.k"
 requires "verification.k"
 
 module {MODULE}-SPEC
   imports ETHEREUM-SIMULATION
-  imports ABSTRACT-SEMANTICS-COMMON
+  imports ABSTRACT-SEMANTICS-DIRECT-GAS
   imports VERIFICATION
 
 {RULES}
