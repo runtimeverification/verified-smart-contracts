@@ -1,6 +1,6 @@
 requires "evm-symbolic.k"
 
-module ABSTRACT-SEMANTICS-COMMON
+module ABSTRACT-SEMANTICS-SEGMENTED-GAS
   imports EVM
   imports EVM-SYMBOLIC
 
@@ -11,7 +11,7 @@ module ABSTRACT-SEMANTICS-COMMON
   rule <k> ISZERO W => bool2Word(W  ==Int 0 ) ~> #push ... </k> [trusted]
 
   // ########################
-  // Gas
+  // Segmented gas representatioon - #gas construct
   // ########################
 
   // accumulate the gas cost and never run out of gas

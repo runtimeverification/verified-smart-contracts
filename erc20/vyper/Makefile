@@ -2,7 +2,7 @@ BUILD_DIR:=../../.build
 
 LOCAL_LEMMAS:=../verification.k \
 			  ../../resources/evm-symbolic.k ../../resources/evm-data-symbolic.k \
-			  ../../resources/abstract-semantics-common.k
+			  ../../resources/abstract-semantics-segmented-gas.k
 TMPLS:=../module-tmpl.k ../spec-tmpl.k
 
 SPEC_GROUP:=vyper-erc20

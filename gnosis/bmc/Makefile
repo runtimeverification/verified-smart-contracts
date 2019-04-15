@@ -1,6 +1,6 @@
 BUILD_DIR:=../../.build
 
-LOCAL_LEMMAS:=../abstract-semantics.k ../verification.k ../../resources/abstract-semantics-common.k
+LOCAL_LEMMAS:=../abstract-semantics.k ../verification.k ../../resources/abstract-semantics-segmented-gas.k
 TMPLS:=../module-tmpl.k ../spec-tmpl.k
 
 SPEC_GROUP:=gnosis-bmc
