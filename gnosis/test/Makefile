@@ -17,6 +17,7 @@ SPEC_NAMES:=testKeccak-1 \
             testAbiEncode-AndKeccak-2 \
             testAbiEncodePacked \
             testEcrecover-non-empty \
-            testEcrecover-empty
+            testEcrecover-empty \
+            testAbiEncodePackedAndKeccak
 
 include ../../resources/kprove.mak
