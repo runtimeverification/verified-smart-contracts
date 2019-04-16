@@ -7,7 +7,6 @@ module COLLECTTOKEN-SPEC
     <exit-code> 1 </exit-code>
     <mode> NORMAL </mode>
     <schedule> BYZANTIUM </schedule>
-    <analysis> .Map </analysis> // not part of evm
 
     <ethereum>
       <evm>
@@ -120,7 +119,6 @@ module COLLECTTOKEN-SPEC
     <mode> NORMAL </mode>
     <schedule> BYZANTIUM </schedule>
     <analysis> .Map </analysis> // not part of evm
-    <ethereum>
       <evm>
         <output> _ </output>
         <memoryUsed> MU </memoryUsed>
@@ -211,7 +209,6 @@ module COLLECTTOKEN-SPEC
     <schedule> BYZANTIUM </schedule>
     <analysis> .Map </analysis> // not part of evm
 
-    <ethereum>
       <evm>
         <output> _ </output>
         <memoryUsed> MU </memoryUsed>
