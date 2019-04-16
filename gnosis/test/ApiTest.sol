@@ -75,4 +75,22 @@ contract ApiTest {
     {
         return ecrecover(hash, v, r, s);
     }
+
+    function testAbiEncodePackedAndKeccak(bytes32 safeTxHash)
+        public
+        pure
+        returns (bytes32)
+    {
+        return keccak256(abi.encodePacked(byte(0x19), byte(0x01), safeTxHash));
+    }
+
+    function testKeccakAndAbiEncodePackedAndKeccak(bytes memory data, bytes32 safeTxHash)
+        public
+        pure
+        returns(bytes32)
+    {
+        bytes32 txInputHash = keccak256(abi.encode(keccak256(data), safeTxHash));
+
+        return keccak256(abi.encodePacked(byte(0x19), byte(0x01), txInputHash));
+    }
 }
