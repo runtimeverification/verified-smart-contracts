@@ -60,6 +60,12 @@ We refer the reader to the following resources for background knowledge about th
 * [ERC20-EVM]: an EVM-level refinement of ERC20-K
 * [ERC777-K]: a formal specification of the high-level business logic of [ERC777]
 
+## License
+
+Copyrightable work in this repository is licensed by Runtime Verification, Inc. under the terms of [The Reproducibility License 1.1.0](/LICENSE.md), a restrictive license.  That license is very readable, and you should read it.  Most will want to pay special attention to its [Reproducibility section](./LICENSE.md#reproducibility).
+
+Other parts of the proof toolchain, including the K-framework, are licensed under different, open source terms, like those of The University of Illinois/NCSA Open Source License.
+
 ## Disclaimer
 
 This repository does not constitute legal or investment advice. The preparers of this repository present it as an informational exercise documenting the due diligence involved in the secure development of the target contract only, and make no material claims or guarantees concerning the contract's operation post-deployment. The preparers of this repository assume no liability for any and all potential consequences of the deployment or use of this contract.
