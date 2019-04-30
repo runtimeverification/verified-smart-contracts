@@ -31,9 +31,9 @@ KPROVE_OPTS?=
 KPROVE_OPTS+=$(EXT_KPROVE_OPTS)
 
 # Define variable DEBUG to enable debug options below
-# DEBUG=true
+DEBUG=true
 ifdef DEBUG
-KPROVE_OPTS+=--debug-z3-queries --log-rules
+KPROVE_OPTS+=--log-rules --debug-z3-queries --log --shutdown-wait-time 5000
 endif
 
 #
