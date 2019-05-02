@@ -49,11 +49,8 @@ RESOURCES:=$(ROOT)/resources
 
 SPECS_DIR:=$(ROOT)/specs
 
-K_VERSION   :=$(shell cat $(BUILD_DIR)/.k.rev)
-KEVM_VERSION:=$(shell cat $(BUILD_DIR)/.kevm.rev)
-
-K_REPO_DIR:=$(abspath $(BUILD_DIR)/k)
 KEVM_REPO_DIR:=$(abspath $(BUILD_DIR)/evm-semantics)
+K_REPO_DIR:=$(KEVM_REPO_DIR)/.build/k
 
 K_BIN:=$(abspath $(K_REPO_DIR)/k-distribution/target/release/k/bin)
 
@@ -84,22 +81,15 @@ clean:
 clean-deps:
 	rm -rf $(SPECS_DIR) $(K_REPO_DIR) $(KEVM_REPO_DIR)
 
-deps: $(K_REPO_DIR) $(KEVM_REPO_DIR) $(TANGLER)
-
-$(K_REPO_DIR):
-	git clone $(K_REPO_URL) $(K_REPO_DIR)
-	cd $(K_REPO_DIR) \
-		&& git reset --hard $(K_VERSION) \
-		&& mvn package -DskipTests -Dllvm.backend.skip -Dhaskell.backend.skip
+deps: $(KEVM_REPO_DIR) $(TANGLER)
 
 $(KEVM_REPO_DIR):
-	git clone $(KEVM_REPO_URL) $(KEVM_REPO_DIR)
+	git submodule update --init --recursive -- $(KEVM_REPO_DIR)
 	cd $(KEVM_REPO_DIR) \
 		&& git clean -fdx \
-		&& git reset --hard $(KEVM_VERSION) \
+		&& make clean -B \
 		&& make tangle-deps \
-		&& make defn \
-		&& $(K_BIN)/kompile -v --debug --backend java -I .build/java -d .build/java --main-module ETHEREUM-SIMULATION --syntax-module ETHEREUM-SIMULATION .build/java/driver.k
+		&& make build-java -B -j4
 
 $(TANGLER):
 	git submodule update --init -- $(PANDOC_TANGLE_SUBMODULE)
