@@ -15,7 +15,7 @@ module ABSTRACT-SEMANTICS-SEGMENTED-GAS
   // ########################
 
   // accumulate the gas cost and never run out of gas
-  rule <k> G ~> #deductGas => . ... </k>
+  rule <k> G:KItem ~> #deductGas => . ... </k>
        <gas> #gas(INITGAS, NONMEM, MEM) => #gas(INITGAS, NONMEM +Int G, MEM) </gas>
        <previousGas> _ => #gas(INITGAS, NONMEM, MEM) </previousGas>
     requires #notKLabel(G, "#symCmem")
@@ -26,7 +26,10 @@ module ABSTRACT-SEMANTICS-SEGMENTED-GAS
        <previousGas> _ => #gas(INITGAS, NONMEM, MEM) </previousGas>
     [trusted, matching(#symCmem,#gas)]
 
-  rule <k> G ~> #deductGas ... </k>
+  //If G is not typd it will be typed as K. This leads to intermittent SPEC ERROR in multi-threaded environment,
+  // on appliation of this rule:
+  // `java.lang.AssertionError: disjunctions are not supported by SMT translation`
+  rule <k> G:KItem ~> #deductGas ... </k>
        <gas> INITGAS => #gas(INITGAS, 0, 0) </gas>
     requires #notKLabel(INITGAS, "#gas")
     [trusted]
