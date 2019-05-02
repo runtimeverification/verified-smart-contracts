@@ -5,6 +5,9 @@ pipeline {
       additionalBuildArgs '--build-arg USER_ID=$(id -u) --build-arg GROUP_ID=$(id -g)'
     }
   }
+  options {
+    ansiColor('xterm')
+  }
   stages {
     stage("Init title") {
       when { changeRequest() }
@@ -37,28 +40,23 @@ pipeline {
     stage('Run Proofs') {
       when { changeRequest() }
       steps {
-        ansiColor('xterm') {
-          sh '''
-            nprocs=$(nproc)
-            [ "$nprocs" -gt '6' ] && nprocs='6'
-            export K_OPTS="-Xmx12g -Xss48m"
-            make jenkins MODE=jenkins NPROCS="$nprocs"
-
-          '''
-        }
+        sh '''
+          nprocs=$(nproc)
+          [ "$nprocs" -gt '6' ] && nprocs='6'
+          export K_OPTS="-Xmx12g -Xss48m"
+          make jenkins MODE=jenkins NPROCS="$nprocs"
+        '''
       }
     }
     stage('Check K revision') {
       steps {
-        ansiColor('xterm') {
-          dir('.build/k') {
-            git credentialsId: 'rv-jenkins', url: 'git@github.com:kframework/k.git'
-          }
-          sh '''
-            cd .build/k
-            git branch --contains $(cat ../.k.rev) | grep -q master
-          '''
+        dir('.build/k') {
+          git credentialsId: 'rv-jenkins', url: 'git@github.com:kframework/k.git'
         }
+        sh '''
+          cd .build/k
+          git branch --contains $(cat ../.k.rev) | grep -q master
+        '''
       }
     }
     stage('Update Git Tags') {
@@ -67,28 +65,24 @@ pipeline {
         branch 'master'
       }
       steps {
-        ansiColor('xterm') {
-          dir('.build/evm-semantics') {
-            git credentialsId: 'rv-jenkins', url: 'git@github.com:kframework/evm-semantics.git'
-          }
-          sh '''
-            krev=$(cat .build/.k.rev)
-            cd .build/k
-            git fetch
-            git tag --force vsc $krev
-            git push --delete origin vsc || true
-            git push origin vsc:vsc
-
-            cd ../..
-
-            kevmrev=$(cat .build/.kevm.rev)
-            cd .build/evm-semantics
-            git fetch
-            git tag --force vsc $kevmrev
-            git push --delete origin vsc || true
-            git push origin vsc:vsc
-          '''
+        dir('.build/evm-semantics') {
+          git credentialsId: 'rv-jenkins', url: 'git@github.com:kframework/evm-semantics.git'
         }
+        sh '''
+          krev=$(cat .build/.k.rev)
+          cd .build/k
+          git fetch
+          git tag --force vsc $krev
+          git push --delete origin vsc || true
+          git push origin vsc:vsc
+          cd ../..
+          kevmrev=$(cat .build/.kevm.rev)
+          cd .build/evm-semantics
+          git fetch
+          git tag --force vsc $kevmrev
+          git push --delete origin vsc || true
+          git push origin vsc:vsc
+        '''
       }
     }
   }
