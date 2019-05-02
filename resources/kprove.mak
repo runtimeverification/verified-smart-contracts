@@ -81,15 +81,15 @@ clean:
 clean-deps:
 	rm -rf $(SPECS_DIR) $(K_REPO_DIR) $(KEVM_REPO_DIR)
 
-deps: $(KEVM_REPO_DIR) $(TANGLER)
+deps: $(KEVM_REPO_DIR)/make.timestamp $(TANGLER)
 
-$(KEVM_REPO_DIR):
+$(KEVM_REPO_DIR)/make.timestamp:
 	git submodule update --init --recursive -- $(KEVM_REPO_DIR)
-	cd $(KEVM_REPO_DIR) \
-		&& git clean -fdx \
-		&& make clean -B \
-		&& make tangle-deps \
-		&& make build-java -B -j4
+	cd $(KEVM_REPO_DIR)           \
+	    && git clean -fdx         \
+	    && make clean      -B     \
+	    && make deps       -B     \
+	    && make build-java -B -j4
 
 $(TANGLER):
 	git submodule update --init -- $(PANDOC_TANGLE_SUBMODULE)
