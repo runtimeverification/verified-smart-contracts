@@ -15,7 +15,7 @@ module ABSTRACT-SEMANTICS-SEGMENTED-GAS
   // ########################
 
   // accumulate the gas cost and never run out of gas
-  rule <k> G:KItem ~> #deductGas => . ... </k>
+  rule <k> G ~> #deductGas => . ... </k>
        <gas> #gas(INITGAS, NONMEM, MEM) => #gas(INITGAS, NONMEM +Int G, MEM) </gas>
        <previousGas> _ => #gas(INITGAS, NONMEM, MEM) </previousGas>
     requires #notKLabel(G, "#symCmem")
