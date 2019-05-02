@@ -26,7 +26,11 @@ module ABSTRACT-SEMANTICS-SEGMENTED-GAS
        <previousGas> _ => #gas(INITGAS, NONMEM, MEM) </previousGas>
     [trusted, matching(#symCmem,#gas)]
 
-  rule <k> G ~> #deductGas ... </k>
+  //If G is not explicitly typed, it will be typed as G:K. This leads to intermittent SPEC ERROR below,
+  // in multi-threaded environment, on appliation of this rule.
+  // `java.lang.AssertionError: disjunctions are not supported by SMT translation`
+  // Issue cause: <k> contains 2 terms `#deductGas`, so for G:K, the rule can match in 2 ways. Observed with in hkg-erc20.
+  rule <k> G:KItem ~> #deductGas ... </k>
        <gas> INITGAS => #gas(INITGAS, 0, 0) </gas>
     requires #notKLabel(INITGAS, "#gas")
     [trusted]
