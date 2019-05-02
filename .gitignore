@@ -2,6 +2,7 @@
 
 /.build/*
 !/.build/pandoc-tangle
+!/.build/evm-semantics
 
 /specs/*
 

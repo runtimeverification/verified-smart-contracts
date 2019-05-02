@@ -2,3 +2,7 @@
 	path = .build/pandoc-tangle
 	url = https://github.com/ehildenb/pandoc-tangle
 	ignore = untracked
+[submodule ".build/evm-semantics"]
+	path = .build/evm-semantics
+	url = https://github.com/kframework/evm-semantics
+	ignore = untracked
