@@ -79,7 +79,8 @@ clean:
 	rm -rf $(SPECS_DIR)
 
 clean-deps:
-	rm -rf $(SPECS_DIR) $(K_REPO_DIR) $(KEVM_REPO_DIR)
+	rm -rf $(SPECS_DIR) $(KEVM_REPO_DIR)
+	git submodule update --init --recursive -- $(KEVM_REPO_DIR)
 
 deps: $(KEVM_REPO_DIR)/make.timestamp $(TANGLER)
 

@@ -42,7 +42,7 @@ NPROCS?=1
 jenkins:
 	set -e; \
 	for i in $(SUBDIRS); do \
-		$(MAKE) -C $$i all; \
+		$(MAKE) -C $$i split-proof-tests; \
 		$(MAKE) -C $$i test -j$(NPROCS); \
 		$(MAKE) -C $$i clean-deps; \
 	done
