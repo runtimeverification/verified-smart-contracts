@@ -29,7 +29,7 @@
           <pc> 0 => _ </pc>
           <gas> {GAS} </gas>
           <memoryUsed> 0 => _ </memoryUsed>
-          <previousGas> _ => _ </previousGas>
+          <callGas> _ => _ </callGas>
 
           <static> false </static> // NOTE: non-static call
           <callDepth> CALL_DEPTH </callDepth>

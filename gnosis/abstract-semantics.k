@@ -42,7 +42,7 @@ module ABSTRACT-SEMANTICS
        <wordStack> GASCAP : ACCTTO : VALUE : ARGSTART : ARGWIDTH : RETSTART : 0 : WS => 1 : WS </wordStack>
        <pc> PCC </pc>
        <gas> #gas(INITGAS, NONMEM, MEM) => #gas(INITGAS, NONMEM +Int #callGas(SCHED, GASCAP, ACCTTO, VALUE, true), MEM) </gas>
-       <previousGas> _ => #gas(INITGAS, NONMEM, MEM) </previousGas>
+       <callGas> _ => #gas(INITGAS, NONMEM, MEM) </callGas>
        <callDepth> CD </callDepth>
        <account>
          <acctID> ACCTFROM </acctID>
@@ -72,7 +72,7 @@ module ABSTRACT-SEMANTICS
        <wordStack> GASCAP : ACCTTO : VALUE : ARGSTART : ARGWIDTH : RETSTART : 32 : WS => 1 : WS </wordStack>
        <pc> PCC </pc>
        <gas> #gas(INITGAS, NONMEM, MEM) => #gas(INITGAS, NONMEM +Int #callGas(SCHED, GASCAP, ACCTTO, VALUE, true), MEM) </gas>
-       <previousGas> _ => #gas(INITGAS, NONMEM, MEM) </previousGas>
+       <callGas> _ => #gas(INITGAS, NONMEM, MEM) </callGas>
        <callDepth> CD </callDepth>
     requires #range(0 <= CD < 1023)
      andBool #callSuccess(PCC, ACCTTO)
@@ -86,7 +86,7 @@ module ABSTRACT-SEMANTICS
        <wordStack> GASCAP : ACCTTO : VALUE : ARGSTART : ARGWIDTH : RETSTART : REWIDTH : WS => 0 : WS </wordStack>
        <pc> PCC </pc>
        <gas> #gas(INITGAS, NONMEM, MEM) => #gas(INITGAS, NONMEM +Int #callGas(SCHED, GASCAP, ACCTTO, VALUE, false), MEM) </gas>
-       <previousGas> _ => #gas(INITGAS, NONMEM, MEM) </previousGas>
+       <callGas> _ => #gas(INITGAS, NONMEM, MEM) </callGas>
     requires #callFailure(PCC, ACCTTO)
     [trusted, matching(#gas)]
 
@@ -98,7 +98,7 @@ module ABSTRACT-SEMANTICS
        <localMem> LM </localMem>
        <pc> PCC </pc>
        <gas> #gas(INITGAS, NONMEM, MEM) => #gas(INITGAS, NONMEM +Int #callGas(SCHED, GASCAP, ACCTTO, VALUE, true), MEM) </gas>
-       <previousGas> _ => #gas(INITGAS, NONMEM, MEM) </previousGas>
+       <callGas> _ => #gas(INITGAS, NONMEM, MEM) </callGas>
        <callDepth> CD </callDepth>
        <timestamp> NOW </timestamp>
        <account>
@@ -132,7 +132,7 @@ module ABSTRACT-SEMANTICS
        <localMem> LM </localMem>
        <pc> PCC </pc>
        <gas> #gas(INITGAS, NONMEM, MEM) => #gas(INITGAS, NONMEM +Int #callGas(SCHED, GASCAP, ACCTTO, VALUE, true), MEM) </gas>
-       <previousGas> _ => #gas(INITGAS, NONMEM, MEM) </previousGas>
+       <callGas> _ => #gas(INITGAS, NONMEM, MEM) </callGas>
        <callDepth> CD </callDepth>
        <timestamp> NOW </timestamp>
        <account>
