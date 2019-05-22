@@ -13,8 +13,6 @@ module BALANCEOF-SPEC
     <exit-code> 1 </exit-code>
     <mode> NORMAL </mode>
     <schedule> BYZANTIUM </schedule>
-    <analysis> .Map </analysis> // not part of evm
-
     <ethereum>
       <evm>
         <output> _ </output>
@@ -109,8 +107,6 @@ andBool 0 <=Int VALUE andBool VALUE <Int (2 ^Int 256)andBool OWNER =/=Int 0
     <exit-code> 1 </exit-code>
     <mode> NORMAL </mode>
     <schedule> BYZANTIUM </schedule>
-    <analysis> .Map </analysis> // not part of evm
-
     <ethereum>
       <evm>
         <output> _ </output>

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 kprove --debugg \
---output-omit "<exit-code>" --output-omit "<mode>" --output-omit "<schedule>" --output-omit "<analysis>" \
+--output-omit "<exit-code>" --output-omit "<mode>" --output-omit "<schedule>" \
 --output-omit "<callStack>" --output-omit "<interimStates>" --output-omit "<touchedAccounts>" --output-omit "<program>" \
 --output-omit "<programBytes>" --output-omit "<id>" --output-omit "<caller>" --output-omit "<callData>" \
 --output-omit "<callValue>" --output-omit "<memoryUsed>" --output-omit "<callGas>" --output-omit "<static>" \

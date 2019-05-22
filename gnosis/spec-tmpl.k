@@ -4,7 +4,6 @@
     <exit-code> 1 </exit-code>
     <mode> NORMAL </mode>
     <schedule> BYZANTIUM </schedule>
-    <analysis> .Map </analysis> // not part of evm
     <ethereum>
       <evm>
         <output> {OUTPUT} </output>

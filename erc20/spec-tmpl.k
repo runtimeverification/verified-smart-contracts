@@ -4,7 +4,6 @@
     <exit-code> 1 </exit-code>
     <mode> NORMAL </mode>
     <schedule> {SCHEDULE} </schedule>
-    <analysis> .Map </analysis> // not part of evm
 
     <ethereum>
       <evm>
