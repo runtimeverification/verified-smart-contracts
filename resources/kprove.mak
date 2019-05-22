@@ -7,7 +7,7 @@ BUILD_DIR?=.build
 
 # check if the build directory exists (note: $(wildcard $(BUILD_DIR)) is not enough since it doesn't check if it is a directory)
 ifeq ($(wildcard $(BUILD_DIR)/.),)
-$(error BUILD_DIR does not exist)
+$(error $(BUILD_DIR) does not exist)
 endif
 
 K_REPO_URL?=https://github.com/kframework/k
