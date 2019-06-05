@@ -1,0 +1,17 @@
+<T>
+  <k>
+    hash ( hash ( hash ( 1 , 2 ) , hash ( 3 , 4 ) ) , hash ( hash ( 5 , 6 ) , hash ( 7 , 0 ) ) )
+  </k>
+  <zerohashes>
+    .IMap [ 0 <- 0 ] [ 1 <- 0 ] [ 2 <- 0 ] [ 1 <- hash ( 0 , 0 ) ] [ 2 <- hash ( hash ( 0 , 0 ) , hash ( 0 , 0 ) ) ]
+  </zerohashes>
+  <branch>
+    .IMap [ 0 <- 0 ] [ 1 <- 0 ] [ 2 <- 0 ] [ 0 <- 1 ] [ 1 <- hash ( 1 , 2 ) ] [ 0 <- 3 ] [ 2 <- hash ( hash ( 1 , 2 ) , hash ( 3 , 4 ) ) ] [ 0 <- 5 ] [ 1 <- hash ( 5 , 6 ) ] [ 0 <- 7 ]
+  </branch>
+  <depositCount>
+    7
+  </depositCount>
+  <treeHeight>
+    3
+  </treeHeight>
+</T>
