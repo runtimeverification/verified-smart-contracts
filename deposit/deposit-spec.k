@@ -4,7 +4,7 @@ module DEPOSIT-SPEC
 
 imports DEPOSIT-SYMBOLIC
 
-// Lemma 6 (deposit).
+// Lemma 7 (deposit).
 
 rule <k> deposit(V) => . ... </k>
      <depositCount> M => M +Int 1 </depositCount>
