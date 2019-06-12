@@ -4,7 +4,7 @@ This directory contains the intermediate result of our (ongoing) formal verifica
 
 Documents:
  * [Formalization of the incremental Merkle tree algorithm and its correctness proof](formal-incremental-merkle-tree-algorithm.pdf)
- * [Blog post](https://runtimeverification.com/blog/formal-verification-of-ethereum-2-0-deposit-contract-part-i)
+ * [Blog post](https://runtimeverification.com/blog/formal-verification-of-ethereum-2-0-deposit-contract-part-1)
 
 Mechanized specifications and proofs in K:
  * [deposit.k](deposit.k): Formal model of the incremental Merkle tree algorithm
