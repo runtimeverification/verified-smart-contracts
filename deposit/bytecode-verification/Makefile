@@ -11,6 +11,6 @@ SPEC_INI:=deposit-spec.ini
 
 KPROVE_OPTS:=--smt-prelude $(abspath $(dir $(abspath $(lastword $(MAKEFILE_LIST))))/evm.smt2)
 
-SPEC_NAMES:=getHashTreeRoot
+SPEC_NAMES:=getHashTreeRoot-init
 
 include ../../resources/kprove.mak
