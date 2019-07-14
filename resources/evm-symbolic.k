@@ -82,4 +82,7 @@ module EVM-SYMBOLIC     [symbolic]
                  | #tokenTransferCallReturnValue ( Int , Int , Int ) [function]
  // ---------------------------------------------------------------------------
 
+
+    syntax Int ::= #sha256 ( WordStack ) [function]
+
 endmodule

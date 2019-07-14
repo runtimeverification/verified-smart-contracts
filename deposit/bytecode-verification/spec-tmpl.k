@@ -54,27 +54,25 @@ rule
       <blockhash> BLOCK_HASHES </blockhash> // block.blockhash
     </evm>
     <network>
-      <activeAccounts> {ACTIVE_ACCOUNTS} </activeAccounts>
+      <activeAccounts> {ACTIVE_ACCOUNTS} SetItem({THIS}) SetItem(2) _:Set </activeAccounts>
       <accounts>
         <account>
           <acctID> {THIS} </acctID>
-          <balance> {BALANCE} </balance>
+          <balance> {BALANCE1} => {BALANCE2} </balance>
           <code> #parseByteStack({CODE}) </code>
           <storage> {STORAGE} </storage>
           <origStorage> {ORIG_STORAGE} </origStorage>
-          <nonce> {NONCE} </nonce>
+          <nonce> {NONCE1} => {NONCE2} </nonce>
         </account>
-/*
         <account>
-          // precompiled account for ECCREC
-          <acctID> 1 </acctID>
+          // precompiled account for SHA256
+          <acctID> 2 </acctID>
           <balance> 0 </balance>
           <code> .WordStack </code>
           <storage> .Map </storage>
           <origStorage> .Map </origStorage>
           <nonce> 0 </nonce>
         </account>
-*/
         {ACCOUNTS}
         ...
       </accounts>
@@ -86,6 +84,9 @@ rule
   requires #rangeAddress(ORIGIN_ID)
    andBool #rangeAddress({THIS})
    andBool #rangeAddress({MSG_SENDER})
+   andBool #rangeUInt(256, {CALL_VALUE})
+   andBool #rangeUInt(256, {BALANCE1})
+   andBool #rangeUInt(256, {NONCE1})
    // builtins
    andBool #rangeUInt(256, NOW)
    andBool #rangeUInt(128, BLOCK_NUM) // Solidity

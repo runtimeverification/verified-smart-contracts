@@ -1,10 +1,10 @@
-requires "abstract-semantics-segmented-gas.k"
+requires "abstract-semantics.k"
 requires "verification.k"
 
 module {MODULE}-SPEC
 
 imports ETHEREUM-SIMULATION
-imports ABSTRACT-SEMANTICS-SEGMENTED-GAS
+imports ABSTRACT-SEMANTICS
 imports VERIFICATION
 
 {RULES}
