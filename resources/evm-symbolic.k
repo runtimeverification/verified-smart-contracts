@@ -29,6 +29,13 @@ module EVM-SYMBOLIC     [symbolic]
     rule 0 <=Int  #symEcrec(DATA)             => true
     rule          #symEcrec(DATA) <Int pow256 => true
 
+
+    syntax Int ::= #sha256 ( WordStack ) [function, smtlib(sha256)]
+    rule 0 <=Int  #sha256(_)             => true
+    rule          #sha256(_) <Int pow256 => true
+
+
+
   // ########################
   // Symbolic Gas
   // ########################
@@ -82,7 +89,5 @@ module EVM-SYMBOLIC     [symbolic]
                  | #tokenTransferCallReturnValue ( Int , Int , Int ) [function]
  // ---------------------------------------------------------------------------
 
-
-    syntax Int ::= #sha256 ( WordStack ) [function]
 
 endmodule

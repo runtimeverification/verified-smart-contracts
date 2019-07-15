@@ -9,6 +9,10 @@ module VERIFICATION
     imports EDSL
     imports LEMMAS
 
+    syntax Bool ::= isStorage(Map) [function]
+    rule 0 <=Int select(M, _)             => true requires isStorage(M)
+    rule         select(M, _) <Int pow256 => true requires isStorage(M)
+
   // ########################
   // Memory Usage
   // ########################
