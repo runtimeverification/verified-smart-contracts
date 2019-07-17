@@ -13,6 +13,74 @@ module VERIFICATION
     rule 0 <=Int select(M, _)             => true requires isStorage(M)
     rule         select(M, _) <Int pow256 => true requires isStorage(M)
 
+    // for to_little_endian_64
+
+    rule 0 <=Int X /Int Y             => true requires #range(0 <= X < pow256) andBool #range(0 <= Y < pow256)
+    rule         X /Int Y <Int pow256 => true requires #range(0 <= X < pow256) andBool #range(0 <= Y < pow256)
+
+    rule X &Int 255 <Int 256 => true requires #range(0 <= X < pow256)
+
+    rule 0 <=Int X *Int 256                    => true requires #range(0 <= X < 256  )
+    rule 0 <=Int X *Int 256                    => true requires #range(0 <= X < pow16)
+    rule 0 <=Int X *Int 256                    => true requires #range(0 <= X < pow24)
+    rule 0 <=Int X *Int 256                    => true requires #range(0 <= X < pow32)
+    rule 0 <=Int X *Int 256                    => true requires #range(0 <= X < pow40)
+    rule 0 <=Int X *Int 256                    => true requires #range(0 <= X < pow48)
+    rule 0 <=Int X *Int 256                    => true requires #range(0 <= X < pow56)
+
+    rule         X *Int 256        <Int pow16  => true requires #range(0 <= X < 256  )
+    rule         X *Int 256        <Int pow24  => true requires #range(0 <= X < pow16)
+    rule         X *Int 256        <Int pow32  => true requires #range(0 <= X < pow24)
+    rule         X *Int 256        <Int pow40  => true requires #range(0 <= X < pow32)
+    rule         X *Int 256        <Int pow48  => true requires #range(0 <= X < pow40)
+    rule         X *Int 256        <Int pow56  => true requires #range(0 <= X < pow48)
+    rule         X *Int 256        <Int pow64  => true requires #range(0 <= X < pow56)
+
+    rule         X *Int 256        <Int pow256 => true requires #range(0 <= X < 256  )
+    rule         X *Int 256        <Int pow256 => true requires #range(0 <= X < pow16)
+    rule         X *Int 256        <Int pow256 => true requires #range(0 <= X < pow24)
+    rule         X *Int 256        <Int pow256 => true requires #range(0 <= X < pow32)
+    rule         X *Int 256        <Int pow256 => true requires #range(0 <= X < pow40)
+    rule         X *Int 256        <Int pow256 => true requires #range(0 <= X < pow48)
+    rule         X *Int 256        <Int pow256 => true requires #range(0 <= X < pow56)
+
+    rule 0 <=Int X *Int 256 +Int Y             => true requires #range(0 <= X < 256  ) andBool #range(0 <= Y < 256)
+    rule 0 <=Int X *Int 256 +Int Y             => true requires #range(0 <= X < pow16) andBool #range(0 <= Y < 256)
+    rule 0 <=Int X *Int 256 +Int Y             => true requires #range(0 <= X < pow24) andBool #range(0 <= Y < 256)
+    rule 0 <=Int X *Int 256 +Int Y             => true requires #range(0 <= X < pow32) andBool #range(0 <= Y < 256)
+    rule 0 <=Int X *Int 256 +Int Y             => true requires #range(0 <= X < pow40) andBool #range(0 <= Y < 256)
+    rule 0 <=Int X *Int 256 +Int Y             => true requires #range(0 <= X < pow48) andBool #range(0 <= Y < 256)
+    rule 0 <=Int X *Int 256 +Int Y             => true requires #range(0 <= X < pow56) andBool #range(0 <= Y < 256)
+
+    rule         X *Int 256 +Int Y <Int pow16  => true requires #range(0 <= X < 256  ) andBool #range(0 <= Y < 256)
+    rule         X *Int 256 +Int Y <Int pow24  => true requires #range(0 <= X < pow16) andBool #range(0 <= Y < 256)
+    rule         X *Int 256 +Int Y <Int pow32  => true requires #range(0 <= X < pow24) andBool #range(0 <= Y < 256)
+    rule         X *Int 256 +Int Y <Int pow40  => true requires #range(0 <= X < pow32) andBool #range(0 <= Y < 256)
+    rule         X *Int 256 +Int Y <Int pow48  => true requires #range(0 <= X < pow40) andBool #range(0 <= Y < 256)
+    rule         X *Int 256 +Int Y <Int pow56  => true requires #range(0 <= X < pow48) andBool #range(0 <= Y < 256)
+    rule         X *Int 256 +Int Y <Int pow64  => true requires #range(0 <= X < pow56) andBool #range(0 <= Y < 256)
+
+    rule         X *Int 256 +Int Y <Int pow256 => true requires #range(0 <= X < 256  ) andBool #range(0 <= Y < 256)
+    rule         X *Int 256 +Int Y <Int pow256 => true requires #range(0 <= X < pow16) andBool #range(0 <= Y < 256)
+    rule         X *Int 256 +Int Y <Int pow256 => true requires #range(0 <= X < pow24) andBool #range(0 <= Y < 256)
+    rule         X *Int 256 +Int Y <Int pow256 => true requires #range(0 <= X < pow32) andBool #range(0 <= Y < 256)
+    rule         X *Int 256 +Int Y <Int pow256 => true requires #range(0 <= X < pow40) andBool #range(0 <= Y < 256)
+    rule         X *Int 256 +Int Y <Int pow256 => true requires #range(0 <= X < pow48) andBool #range(0 <= Y < 256)
+    rule         X *Int 256 +Int Y <Int pow256 => true requires #range(0 <= X < pow56) andBool #range(0 <= Y < 256)
+
+    // for addition overflow check
+
+    rule X +Int Y <Int X => false requires #range(0 <= (X +Int Y) < pow256)
+
+//  rule (X *Int 256 +Int Y) <Int (X *Int 256) => false requires #range(0 <= X < 256  ) andBool #range(0 <= Y < 256)
+//  rule (X *Int 256 +Int Y) <Int (X *Int 256) => false requires #range(0 <= X < pow16) andBool #range(0 <= Y < 256)
+//  rule (X *Int 256 +Int Y) <Int (X *Int 256) => false requires #range(0 <= X < pow24) andBool #range(0 <= Y < 256)
+//  rule (X *Int 256 +Int Y) <Int (X *Int 256) => false requires #range(0 <= X < pow32) andBool #range(0 <= Y < 256)
+//  rule (X *Int 256 +Int Y) <Int (X *Int 256) => false requires #range(0 <= X < pow40) andBool #range(0 <= Y < 256)
+//  rule (X *Int 256 +Int Y) <Int (X *Int 256) => false requires #range(0 <= X < pow48) andBool #range(0 <= Y < 256)
+//  rule (X *Int 256 +Int Y) <Int (X *Int 256) => false requires #range(0 <= X < pow56) andBool #range(0 <= Y < 256)
+
+
   // ########################
   // Memory Usage
   // ########################

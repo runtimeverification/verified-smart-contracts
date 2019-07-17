@@ -4,6 +4,20 @@ module EVM-SYMBOLIC     [symbolic]
     imports EVM
     imports EDSL
 
+    syntax Int ::= "pow24"
+                 | "pow32"
+                 | "pow40"
+                 | "pow48"
+                 | "pow56"
+                 | "pow64"
+    rule pow24 => 16777216                  [macro]
+    rule pow32 => 4294967296                [macro]
+    rule pow40 => 1099511627776             [macro]
+    rule pow48 => 281474976710656           [macro]
+    rule pow56 => 72057594037927936         [macro]
+    rule pow64 => 18446744073709551616      [macro]
+
+
   // ########################
   // Ecrecover
   // todo move to ecrec-symbolic.k when K supports it.

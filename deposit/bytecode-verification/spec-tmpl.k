@@ -54,7 +54,7 @@ rule
       <blockhash> BLOCK_HASHES </blockhash> // block.blockhash
     </evm>
     <network>
-      <activeAccounts> {ACTIVE_ACCOUNTS} SetItem({THIS}) SetItem(2) _:Set </activeAccounts>
+      <activeAccounts> {ACTIVE_ACCOUNTS} SetItem({THIS}) SetItem(2) SetItem(4) _:Set </activeAccounts>
       <accounts>
         <account>
           <acctID> {THIS} </acctID>
@@ -67,6 +67,15 @@ rule
         <account>
           // precompiled account for SHA256
           <acctID> 2 </acctID>
+          <balance> 0 </balance>
+          <code> .WordStack </code>
+          <storage> .Map </storage>
+          <origStorage> .Map </origStorage>
+          <nonce> 0 </nonce>
+        </account>
+        <account>
+          // precompiled account for ID
+          <acctID> 4 </acctID>
           <balance> 0 </balance>
           <code> .WordStack </code>
           <storage> .Map </storage>
