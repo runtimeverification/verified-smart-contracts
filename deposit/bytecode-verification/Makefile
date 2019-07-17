@@ -12,7 +12,10 @@ SPEC_INI:=deposit-spec.ini
 
 KPROVE_OPTS:=--smt-prelude $(abspath $(dir $(abspath $(lastword $(MAKEFILE_LIST))))/evm.smt2)
 
-SPEC_NAMES:=getHashTreeRoot-init-beforeLoop \
+SPEC_NAMES:=to_little_endian_64 \
+            to_little_endian_64-forloop \
+            to_little_endian_64-return \
+            getHashTreeRoot-init-beforeLoop \
             getHashTreeRoot-init-afterFirstLoopIter-1 \
             getHashTreeRoot-init-afterFirstLoopIter-2 \
             getHashTreeRoot-loop-1 \
