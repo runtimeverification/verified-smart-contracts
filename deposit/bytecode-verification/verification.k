@@ -172,10 +172,19 @@ module VERIFICATION
       requires range(K0, W0) <>Range range(K1, W1)
        andBool range(K1, W1) in keys(M)
 
+    rule storeRange(store(M, K0, V0), K1, W1, V1) => store(storeRange(M, K1, W1, V1), K0, V0)
+      requires range(K0, 1) <>Range range(K1, W1) andBool range(K1, W1) in keys(M)
+
+    rule store(storeRange(M, K0, W0, V0), K1, V1) => storeRange(store(M, K1, V1), K0, W0, V0)
+      requires range(K0, W0) <>Range range(K1, 1) andBool K1 in keys(M)
+
     syntax Range ::= range(Int, Int)
 
     rule range(K1, W1) in keys(storeRange(M, K2, W2, _)) => true                     requires range(K1, W1) ==Range range(K2, W2)
     rule range(K1, W1) in keys(storeRange(M, K2, W2, _)) => range(K1, W1) in keys(M) requires range(K1, W1) <>Range range(K2, W2)
+
+    rule range(K1, W1) in keys(store     (M, K2,     _)) => range(K1, W1) in keys(M) requires range(K1, W1) <>Range range(K2, 1)
+    rule       K1      in keys(storeRange(M, K2, W2, _)) =>       K1      in keys(M) requires range(K1, 1)  <>Range range(K2, W2)
 
     syntax Bool ::= Range "==Range" Range [function]
                   | Range "<>Range" Range [function]
@@ -213,6 +222,16 @@ module VERIFICATION
 
     rule selectRange(storeRange(M, START1, WIDTH1, BUF), START2, WIDTH2) => BUF
       requires START1 ==Int START2 andBool WIDTH1 ==Int WIDTH2
+
+    rule selectRange(store(store(store(store(store(store(store(store(M, K1, 0), K2, 0), K3, 0), K4, 0), K5, 0), K6, 0), K7, 0), K8, 0), K, W)
+      => selectRange(storeRange(M, K1, 8, #buf(8, 0)), K, W)
+      requires K1 +Int 1 ==Int K2
+       andBool K2 +Int 1 ==Int K3
+       andBool K3 +Int 1 ==Int K4
+       andBool K4 +Int 1 ==Int K5
+       andBool K5 +Int 1 ==Int K6
+       andBool K6 +Int 1 ==Int K7
+       andBool K7 +Int 1 ==Int K8
 
   // ########################
   // Range

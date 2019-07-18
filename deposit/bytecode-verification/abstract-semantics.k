@@ -12,6 +12,16 @@ module ABSTRACT-SEMANTICS
       requires notBool #isConcrete(DATA)
       [trusted]
 
+/*
+    rule <k> MSTORE8 INDEX VALUE => . ... </k>
+//       <localMem> LM => LM [ INDEX <- (VALUE modInt 256) ] </localMem>
+//       <localMem> LM => storeRange(LM, INDEX, 1, #buf(1, VALUE modInt 256)) </localMem>
+//       <localMem> LM => LM [ INDEX := ((VALUE modInt 256) : .WordStack) ] </localMem>
+         <localMem> LM => LM [ INDEX := #buf(1, VALUE modInt 256) ] </localMem>
+      requires notBool (#isConcrete(LM) andBool #isConcrete(INDEX) andBool #isConcrete(VALUE))
+      [trusted]
+*/
+
   // ########################
   // Gas - in addition to ABSTRACT-SEMANTICS-COMMON
   // ########################
