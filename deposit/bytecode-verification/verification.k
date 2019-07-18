@@ -282,7 +282,8 @@ module VERIFICATION
     rule #bufSeg(BUF, START, 1) => #bufElm(BUF, START) : .WordStack
     rule #asWord(#bufElm(BUF, INDEX) : .WordStack) => #bufElm(BUF, INDEX)
 
-    rule #buf(32, DATA) => #padToWidth(32, #asByteStack(DATA))  [concrete]
+//  rule #buf(32, DATA) => #padToWidth(32, #asByteStack(DATA))  [concrete]
+    rule #buf(SIZE, DATA) => #padToWidth(SIZE, #asByteStack(DATA)) requires #range(0 <= DATA < (2 ^Int SIZE)) [concrete]
 
     rule #asWord(WS0 ++ #buf(MASKWIDTH0, 0)) |Int #asWord(#buf(MASKWIDHT1, 0) ++ WS1)
       => #asWord(WS0 ++ WS1)

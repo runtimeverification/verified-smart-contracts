@@ -23,3 +23,8 @@ SPEC_NAMES:=to_little_endian_64 \
             getHashTreeRoot-loop-exit
 
 include ../../resources/kprove.mak
+
+# non-standard spec generation
+
+$(SPECS_DIR)/$(SPEC_GROUP)/getHashTreeRoot-loop-exit-spec.k: $(TMPLS) $(SPEC_INI)
+	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) getHashTreeRoot-loop-exit to_little_endian_64-trusted getHashTreeRoot-loop-exit > $@
