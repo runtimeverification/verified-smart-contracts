@@ -17,6 +17,8 @@ module EVM-SYMBOLIC     [symbolic]
     rule pow56 => 72057594037927936         [macro]
     rule pow64 => 18446744073709551616      [macro]
 
+    syntax Bool ::= #regularAddress(Schedule, Int)
+    rule #regularAddress(SCHEDULE, X) => X >Int 0 andBool (notBool X in #precompiledAccounts(SCHEDULE))  [macro]
 
   // ########################
   // Ecrecover

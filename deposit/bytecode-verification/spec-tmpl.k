@@ -58,11 +58,11 @@ rule
       <accounts>
         <account>
           <acctID> {THIS} </acctID>
-          <balance> {BALANCE1} => {BALANCE2} </balance>
+          <balance> {BALANCE} </balance>
           <code> #parseByteStack({CODE}) </code>
           <storage> {STORAGE} </storage>
           <origStorage> {ORIG_STORAGE} </origStorage>
-          <nonce> {NONCE1} => {NONCE2} </nonce>
+          <nonce> {NONCE} </nonce>
         </account>
         <account>
           // precompiled account for SHA256
@@ -91,16 +91,9 @@ rule
     </network>
   </ethereum>
   requires #rangeAddress(ORIGIN_ID)
-   andBool #rangeAddress({THIS})
-   andBool #rangeAddress({MSG_SENDER})
-   andBool #rangeUInt(256, {CALL_VALUE})
-   andBool #rangeUInt(256, {BALANCE1})
-   andBool #rangeUInt(256, {NONCE1})
    // builtins
    andBool #rangeUInt(256, NOW)
    andBool #rangeUInt(128, BLOCK_NUM) // Solidity
-   // Account address normality
-   andBool {THIS} >Int 0 andBool (notBool {THIS} in #precompiledAccounts({SCHEDULE}))
    {REQUIRES}
   ensures true
    {ENSURES}
