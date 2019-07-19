@@ -70,7 +70,8 @@ module VERIFICATION
 
     // for addition overflow check
 
-    rule X +Int Y <Int X => false requires #range(0 <= (X +Int Y) < pow256)
+    rule X +Int Y <Int X => false requires X >=Int 0 andBool Y >=Int 0 // #range(0 <= (X +Int Y) < pow256)
+
 
 //  rule (X *Int 256 +Int Y) <Int (X *Int 256) => false requires #range(0 <= X < 256  ) andBool #range(0 <= Y < 256)
 //  rule (X *Int 256 +Int Y) <Int (X *Int 256) => false requires #range(0 <= X < pow16) andBool #range(0 <= Y < 256)
