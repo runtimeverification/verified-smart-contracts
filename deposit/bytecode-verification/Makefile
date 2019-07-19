@@ -20,7 +20,8 @@ SPEC_NAMES:=to_little_endian_64 \
             get_hash_tree_root-loop0-else \
             get_hash_tree_root-loop-body-then \
             get_hash_tree_root-loop-body-else \
-            get_hash_tree_root-loop-exit
+            get_hash_tree_root-loop-exit \
+            get_deposit_count
 
 include ../../resources/kprove.mak
 
@@ -28,3 +29,6 @@ include ../../resources/kprove.mak
 
 $(SPECS_DIR)/$(SPEC_GROUP)/get_hash_tree_root-loop-exit-spec.k: $(TMPLS) $(SPEC_INI)
 	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) get_hash_tree_root-loop-exit to_little_endian_64-trusted get_hash_tree_root-loop-exit > $@
+
+$(SPECS_DIR)/$(SPEC_GROUP)/get_deposit_count-spec.k: $(TMPLS) $(SPEC_INI)
+	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) get_deposit_count to_little_endian_64-trusted get_deposit_count > $@
