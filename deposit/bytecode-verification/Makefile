@@ -22,7 +22,7 @@ SPEC_NAMES:=to_little_endian_64 \
             get_hash_tree_root-loop-body-else \
             get_hash_tree_root-loop-exit \
             get_deposit_count \
-            deposit
+            deposit-init
 
 include ../../resources/kprove.mak
 
