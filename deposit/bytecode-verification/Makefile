@@ -22,7 +22,10 @@ SPEC_NAMES:=to_little_endian_64 \
             get_hash_tree_root-loop-body-else \
             get_hash_tree_root-loop-exit \
             get_deposit_count \
-            deposit-init
+            deposit-init \
+            deposit-subcall_1 \
+            deposit-subcall_2 \
+            deposit
 
 include ../../resources/kprove.mak
 
@@ -36,3 +39,9 @@ $(SPECS_DIR)/$(SPEC_GROUP)/get_deposit_count-spec.k: $(TMPLS) $(SPEC_INI)
 
 $(SPECS_DIR)/$(SPEC_GROUP)/deposit-spec.k: $(TMPLS) $(SPEC_INI)
 	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) deposit to_little_endian_64-trusted deposit > $@
+
+$(SPECS_DIR)/$(SPEC_GROUP)/deposit-subcall_1-spec.k: $(TMPLS) $(SPEC_INI)
+	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) deposit-subcall_1 to_little_endian_64-trusted deposit-subcall_1 > $@
+
+$(SPECS_DIR)/$(SPEC_GROUP)/deposit-subcall_2-spec.k: $(TMPLS) $(SPEC_INI)
+	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) deposit-subcall_2 to_little_endian_64-trusted deposit-subcall_2 > $@
