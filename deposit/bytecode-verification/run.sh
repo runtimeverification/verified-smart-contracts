@@ -27,7 +27,7 @@
   export OPTS+=",refund"
 # export OPTS+=",accounts"
   export OPTS+=",#pc,#result"
-# export OPTS+=" --debug-z3-queries"
+  export OPTS+=" --debug-z3-queries"
 
   make clean
   make split-proof-tests
