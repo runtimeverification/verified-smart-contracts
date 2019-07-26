@@ -1,3 +1,5 @@
+  export K_OPTS=-Xmx16g
+
   export OPTS="--z3-impl-timeout 500"
   export OPTS+=" --no-exc-wrap"
   export OPTS+=" --deterministic-functions"
@@ -17,15 +19,15 @@
   export OPTS+=",wordStack"
   export OPTS+=",localMem"
   export OPTS+=",output"
-  export OPTS+=",gas"
-  export OPTS+=",memoryUsed"
+# export OPTS+=",gas"
+# export OPTS+=",memoryUsed"
   export OPTS+=",statusCode"
   export OPTS+=",callData"
   export OPTS+=",log"
   export OPTS+=",refund"
 # export OPTS+=",accounts"
   export OPTS+=",#pc,#result"
-  export OPTS+=" --debug-z3-queries"
+# export OPTS+=" --debug-z3-queries"
 
   make clean
   make split-proof-tests
@@ -42,5 +44,5 @@
 # kprove -v --debug -d ~/evm-semantics/.build/java -m VERIFICATION $OPTS --smt-prelude ~/verified-smart-contracts/deposit/bytecode-verification/evm.smt2 ~/verified-smart-contracts/specs/deposit/get_deposit_count-spec.k
 # kprove -v --debug -d ~/evm-semantics/.build/java -m VERIFICATION $OPTS --smt-prelude ~/verified-smart-contracts/deposit/bytecode-verification/evm.smt2 ~/verified-smart-contracts/specs/deposit/deposit-init-spec.k
 # kprove -v --debug -d ~/evm-semantics/.build/java -m VERIFICATION $OPTS --smt-prelude ~/verified-smart-contracts/deposit/bytecode-verification/evm.smt2 ~/verified-smart-contracts/specs/deposit/deposit-subcall_1-spec.k
-  kprove -v --debug -d ~/evm-semantics/.build/java -m VERIFICATION $OPTS --smt-prelude ~/verified-smart-contracts/deposit/bytecode-verification/evm.smt2 ~/verified-smart-contracts/specs/deposit/deposit-subcall_2-spec.k
-# kprove -v --debug -d ~/evm-semantics/.build/java -m VERIFICATION $OPTS --smt-prelude ~/verified-smart-contracts/deposit/bytecode-verification/evm.smt2 ~/verified-smart-contracts/specs/deposit/deposit-log-spec.k
+# kprove -v --debug -d ~/evm-semantics/.build/java -m VERIFICATION $OPTS --smt-prelude ~/verified-smart-contracts/deposit/bytecode-verification/evm.smt2 ~/verified-smart-contracts/specs/deposit/deposit-subcall_2-spec.k
+  kprove -v --debug -d ~/evm-semantics/.build/java -m VERIFICATION $OPTS --smt-prelude ~/verified-smart-contracts/deposit/bytecode-verification/evm.smt2 ~/verified-smart-contracts/specs/deposit/deposit-log-spec.k
