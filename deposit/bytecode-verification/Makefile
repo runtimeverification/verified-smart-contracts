@@ -31,8 +31,7 @@ SPEC_NAMES:=to_little_endian_64 \
             deposit-add-init-else \
             deposit-add-loop-enter-then \
             deposit-add-loop-enter-else \
-            deposit-add-loop-exit \
-            deposit
+            deposit-add-loop-exit
 
 include ../../resources/kprove.mak
 
@@ -42,13 +41,10 @@ $(SPECS_DIR)/$(SPEC_GROUP)/get_hash_tree_root-loop-exit-spec.k: $(TMPLS) $(SPEC_
 	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) get_hash_tree_root-loop-exit to_little_endian_64-trusted get_hash_tree_root-loop-exit > $@
 
 $(SPECS_DIR)/$(SPEC_GROUP)/get_deposit_count-spec.k: $(TMPLS) $(SPEC_INI)
-	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) get_deposit_count to_little_endian_64-trusted get_deposit_count > $@
-
-$(SPECS_DIR)/$(SPEC_GROUP)/deposit-spec.k: $(TMPLS) $(SPEC_INI)
-	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) deposit to_little_endian_64-trusted deposit > $@
+	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) get_deposit_count            to_little_endian_64-trusted get_deposit_count            > $@
 
 $(SPECS_DIR)/$(SPEC_GROUP)/deposit-subcall_1-spec.k: $(TMPLS) $(SPEC_INI)
-	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) deposit-subcall_1 to_little_endian_64-trusted deposit-subcall_1 > $@
+	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) deposit-subcall_1            to_little_endian_64-trusted deposit-subcall_1            > $@
 
 $(SPECS_DIR)/$(SPEC_GROUP)/deposit-subcall_2-spec.k: $(TMPLS) $(SPEC_INI)
-	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) deposit-subcall_2 to_little_endian_64-trusted deposit-subcall_2 > $@
+	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) deposit-subcall_2            to_little_endian_64-trusted deposit-subcall_2            > $@
