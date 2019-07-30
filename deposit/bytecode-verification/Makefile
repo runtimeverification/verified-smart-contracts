@@ -27,7 +27,11 @@ SPEC_NAMES:=to_little_endian_64 \
             deposit-subcall_2 \
             deposit-log \
             deposit-data \
-            deposit-add \
+            deposit-add-init-then \
+            deposit-add-init-else \
+            deposit-add-loop-enter-then \
+            deposit-add-loop-enter-else \
+            deposit-add-loop-exit \
             deposit
 
 include ../../resources/kprove.mak
