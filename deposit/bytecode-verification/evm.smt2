@@ -16,3 +16,6 @@
 
 ; ceil32
 (define-fun ceil32 ((x Int)) Int ( * ( div ( + x 31 ) 32 ) 32 ) )
+
+; 0 <=Int select(M, K)
+;(assert (forall ((m Map) (k Int)) (<= 0 (selectInt m k))))

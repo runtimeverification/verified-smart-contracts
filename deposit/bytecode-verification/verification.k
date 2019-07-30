@@ -13,6 +13,8 @@ module VERIFICATION
     rule 0 <=Int select(M, _)             => true requires isStorage(M)
     rule         select(M, _) <Int pow256 => true requires isStorage(M)
 
+    rule 0 <=Int select(M, _) +Int 1      => true requires isStorage(M)
+
     // for to_little_endian_64
 
     rule 0 <=Int X /Int Y             => true requires #range(0 <= X < pow256) andBool #range(0 <= Y < pow256)

@@ -14,6 +14,7 @@
   export OPTS+=" --log-rules"
   export OPTS+=" --log-success"
   export OPTS+=" --log-success-pc-diff"
+# export OPTS+=" --log-func-eval"
   export OPTS+=" --log-cells k"
   export OPTS+=",pc"
   export OPTS+=",wordStack"
