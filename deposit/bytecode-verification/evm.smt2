@@ -19,3 +19,6 @@
 
 ; 0 <=Int select(M, K)
 ;(assert (forall ((m Map) (k Int)) (<= 0 (selectInt m k))))
+
+; (declare-fun gas ((x Int)) Int)
+; (assert (forall ((i Int) (j Int)) (=> (i > j) (< (gas i) (gas j)))))

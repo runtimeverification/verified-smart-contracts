@@ -11,6 +11,7 @@ module ABSTRACT-SEMANTICS-SEGMENTED-GAS
   rule <k> ISZERO W => bool2Word(W  ==Int 0 ) ~> #push ... </k> [trusted]
 
 
+/*
   // tmp gas model
 
   rule <k> G ~> #deductGas => . ... </k>
@@ -32,6 +33,7 @@ module ABSTRACT-SEMANTICS-SEGMENTED-GAS
 
   rule <k> #refund G:Int => . ... </k>
     [trusted]
+*/
 
 /* TODO: more simplification needed, e.g., using interval abstraction
   // ########################

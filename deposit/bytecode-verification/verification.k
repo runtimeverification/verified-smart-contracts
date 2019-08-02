@@ -84,6 +84,7 @@ module VERIFICATION
 //  rule (X *Int 256 +Int Y) <Int (X *Int 256) => false requires #range(0 <= X < pow56) andBool #range(0 <= Y < 256)
 
 
+/*
   // ########################
   // Memory Usage
   // ########################
@@ -99,8 +100,91 @@ module VERIFICATION
         andBool 0 <Int WIDTH1
 
     rule 0 <=Int #memoryUsageUpdate(MU, START, WIDTH) => true
+*/
 
 
+/*
+    syntax Bool ::= #isConcreteItv(Int) [function]
+    rule #isConcreteItv(X) => #isConcrete(X) orBool #getKLabelString(X) ==String "#itv"
+
+    syntax Int ::= #makeItv(Int, Int) [function]
+    rule #makeItv(X1, X2) => #itv(X1, X2) requires X1  <Int X2 andBool #isConcrete(X1) andBool #isConcrete(X2)
+    rule #makeItv(X1, X2) => X1           requires X1 ==Int X2 andBool #isConcrete(X1) andBool #isConcrete(X2)
+
+    // interval abstraction -- both bounds must be concrete
+    syntax Int ::= #itv(Int, Int) [function]
+
+    rule #itv(X1, X2) +Int #itv(Y1, Y2) => #makeItv(X1 +Int Y1, X2 +Int Y2)
+    rule #itv(X1, X2) -Int #itv(Y1, Y2) => #makeItv(X1 -Int Y2, X2 -Int Y1)
+    rule #itv(X1, X2) *Int #itv(Y1, Y2) => #makeItv(X1 *Int Y1, X2 *Int Y2)
+    rule #itv(X1, X2) /Int #itv(Y1, Y2) => #makeItv(X1 /Int Y2, X2 /Int Y1)
+
+    rule #itv(X1, X2) +Int Y => #makeItv(X1 +Int Y, X2 +Int Y)  requires #isConcrete(Y)
+    rule #itv(X1, X2) -Int Y => #makeItv(X1 -Int Y, X2 -Int Y)  requires #isConcrete(Y)
+    rule #itv(X1, X2) *Int Y => #makeItv(X1 *Int Y, X2 *Int Y)  requires #isConcrete(Y)
+    rule #itv(X1, X2) /Int Y => #makeItv(X1 /Int Y, X2 /Int Y)  requires #isConcrete(Y)
+
+    rule X +Int #itv(Y1, Y2) => #makeItv(X +Int Y1, X +Int Y2)  requires #isConcrete(X)
+    rule X -Int #itv(Y1, Y2) => #makeItv(X -Int Y2, X -Int Y1)  requires #isConcrete(X)
+    rule X *Int #itv(Y1, Y2) => #makeItv(X *Int Y1, X *Int Y2)  requires #isConcrete(X)
+    rule X /Int #itv(Y1, Y2) => #makeItv(X /Int Y2, X /Int Y1)  requires #isConcrete(X)
+
+    rule #itv(X1, X2)  <Int #itv(Y1, Y2) => true  requires X2  <Int Y1
+    rule #itv(X1, X2)  <Int #itv(Y1, Y2) => false requires X1 >=Int Y2
+    rule #itv(X1, X2) <=Int #itv(Y1, Y2) => true  requires X2 <=Int Y1
+    rule #itv(X1, X2) <=Int #itv(Y1, Y2) => false requires X1  >Int Y2
+
+    rule #itv(X1, X2)  <Int Y => true  requires X2  <Int Y // andBool #isConcrete(Y)
+    rule #itv(X1, X2)  <Int Y => false requires X1 >=Int Y // andBool #isConcrete(Y)
+    rule #itv(X1, X2) <=Int Y => true  requires X2 <=Int Y // andBool #isConcrete(Y)
+    rule #itv(X1, X2) <=Int Y => false requires X1  >Int Y // andBool #isConcrete(Y)
+
+    rule X  <Int #itv(Y1, Y2) => true  requires X  <Int Y1 // andBool #isConcrete(X)
+    rule X  <Int #itv(Y1, Y2) => false requires X >=Int Y2 // andBool #isConcrete(X)
+    rule X <=Int #itv(Y1, Y2) => true  requires X <=Int Y1 // andBool #isConcrete(X)
+    rule X <=Int #itv(Y1, Y2) => false requires X  >Int Y2 // andBool #isConcrete(X)
+
+    syntax Int ::= minItv(Int, Int) [function]
+                 | maxItv(Int, Int) [function]
+
+    rule minItv(#itv(X1, X2), #itv(Y1, Y2)) => #makeItv(minInt(X1, Y1), minInt(X2, Y2))
+    rule maxItv(#itv(X1, X2), #itv(Y1, Y2)) => #makeItv(maxInt(X1, Y1), maxInt(X2, Y2))
+
+    rule minItv(#itv(X1, X2), Y) => #makeItv(minInt(X1, Y), minInt(X2, Y))  requires #isConcrete(Y)
+    rule maxItv(#itv(X1, X2), Y) => #makeItv(maxInt(X1, Y), maxInt(X2, Y))  requires #isConcrete(Y)
+
+    rule minItv(X, #itv(Y1, Y2)) => #makeItv(minInt(X, Y1), minInt(X, Y2))  requires #isConcrete(X)
+    rule maxItv(X, #itv(Y1, Y2)) => #makeItv(maxInt(X, Y1), maxInt(X, Y2))  requires #isConcrete(X)
+
+    rule minItv(X, Y) => minInt(X, Y)  requires #isConcrete(X) andBool #isConcrete(Y)
+    rule maxItv(X, Y) => maxInt(X, Y)  requires #isConcrete(X) andBool #isConcrete(Y)
+*/
+
+
+/*
+    rule maxInt(maxInt(A, B), C) => maxInt(A, C)  requires C  >Int B
+    rule maxInt(maxInt(A, B), C) => maxInt(A, B)  requires C <=Int B
+
+    rule maxInt(A, B) => maxInt(B, A)  requires #isConcrete(A) andBool notBool #isConcrete(B)
+    rule maxInt(maxInt(A, B), C) => maxInt(maxInt(A, C), B)  requires #isConcrete(B) andBool notBool #isConcrete(C)
+
+
+// TODO: move to domains.k
+  rule maxInt(I1:Int, I2:Int) => I1 requires I1 >=Int I2
+  rule maxInt(I1:Int, I2:Int) => I2 requires I1 <=Int I2
+*/
+
+
+    syntax Int ::= #symGas(Int) [function, smtlib(gas)]
+    syntax Int ::= #symMem(Int) [function, smtlib(mem)]
+
+//  // no need to divide
+//  rule #memoryUsageUpdate(MU, START, WIDTH) => maxInt(MU, START +Int WIDTH)
+//      requires WIDTH >Int 0
+//       andBool notBool (#isConcrete(MU) andBool #isConcrete(START) andBool #isConcrete(WIDTH))
+
+
+/*
   // ########################
   // Gas
   // ########################
@@ -115,7 +199,7 @@ module VERIFICATION
 
     rule 0 <=Int #gas(_, _, _)             => true
     rule         #gas(_, _, _) <Int pow256 => true
-
+*/
 
   // ########################
   // Memory Reasoning
