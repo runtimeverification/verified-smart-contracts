@@ -70,7 +70,8 @@ They capture the essential mechanisms used by the two instructions: splitting a 
                 : .WordStack ) => V
       requires 0 <=Int V andBool V <Int pow256
 
-    rule #asWord( 0 : W1 : WS  =>  W1 : WS )
+//  rule #asWord( 0 : W1 : WS  =>  W1 : WS )
+    rule #asWord( 0 :      WS  =>       WS )
 
     rule nthbyteof(N, 0, 1) => N
 ```

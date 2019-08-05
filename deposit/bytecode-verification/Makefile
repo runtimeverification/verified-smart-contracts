@@ -31,7 +31,8 @@ SPEC_NAMES:=to_little_endian_64 \
             deposit-add-init-else \
             deposit-add-loop-enter-then \
             deposit-add-loop-enter-else \
-            deposit-add-loop-exit
+            deposit-add-loop-exit \
+            revert-call_data-invalid_function_identifier
 
 include ../../resources/kprove.mak
 
