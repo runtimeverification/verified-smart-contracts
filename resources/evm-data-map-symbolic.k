@@ -33,6 +33,8 @@ module EVM-DATA-MAP-SYMBOLIC [symbolic]
     rule #takeAux(N, BUF, WS) => #bufSeg(BUF, 0, N)                        requires 0 <=Int N andBool N <=Int #sizeBuffer(BUF)
     rule #takeAux(N, BUF, WS) => BUF ++ #take(N -Int #sizeBuffer(BUF), WS) requires N >Int #sizeBuffer(BUF)
 
+    rule #take(N, .WordStack) => #buf(N, 0) requires notBool #isConcrete(N)
+
     syntax WordStack ::= #dropAux ( Int , WordStack , WordStack ) [function]
  // ------------------------------------------------------------------------
     rule #drop(N, BUF      ) => #dropAux(N, BUF, .WordStack)                    requires #isBuf(BUF)

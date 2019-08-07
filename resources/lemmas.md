@@ -190,6 +190,8 @@ These rules are specific to reasoning about EVM programs.
 
     rule (A +Int I2) +Int I3 => A +Int (I2 +Int I3) when notBool #isConcrete(A) andBool #isConcrete(I2) andBool #isConcrete(I3)
 
+    rule A +Int (I -Int A) => I when notBool #isConcrete(A) andBool #isConcrete(I)
+
     // 0xffff...f &Int N = N
     rule MASK &Int N => N  requires MASK ==Int (2 ^Int (log2Int(MASK) +Int 1)) -Int 1 // MASK = 0xffff...f
                             andBool 0 <=Int N andBool N <=Int MASK

@@ -9,6 +9,9 @@ module VERIFICATION
     imports EDSL
     imports LEMMAS
 
+    // revert-invalid_function_identifier-0_4
+    rule #bufSeg(#buf(N, 0), 0, M) => #buf(M, 0) requires 0 <Int M andBool M <Int N
+
     syntax Bool ::= isStorage(Map) [function]
     rule 0 <=Int select(M, _)             => true requires isStorage(M)
     rule         select(M, _) <Int pow256 => true requires isStorage(M)

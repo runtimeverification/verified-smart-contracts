@@ -32,7 +32,9 @@ SPEC_NAMES:=to_little_endian_64 \
             deposit-add-loop-enter-then \
             deposit-add-loop-enter-else \
             deposit-add-loop-exit \
-            revert-call_data-invalid_function_identifier
+            revert-invalid_function_identifier-lt_4 \
+            revert-invalid_function_identifier-ge_4-lt_32 \
+            revert-invalid_function_identifier-ge_4-ge_32
 
 include ../../resources/kprove.mak
 
