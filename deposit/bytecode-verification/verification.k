@@ -253,7 +253,7 @@ module VERIFICATION
   // Buffer Reasoning
   // ########################
 
-    rule #noOverflowAux(BUF) => true requires #isBuf(BUF)
+    rule #noOverflowAux(BUF) => true requires #isBuf(BUF) orBool #isTake(BUF)
     rule #noOverflowAux(WS1 ++ WS2) => #noOverflowAux(WS1) andBool #noOverflowAux(WS2)
 
     rule #bufSeg(BUF, S0, W0) ++ #bufSeg(BUF, S1, W1) => #bufSeg(BUF, S0, W0 +Int W1)

@@ -14,6 +14,11 @@ module EVM-DATA-MAP-SYMBOLIC [symbolic]
     rule #isBuf(#buf(_,_)) => true
     rule #isBuf(#bufSeg(_,_,_)) => true
 
+    syntax Bool ::= #isTake ( WordStack ) [function]
+    rule #isTake(#take(_,_)) => true
+    rule #isTake(#takeAux(_,_,_)) => true
+
+
     rule #asWord(#buf(SIZE, DATA)) => DATA requires SIZE <=Int 32
 
     rule #buf(SIZE, _)        => .WordStack requires SIZE  ==Int 0
@@ -50,13 +55,16 @@ module EVM-DATA-MAP-SYMBOLIC [symbolic]
     rule #getElmAux(BUF, WS, N) => WS [ N -Int #sizeBuffer(BUF) ] requires N >=Int #sizeBuffer(BUF)
 
 
-    rule #sizeWordStack ( BUF ++ WS, SIZE ) => #sizeWordStack(WS, SIZE +Int #sizeBuffer(BUF)) requires #isBuf(BUF)
-    rule #sizeWordStack ( BUF      , SIZE ) =>                    SIZE +Int #sizeBuffer(BUF)  requires #isBuf(BUF)
+    rule #sizeWordStack ( BUF ++ WS, SIZE ) => #sizeWordStack(WS, SIZE +Int #sizeBuffer(BUF)) requires #isBuf(BUF) orBool #isTake(BUF)
+    rule #sizeWordStack ( BUF      , SIZE ) =>                    SIZE +Int #sizeBuffer(BUF)  requires #isBuf(BUF) orBool #isTake(BUF)
 
     syntax Int ::= #sizeBuffer ( WordStack ) [function]
  // ---------------------------------------------------
     rule #sizeBuffer ( #buf(N,_) )      => N
     rule #sizeBuffer ( #bufSeg(_,_,N) ) => N
+
+    rule #sizeBuffer ( #take(N,_) )      => N
+    rule #sizeBuffer ( #takeAux(N,_,_) ) => N
 
 
   // ########################
