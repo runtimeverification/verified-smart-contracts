@@ -92,6 +92,7 @@ module VERIFICATION
 /*
     syntax Bool ::= #isConcreteItv(Int) [function]
     rule #isConcreteItv(X) => #isConcrete(X) orBool #getKLabelString(X) ==String "#itv"
+*/
 
     syntax Int ::= #makeItv(Int, Int) [function]
     rule #makeItv(X1, X2) => #itv(X1, X2) requires X1  <Int X2 andBool #isConcrete(X1) andBool #isConcrete(X2)
@@ -100,6 +101,7 @@ module VERIFICATION
     // interval abstraction -- both bounds must be concrete
     syntax Int ::= #itv(Int, Int) [function]
 
+/*
     rule #itv(X1, X2) +Int #itv(Y1, Y2) => #makeItv(X1 +Int Y1, X2 +Int Y2)
     rule #itv(X1, X2) -Int #itv(Y1, Y2) => #makeItv(X1 -Int Y2, X2 -Int Y1)
     rule #itv(X1, X2) *Int #itv(Y1, Y2) => #makeItv(X1 *Int Y1, X2 *Int Y2)
@@ -194,6 +196,14 @@ module VERIFICATION
 
     rule #gasUsageUpdate(#symGas(N, LB, UB, S), G) => #symGas(N +Int 1, LB, UB, S ListItem(G))
         requires (notBool #isConcrete(G)) andBool #getKLabelString(G) =/=String "#itv"
+
+
+
+    rule Csstore(SCHED, NEW, CURR, ORIG) => #makeItv(Gsstorereset < SCHED >, Gsstoreset < SCHED >)
+        requires #isConcrete(SCHED)
+         andBool notBool ( #isConcrete(NEW) andBool #isConcrete(CURR) )
+         andBool notBool Ghasdirtysstore << SCHED >>
+
 
 
   // ########################
