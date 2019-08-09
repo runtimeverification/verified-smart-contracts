@@ -161,13 +161,39 @@ module VERIFICATION
 */
 
 
-    syntax Int ::= #symGas(Int) [function, smtlib(gas)]
-    syntax Int ::= #symMem(Int) [function, smtlib(mem)]
+    syntax Int ::= #symGas(Int, Int, Int, List) [function]
+    syntax Int ::= #symMem(Int, Set) [function]
+
+    /* definition
+    rule #symMem(N, S) => maxInt(N, maxIntSet(S)) up/Int 32
+
+    rule #symGas(LB, UB, S) => #symGas(0, 0, .List) - [LB, UB] - sum(S) - Cmem(SCHED, MU)
+        <memoryUsed> MU </memoryUsed>
+    */
+
 
 //  // no need to divide
 //  rule #memoryUsageUpdate(MU, START, WIDTH) => maxInt(MU, START +Int WIDTH)
 //      requires WIDTH >Int 0
 //       andBool notBool (#isConcrete(MU) andBool #isConcrete(START) andBool #isConcrete(WIDTH))
+
+
+    rule #memoryUsageUpdate(#symMem(MUC, MUS), START, WIDTH) => #symMem(maxInt(MUC, START +Int WIDTH), MUS)
+        requires #isConcrete(MUC) andBool #isConcrete(START) andBool #isConcrete(WIDTH)
+
+    rule #memoryUsageUpdate(#symMem(MUC, MUS), START, WIDTH) => #symMem(MUC, SetItem(START +Int WIDTH) MUS)
+        requires notBool (#isConcrete(START) andBool #isConcrete(WIDTH))
+
+
+    syntax Int ::= #gasUsageUpdate(Int, Int) [function]
+
+    rule #gasUsageUpdate(#symGas(N, LB, UB, S), G) => #symGas(N +Int 1, LB +Int G, UB +Int G, S)
+        requires #isConcrete(G)
+
+    rule #gasUsageUpdate(#symGas(N, LB, UB, S), #itv(LB', UB')) => #symGas(N +Int 1, LB +Int LB', UB +Int UB', S)
+
+    rule #gasUsageUpdate(#symGas(N, LB, UB, S), G) => #symGas(N +Int 1, LB, UB, S ListItem(G))
+        requires (notBool #isConcrete(G)) andBool #getKLabelString(G) =/=String "#itv"
 
 
   // ########################

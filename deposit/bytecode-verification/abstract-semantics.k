@@ -64,25 +64,48 @@ module ABSTRACT-SEMANTICS
    Other calls are either private calls or calls with all available gas.
 */
 
+/*
     // uninterpreted gas abstraction, except #symGas(I) < #symGas(J) if I > J
     rule <k> _:Int ~> #deductGas => . ... </k>
          <gas> #symGas(N => N +Int 1) </gas>
         [trusted, matching(#symGas)]
+*/
 
+    rule <k> G':Int ~> #deductGas => . ... </k>
+         <gas> G => #gasUsageUpdate(G, G') </gas>
+        [trusted]
+
+/*
     // uninterpreted memory usage abstraction, except #symMem(I) <= #symMem(J) if I < J
     rule <k> _:Int ~> #deductMemory => . ... </k>
          <memoryUsed> #symMem(N => N +Int 1) </memoryUsed>
         [trusted, matching(#symMem)]
+*/
 
+    rule <k> MU':Int ~> #deductMemory => . ... </k>
+         <memoryUsed> MU => MU' </memoryUsed>
+        [trusted]
+
+/*
     // another unknown initial gas --- spawn in a new vm, thus no name clash
     rule <k> Ccallgas(SCHED, _, _, _, _) => #symGas(0) ... </k>
         [trusted]
+*/
 
     // ignore refund, since it does not affect the #symGas property.
     rule <k> #refund G:Int => . ... </k>
         [trusted]
 
 
+//  rule <k> #gasExec(SCHED, CALL GCAP ACCTTO VALUE ARGSTART ARGWIDTH RETSTART RETWIDTH) => ??? ... </k>
+
+    rule <k> #gasExec(SCHED, CALL GCAP 2 0 ARGSTART ARGWIDTH RETSTART RETWIDTH)
+          => Cextra(SCHED, true, 0) +Int (60 +Int  12 *Int (ARGWIDTH up/Int 32)) ... </k>
+        [trusted]
+
+    rule <k> #gasExec(SCHED, CALL GCAP 4 0 ARGSTART ARGWIDTH RETSTART RETWIDTH)
+          => Cextra(SCHED, true, 0) +Int (15 +Int   3 *Int (ARGWIDTH up/Int 32)) ... </k>
+        [trusted]
 
 
 /*
