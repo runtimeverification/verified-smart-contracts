@@ -21,6 +21,7 @@
   export OPTS+=",localMem"
   export OPTS+=",output"
   export OPTS+=",gas"
+  export OPTS+=",previousGas"
   export OPTS+=",memoryUsed"
   export OPTS+=",statusCode"
   export OPTS+=",callData"

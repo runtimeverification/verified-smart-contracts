@@ -169,7 +169,7 @@ module VERIFICATION
     /* definition
     rule #symMem(N, S) => maxInt(N, maxIntSet(S)) up/Int 32
 
-    rule #symGas(LB, UB, S) => #symGas(0, 0, .List) - [LB, UB] - sum(S) - Cmem(SCHED, MU)
+    rule #symGas(INIT, LB, UB, S) => INIT - [LB, UB] - sum(S) - Cmem(SCHED, MU)
         <memoryUsed> MU </memoryUsed>
     */
 
@@ -189,12 +189,12 @@ module VERIFICATION
 
     syntax Int ::= #gasUsageUpdate(Int, Int) [function]
 
-    rule #gasUsageUpdate(#symGas(N, LB, UB, S), G) => #symGas(N +Int 1, LB +Int G, UB +Int G, S)
+    rule #gasUsageUpdate(#symGas(I, LB, UB, S), G) => #symGas(I, LB +Int G, UB +Int G, S)
         requires #isConcrete(G)
 
-    rule #gasUsageUpdate(#symGas(N, LB, UB, S), #itv(LB', UB')) => #symGas(N +Int 1, LB +Int LB', UB +Int UB', S)
+    rule #gasUsageUpdate(#symGas(I, LB, UB, S), #itv(LB', UB')) => #symGas(I, LB +Int LB', UB +Int UB', S)
 
-    rule #gasUsageUpdate(#symGas(N, LB, UB, S), G) => #symGas(N +Int 1, LB, UB, S ListItem(G))
+    rule #gasUsageUpdate(#symGas(I, LB, UB, S), G) => #symGas(I, LB, UB, S ListItem(G))
         requires (notBool #isConcrete(G)) andBool #getKLabelString(G) =/=String "#itv"
 
 
@@ -203,6 +203,10 @@ module VERIFICATION
         requires #isConcrete(SCHED)
          andBool notBool ( #isConcrete(NEW) andBool #isConcrete(CURR) )
          andBool notBool Ghasdirtysstore << SCHED >>
+
+
+    rule Ccallstipend(VALUE) => 0                      requires VALUE  ==Int 0
+    rule Ccallstipend(VALUE) => Gcallstipend < SCHED > requires VALUE =/=Int 0
 
 
 
