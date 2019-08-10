@@ -62,11 +62,12 @@ module ABSTRACT-SEMANTICS
 
     rule <k> #setupCallGasAux(SCHED, VALUE, GEXTRA, CGASCAP, CCALLSTIPEND) => . ... </k>
          <gas> GAVAIL => #gasUsageUpdate(#gasUsageUpdate(GAVAIL, GEXTRA), CGASCAP) </gas>
-         <previousGas> _ => #gasUsageUpdate(#symGas(CGASCAP, 0, 0, .List), CCALLSTIPEND) </previousGas>
+         <previousGas> _ => #gasUsageUpdate(#symGas(CGASCAP, 0, 0, .List, 0), CCALLSTIPEND) </previousGas>
         [trusted]
 
-    rule <k> #refund #symGas(C, LB', UB', S') => . ... </k>
-         <gas> #symGas(X, LB, UB, S ListItem(C)) => #symGas(X, LB +Int LB', UB +Int UB', S S') </gas>
+    rule <k> #refund #symGas(C, LB', UB', S', MU') => . ... </k>
+         <gas> #symGas(X, LB, UB, S ListItem(C), MU) => #gasUsageUpdate(#symGas(X, LB +Int LB', UB +Int UB', S S', MU), Cmem(SCHED, MU')) </gas>
+         <schedule> SCHED </schedule>
         [trusted, matching(#symGas)]
 
 /*
@@ -144,8 +145,9 @@ module ABSTRACT-SEMANTICS
 */
 
     rule <k> MU':Int ~> #deductMemory => . ... </k>
+         <gas> #symGas(_, _, _, _, MU => MU') </gas>
          <memoryUsed> MU => MU' </memoryUsed>
-        [trusted]
+        [trusted, matching(#symGas)]
 
 /*
     // another unknown initial gas --- spawn in a new vm, thus no name clash
