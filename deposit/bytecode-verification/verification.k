@@ -191,12 +191,12 @@ module VERIFICATION
 
 //  syntax Int ::= #gasUsageUpdate(Int, Int) [function]
 
-    rule #symGas(I, LB, UB, S, CMEM) -Gas G              => #symGas(I, LB +Int G,   UB +Int G,   S,             CMEM)
+    rule #symGas(I, LB, UB, S, CMEM) -Gas G              => #symGas(I, LB +Int G,   UB +Int G,               S, CMEM)
         requires #isConcrete(G)
 
-    rule #symGas(I, LB, UB, S, CMEM) -Gas #itv(LB', UB') => #symGas(I, LB +Int LB', UB +Int UB', S,             CMEM)
+    rule #symGas(I, LB, UB, S, CMEM) -Gas #itv(LB', UB') => #symGas(I, LB +Int LB', UB +Int UB',             S, CMEM)
 
-    rule #symGas(I, LB, UB, S, CMEM) -Gas G              => #symGas(I, LB,          UB,          S ListItem(G), CMEM)
+    rule #symGas(I, LB, UB, S, CMEM) -Gas G              => #symGas(I, LB,          UB,          ListItem(G) S, CMEM)
         requires (notBool #isConcrete(G)) andBool #getKLabelString(G) =/=String "#itv" andBool #getKLabelString(G) =/=String "_+Int_"
 
     rule G -Gas (G1 +Int G2) => (G -Gas G1) -Gas G2
@@ -217,11 +217,13 @@ module VERIFICATION
 */
 
 
-    rule #symGas(X,                   LB,          UB,          S ListItem(CGASCAP), CMEM) +Gas #symGas(CGASCAP,                   LB', UB', S', CMEM')
-      => #symGas(X,                   LB +Int LB', UB +Int UB', S S',                CMEM) -Gas CMEM'
+    rule #symGas(X,                   LB,          UB,          ListItem(C) S, CMEM) +Gas #symGas(CGASCAP,                   LB', UB', S', CMEM')
+      => #symGas(X,                   LB +Int LB', UB +Int UB', S'          S, CMEM) -Gas CMEM'
+        requires C ==K CGASCAP
 
-    rule #symGas(X,                   LB,          UB,          S ListItem(CGASCAP), CMEM) +Gas #symGas(CGASCAP +Int CCALLSTIPEND, LB', UB', S', CMEM')
-      => #symGas(X +Int CCALLSTIPEND, LB +Int LB', UB +Int UB', S S',                CMEM) -Gas CMEM'
+    rule #symGas(X,                   LB,          UB,          ListItem(C) S, CMEM) +Gas #symGas(CGASCAP +Int CCALLSTIPEND, LB', UB', S', CMEM')
+      => #symGas(X +Int CCALLSTIPEND, LB +Int LB', UB +Int UB', S'          S, CMEM) -Gas CMEM'
+        requires C ==K CGASCAP
 
 
     rule Csstore(SCHED, NEW, CURR, ORIG) => #makeItv(Gsstorereset < SCHED >, Gsstoreset < SCHED >)
