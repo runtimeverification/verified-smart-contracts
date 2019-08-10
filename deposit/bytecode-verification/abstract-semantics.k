@@ -48,6 +48,7 @@ module ABSTRACT-SEMANTICS
 
 
 
+/*
     rule <k> #gasExec(SCHED, CALL GCAP ACCTTO VALUE _ _ _ _)
           => #accountNonexistent(ACCTTO) ~> #setupCallGas(SCHED, GCAP, VALUE)
           ~> 0 ... </k>
@@ -64,11 +65,23 @@ module ABSTRACT-SEMANTICS
          <gas> GAVAIL => #gasUsageUpdate(#gasUsageUpdate(GAVAIL, GEXTRA), CGASCAP) </gas>
          <previousGas> _ => #gasUsageUpdate(#symGas(CGASCAP, 0, 0, .List, 0), CCALLSTIPEND) </previousGas>
         [trusted]
+*/
 
-    rule <k> #refund #symGas(C, LB', UB', S', MU') => Cmem(SCHED, MU') ~> #deductGas ... </k>
-         <gas> #symGas(X, LB, UB, S ListItem(C), MU) => #symGas(X, LB +Int LB', UB +Int UB', S S', MU) </gas>
+
+    rule <k> GCALL:Int ~> #allocateCallGas => . ... </k>
+         <previousGas> _ => #symGas(GCALL, 0, 0, .List, 0) </previousGas>
+        [trusted]
+
+/*
+    rule <k> #refund #symGas(C, LB', UB', S', CMEM') => . ... </k>
+         <gas> #symGas(X, LB, UB, S ListItem(C), CMEM) => #symGas(X, LB +Int LB', UB +Int UB', S S', CMEM) -Gas CMEM' </gas>
          <schedule> SCHED </schedule>
         [trusted, matching(#symGas)]
+*/
+
+    rule <k> #refund G:Int => . ... </k>
+         <gas> GAVAIL => GAVAIL +Gas G </gas>
+        [trusted]
 
 /*
     rule <k> #gasExec(SCHED, CALL GCAP ACCTTO VALUE _ _ _ _)
@@ -134,7 +147,8 @@ module ABSTRACT-SEMANTICS
 */
 
     rule <k> G':Int ~> #deductGas => . ... </k>
-         <gas> G => #gasUsageUpdate(G, G') </gas>
+         <gas> G => G -Gas G' </gas>
+         requires notBool (#isConcrete(G) andBool #isConcrete(G'))
         [trusted]
 
 /*
@@ -145,9 +159,12 @@ module ABSTRACT-SEMANTICS
 */
 
     rule <k> MU':Int ~> #deductMemory => . ... </k>
-         <gas> #symGas(_, _, _, _, MU => MU') </gas>
+         <gas> #symGas(_, _, _, _, CMEM => Cmem(SCHED, MU')) </gas>
          <memoryUsed> MU => MU' </memoryUsed>
+         <schedule> SCHED </schedule>
+         requires CMEM ==Int Cmem(SCHED, MU)
         [trusted, matching(#symGas)]
+
 
 /*
     // another unknown initial gas --- spawn in a new vm, thus no name clash

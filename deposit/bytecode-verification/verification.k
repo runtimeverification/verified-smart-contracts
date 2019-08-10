@@ -167,7 +167,7 @@ module VERIFICATION
 //  syntax Int ::= #symMem(Int, Set) [function]
 
     /* definition
-    rule #symGas(INIT, LB, UB, S, MU) => INIT - [LB, UB] - sum(S) - Cmem(SCHED, MU)
+    rule #symGas(INIT, LB, UB, S, MU) => INIT - [LB, UB] - sum(S) - MU
 
     rule #symMem(N, S) => maxInt(N, maxIntSet(S)) up/Int 32
     */
@@ -179,23 +179,49 @@ module VERIFICATION
 //       andBool notBool (#isConcrete(MU) andBool #isConcrete(START) andBool #isConcrete(WIDTH))
 
 
-    rule #memoryUsageUpdate(#symMem(MUC, MUS), START, WIDTH) => #symMem(maxInt(MUC, START +Int WIDTH), MUS)
-        requires #isConcrete(MUC) andBool #isConcrete(START) andBool #isConcrete(WIDTH)
+    rule #memoryUsageUpdate(#symMem(MU, MUS), START, WIDTH) => #symMem(maxInt(MU, START +Int WIDTH), MUS)
+        requires #isConcrete(MU) andBool #isConcrete(START) andBool #isConcrete(WIDTH)
 
-    rule #memoryUsageUpdate(#symMem(MUC, MUS), START, WIDTH) => #symMem(MUC, SetItem(START +Int WIDTH) MUS)
+    rule #memoryUsageUpdate(#symMem(MU, MUS), START, WIDTH) => #symMem(MU, SetItem(START +Int WIDTH) MUS)
         requires notBool (#isConcrete(START) andBool #isConcrete(WIDTH))
+
+    rule #memoryUsageUpdate(        MU,       START, WIDTH) => #symMem(MU, SetItem(START +Int WIDTH) .Set)
+        requires #isConcrete(MU) andBool notBool (#isConcrete(START) andBool #isConcrete(WIDTH))
 
 
 //  syntax Int ::= #gasUsageUpdate(Int, Int) [function]
 
-    rule #gasUsageUpdate(#symGas(I, LB, UB, S, MU), G) => #symGas(I, LB +Int G, UB +Int G, S, MU)
+    rule #symGas(I, LB, UB, S, CMEM) -Gas G              => #symGas(I, LB +Int G,   UB +Int G,   S,             CMEM)
         requires #isConcrete(G)
 
-    rule #gasUsageUpdate(#symGas(I, LB, UB, S, MU), #itv(LB', UB')) => #symGas(I, LB +Int LB', UB +Int UB', S, MU)
+    rule #symGas(I, LB, UB, S, CMEM) -Gas #itv(LB', UB') => #symGas(I, LB +Int LB', UB +Int UB', S,             CMEM)
 
-    rule #gasUsageUpdate(#symGas(I, LB, UB, S, MU), G) => #symGas(I, LB, UB, S ListItem(G), MU)
-        requires (notBool #isConcrete(G)) andBool #getKLabelString(G) =/=String "#itv"
+    rule #symGas(I, LB, UB, S, CMEM) -Gas G              => #symGas(I, LB,          UB,          S ListItem(G), CMEM)
+        requires (notBool #isConcrete(G)) andBool #getKLabelString(G) =/=String "#itv" andBool #getKLabelString(G) =/=String "_+Int_"
 
+    rule G -Gas (G1 +Int G2) => (G -Gas G1) -Gas G2
+
+
+/*
+    rule #symGas(I, LB, UB, S, CMEM) -Gas (CMEM' -Int CMEM) => #symGas(I, LB, UB, S, CMEM')
+        requires #getKLabelString(CMEM)  ==String "Cmem"
+         andBool #getKLabelString(CMEM') ==String "Cmem"
+
+    rule #symGas(I, LB, UB, S, 0)    -Gas (CMEM' -Int CMEM) => #symGas(I, LB, UB, S, CMEM') -Gas (0 -Int CMEM)
+        requires #isConcrete(CMEM)
+         andBool #getKLabelString(CMEM') ==String "Cmem"
+
+    rule #symGas(I, LB, UB, S, CMEM) -Gas (CMEM' -Int CMEM) => #symGas(I, LB, UB, S, 0)     -Gas CMEM'
+        requires #getKLabelString(CMEM)  ==String "Cmem"
+         andBool #isConcrete(CMEM')
+*/
+
+
+    rule #symGas(X,                   LB,          UB,          S ListItem(CGASCAP), CMEM) +Gas #symGas(CGASCAP,                   LB', UB', S', CMEM')
+      => #symGas(X,                   LB +Int LB', UB +Int UB', S S',                CMEM) -Gas CMEM'
+
+    rule #symGas(X,                   LB,          UB,          S ListItem(CGASCAP), CMEM) +Gas #symGas(CGASCAP +Int CCALLSTIPEND, LB', UB', S', CMEM')
+      => #symGas(X +Int CCALLSTIPEND, LB +Int LB', UB +Int UB', S S',                CMEM) -Gas CMEM'
 
 
     rule Csstore(SCHED, NEW, CURR, ORIG) => #makeItv(Gsstorereset < SCHED >, Gsstoreset < SCHED >)
@@ -204,8 +230,8 @@ module VERIFICATION
          andBool notBool Ghasdirtysstore << SCHED >>
 
 
-    rule Ccallstipend(VALUE) => 0                      requires VALUE  ==Int 0
-    rule Ccallstipend(VALUE) => Gcallstipend < SCHED > requires VALUE =/=Int 0
+//  rule Ccallstipend(VALUE) => 0                      requires VALUE  ==Int 0
+//  rule Ccallstipend(VALUE) => Gcallstipend < SCHED > requires VALUE =/=Int 0
 
 
 
