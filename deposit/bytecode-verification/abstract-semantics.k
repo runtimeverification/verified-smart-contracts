@@ -54,16 +54,13 @@ module ABSTRACT-SEMANTICS
         [trusted]
 
     rule <k> ISEMPTY:Bool
-          ~> #setupCallGas (SCHED, GCAP, VALUE)
-          => #setupCallGas1(SCHED, GCAP, VALUE, Cextra(SCHED, ISEMPTY, VALUE)) ... </k>
-        [trusted]
-
-    rule <k> #setupCallGas1(SCHED, GCAP, VALUE, GEXTRA)
-          => #setupCallGas2(SCHED,       VALUE, GEXTRA, Cgascap(SCHED, GCAP, GAVAIL, GEXTRA), 0 -Int Ccallstipend(VALUE)) ... </k>
+          ~> #setupCallGas(SCHED, GCAP, VALUE)
+          => #setupCallGasAux(SCHED, VALUE, Cextra(SCHED, ISEMPTY, VALUE),
+               Cgascap(SCHED, GCAP, GAVAIL, Cextra(SCHED, ISEMPTY, VALUE)), 0 -Int Ccallstipend(VALUE)) ... </k>
          <gas> GAVAIL </gas>
         [trusted]
 
-    rule <k> #setupCallGas2(SCHED, VALUE, GEXTRA, CGASCAP, CCALLSTIPEND) => . ... </k>
+    rule <k> #setupCallGasAux(SCHED, VALUE, GEXTRA, CGASCAP, CCALLSTIPEND) => . ... </k>
          <gas> GAVAIL => #gasUsageUpdate(#gasUsageUpdate(GAVAIL, GEXTRA), CGASCAP) </gas>
          <previousGas> _ => #gasUsageUpdate(#symGas(CGASCAP, 0, 0, .List), CCALLSTIPEND) </previousGas>
         [trusted]

@@ -6,9 +6,8 @@ module EVM-SYMBOLIC     [symbolic]
 
     syntax Int ::= Ccallstipend(Int) [function]
 
-    syntax KItem ::= #setupCallGas (Schedule, Int, Int)
-                   | #setupCallGas1(Schedule, Int, Int, Int)
-                   | #setupCallGas2(Schedule, Int, Int, Int, Int)
+    syntax KItem ::= #setupCallGas(Schedule, Int, Int)
+                   | #setupCallGasAux(Schedule, Int, Int, Int, Int)
 
     syntax Int ::= "pow24"
                  | "pow32"
