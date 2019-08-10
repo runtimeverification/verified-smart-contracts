@@ -65,8 +65,8 @@ module ABSTRACT-SEMANTICS
          <previousGas> _ => #gasUsageUpdate(#symGas(CGASCAP, 0, 0, .List, 0), CCALLSTIPEND) </previousGas>
         [trusted]
 
-    rule <k> #refund #symGas(C, LB', UB', S', MU') => . ... </k>
-         <gas> #symGas(X, LB, UB, S ListItem(C), MU) => #gasUsageUpdate(#symGas(X, LB +Int LB', UB +Int UB', S S', MU), Cmem(SCHED, MU')) </gas>
+    rule <k> #refund #symGas(C, LB', UB', S', MU') => Cmem(SCHED, MU') ~> #deductGas ... </k>
+         <gas> #symGas(X, LB, UB, S ListItem(C), MU) => #symGas(X, LB +Int LB', UB +Int UB', S S', MU) </gas>
          <schedule> SCHED </schedule>
         [trusted, matching(#symGas)]
 
