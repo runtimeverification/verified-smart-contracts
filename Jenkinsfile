@@ -56,7 +56,7 @@ pipeline {
           }
           sh '''
             cd .build/k
-            git branch --contains $(cat ../.k.rev) | grep -q master
+            git branch --merged $(cat ../.k.rev) | grep -q master
           '''
         }
       }
