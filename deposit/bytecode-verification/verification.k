@@ -9,6 +9,8 @@ module VERIFICATION
     imports EDSL
     imports LEMMAS
 
+    rule #sha256(DATA) => #asWord(#parseHexBytes(Sha256(#unparseByteStack(DATA)))) [concrete]
+
     // revert-invalid_function_identifier-0_4
     rule #bufSeg(#buf(N, 0), 0, M) => #buf(M, 0) requires 0 <Int M andBool M <Int N
 

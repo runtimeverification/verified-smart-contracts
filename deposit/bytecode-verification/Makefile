@@ -12,7 +12,11 @@ SPEC_INI:=deposit-spec.ini
 
 KPROVE_OPTS:=--smt-prelude $(abspath $(dir $(abspath $(lastword $(MAKEFILE_LIST))))/evm.smt2)
 
-SPEC_NAMES:=to_little_endian_64 \
+SPEC_NAMES:=init-init \
+            init-loop0 \
+            init-loop-enter \
+            init-loop-exit \
+            to_little_endian_64 \
             to_little_endian_64-forloop \
             to_little_endian_64-return \
             get_hash_tree_root-init \
