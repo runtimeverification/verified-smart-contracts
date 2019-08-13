@@ -36,9 +36,14 @@ SPEC_NAMES:=init-init \
             deposit-add-loop-enter-then \
             deposit-add-loop-enter-else \
             deposit-add-loop-exit \
+            deposit-revert-1 \
+            deposit-revert-2 \
             revert-invalid_function_identifier-lt_4 \
             revert-invalid_function_identifier-ge_4-lt_32 \
-            revert-invalid_function_identifier-ge_4-ge_32
+            revert-invalid_function_identifier-ge_4-ge_32 \
+            revert-init \
+            revert-get_hash_tree_root \
+            revert-get_deposit_count
 
 include ../../resources/kprove.mak
 
