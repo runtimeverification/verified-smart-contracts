@@ -348,15 +348,56 @@ module VERIFICATION
     rule selectRange(storeRange(M, START1, WIDTH1, BUF), START2, WIDTH2) => BUF
       requires START1 ==Int START2 andBool WIDTH1 ==Int WIDTH2
 
-    rule selectRange(store(store(store(store(store(store(store(store(M, K1, 0), K2, 0), K3, 0), K4, 0), K5, 0), K6, 0), K7, 0), K8, 0), K, W)
-      => selectRange(storeRange(M, K1, 8, #buf(8, 0)), K, W)
-      requires K1 +Int 1 ==Int K2
-       andBool K2 +Int 1 ==Int K3
-       andBool K3 +Int 1 ==Int K4
-       andBool K4 +Int 1 ==Int K5
-       andBool K5 +Int 1 ==Int K6
-       andBool K6 +Int 1 ==Int K7
-       andBool K7 +Int 1 ==Int K8
+    rule selectRange(store(store(store(store(store(store(store(store(store(store(store(store(store(store(store(store(store(store(store(store(store(store(store(store(M,
+        K1 , 0),
+        K2 , 0),
+        K3 , 0),
+        K4 , 0),
+        K5 , 0),
+        K6 , 0),
+        K7 , 0),
+        K8 , 0),
+        K9 , 0),
+        K10, 0),
+        K11, 0),
+        K12, 0),
+        K13, 0),
+        K14, 0),
+        K15, 0),
+        K16, 0),
+        K17, 0),
+        K18, 0),
+        K19, 0),
+        K20, 0),
+        K21, 0),
+        K22, 0),
+        K23, 0),
+        K24, 0),
+        K, W)
+      => selectRange(storeRange(M, K1, 24, #buf(24, 0)), K, W)
+      requires K1  +Int 1 ==Int K2
+       andBool K2  +Int 1 ==Int K3
+       andBool K3  +Int 1 ==Int K4
+       andBool K4  +Int 1 ==Int K5
+       andBool K5  +Int 1 ==Int K6
+       andBool K6  +Int 1 ==Int K7
+       andBool K7  +Int 1 ==Int K8
+       andBool K8  +Int 1 ==Int K9
+       andBool K9  +Int 1 ==Int K10
+       andBool K10 +Int 1 ==Int K11
+       andBool K11 +Int 1 ==Int K12
+       andBool K12 +Int 1 ==Int K13
+       andBool K13 +Int 1 ==Int K14
+       andBool K14 +Int 1 ==Int K15
+       andBool K15 +Int 1 ==Int K16
+       andBool K16 +Int 1 ==Int K17
+       andBool K17 +Int 1 ==Int K18
+       andBool K18 +Int 1 ==Int K19
+       andBool K19 +Int 1 ==Int K20
+       andBool K20 +Int 1 ==Int K21
+       andBool K21 +Int 1 ==Int K22
+       andBool K22 +Int 1 ==Int K23
+       andBool K23 +Int 1 ==Int K24
 
   // ########################
   // Range
