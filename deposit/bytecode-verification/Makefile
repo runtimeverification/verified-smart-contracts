@@ -19,12 +19,12 @@ SPEC_NAMES:=init-init \
             to_little_endian_64 \
             to_little_endian_64-forloop \
             to_little_endian_64-return \
-            get_hash_tree_root-init \
-            get_hash_tree_root-loop0-then \
-            get_hash_tree_root-loop0-else \
-            get_hash_tree_root-loop-body-then \
-            get_hash_tree_root-loop-body-else \
-            get_hash_tree_root-loop-exit \
+            get_deposit_root-init \
+            get_deposit_root-loop0-then \
+            get_deposit_root-loop0-else \
+            get_deposit_root-loop-body-then \
+            get_deposit_root-loop-body-else \
+            get_deposit_root-loop-exit \
             get_deposit_count \
             deposit-init \
             deposit-subcall_1 \
@@ -42,15 +42,15 @@ SPEC_NAMES:=init-init \
             revert-invalid_function_identifier-ge_4-lt_32 \
             revert-invalid_function_identifier-ge_4-ge_32 \
             revert-init \
-            revert-get_hash_tree_root \
+            revert-get_deposit_root \
             revert-get_deposit_count
 
 include ../../resources/kprove.mak
 
 # non-standard spec generation
 
-$(SPECS_DIR)/$(SPEC_GROUP)/get_hash_tree_root-loop-exit-spec.k: $(TMPLS) $(SPEC_INI)
-	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) get_hash_tree_root-loop-exit to_little_endian_64-trusted get_hash_tree_root-loop-exit > $@
+$(SPECS_DIR)/$(SPEC_GROUP)/get_deposit_root-loop-exit-spec.k: $(TMPLS) $(SPEC_INI)
+	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) get_deposit_root-loop-exit to_little_endian_64-trusted get_deposit_root-loop-exit > $@
 
 $(SPECS_DIR)/$(SPEC_GROUP)/get_deposit_count-spec.k: $(TMPLS) $(SPEC_INI)
 	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) get_deposit_count            to_little_endian_64-trusted get_deposit_count            > $@
