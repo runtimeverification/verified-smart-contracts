@@ -243,11 +243,13 @@ module VERIFICATION
   // Memory Reasoning
   // ########################
 
+/*
     // Merge
     rule storeRange(storeRange(M, MS0, MW0, #bufSeg(BUF, BS0, BW0)), MS1, MW1, #bufSeg(BUF, BS1, BW1))
         => storeRange(M, MS0, MW0 +Int MW1, #bufSeg(BUF, BS0, MW0 +Int MW1))
       requires #isBuf(BUF) andBool MW0 ==Int BW0 andBool MW1 ==Int BW1
        andBool MS1 ==Int MS0 +Int MW0 andBool BS1 ==Int BS0 +Int BW0
+*/
 
     // select/store key equality
 
