@@ -7,7 +7,6 @@ module COLLECTTOKEN-SPEC
     <exit-code> 1 </exit-code>
     <mode> NORMAL </mode>
     <schedule> BYZANTIUM </schedule>
-    <analysis> .Map </analysis> // not part of evm
 
     <ethereum>
       <evm>
@@ -34,7 +33,7 @@ module COLLECTTOKEN-SPEC
           <localMem> .Map => ( .Map[ RET_ADDR := #asByteStackInWidth(1, 32) ] _:Map ) </localMem>
           <pc> 0 => _ </pc>
           <gas> GASCAP => _ </gas>
-          <previousGas> _ => _ </previousGas>
+          <callGas> _ => _ </callGas>
 
           <static> false </static> // NOTE: non-static call
         </txExecState>
@@ -119,7 +118,6 @@ module COLLECTTOKEN-SPEC
     <exit-code> 1 </exit-code>
     <mode> NORMAL </mode>
     <schedule> BYZANTIUM </schedule>
-    <analysis> .Map </analysis> // not part of evm
     <ethereum>
       <evm>
         <output> _ </output>
@@ -144,7 +142,7 @@ module COLLECTTOKEN-SPEC
           <localMem> _ </localMem>
           <pc> 750 => 793 </pc>
           <gas> GASCAP => GASCAP -Int 114 </gas>
-          <previousGas> _ => _ </previousGas>
+          <callGas> _ => _ </callGas>
           <static> false </static> // NOTE: non-static call
         </txExecState>
         <substate>
@@ -209,7 +207,6 @@ module COLLECTTOKEN-SPEC
     <exit-code> 1 </exit-code>
     <mode> NORMAL </mode>
     <schedule> BYZANTIUM </schedule>
-    <analysis> .Map </analysis> // not part of evm
 
     <ethereum>
       <evm>
@@ -238,7 +235,7 @@ module COLLECTTOKEN-SPEC
           <localMem> _ </localMem>
           <pc> 498 => 545 </pc>
           <gas> GASCAP => GASCAP -Int (293 *Int (YEARCOUNT -Int INDEX)) -Int 26 </gas>
-          <previousGas> _ => _ </previousGas>
+          <callGas> _ => _ </callGas>
 
           <static> false </static> // NOTE: non-static call
         </txExecState>

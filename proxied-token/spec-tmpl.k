@@ -4,7 +4,6 @@
     <exit-code> 1 </exit-code>
     <mode> NORMAL </mode>
     <schedule> BYZANTIUM </schedule>
-    <analysis> .Map </analysis> // not part of evm
 
     <ethereum>
       <evm>
@@ -13,11 +12,11 @@
         <callStack> _ </callStack>
         <interimStates> _ </interimStates>
         <touchedAccounts> _ => _ </touchedAccounts>
-        
+
         <callState>
           <program> #asMapOpCodes(#dasmOpCodes(#parseByteStack({CODE}), BYZANTIUM)) </program>
           <programBytes> #parseByteStack({CODE}) </programBytes>
-          
+
           <id> PROXY_ID </id> // `this`
           <caller> {MSG_SENDER} </caller> // `msg.sender`
 
@@ -29,7 +28,7 @@
           <pc> 0 => _ </pc>
           <gas> 100000 => _ </gas>
           <memoryUsed> 0 => _ </memoryUsed>
-          <previousGas> _ => _ </previousGas>
+          <callGas> _ => _ </callGas>
 
           <static> false </static> // NOTE: non-static call
           <callDepth> CALL_DEPTH </callDepth>
@@ -78,9 +77,9 @@
             <acctID> PROXY_ID </acctID>
             <balance> PROXY_BALANCE </balance>
             <code> #parseByteStack({PROXY_CODE}) </code>
-            <storage> 
-              {STORAGE} 
-              _:Map 
+            <storage>
+              {STORAGE}
+              _:Map
             </storage>
             <origStorage> _ </origStorage>
             <nonce> _ </nonce>
@@ -113,7 +112,7 @@
     andBool #rangeAddress(ORIGIN_ID)
     andBool #rangeAddress(CREATOR_ID)
     andBool #rangeAddress(RANDOM_ID)
-    
+
     //
     andBool MASTER_COPY_ID =/=Int PROXY_ID
     andBool MASTER_COPY_ID =/=Int ORIGIN_ID
@@ -133,7 +132,7 @@
     andBool #rangeUInt(256, PROXY_BALANCE)
     andBool #rangeUInt(256, CREATOR_BALANCE)
     andBool #rangeUInt(256, RANDOM_BALANCE)
-    //  
+    //
     andBool 0 <=Int CALL_DEPTH andBool CALL_DEPTH <Int 1023
 
 {REQUIRES}
