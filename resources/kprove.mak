@@ -57,7 +57,7 @@ KEVM_REPO_DIR:=$(abspath $(BUILD_DIR)/evm-semantics)
 
 K_BIN:=$(abspath $(K_REPO_DIR)/k-distribution/target/release/k/bin)
 
-KPROVE:=$(K_BIN)/kprove -v --debug -d $(KEVM_REPO_DIR)/.build/java -m VERIFICATION --z3-impl-timeout 500 \
+KPROVE:=$(K_BIN)/kprove -v --debug -d $(KEVM_REPO_DIR)/.build/defn/java -m VERIFICATION --z3-impl-timeout 500 \
         --deterministic-functions --no-exc-wrap \
         --cache-func-optimized --no-alpha-renaming --format-failures --boundary-cells k,pc \
         --log-cells k,output,statusCode,localMem,pc,gas,wordStack,callData,accounts,memoryUsed,\#pc,\#result \
@@ -100,7 +100,7 @@ $(KEVM_REPO_DIR):
 		&& git reset --hard $(KEVM_VERSION) \
 		&& make tangle-deps \
 		&& make defn \
-		&& $(K_BIN)/kompile -v --debug --backend java -I .build/java -d .build/java --main-module ETHEREUM-SIMULATION --syntax-module ETHEREUM-SIMULATION .build/java/driver.k
+		&& $(K_BIN)/kompile -v --debug --backend java -I .build/defn/java -d .build/defn/java --main-module ETHEREUM-SIMULATION --syntax-module ETHEREUM-SIMULATION .build/defn/java/driver.k
 
 $(TANGLER):
 	git submodule update --init -- $(PANDOC_TANGLE_SUBMODULE)

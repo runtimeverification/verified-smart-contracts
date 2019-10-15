@@ -19,7 +19,7 @@ output_dir="$2"
 mkdir -p "$output_top_dir/$output_dir"
 touch "$output_top_dir/$output_dir/log"
 
-# Assuming an (exported) KEVM environmental variable. 
+# Assuming an (exported) KEVM environmental variable.
 # If you don't have one, uncomment this and set it here:
 
 # KEVM="/Users"
@@ -27,7 +27,7 @@ touch "$output_top_dir/$output_dir/log"
 run_proof() {
     touch "$output_top_dir/$output_dir/$file_name"
 
-    cmd_part1="kprove "$file_path" -d "${KEVM}/.build/java" -m VERIFICATION"
+    cmd_part1="kprove "$file_path" -d "${KEVM}/.build/defn/java" -m VERIFICATION"
     cmd_part2="&> "$output_top_dir/$output_dir/$file_name""
     cmd="$cmd_part1 ${options[@]} $cmd_part2"
 
