@@ -13,7 +13,6 @@ module BALANCEOF-SPEC
     <exit-code> 1 </exit-code>
     <mode> NORMAL </mode>
     <schedule> BYZANTIUM </schedule>
-    <analysis> .Map </analysis> // not part of evm
 
     <ethereum>
       <evm>
@@ -40,7 +39,7 @@ module BALANCEOF-SPEC
           <localMem> .Map => .Map[ RET_ADDR := #asByteStackInWidth(VALUE, 32) ] _:Map </localMem>
           <pc> 0 => _ </pc>
           <gas> 100000 => _ </gas>
-          <previousGas> _ => _ </previousGas>
+          <callGas> _ => _ </callGas>
 
           <static> false </static> // NOTE: non-static call
         </txExecState>
@@ -109,7 +108,6 @@ andBool 0 <=Int VALUE andBool VALUE <Int (2 ^Int 256)andBool OWNER =/=Int 0
     <exit-code> 1 </exit-code>
     <mode> NORMAL </mode>
     <schedule> BYZANTIUM </schedule>
-    <analysis> .Map </analysis> // not part of evm
 
     <ethereum>
       <evm>
@@ -136,7 +134,7 @@ andBool 0 <=Int VALUE andBool VALUE <Int (2 ^Int 256)andBool OWNER =/=Int 0
           <localMem> .Map => _ </localMem>
           <pc> 0 => _ </pc>
           <gas> 100000 => _ </gas>
-          <previousGas> _ => _ </previousGas>
+          <callGas> _ => _ </callGas>
 
           <static> false </static> // NOTE: non-static call
         </txExecState>

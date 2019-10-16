@@ -7,8 +7,8 @@
 $ cd evm-semantics
 $ make deps defn split-proof-tests
 $ export PATH=`pwd`/.build/k/k-distribution/target/release/k/bin:$PATH
-$ kompile --debug --backend java -I .build/java -d .build/java --main-module ETHEREUM-SIMULATION --syntax-module ETHEREUM-SIMULATION .build/java/driver.k
-$ kprove tests/proofs/specs/vyper-erc20/totalSupply-spec.k -d .build/java -m VERIFICATION --z3-executable
+$ kompile --debug --backend java -I .build/defn/java -d .build/defn/java --main-module ETHEREUM-SIMULATION --syntax-module ETHEREUM-SIMULATION .build/defn/java/driver.k
+$ kprove tests/proofs/specs/vyper-erc20/totalSupply-spec.k -d .build/defn/java -m VERIFICATION --z3-executable
 ```
 
 
@@ -24,7 +24,7 @@ $ kprove tests/proofs/specs/vyper-erc20/totalSupply-spec.k -d .build/java -m VER
    2. Enter
       * Main class: `org.kframework.main.Main`
       * VM options: `-Xms64m -Xmx4g -Xss32m -XX:+TieredCompilation -ea`
-      * Program arguments: `-kprove /path/to/spec.k -d .build/java -m VERIFICATION <additional-arguments>` see [kprove tutorial](https://github.com/runtimeverification/verified-smart-contracts/blob/master/resources/kprove-tutorial.md)
+      * Program arguments: `-kprove /path/to/spec.k -d .build/defn/java -m VERIFICATION <additional-arguments>` see [kprove tutorial](https://github.com/runtimeverification/verified-smart-contracts/blob/master/resources/kprove-tutorial.md)
       * Working dir: `/path/to/evm-semantics`
       * Env Variables:
         * `LD_LIBRARY_PATH` : `$LD_LIBRARY_PATH:$MODULE_DIR$/../k-distribution/target/release/k/lib/native/linux64`

@@ -25,7 +25,7 @@ Let's consider you have 3 path variables for home dir of the 3 projects: `$K_HOM
   $ cd $KEVM
   $ make tangle-deps  #only needed first time
   $ make defn
-  $ kompile --debug --backend java -I .build/java -d .build/java --main-module ETHEREUM-SIMULATION --syntax-module ETHEREUM-SIMULATION .build/java/driver.k
+  $ kompile --debug --backend java -I .build/defn/java -d .build/defn/java --main-module ETHEREUM-SIMULATION --syntax-module ETHEREUM-SIMULATION .build/defn/java/driver.k
 ```
 
 - To run a spec:
@@ -33,7 +33,7 @@ Let's consider you have 3 path variables for home dir of the 3 projects: `$K_HOM
   $ cd $VSC
   $ make all
     # or `make <specific project>`, like `make hobby-erc20`. Look into Makefile for available commands.
-  $ kprove -v --debug -d $KEVM/.build/java -m VERIFICATION --z3-impl-timeout 500 \
+  $ kprove -v --debug -d $KEVM/.build/defn/java -m VERIFICATION --z3-impl-timeout 500 \
         --deterministic-functions --no-exc-wrap \
         --cache-func-optimized --no-alpha-renaming --format-failures --boundary-cells k,pc \
         --log-cells k,output,statusCode,localMem,pc,gas,wordStack,callData,accounts,memoryUsed,#pc,#result \

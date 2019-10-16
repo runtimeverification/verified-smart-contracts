@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
 kprove --debugg \
---output-omit "<exit-code>" --output-omit "<mode>" --output-omit "<schedule>" --output-omit "<analysis>" \
+--output-omit "<exit-code>" --output-omit "<mode>" --output-omit "<schedule>" \
 --output-omit "<callStack>" --output-omit "<interimStates>" --output-omit "<touchedAccounts>" --output-omit "<program>" \
 --output-omit "<programBytes>" --output-omit "<id>" --output-omit "<caller>" --output-omit "<callData>" \
---output-omit "<callValue>" --output-omit "<memoryUsed>" --output-omit "<previousGas>" --output-omit "<static>" \
+--output-omit "<callValue>" --output-omit "<memoryUsed>" --output-omit "<callGas>" --output-omit "<static>" \
 --output-omit "<callDepth>" --output-omit "<substate>" --output-omit "<gasPrice>" --output-omit "<origin>" \
 --output-omit "<previousHash>" --output-omit "<ommersHash>" --output-omit "<coinbase>" --output-omit "<stateRoot>" \
 --output-omit "<transactionsRoot>" --output-omit "<receiptsRoot>" --output-omit "<logsBloom>" --output-omit "<difficulty>" \

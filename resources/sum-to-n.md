@@ -74,7 +74,7 @@ Proof Claims
 
 ### Static Configuration
 
-The first part of the claim is largely static (or abstracted away, like `<previousGas>`).
+The first part of the claim is largely static (or abstracted away, like `<callGas>`).
 
 ```{.k .sum-to-n}
     rule <k> #execute ... </k>
@@ -83,7 +83,7 @@ The first part of the claim is largely static (or abstracted away, like `<previo
          <callStack> .List </callStack>
          <memoryUsed> 0   </memoryUsed>
          <localMem> .Map </localMem>
-         <previousGas> _ => _ </previousGas>
+         <callGas> _ => _ </callGas>
          <program> sumTo(N) </program>
 ```
 
@@ -119,7 +119,7 @@ The circularity is in the same static environment as the overall proof-goal.
          <callStack> .List </callStack>
          <memoryUsed> 0   </memoryUsed>
          <localMem> .Map </localMem>
-         <previousGas> _ => _ </previousGas>
+         <callGas> _ => _ </callGas>
          <program> sumTo(N) </program>
 ```
 
