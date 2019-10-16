@@ -1,0 +1,9 @@
+  bash -x run.sh consensys.ini
+  bash -x run.sh zeppelin-new.ini
+  bash -x run.sh zeppelin.ini
+  bash -x run.sh vyper.ini
+  bash -x run.sh hkg.ini
+  bash -x run.sh hobby.ini
+ #bash -x run.sh hobby-buggy.ini
+  bash -x run.sh certora-buggy.ini
+  bash -x run.sh certora-fixed.ini
