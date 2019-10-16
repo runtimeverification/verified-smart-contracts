@@ -300,6 +300,12 @@ Below are the most common such range matching lemmas.
 
     rule 0 <=Int keccakIntList(_)             => true
     rule         keccakIntList(_) <Int pow256 => true
+
+    rule 0 <=Int N &Int X => true
+      requires 0 <=Int N
+
+    rule         N &Int X <Int pow256 => true
+      requires N <Int pow256
 ```
 
 Because lemmas are applied as plain K rewrite rule, they have to match exactly, without any deductive reasoning.
