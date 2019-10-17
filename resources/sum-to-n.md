@@ -13,24 +13,25 @@ requires "../lemmas.k"
 module VERIFICATION
     imports EDSL
     imports LEMMAS
+    imports EVM-ASSEMBLY
 
     rule #sizeWordStack ( WS , N:Int )
       => N +Int #sizeWordStack ( WS , 0 )
       requires N =/=K 0
       [lemma]
 
-    syntax Map ::= "sumTo" "(" Int ")" [function]
- // ---------------------------------------------
-    rule sumTo(N)
-      => #asMapOpCodes( PUSH(1, 0) ; PUSH(32, N)                // s = 0 ; n = N
-                      ; JUMPDEST                                // label:loop
-                      ; DUP(1) ; ISZERO ; PUSH(1, 52) ; JUMPI   // if n == 0, jump to end
-                      ; DUP(1) ; SWAP(2) ; ADD                  // s = s + n
-                      ; SWAP(1) ; PUSH(1, 1) ; SWAP(1) ; SUB    // n = n - 1
-                      ; PUSH(1, 35) ; JUMP                      // jump to loop
-                      ; JUMPDEST                                // label:end
-                      ; .OpCodes
-                      ) [macro]
+    syntax ByteArray ::= "sumToN" [function]
+ // ----------------------------------------
+    rule sumToN
+      => #asmOpCodes(PUSH(1, 0) ; SWAP(1)                   // s = 0 ; n = N
+                    ; JUMPDEST                              // label:loop
+                    ; DUP(1) ; ISZERO ; PUSH(1, 20) ; JUMPI // if n == 0, jump to end
+                    ; DUP(1) ; SWAP(2) ; ADD                // s = s + n
+                    ; SWAP(1) ; PUSH(1, 1) ; SWAP(1) ; SUB  // n = n - 1
+                    ; PUSH(1, 3) ; JUMP                     // jump to loop
+                    ; JUMPDEST                              // label:end
+                    ; .OpCodes
+                    ) [macro]
 endmodule
 ```
 
@@ -84,7 +85,8 @@ The first part of the claim is largely static (or abstracted away, like `<callGa
          <memoryUsed> 0   </memoryUsed>
          <localMem> .Map </localMem>
          <callGas> _ => _ </callGas>
-         <program> sumTo(N) </program>
+         <program> sumToN </program>
+         <jumpDests> #computeValidJumpDests(sumToN) </jumpDests>
 ```
 
 ### Main Claim
@@ -95,8 +97,8 @@ The first part of the claim is largely static (or abstracted away, like `<callGa
 -   `N` is sufficiently low that overflow will not occur in execution.
 
 ```{.k .sum-to-n}
-     <pc>        0  => 53                                </pc>
-     <wordStack> WS => 0 : N *Int (N +Int 1) /Int 2 : WS </wordStack>
+     <pc>        0  => 21                                </pc>
+     <wordStack> N : WS => 0 : N *Int (N +Int 1) /Int 2 : WS </wordStack>
      <gas>       G  => G -Int (52 *Int N +Int 27)        </gas>
 
   requires N >=Int 0
@@ -120,7 +122,8 @@ The circularity is in the same static environment as the overall proof-goal.
          <memoryUsed> 0   </memoryUsed>
          <localMem> .Map </localMem>
          <callGas> _ => _ </callGas>
-         <program> sumTo(N) </program>
+         <program> sumToN </program>
+         <jumpDests> #computeValidJumpDests(sumToN) </jumpDests>
 ```
 
 ### Circularity (Loop Invariant)
@@ -134,7 +137,7 @@ We specify the behaviour of the rest of the program any time it reaches the loop
 -   `S` and `I` are sufficiently low that overflow will not occur during execution.
 
 ```{.k .sum-to-n}
-     <pc> 35 => 53                         </pc>
+     <pc>  3 => 21                         </pc>
      <gas> G => G -Int (52 *Int I +Int 21) </gas>
 
      <wordStack> I : S                               : WS
