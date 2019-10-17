@@ -22,8 +22,8 @@ $(error SPEC_NAMES is not set)
 endif
 
 SPEC_INI?=spec.ini
-LOCAL_LEMMAS?=../resources/abstract-semantics-direct-gas.k ../resources/evm-direct-gas.k \
-              ../resources/evm-data-map-concrete.k verification.k
+LOCAL_LEMMAS?=$(RESOURCES)/abstract-semantics-direct-gas.k $(RESOURCES)/evm-direct-gas.k \
+              $(RESOURCES)/evm-data-map-concrete.k verification.k
 TMPLS?=module-tmpl.k spec-tmpl.k
 
 # additional options to kprove command
