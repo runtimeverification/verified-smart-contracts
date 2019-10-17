@@ -14,8 +14,8 @@
         <touchedAccounts> _ => _ </touchedAccounts>
 
         <callState>
-          <program> #asMapOpCodes(#dasmOpCodes(#parseByteStack({CODE}), {SCHEDULE})) </program>
-          <programBytes> #parseByteStack({CODE}) </programBytes>
+          <program> #parseByteStack({CODE}) </program>
+          <jumpDests> #computeValidJumpDests(#parseByteStack({CODE})) </jumpDests>
 
           <id> ACCT_ID </id> // contract owner
           <caller> CALLER_ID </caller> // who called this contract; in the begining, origin // msg.sender
@@ -42,25 +42,26 @@
 
         <gasPrice> _ </gasPrice>
         <origin> ORIGIN_ID </origin> // who fires tx
+        <blockhashes> _ </blockhashes>
+        <block>
+          <previousHash> _ </previousHash>
+          <ommersHash> _ </ommersHash>
+          <coinbase> _ </coinbase>
+          <stateRoot> _ </stateRoot>
+          <transactionsRoot> _ </transactionsRoot>
+          <receiptsRoot> _ </receiptsRoot>
+          <logsBloom> _ </logsBloom>
+          <difficulty> _ </difficulty>
+          <number> _ </number>
+          <gasLimit> _ </gasLimit>
+          <gasUsed> _ </gasUsed>
+          <timestamp> _ </timestamp>
+          <extraData> _ </extraData>
+          <mixHash> _ </mixHash>
+          <blockNonce> _ </blockNonce>
 
-        <previousHash> _ </previousHash>
-        <ommersHash> _ </ommersHash>
-        <coinbase> _ </coinbase>
-        <stateRoot> _ </stateRoot>
-        <transactionsRoot> _ </transactionsRoot>
-        <receiptsRoot> _ </receiptsRoot>
-        <logsBloom> _ </logsBloom>
-        <difficulty> _ </difficulty>
-        <number> _ </number>
-        <gasLimit> _ </gasLimit>
-        <gasUsed> _ </gasUsed>
-        <timestamp> _ </timestamp>
-        <extraData> _ </extraData>
-        <mixHash> _ </mixHash>
-        <blockNonce> _ </blockNonce>
-
-        <ommerBlockHeaders> _ </ommerBlockHeaders>
-        <blockhash> _ </blockhash>
+          <ommerBlockHeaders> _ </ommerBlockHeaders>
+        </block>
       </evm>
 
       <network>

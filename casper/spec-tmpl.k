@@ -12,8 +12,9 @@
         <interimStates> _ </interimStates>
         <touchedAccounts> _ => _ </touchedAccounts>
         <callState>
-          <program> #asMapOpCodes(#dasmOpCodes(#parseByteStack({CODE}), BYZANTIUM)) </program>
-          <programBytes> #parseByteStack({CODE}) </programBytes>
+          <program> #parseByteStack({CODE}) </program>
+          <jumpDests> #computeValidJumpDests(#parseByteStack({CODE})) </jumpDests>
+
           <id> CASPER_ACCT_ID </id> // this
           <caller> CALLER_ID </caller> // msg.sender
           <callData> {CALLDATA} </callData> // msg.data
@@ -34,23 +35,25 @@
         </substate>
         <gasPrice> _ </gasPrice>
         <origin> ORIGIN_ID </origin> // tx.origin
-        <previousHash> _ </previousHash>
-        <ommersHash> _ </ommersHash>
-        <coinbase> {COINBASE} </coinbase> // block.coinbase
-        <stateRoot> _ </stateRoot>
-        <transactionsRoot> _ </transactionsRoot>
-        <receiptsRoot> _ </receiptsRoot>
-        <logsBloom> _ </logsBloom>
-        <difficulty> _ </difficulty>
-        <number> BLOCK_NUM </number> // block.number
-        <gasLimit> _ </gasLimit>
-        <gasUsed> _ </gasUsed>
-        <timestamp> NOW </timestamp> // now = block.timestamp
-        <extraData> _ </extraData>
-        <mixHash> _ </mixHash>
-        <blockNonce> _ </blockNonce>
-        <ommerBlockHeaders> _ </ommerBlockHeaders>
-        <blockhash> BLOCK_HASHES </blockhash> // block.blockhash
+        <blockhashes> BLOCK_HASHES </blockhashes> // block.blockhash
+        <block>
+          <previousHash> _ </previousHash>
+          <ommersHash> _ </ommersHash>
+          <coinbase> {COINBASE} </coinbase> // block.coinbase
+          <stateRoot> _ </stateRoot>
+          <transactionsRoot> _ </transactionsRoot>
+          <receiptsRoot> _ </receiptsRoot>
+          <logsBloom> _ </logsBloom>
+          <difficulty> _ </difficulty>
+          <number> BLOCK_NUM </number> // block.number
+          <gasLimit> _ </gasLimit>
+          <gasUsed> _ </gasUsed>
+          <timestamp> NOW </timestamp> // now = block.timestamp
+          <extraData> _ </extraData>
+          <mixHash> _ </mixHash>
+          <blockNonce> _ </blockNonce>
+          <ommerBlockHeaders> _ </ommerBlockHeaders>
+        </block>
       </evm>
       <network>
         <activeAccounts> {ACTIVEACCOUNTS} </activeAccounts>
