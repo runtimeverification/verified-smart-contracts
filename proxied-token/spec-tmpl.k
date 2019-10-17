@@ -14,8 +14,8 @@
         <touchedAccounts> _ => _ </touchedAccounts>
 
         <callState>
-          <program> #asMapOpCodes(#dasmOpCodes(#parseByteStack({CODE}), BYZANTIUM)) </program>
-          <programBytes> #parseByteStack({CODE}) </programBytes>
+          <program> #parseByteStack({CODE}) </program>
+          <jumpDests> #computeValidJumpDests(#parseByteStack({CODE})) </jumpDests>
 
           <id> PROXY_ID </id> // `this`
           <caller> {MSG_SENDER} </caller> // `msg.sender`
@@ -42,25 +42,26 @@
 
         <gasPrice> _ </gasPrice>
         <origin> ORIGIN_ID </origin> // tx.origin
+        <blockhashes> _ </blockhashes> // block.blockhash
+        <block>
+          <previousHash> _ </previousHash>
+          <ommersHash> _ </ommersHash>
+          <coinbase> _ </coinbase> // block.coinbase
+          <stateRoot> _ </stateRoot>
+          <transactionsRoot> _ </transactionsRoot>
+          <receiptsRoot> _ </receiptsRoot>
+          <logsBloom> _ </logsBloom>
+          <difficulty> _ </difficulty>
+          <number> _ </number> // block.number
+          <gasLimit> _ </gasLimit>
+          <gasUsed> _ </gasUsed>
+          <timestamp> _ </timestamp> // now = block.timestamp
+          <extraData> _ </extraData>
+          <mixHash> _ </mixHash>
+          <blockNonce> _ </blockNonce>
 
-        <previousHash> _ </previousHash>
-        <ommersHash> _ </ommersHash>
-        <coinbase> _ </coinbase> // block.coinbase
-        <stateRoot> _ </stateRoot>
-        <transactionsRoot> _ </transactionsRoot>
-        <receiptsRoot> _ </receiptsRoot>
-        <logsBloom> _ </logsBloom>
-        <difficulty> _ </difficulty>
-        <number> _ </number> // block.number
-        <gasLimit> _ </gasLimit>
-        <gasUsed> _ </gasUsed>
-        <timestamp> _ </timestamp> // now = block.timestamp
-        <extraData> _ </extraData>
-        <mixHash> _ </mixHash>
-        <blockNonce> _ </blockNonce>
-
-        <ommerBlockHeaders> _ </ommerBlockHeaders>
-        <blockhash> _ </blockhash> // block.blockhash
+          <ommerBlockHeaders> _ </ommerBlockHeaders>
+        </block>
       </evm>
       <network>
         <activeAccounts> SetItem(MASTER_COPY_ID) SetItem(PROXY_ID) SetItem(CREATOR_ID) _:Set </activeAccounts>
