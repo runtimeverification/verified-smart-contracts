@@ -10,4 +10,4 @@
     $1 >erc20-spec.ini
   make clean
   make
-  make -i -j 8 test
+  make -i -j "$(nproc)" test
