@@ -4,7 +4,7 @@ rule
   <exit-code> 1 </exit-code>
   <mode> NORMAL </mode>
   <schedule> {SCHEDULE} </schedule>
-  <analysis> .Map </analysis> // not part of evm
+
   <ethereum>
     <evm>
       <output> {OUTPUT} </output>
@@ -24,7 +24,7 @@ rule
         <pc> 0 => _ </pc>
         <gas> {GAS} </gas>
         <memoryUsed> 0 => _ </memoryUsed>
-        <previousGas> _ => _ </previousGas>
+        <callGas> _ => _ </callGas>
         <static> false </static> // NOTE: non-static call
         <callDepth> CALL_DEPTH </callDepth>
       </callState>
