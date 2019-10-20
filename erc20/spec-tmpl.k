@@ -75,7 +75,7 @@
             <origStorage> {ORIGSTORAGE} </origStorage>
             <nonce> _ </nonce>
           </account>
-       // ... // TODO: fix
+          ...
         </accounts>
 
         <txOrder> _ </txOrder>
@@ -83,9 +83,9 @@
         <messages> _ </messages>
       </network>
     </ethereum>
-    requires 0 <=Int ACCT_ID    andBool ACCT_ID    <Int (2 ^Int 160)
-     andBool 0 <=Int CALLER_ID  andBool CALLER_ID  <Int (2 ^Int 160)
-     andBool 0 <=Int ORIGIN_ID  andBool ORIGIN_ID  <Int (2 ^Int 160)
-     andBool 0 <=Int CALL_DEPTH andBool CALL_DEPTH <Int 1024
+    requires #rangeAddress(ACCT_ID)
+     andBool #rangeAddress(CALLER_ID)
+     andBool #rangeAddress(ORIGIN_ID)
+     andBool #range(0 <= CALL_DEPTH < 1024)
      {REQUIRES}
      {ENSURES}
