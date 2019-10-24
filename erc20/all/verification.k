@@ -95,5 +95,7 @@ module VERIFICATION
 
     rule A -Int B +Int B => A
     rule A +Int B -Int B => A
+    rule A +Int B -Int A => B
+    rule A +Int (B -Int A) => B
 
 endmodule
