@@ -1,13 +1,16 @@
+#!/bin/bash
+
+NPROC=$(nproc)
+
   [[ $# -eq 1 ]] || { echo "Illegal number of parameters"; exit; }
-  rm -f erc20-spec.ini
-  cat root.ini \
-    totalSupply.ini \
-    balanceOf.ini \
-    allowance.ini \
-    approve.ini \
-    transfer.ini \
-    transferFrom.ini \
-    $1 >erc20-spec.ini
-  make clean
-  make
-  make -i -j "$(nproc)" test
+  rm -f .make-internal/erc20-spec.ini
+  cat fragments/root.ini \
+    fragments/totalSupply.ini \
+    fragments/balanceOf.ini \
+    fragments/allowance.ini \
+    fragments/approve.ini \
+    fragments/transfer.ini \
+    fragments/transferFrom.ini \
+    $1 >.make-internal/erc20-spec.ini
+  make -C .make-internal clean all
+  make -C .make-internal -i -j "$NPROC" test
