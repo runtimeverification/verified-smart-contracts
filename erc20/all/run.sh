@@ -1,6 +1,6 @@
 #!/bin/bash
 
-NPROC=$(nproc)
+NPROCS=2
 
   [[ $# -eq 1 ]] || { echo "Illegal number of parameters"; exit; }
   rm -f .make-internal/erc20-spec.ini
@@ -13,4 +13,4 @@ NPROC=$(nproc)
     fragments/transferFrom.ini \
     $1 >.make-internal/erc20-spec.ini
   make -C .make-internal clean all
-  make -C .make-internal -i -j "$NPROC" test
+  make -C .make-internal -i -j "NPROCS" test
