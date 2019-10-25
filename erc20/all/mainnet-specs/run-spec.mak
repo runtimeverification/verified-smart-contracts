@@ -1,15 +1,11 @@
-BUILD_DIR:=../../../.build
+ROOT_DIR:=$(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../../..)
+RESOURCES_DIR:=$(ROOT_DIR)/resources
 
 LOCAL_LEMMAS:=../verification.k \
-			  ../../../resources/abstract-semantics-segmented-gas.k \
-			  ../../../resources/evm-symbolic.k \
-			  ../../../resources/evm-data-map-symbolic.k
+			  $(RESOURCES_DIR)/abstract-semantics-segmented-gas.k \
+			  $(RESOURCES_DIR)/evm-symbolic.k \
+			  $(RESOURCES_DIR)/evm-data-map-symbolic.k
 TMPLS:=../../module-tmpl.k ../spec-tmpl.k
-
-SPEC_GROUP:=erc20
-SPEC_INI:=erc20-spec.ini
-
-KPROVE_OPTS:=--smt-prelude $(abspath $(dir $(abspath $(lastword $(MAKEFILE_LIST))))/../../../resources/evm.smt2)
 
 SPEC_NAMES:=totalSupply \
             balanceOf \
@@ -24,4 +20,6 @@ SPEC_NAMES:=totalSupply \
             transferFrom-success-self \
             transferFrom-failure
 
-include ../../../resources/kprove.mak
+KPROVE_OPTS:=--smt-prelude $(ROOT_DIR)/resources/evm.smt2
+
+include $(RESOURCES_DIR)/kprove.mak
