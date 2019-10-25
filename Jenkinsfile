@@ -5,6 +5,7 @@ pipeline {
       additionalBuildArgs '--build-arg USER_ID=$(id -u) --build-arg GROUP_ID=$(id -g)'
     }
   }
+
   stages {
     stage("Init title") {
       when { changeRequest() }
@@ -15,7 +16,6 @@ pipeline {
       }
     }
 /*    stage('Check revisions') {
-      when { changeRequest() }
       steps {
         ansiColor('xterm') {
           sh '''
@@ -34,20 +34,53 @@ pipeline {
       }
     }
 */
-    stage('Run Proofs') {
-      when { changeRequest() }
+    stage('Set vars') {
       steps {
-        ansiColor('xterm') {
-          sh '''
-            nprocs=$(nproc)
-            [ "$nprocs" -gt '6' ] && nprocs='6'
-            export K_OPTS="-Xmx12g -Xss48m"
-            make jenkins MODE=jenkins NPROCS="$nprocs"
-
-          '''
+        script {
+          env.K_OPTS = "-Xmx12g -Xss48m"
+          env.NPROCS = sh(script: 'nproc', returnStdout: true)
+          if (env.NPROCS.trim().toInteger() > 6) {
+            env.NPROCS = "6"
+          }
         }
+        sh 'printenv'
       }
     }
+    stage('Dependencies') {
+      steps { ansiColor('xterm') {
+          sh 'make -C resources deps'
+      } }
+    }
+    stage('Minimal') {
+      steps { ansiColor('xterm') {
+          sh ' make jenkins MODE=MINIMAL NPROCS="$NPROCS" '
+      } }
+    }
+    stage('KTest') {
+      steps { ansiColor('xterm') {
+          sh ' make jenkins MODE=KTEST NPROCS="$NPROCS" '
+      } }
+    }
+    stage('ERC20') {
+      steps { ansiColor('xterm') {
+          sh ' make jenkins MODE=ERC20 NPROCS="$NPROCS" '
+      } }
+    }
+    stage('Gnosis') {
+      steps { ansiColor('xterm') {
+          sh ' make jenkins MODE=GNOSIS NPROCS="$NPROCS" '
+      } }
+    }
+    stage('Bihu') {
+      steps { ansiColor('xterm') {
+          sh ' make jenkins MODE=BIHU NPROCS="$NPROCS" '
+      } }
+    }
+/*    stage('ERC20 mainnet') {
+      steps { ansiColor('xterm') {
+          sh ' make -C erc20/all/mainnet-specs concat-test NPROCS="$NPROCS" '
+      } }
+    }*/
     stage('Check K revision') {
       steps {
         ansiColor('xterm') {
