@@ -49,8 +49,10 @@ RESOURCES:=$(ROOT)/resources
 
 SPECS_DIR:=$(ROOT)/specs
 
-K_VERSION   :=$(shell cat $(BUILD_DIR)/.k.rev)
-KEVM_VERSION:=$(shell cat $(BUILD_DIR)/.kevm.rev)
+K_VERSION_FILE   :=$(BUILD_DIR)/.k.rev
+KEVM_VERSION_FILE:=$(BUILD_DIR)/.kevm.rev
+K_VERSION        :=$(shell cat $(K_VERSION_FILE))
+KEVM_VERSION     :=$(shell cat $(KEVM_VERSION_FILE))
 
 K_REPO_DIR:=$(abspath $(BUILD_DIR)/k)
 KEVM_REPO_DIR:=$(abspath $(BUILD_DIR)/evm-semantics)
@@ -72,13 +74,14 @@ SPEC_FILES:=$(patsubst %,$(SPECS_DIR)/$(SPEC_GROUP)/%-spec.k,$(SPEC_NAMES))
 PANDOC_TANGLE_SUBMODULE:=$(ROOT)/.build/pandoc-tangle
 TANGLER:=$(PANDOC_TANGLE_SUBMODULE)/tangle.lua
 LUA_PATH:=$(PANDOC_TANGLE_SUBMODULE)/?.lua;;
+export TANGLER
 export LUA_PATH
 
 #
 # Dependencies
 #
 
-.PHONY: all clean clean-deps deps split-proof-tests test $(SPECS_DIR)/$(SPEC_GROUP)
+.PHONY: all clean clean-deps deps deps-tangle deps-k deps-kevm split-proof-tests test
 
 all: deps split-proof-tests
 
@@ -88,45 +91,58 @@ clean:
 clean-deps:
 	rm -rf $(SPECS_DIR) $(K_REPO_DIR) $(KEVM_REPO_DIR)
 
-deps: $(K_REPO_DIR) $(KEVM_REPO_DIR) $(TANGLER)
+deps: deps-tangle deps-k deps-kevm
+deps-tangle: $(PANDOC_TANGLE_SUBMODULE)/submodule.timestamp
+deps-k:      $(K_REPO_DIR)/mvn.timestamp
+deps-kevm:   $(KEVM_REPO_DIR)/make.timestamp
 
-$(K_REPO_DIR):
-	git clone $(K_REPO_URL) $(K_REPO_DIR)
+%/submodule.timestamp:
+	git submodule update --init --recursive -- $*
+	touch $@
+
+$(K_REPO_DIR)/mvn.timestamp: $(K_VERSION_FILE) | $(K_REPO_DIR)
 	cd $(K_REPO_DIR) \
+		&& git fetch \
 		&& git reset --hard $(K_VERSION) \
 		&& git submodule update --init --recursive --remote \
 		&& mvn package -DskipTests -Dllvm.backend.skip -Dhaskell.backend.skip
+	touch $@
 
-$(KEVM_REPO_DIR):
-	git clone $(KEVM_REPO_URL) $(KEVM_REPO_DIR)
+$(K_REPO_DIR):
+	git clone $(K_REPO_URL) $(K_REPO_DIR)
+
+$(KEVM_REPO_DIR)/make.timestamp: $(KEVM_VERSION_FILE) $(K_REPO_DIR)/mvn.timestamp | $(KEVM_REPO_DIR)
 	cd $(KEVM_REPO_DIR) \
+		&& git fetch \
 		&& git clean -fdx \
 		&& git reset --hard $(KEVM_VERSION) \
 		&& make tangle-deps \
 		&& make defn \
 		&& $(K_BIN)/kompile -v --debug --backend java -I .build/defn/java -d .build/defn/java --main-module ETHEREUM-SIMULATION --syntax-module ETHEREUM-SIMULATION .build/defn/java/driver.k
+	touch $@
 
-$(TANGLER):
-	git submodule update --init -- $(PANDOC_TANGLE_SUBMODULE)
+$(KEVM_REPO_DIR):
+	git clone $(KEVM_REPO_URL) $(KEVM_REPO_DIR)
 
 #
 # Specs
 #
 
-split-proof-tests: $(SPECS_DIR)/$(SPEC_GROUP) $(dir $(SPECS_DIR)/$(SPEC_GROUP))/lemmas.k $(SPEC_FILES)
+split-proof-tests: $(SPECS_DIR)/$(SPEC_GROUP)/lemmas.timestamp $(dir $(SPECS_DIR)/$(SPEC_GROUP))/lemmas.k $(SPEC_FILES)
 
-$(SPECS_DIR)/$(SPEC_GROUP): $(LOCAL_LEMMAS)
-	mkdir -p $@
+$(SPECS_DIR)/$(SPEC_GROUP)/lemmas.timestamp: $(LOCAL_LEMMAS)
+	mkdir -p $(SPECS_DIR)/$(SPEC_GROUP)
 ifneq ($(strip $(LOCAL_LEMMAS)),)
-	cp $(LOCAL_LEMMAS) $@
+	cp $(LOCAL_LEMMAS) $(SPECS_DIR)/$(SPEC_GROUP)
 endif
+	touch $@
 
 ifneq ($(wildcard $(SPEC_INI:.ini=.md)),)
-$(SPEC_INI): $(SPEC_INI:.ini=.md) $(TANGLER)
+$(SPEC_INI): $(SPEC_INI:.ini=.md) $(PANDOC_TANGLE_SUBMODULE)/submodule.timestamp
 	pandoc --from markdown --to "$(TANGLER)" --metadata=code:".ini" $< > $@
 endif
 
-%/lemmas.k: $(RESOURCES)/lemmas.md $(TANGLER)
+%/lemmas.k: $(RESOURCES)/lemmas.md $(PANDOC_TANGLE_SUBMODULE)/submodule.timestamp
 	pandoc --from markdown --to "$(TANGLER)" --metadata=code:".k" $< > $@
 
 $(SPECS_DIR)/$(SPEC_GROUP)/%-spec.k: $(TMPLS) $(SPEC_INI)
