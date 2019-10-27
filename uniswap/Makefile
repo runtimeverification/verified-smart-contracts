@@ -3,9 +3,6 @@ BUILD_DIR:=.build
 LOCAL_LEMMAS:=abstract-semantics.k verification.k
 TMPLS:=module-tmpl.k spec-tmpl.k
 
-SPEC_GROUP:=uniswap
-SPEC_INI:=uniswap-spec.ini
-
 SPEC_NAMES:=addLiquidity-1 \
             addLiquidity-2 \
             removeLiquidity \

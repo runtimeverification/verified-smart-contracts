@@ -1,13 +1,8 @@
-BUILD_DIR:=../../.build
-
 LOCAL_LEMMAS:=../verification.k \
 			  ../../resources/abstract-semantics-segmented-gas.k \
 			  ../../resources/evm-symbolic.k \
 			  ../../resources/evm-data-map-symbolic.k
 TMPLS:=../module-tmpl.k ../spec-tmpl.k
-
-SPEC_GROUP:=vyper-erc20
-SPEC_INI:=vyper-erc20-spec.ini
 
 KPROVE_OPTS:=--smt-prelude $(abspath $(dir $(abspath $(lastword $(MAKEFILE_LIST))))/../../resources/evm.smt2)
 

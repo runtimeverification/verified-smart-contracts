@@ -1,9 +1,6 @@
 BUILD_DIR:=../erc20/.build
 LOCAL_LEMMAS:=abstract-semantics.k verification.k
 
-SPEC_GROUP:=casper
-SPEC_INI:=casper-spec.ini
-
 SPEC_NAMES:=recommended_source_epoch \
             recommended_target_hash-success \
             recommended_target_hash-failure-11 \

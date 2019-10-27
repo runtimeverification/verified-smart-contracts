@@ -1,8 +1,5 @@
 BUILD_DIR:=../erc20/.build
 
-SPEC_GROUP:=proxied-token
-SPEC_INI:=proxied-token-spec.ini
-
 SPEC_NAMES:=proxyType-success \
             proxyType-failure \
             implementation-success \
