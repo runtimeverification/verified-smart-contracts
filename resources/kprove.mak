@@ -57,7 +57,11 @@ KEVM_REPO_DIR:=$(abspath $(BUILD_DIR)/evm-semantics)
 
 K_BIN:=$(abspath $(K_REPO_DIR)/k-distribution/target/release/k/bin)
 
-KPROVE:=$(K_BIN)/kprove -v --debug -d $(KEVM_REPO_DIR)/.build/defn/java -m VERIFICATION --z3-impl-timeout 500 \
+TIMEOUT?=30m
+TIMEOUT_PREFIX:=timeout -s SIGINT -k 10s --foreground $(TIMEOUT)
+
+KPROVE:=$(TIMEOUT_PREFIX) $(K_BIN)/kprove -v --debug -d $(KEVM_REPO_DIR)/.build/defn/java -m VERIFICATION \
+        --z3-impl-timeout 500 --shutdown-wait-time 5000 \
         --deterministic-functions --no-exc-wrap \
         --cache-func-optimized --no-alpha-renaming --format-failures --boundary-cells k,pc \
         --log-cells k,output,statusCode,localMem,pc,gas,wordStack,callData,accounts,memoryUsed,\#pc,\#result \
@@ -74,7 +78,7 @@ export LUA_PATH
 # Dependencies
 #
 
-.PHONY: all clean clean-deps deps split-proof-tests test
+.PHONY: all clean clean-deps deps split-proof-tests test $(SPECS_DIR)/$(SPEC_GROUP)
 
 all: deps split-proof-tests
 
@@ -109,7 +113,7 @@ $(TANGLER):
 # Specs
 #
 
-split-proof-tests: $(SPECS_DIR)/$(SPEC_GROUP) $(SPECS_DIR)/lemmas.k $(SPEC_FILES)
+split-proof-tests: $(SPECS_DIR)/$(SPEC_GROUP) $(dir $(SPECS_DIR)/$(SPEC_GROUP))/lemmas.k $(SPEC_FILES)
 
 $(SPECS_DIR)/$(SPEC_GROUP): $(LOCAL_LEMMAS)
 	mkdir -p $@
@@ -122,7 +126,7 @@ $(SPEC_INI): $(SPEC_INI:.ini=.md) $(TANGLER)
 	pandoc --from markdown --to "$(TANGLER)" --metadata=code:".ini" $< > $@
 endif
 
-$(SPECS_DIR)/lemmas.k: $(RESOURCES)/lemmas.md $(TANGLER)
+%/lemmas.k: $(RESOURCES)/lemmas.md $(TANGLER)
 	pandoc --from markdown --to "$(TANGLER)" --metadata=code:".k" $< > $@
 
 $(SPECS_DIR)/$(SPEC_GROUP)/%-spec.k: $(TMPLS) $(SPEC_INI)
