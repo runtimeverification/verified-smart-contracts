@@ -1,4 +1,4 @@
-BUILD_DIR:=../.build
+#BUILD_DIR:=../.build
 
 LOCAL_LEMMAS:=verification.k \
 			  ../../resources/abstract-semantics-segmented-gas.k \
