@@ -1,3 +1,6 @@
+# Hack to have specs/uniswap/lemmas.k separate from specs/lemmas.k
+SPEC_GROUP:=uniswap/uniswap
+
 BUILD_DIR:=.build
 
 LOCAL_LEMMAS:=abstract-semantics.k verification.k
