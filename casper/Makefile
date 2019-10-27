@@ -1,4 +1,4 @@
-BUILD_DIR:=../erc20/.build
+#BUILD_DIR:=../erc20/.build
 LOCAL_LEMMAS:=abstract-semantics.k verification.k
 
 SPEC_NAMES:=recommended_source_epoch \

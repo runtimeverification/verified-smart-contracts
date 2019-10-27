@@ -1,4 +1,4 @@
-BUILD_DIR:=../erc20/.build
+#BUILD_DIR:=../erc20/.build
 
 SPEC_INI:=forwardToHotWallet-spec.ini
 
