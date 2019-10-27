@@ -91,7 +91,7 @@ export LUA_PATH
 # Dependencies
 #
 
-.PHONY: all clean clean-deps clean-k clean-kevm deps deps-tangle deps-k deps-kevm split-proof-tests test
+.PHONY: all clean clean-deps clean-k clean-kevm clean-kevm-cache deps deps-tangle deps-k deps-kevm split-proof-tests test
 
 all: deps split-proof-tests
 
@@ -103,6 +103,8 @@ clean-k:
 	rm -rf $(K_REPO_DIR)
 clean-kevm:
 	rm -rf $(KEVM_REPO_DIR)
+clean-kevm-cache:
+	rm -rf $(KEVM_REPO_DIR)/.build/defn/java/driver-kompiled/cache.bin
 
 deps: deps-tangle deps-k deps-kevm
 deps-tangle: $(PANDOC_TANGLE_SUBMODULE)/submodule.timestamp
