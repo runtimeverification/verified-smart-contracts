@@ -51,7 +51,7 @@ pipeline {
           sh 'make -C resources deps'
       } }
     }
-    stage('Minimal') {
+/*    stage('Minimal') {
       steps { ansiColor('xterm') {
           sh ' make jenkins MODE=MINIMAL NPROCS="$NPROCS" '
       } }
@@ -75,12 +75,12 @@ pipeline {
       steps { ansiColor('xterm') {
           sh ' make jenkins MODE=BIHU NPROCS="$NPROCS" '
       } }
-    }
-/*    stage('ERC20 mainnet') {
+    }*/
+    stage('ERC20 mainnet') {
       steps { ansiColor('xterm') {
           sh ' make -C erc20/all/mainnet-specs test NPROCS="$NPROCS" TIMEOUT=30m SHUTDOWN_WAIT_TIME=5m'
       } }
-    }*/
+    }
     stage('Check K revision') {
       steps {
         ansiColor('xterm') {
