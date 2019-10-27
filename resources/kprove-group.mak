@@ -40,11 +40,10 @@ NPROCS?=1
 .PHONY: jenkins
 
 # K bug workaround: Because KEVM parse cache is shared between projects, rules with equal body but different attributes will collide.
-# The only reason why we need clean-kevm below.
+# That's why we need clean-kevm-cache below.
 jenkins:
 	set -e; \
 	for i in $(SUBDIRS); do \
-		$(MAKE) -C $$i all; \
+		$(MAKE) -C $$i clean-kevm-cache all; \
 		$(MAKE) -C $$i test -j$(NPROCS); \
-		$(MAKE) -C $$i clean-kevm; \
 	done
