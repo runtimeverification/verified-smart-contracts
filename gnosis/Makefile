@@ -1,5 +1,3 @@
-BUILD_DIR:=../.build
-
 LOCAL_LEMMAS:=verification.k \
 			  abstract-semantics.k \
 			  ../resources/abstract-semantics-segmented-gas.k \
@@ -7,9 +5,6 @@ LOCAL_LEMMAS:=verification.k \
 			  ../resources/evm-data-map-symbolic.k \
 			  ../resources/ecrec-symbolic.k
 TMPLS:=module-tmpl.k spec-tmpl.k
-
-SPEC_GROUP:=gnosis
-SPEC_INI:=gnosis-spec.ini
 
 KPROVE_OPTS:=--smt-prelude $(abspath $(dir $(abspath $(lastword $(MAKEFILE_LIST))))/evm.smt2)
 

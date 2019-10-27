@@ -1,10 +1,5 @@
-BUILD_DIR:=../../.build
-
 LOCAL_LEMMAS:=../abstract-semantics.k ../verification.k ../../resources/abstract-semantics-segmented-gas.k
 TMPLS:=../module-tmpl.k ../spec-tmpl.k
-
-SPEC_GROUP:=gnosis-bmc
-SPEC_INI:=gnosis-bmc-spec.ini
 
 KPROVE_OPTS:=--smt-prelude $(abspath $(dir $(abspath $(lastword $(MAKEFILE_LIST))))/../evm.smt2)
 

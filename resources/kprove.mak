@@ -1,9 +1,21 @@
 #
+# VSC-wide Settings
+#
+
+# path to this file
+THIS_FILE:=$(abspath $(lastword $(MAKEFILE_LIST)))
+# path to root directory
+ROOT:=$(abspath $(dir $(THIS_FILE))/../)
+
+RESOURCES:=$(ROOT)/resources
+SPECS_DIR:=$(ROOT)/specs
+
+#
 # Parameters
 #
 
 # path to a directory that contains .k.rev and .kevm.rev
-BUILD_DIR?=.build
+BUILD_DIR?=$(ROOT)/.build
 
 # check if the build directory exists (note: $(wildcard $(BUILD_DIR)) is not enough since it doesn't check if it is a directory)
 ifeq ($(wildcard $(BUILD_DIR)/.),)
@@ -13,15 +25,21 @@ endif
 K_REPO_URL?=https://github.com/kframework/k
 KEVM_REPO_URL?=https://github.com/kframework/evm-semantics
 
+# Current dir path suffix after $(ROOT), if $(ROOT) is prefix of $(CURDIR)
+SPEC_GROUP?=$(strip $(patsubst $(ROOT)/%, %, $(filter $(ROOT)/%, $(CURDIR))))
 ifndef SPEC_GROUP
 $(error SPEC_GROUP is not set)
+endif
+
+SPEC_INI?=$(strip $(wildcard *-spec.ini))
+ifneq ($(words $(SPEC_INI)), 1)
+$(error SPEC_INI should have 1 element. Actual value: $(SPEC_INI))
 endif
 
 ifndef SPEC_NAMES
 $(error SPEC_NAMES is not set)
 endif
 
-SPEC_INI?=spec.ini
 LOCAL_LEMMAS?=../resources/abstract-semantics-direct-gas.k ../resources/evm-direct-gas.k \
               ../resources/evm-data-map-concrete.k verification.k
 TMPLS?=module-tmpl.k spec-tmpl.k
@@ -36,18 +54,11 @@ ifdef DEBUG
 KPROVE_OPTS+=--debug-z3-queries --log-rules
 endif
 
+TIMEOUT?=30m
+
 #
 # Settings
 #
-
-# path to this file
-THIS_FILE:=$(abspath $(lastword $(MAKEFILE_LIST)))
-# path to root directory
-ROOT:=$(abspath $(dir $(THIS_FILE))/../)
-
-RESOURCES:=$(ROOT)/resources
-
-SPECS_DIR:=$(ROOT)/specs
 
 K_VERSION_FILE   :=$(BUILD_DIR)/.k.rev
 KEVM_VERSION_FILE:=$(BUILD_DIR)/.kevm.rev
@@ -59,7 +70,6 @@ KEVM_REPO_DIR:=$(abspath $(BUILD_DIR)/evm-semantics)
 
 K_BIN:=$(abspath $(K_REPO_DIR)/k-distribution/target/release/k/bin)
 
-TIMEOUT?=30m
 TIMEOUT_PREFIX:=timeout -s SIGINT -k 10s --foreground $(TIMEOUT)
 
 KPROVE:=$(TIMEOUT_PREFIX) $(K_BIN)/kprove -v --debug -d $(KEVM_REPO_DIR)/.build/defn/java -m VERIFICATION \

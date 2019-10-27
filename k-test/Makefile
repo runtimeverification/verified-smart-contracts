@@ -11,9 +11,6 @@ LOCAL_LEMMAS:=verification.k \
 # Just to have the simplest initial config
 TMPLS:=../gnosis/module-tmpl.k spec-tmpl.k
 
-SPEC_GROUP:=k-test
-SPEC_INI:=k-test-spec.ini
-
 MAKEFILE_PATH := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 KPROVE_OPTS:=--smt-prelude $(MAKEFILE_PATH)/smt-prelude.smt2
 

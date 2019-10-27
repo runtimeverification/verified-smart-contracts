@@ -1,6 +1,5 @@
 BUILD_DIR:=../erc20/.build
 
-SPEC_GROUP:=bihu
 SPEC_INI:=forwardToHotWallet-spec.ini
 
 SPEC_NAMES:=collectToken \

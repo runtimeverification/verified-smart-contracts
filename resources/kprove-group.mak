@@ -39,6 +39,8 @@ NPROCS?=1
 
 .PHONY: jenkins
 
+# If KEVM parse cache is shared between projects, differences in rule attributes in otherwise equal rules might not be detected.
+# The only reason why we need clean-deps below.
 jenkins:
 	set -e; \
 	for i in $(SUBDIRS); do \

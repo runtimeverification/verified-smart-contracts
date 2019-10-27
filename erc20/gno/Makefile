@@ -6,9 +6,6 @@ LOCAL_LEMMAS:=verification.k \
 			  ../../resources/evm-data-map-concrete.k
 TMPLS:=../module-tmpl.k spec-tmpl.k
 
-SPEC_GROUP:=gno-erc20
-SPEC_INI:=gno-erc20-spec.ini
-
 SPEC_NAMES:=totalSupply-success \
             totalSupply-failure \
             balanceOf-success \
