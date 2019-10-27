@@ -39,12 +39,12 @@ NPROCS?=1
 
 .PHONY: jenkins
 
-# If KEVM parse cache is shared between projects, differences in rule attributes in otherwise equal rules might not be detected.
-# The only reason why we need clean-deps below.
+# K bug workaround: Because KEVM parse cache is shared between projects, rules with equal body but different attributes will collide.
+# The only reason why we need clean-kevm below.
 jenkins:
 	set -e; \
 	for i in $(SUBDIRS); do \
 		$(MAKE) -C $$i all; \
 		$(MAKE) -C $$i test -j$(NPROCS); \
-		$(MAKE) -C $$i clean-deps; \
+		$(MAKE) -C $$i clean-kevm; \
 	done
