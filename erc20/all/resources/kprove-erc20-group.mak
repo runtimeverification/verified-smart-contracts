@@ -21,20 +21,39 @@ SPEC_INI_FILES:=$(patsubst %.ini, $(SPECS_DIR)/$(RELATIVE_CURDIR)/%/erc20-spec.i
 #
 # Tasks
 
-.PHONY: concat concat-test clean
+.PHONY: test concat split-proof-tests clean deps clean-deps
 
-concat-test: $(SPEC_INI_FILES:=.concat-test)
+test: $(SPEC_INI_FILES:=.test)
 
 # Makes $(SPEC_INI_FILES) non-intermediary
 concat: $(SPEC_INI_FILES)
 
+split-proof-tests: $(SPEC_INI_FILES:=.split-proof-tests)
+
 clean:
 	rm -rf $(SPECS_DIR)
 
-%/erc20-spec.ini:
+deps:
+	$(MAKE) -f $(LOCAL_RESOURCES_DIR)/kprove-erc20.mak deps SPEC_GROUP=resources SPEC_INI=mock.ini
+
+clean-deps:
+	$(MAKE) -f $(LOCAL_RESOURCES_DIR)/kprove-erc20.mak clean-deps SPEC_GROUP=resources SPEC_INI=mock.ini
+
+.SECONDEXPANSION:
+$(SPECS_DIR)/%/erc20-spec.ini: $$(notdir $$*).ini $(FRAGMENT_INI_FILES)
 	mkdir -p $(dir $@)
 	cat $(FRAGMENT_INI_FILES) $(CURDIR)/$(notdir $*).ini > $@
 
-$(SPECS_DIR)/%/erc20-spec.ini.concat-test: $(SPECS_DIR)/%/erc20-spec.ini
+# Calling "clean-kevm-cache all" here leads to very long parse times on Jenkins, 30m+ on some specs, doesn't finish in 12+ hours.
+$(SPECS_DIR)/%/erc20-spec.ini.split-proof-tests: $(SPECS_DIR)/%/erc20-spec.ini
 	$(MAKE) -f $(LOCAL_RESOURCES_DIR)/kprove-erc20.mak all  SPEC_GROUP=$* SPEC_INI=$(basename $@)
+
+$(SPECS_DIR)/%/erc20-spec.ini.test: $(SPECS_DIR)/%/erc20-spec.ini.split-proof-tests
 	$(MAKE) -f $(LOCAL_RESOURCES_DIR)/kprove-erc20.mak test SPEC_GROUP=$* SPEC_INI=$(basename $@) TIMEOUT=$(TIMEOUT) -i -j$(NPROCS)
+
+# Command to run just one spec. Argument: <absolute path to k>.test
+# patsubst below needed because $(dir ...) leaves a trailing slash.
+# TODO define function mydir - same as dir but without trailing slash
+.SECONDEXPANSION:
+$(SPECS_DIR)/%-spec.k.test: $$(dir $$@)erc20-spec.ini
+	$(MAKE) -f $(LOCAL_RESOURCES_DIR)/kprove-erc20.mak $@ SPEC_GROUP=$(patsubst %/,%,$(dir $*)) SPEC_INI=$(dir $@)erc20-spec.ini TIMEOUT=$(TIMEOUT)

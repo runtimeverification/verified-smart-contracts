@@ -78,7 +78,7 @@ pipeline {
     }
 /*    stage('ERC20 mainnet') {
       steps { ansiColor('xterm') {
-          sh ' make -C erc20/all/mainnet-specs concat-test NPROCS="$NPROCS" '
+          sh ' make -C erc20/all/mainnet-specs test NPROCS="$NPROCS" '
       } }
     }*/
     stage('Check K revision') {

@@ -5,7 +5,7 @@
 # path to this file
 THIS_FILE:=$(abspath $(lastword $(MAKEFILE_LIST)))
 # path to root directory
-ROOT:=$(abspath $(dir $(THIS_FILE))/../)
+ROOT:=$(abspath $(dir $(THIS_FILE))/..)
 
 RESOURCES:=$(ROOT)/resources
 SPECS_DIR:=$(ROOT)/specs
@@ -80,6 +80,7 @@ KPROVE:=$(TIMEOUT_PREFIX) $(K_BIN)/kprove -v --debug -d $(KEVM_REPO_DIR)/.build/
         $(KPROVE_OPTS)
 
 SPEC_FILES:=$(patsubst %,$(SPECS_DIR)/$(SPEC_GROUP)/%-spec.k,$(SPEC_NAMES))
+LEMMAS:=$(SPECS_DIR)/$(SPEC_GROUP)/lemmas.timestamp $(dir $(SPECS_DIR)/$(SPEC_GROUP))/lemmas.k
 
 PANDOC_TANGLE_SUBMODULE:=$(ROOT)/.build/pandoc-tangle
 TANGLER:=$(PANDOC_TANGLE_SUBMODULE)/tangle.lua
@@ -143,7 +144,8 @@ $(KEVM_REPO_DIR):
 # Specs
 #
 
-split-proof-tests: $(SPECS_DIR)/$(SPEC_GROUP)/lemmas.timestamp $(dir $(SPECS_DIR)/$(SPEC_GROUP))/lemmas.k $(SPEC_FILES)
+# makes all these files non-intermediary
+split-proof-tests: $(SPEC_FILES) $(LEMMAS)
 
 $(SPECS_DIR)/$(SPEC_GROUP)/lemmas.timestamp: $(LOCAL_LEMMAS)
 	mkdir -p $(SPECS_DIR)/$(SPEC_GROUP)
@@ -160,7 +162,8 @@ endif
 %/lemmas.k: $(RESOURCES)/lemmas.md $(PANDOC_TANGLE_SUBMODULE)/submodule.timestamp
 	pandoc --from markdown --to "$(TANGLER)" --metadata=code:".k" $< > $@
 
-$(SPECS_DIR)/$(SPEC_GROUP)/%-spec.k: $(TMPLS) $(SPEC_INI)
+# When building a -spec.k file, build all run dependencies.
+$(SPECS_DIR)/$(SPEC_GROUP)/%-spec.k: $(TMPLS) $(SPEC_INI) $(LEMMAS)
 	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) $* $* > $@
 
 #
