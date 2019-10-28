@@ -1,9 +1,0 @@
-  bash -x run.sh demo-specs/consensys.ini
-  bash -x run.sh demo-specs/zeppelin-new.ini
-  bash -x run.sh demo-specs/zeppelin.ini
-  bash -x run.sh demo-specs/vyper.ini
-  bash -x run.sh demo-specs/hkg.ini
-  bash -x run.sh demo-specs/hobby.ini
- #bash -x run.sh demo-specs/hobby-buggy.ini
-  bash -x run.sh demo-specs/certora-buggy.ini
-  bash -x run.sh demo-specs/certora-fixed.ini
