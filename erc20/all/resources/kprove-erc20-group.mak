@@ -1,17 +1,20 @@
+THIS_FILE_DIR:=$(dir $(realpath $(lastword $(MAKEFILE_LIST))))
+
 #
 # Parameters
 
 NPROCS?=2
 TIMEOUT?=10m
+FRAGMENT_INI_DIR?=$(abspath $(THIS_FILE_DIR)/../fragments)
 
 #
 # Settings
 
-MAKEFILE_DIR:=$(dir $(realpath $(lastword $(MAKEFILE_LIST))))
-ROOT:=$(abspath $(MAKEFILE_DIR)/../../..)
+LOCAL_RESOURCES_DIR:=$(THIS_FILE_DIR)
+ROOT:=$(abspath $(THIS_FILE_DIR)/../../..)
 RELATIVE_CURDIR:=$(strip $(patsubst $(ROOT)/%, %, $(filter $(ROOT)/%, $(CURDIR))))
 SPECS_DIR:=$(ROOT)/specs
-FRAGMENT_INI_FILES:=$(sort $(wildcard ../fragments/*.ini))
+FRAGMENT_INI_FILES:=$(sort $(wildcard $(FRAGMENT_INI_DIR)/*.ini))
 MAIN_INI_FILES:=$(sort $(wildcard *.ini))
 SPEC_INI_FILES:=$(patsubst %.ini, $(SPECS_DIR)/$(RELATIVE_CURDIR)/%/erc20-spec.ini, $(MAIN_INI_FILES))
 
@@ -30,8 +33,8 @@ clean:
 
 %/erc20-spec.ini:
 	mkdir -p $(dir $@)
-	cat $(FRAGMENT_INI_FILES) $(MAKEFILE_DIR)/$(notdir $*).ini > $@
+	cat $(FRAGMENT_INI_FILES) $(CURDIR)/$(notdir $*).ini > $@
 
 $(SPECS_DIR)/%/erc20-spec.ini.concat-test: $(SPECS_DIR)/%/erc20-spec.ini
-	$(MAKE) -f run-spec.mak all                  SPEC_GROUP=$* SPEC_INI=$(basename $@)
-	$(MAKE) -f run-spec.mak test                 SPEC_GROUP=$* SPEC_INI=$(basename $@) TIMEOUT=$(TIMEOUT) -i -j$(NPROCS)
+	$(MAKE) -f $(LOCAL_RESOURCES_DIR)/kprove-erc20.mak all  SPEC_GROUP=$* SPEC_INI=$(basename $@)
+	$(MAKE) -f $(LOCAL_RESOURCES_DIR)/kprove-erc20.mak test SPEC_GROUP=$* SPEC_INI=$(basename $@) TIMEOUT=$(TIMEOUT) -i -j$(NPROCS)

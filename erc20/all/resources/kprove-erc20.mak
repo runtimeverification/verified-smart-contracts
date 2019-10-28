@@ -1,11 +1,13 @@
-ROOT_DIR:=$(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../../..)
+THIS_FILE_DIR:=$(dir $(realpath $(lastword $(MAKEFILE_LIST))))
+ROOT_DIR:=$(abspath $(THIS_FILE_DIR)/../../..)
 RESOURCES_DIR:=$(ROOT_DIR)/resources
+LOCAL_RESOURCES_DIR:=$(THIS_FILE_DIR)
 
-LOCAL_LEMMAS:=../verification.k \
+LOCAL_LEMMAS:=$(LOCAL_RESOURCES_DIR)/verification.k \
 			  $(RESOURCES_DIR)/abstract-semantics-segmented-gas.k \
 			  $(RESOURCES_DIR)/evm-symbolic.k \
 			  $(RESOURCES_DIR)/evm-data-map-symbolic.k
-TMPLS:=../../module-tmpl.k ../spec-tmpl.k
+TMPLS:=../../module-tmpl.k $(LOCAL_RESOURCES_DIR)/spec-tmpl.k
 
 SPEC_NAMES:=totalSupply \
             balanceOf \
