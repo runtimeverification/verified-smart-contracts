@@ -4,7 +4,7 @@ THIS_FILE_DIR:=$(dir $(realpath $(lastword $(MAKEFILE_LIST))))
 # Parameters
 
 NPROCS?=2
-TIMEOUT?=10m
+TIMEOUT?=
 FRAGMENT_INI_DIR?=$(abspath $(THIS_FILE_DIR)/../fragments)
 
 #
