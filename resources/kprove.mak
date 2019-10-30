@@ -54,7 +54,8 @@ ifdef DEBUG
 KPROVE_OPTS+=--debug-z3-queries --log-rules
 endif
 
-TIMEOUT?=30m
+# Example: 10ms/10s/10m/10h
+TIMEOUT?=
 
 #
 # Settings
@@ -70,10 +71,12 @@ KEVM_REPO_DIR:=$(abspath $(BUILD_DIR)/evm-semantics)
 
 K_BIN:=$(abspath $(K_REPO_DIR)/k-distribution/target/release/k/bin)
 
-TIMEOUT_PREFIX:=timeout -s SIGINT -k 10s --foreground $(TIMEOUT)
+ifneq ($(TIMEOUT),)
+  TIMEOUT_OPT:=--timeout $(TIMEOUT)
+endif
 
-KPROVE:=$(TIMEOUT_PREFIX) $(K_BIN)/kprove -v --debug -d $(KEVM_REPO_DIR)/.build/defn/java -m VERIFICATION \
-        --z3-impl-timeout 500 --shutdown-wait-time 5000 \
+KPROVE:=$(K_BIN)/kprove -v --debug -d $(KEVM_REPO_DIR)/.build/defn/java -m VERIFICATION \
+        --z3-impl-timeout 500 --shutdown-wait-time 5s $(TIMEOUT_OPT) \
         --deterministic-functions --no-exc-wrap \
         --cache-func-optimized --no-alpha-renaming --format-failures --boundary-cells k,pc \
         --log-cells k,output,statusCode,localMem,pc,gas,wordStack,callData,accounts,memoryUsed,\#pc,\#result \
