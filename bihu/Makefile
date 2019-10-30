@@ -13,5 +13,5 @@ SPEC_NAMES:=collectToken \
 include ../resources/kprove.mak
 
 # non-standard spec generation
-$(SPECS_DIR)/$(SPEC_GROUP)/collectToken-spec.k: $(TMPLS) collectToken-spec.ini
+$(SPECS_DIR)/$(SPEC_GROUP)/collectToken-spec.k: $(TMPLS) collectToken-spec.ini $(LEMMAS)
 	python3 $(RESOURCES)/gen-spec.py $^ collectToken collectToken loop ds-math-mul > $@
