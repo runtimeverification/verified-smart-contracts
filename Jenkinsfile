@@ -78,7 +78,7 @@ pipeline {
     }
 /*    stage('ERC20 mainnet') {
       steps { ansiColor('xterm') {
-          sh ' make -C erc20/all/mainnet-specs test NPROCS="$NPROCS" '
+          sh ' make -C erc20/all/mainnet-specs test NPROCS="$NPROCS" TIMEOUT=30m SHUTDOWN_WAIT_TIME=5m'
       } }
     }*/
     stage('Check K revision') {
