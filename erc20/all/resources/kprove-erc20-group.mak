@@ -49,7 +49,7 @@ $(SPECS_DIR)/%/erc20-spec.ini.split-proof-tests: $(SPECS_DIR)/%/erc20-spec.ini
 	$(MAKE) -f $(LOCAL_RESOURCES_DIR)/kprove-erc20.mak all  SPEC_GROUP=$* SPEC_INI=$(basename $@)
 
 $(SPECS_DIR)/%/erc20-spec.ini.test: $(SPECS_DIR)/%/erc20-spec.ini.split-proof-tests
-	$(MAKE) -f $(LOCAL_RESOURCES_DIR)/kprove-erc20.mak test SPEC_GROUP=$* SPEC_INI=$(basename $@) TIMEOUT=$(TIMEOUT) -i -j$(NPROCS)
+	$(MAKE) -f $(LOCAL_RESOURCES_DIR)/kprove-erc20.mak test SPEC_GROUP=$* SPEC_INI=$(basename $@) TIMEOUT=$(TIMEOUT) -i >$(notdir $*).log 2>&1
 
 # Command to run just one spec. Argument: <absolute path to k>.test
 # patsubst below needed because $(dir ...) leaves a trailing slash.
