@@ -5,6 +5,16 @@ pipeline {
       additionalBuildArgs '--build-arg USER_ID=$(id -u) --build-arg GROUP_ID=$(id -g)'
     }
   }
+  environment {
+    VSC_USE_KSERVER           = false
+
+    VSC_MINIMAL_ENABLED       = true
+    VSC_KTEST_ENABLED         = true
+    VSC_ERC20_ENABLED         = true
+    VSC_GNOSIS_ENABLED        = true
+    VSC_BIHU_ENABLED          = true
+    VSC_ERC20_MAINNET_ENABLED = false
+  }
 
   stages {
     stage("Init title") {
@@ -48,37 +58,59 @@ pipeline {
     stage('Dependencies') {
       steps { ansiColor('xterm') {
           sh 'make -C resources deps'
+          script { 
+            if (env.VSC_USE_KSERVER.toBoolean()) {
+              sh '''
+                echo 'Starting kserver...'
+                make -C resources spawn-kserver
+              '''
+            }
+          }
       } }
     }
     stage('Minimal') {
+      when {
+        environment name: 'VSC_MINIMAL_ENABLED', value: 'true'
+      }
       steps { ansiColor('xterm') {
           sh ' make jenkins MODE=MINIMAL NPROCS="$NPROCS" '
       } }
     }
     stage('KTest') {
+      when {
+        environment name: 'VSC_KTEST_ENABLED', value: 'true'
+      }
       steps { ansiColor('xterm') {
           sh ' make jenkins MODE=KTEST NPROCS="$NPROCS" '
       } }
     }
     stage('ERC20') {
+      when {
+        environment name: 'VSC_ERC20_ENABLED', value: 'true'
+      }
       steps { ansiColor('xterm') {
           sh ' make jenkins MODE=ERC20 NPROCS="$NPROCS" '
       } }
     }
     stage('Gnosis') {
+      when {
+        environment name: 'VSC_GNOSIS_ENABLED', value: 'true'
+      }
       steps { ansiColor('xterm') {
           sh ' make jenkins MODE=GNOSIS NPROCS="$NPROCS" '
       } }
     }
     stage('Bihu') {
+      when {
+        environment name: 'VSC_BIHU_ENABLED', value: 'true'
+      }
       steps { ansiColor('xterm') {
           sh ' make jenkins MODE=BIHU NPROCS="$NPROCS" '
       } }
     }
     stage('ERC20 mainnet') {
-      if (true) { //true = stage disabled, false = stage enabled
-        //jump to next stage
-        return;
+      when {
+        environment name: 'VSC_ERC20_MAINNET_ENABLED', value: 'true'
       }
       steps { ansiColor('xterm') {
           sh ' make -C erc20/all/mainnet-specs test NPROCS="$NPROCS" TIMEOUT=30m SHUTDOWN_WAIT_TIME=5m'
@@ -126,6 +158,12 @@ pipeline {
           '''
         }
       }
+    }
+  }
+  post {
+    always {
+      sh 'make -C resources stop-kserver'
+      //archiveArtifacts 'kserver.log,k-distribution/target/kserver.log'
     }
   }
 }
