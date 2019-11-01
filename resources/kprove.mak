@@ -88,6 +88,10 @@ KPROVE:=$(K_BIN)/kprove -v --debug -d $(KEVM_REPO_DIR)/.build/defn/java -m VERIF
         --log-cells k,output,statusCode,localMem,pc,gas,wordStack,callData,accounts,memoryUsed,\#pc,\#result \
         $(KPROVE_OPTS)
 
+KSERVER_LOG_FILE:=$(SPECS_DIR)/$(SPEC_GROUP)/kserver.log
+SPAWN_KSERVER:=$(K_BIN)/kserver >> "$(KSERVER_LOG_FILE)" 2>&1 &
+STOP_KSERVER:=$(K_BIN)/stop-kserver || true
+
 SPEC_FILES:=$(patsubst %,$(SPECS_DIR)/$(SPEC_GROUP)/%-spec.k,$(SPEC_NAMES))
 LEMMAS:=$(SPECS_DIR)/$(SPEC_GROUP)/lemmas.timestamp $(dir $(SPECS_DIR)/$(SPEC_GROUP))/lemmas.k
 
@@ -183,3 +187,10 @@ test: $(addsuffix .test,$(SPEC_FILES))
 
 $(SPECS_DIR)/$(SPEC_GROUP)/%-spec.k.test: $(SPECS_DIR)/$(SPEC_GROUP)/%-spec.k
 	$(KPROVE) $<
+
+spawn-kserver:
+	mkdir -p "$(dir $(KSERVER_LOG_FILE))"
+	$(SPAWN_KSERVER)
+
+stop-kserver:
+	$(STOP_KSERVER)

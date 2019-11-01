@@ -48,6 +48,10 @@ pipeline {
     stage('Dependencies') {
       steps { ansiColor('xterm') {
           sh 'make -C resources deps'
+          sh '''
+            echo 'Starting kserver...'
+            make -C resources spawn-kserver
+          '''
       } }
     }
     stage('Minimal') {
@@ -76,12 +80,13 @@ pipeline {
       } }
     }
     stage('ERC20 mainnet') {
-      if (true) { //true = stage disabled, false = stage enabled
-        //jump to next stage
-        return;
-      }
       steps { ansiColor('xterm') {
-          sh ' make -C erc20/all/mainnet-specs test NPROCS="$NPROCS" TIMEOUT=30m SHUTDOWN_WAIT_TIME=5m'
+          script {
+            enabled = true
+            if (enabled) {
+              sh ' make -C erc20/all/mainnet-specs test NPROCS="$NPROCS" TIMEOUT=30m SHUTDOWN_WAIT_TIME=5m'
+            }
+          }
       } }
     }
     stage('Check K revision') {
@@ -126,6 +131,12 @@ pipeline {
           '''
         }
       }
+    }
+  }
+  post {
+    always {
+      sh 'make -C resources stop-kserver'
+      //archiveArtifacts 'kserver.log,k-distribution/target/kserver.log'
     }
   }
 }
