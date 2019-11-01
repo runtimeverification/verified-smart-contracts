@@ -15,7 +15,7 @@ pipeline {
         }
       }
     }
-/*    stage('Check revisions') {
+    /*stage('Check revisions') {
       steps {
         ansiColor('xterm') {
           sh '''
@@ -32,8 +32,7 @@ pipeline {
           '''
         }
       }
-    }
-*/
+    }*/
     stage('Set vars') {
       steps {
         script {
@@ -76,11 +75,15 @@ pipeline {
           sh ' make jenkins MODE=BIHU NPROCS="$NPROCS" '
       } }
     }
-/*    stage('ERC20 mainnet') {
+    stage('ERC20 mainnet') {
+      if (true) { //true = stage disabled, false = stage enabled
+        //jump to next stage
+        return;
+      }
       steps { ansiColor('xterm') {
           sh ' make -C erc20/all/mainnet-specs test NPROCS="$NPROCS" TIMEOUT=30m SHUTDOWN_WAIT_TIME=5m'
       } }
-    }*/
+    }
     stage('Check K revision') {
       steps {
         ansiColor('xterm') {
