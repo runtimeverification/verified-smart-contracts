@@ -183,4 +183,4 @@ $(SPECS_DIR)/$(SPEC_GROUP)/%-spec.k: $(TMPLS) $(SPEC_INI) $(LEMMAS)
 test: $(addsuffix .test,$(SPEC_FILES))
 
 $(SPECS_DIR)/$(SPEC_GROUP)/%-spec.k.test: $(SPECS_DIR)/$(SPEC_GROUP)/%-spec.k
-	$(KPROVE) $<
+	$(KPROVE) $< >$<.out 2>&1

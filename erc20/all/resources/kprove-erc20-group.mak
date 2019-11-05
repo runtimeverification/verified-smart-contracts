@@ -3,7 +3,7 @@ THIS_FILE_DIR:=$(dir $(realpath $(lastword $(MAKEFILE_LIST))))
 #
 # Parameters
 
-NPROCS?=2
+NPROCS?=10
 TIMEOUT?=
 FRAGMENT_INI_DIR?=$(abspath $(THIS_FILE_DIR)/../fragments)
 
@@ -49,7 +49,7 @@ $(SPECS_DIR)/%/erc20-spec.ini.split-proof-tests: $(SPECS_DIR)/%/erc20-spec.ini
 	$(MAKE) -f $(LOCAL_RESOURCES_DIR)/kprove-erc20.mak all  SPEC_GROUP=$* SPEC_INI=$(basename $@)
 
 $(SPECS_DIR)/%/erc20-spec.ini.test: $(SPECS_DIR)/%/erc20-spec.ini.split-proof-tests
-	$(MAKE) -f $(LOCAL_RESOURCES_DIR)/kprove-erc20.mak test SPEC_GROUP=$* SPEC_INI=$(basename $@) TIMEOUT=$(TIMEOUT) -i >$(notdir $*).log 2>&1
+	$(MAKE) -f $(LOCAL_RESOURCES_DIR)/kprove-erc20.mak test SPEC_GROUP=$* SPEC_INI=$(basename $@) TIMEOUT=$(TIMEOUT) -i -j$(NPROCS)
 
 # Command to run just one spec. Argument: <absolute path to k>.test
 # patsubst below needed because $(dir ...) leaves a trailing slash.
