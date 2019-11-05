@@ -14,11 +14,9 @@ SPEC_NAMES:=totalSupply \
             allowance \
             approve \
             transfer-success-regular \
-            transfer-success-regular-overflow \
             transfer-success-self \
             transfer-failure \
             transferFrom-success-regular \
-            transferFrom-success-regular-overflow \
             transferFrom-success-self \
             transferFrom-failure
 
