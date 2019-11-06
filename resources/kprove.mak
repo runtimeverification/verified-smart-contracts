@@ -129,7 +129,7 @@ $(K_REPO_DIR)/mvn.timestamp: $(K_VERSION_FILE) | $(K_REPO_DIR)
 	cd $(K_REPO_DIR) \
 		&& git fetch \
 		&& git reset --hard $(K_VERSION) \
-		&& git submodule update --init --recursive --remote \
+		&& git submodule update --init --recursive \
 		&& mvn package -DskipTests -Dllvm.backend.skip -Dhaskell.backend.skip
 	touch $@
 
