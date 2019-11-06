@@ -71,7 +71,7 @@ pipeline {
     }
     stage('Gnosis') {
       steps { ansiColor('xterm') {
-          sh ' make jenkins MODE=GNOSIS NPROCS="$NPROCS" '
+          sh ' make jenkins MODE=GNOSIS NPROCS="3" '
       } }
     }
     stage('Bihu') {
