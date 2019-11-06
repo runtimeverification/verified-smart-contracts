@@ -41,6 +41,7 @@ pipeline {
           if (env.NPROCS.trim().toInteger() > 6) {
             env.NPROCS = "6"
           }
+          env.KPROVE_OPTS = "--profile-mem-adv"
         }
         sh 'printenv'
       }
