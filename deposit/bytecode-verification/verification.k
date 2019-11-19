@@ -508,4 +508,8 @@ module VERIFICATION
     rule X <=Int #ceil32(X) => true
       requires X >=Int 0
 
+    // for [deposit-init-calldata]
+    rule #take(X, #take(Y, WS)) => #take(X, WS)
+      requires X <=Int Y
+
 endmodule

@@ -36,6 +36,13 @@ SPEC_NAMES:=init-init \
             deposit-add-loop-enter-then \
             deposit-add-loop-enter-else \
             deposit-add-loop-exit \
+            deposit-init-calldata \
+            deposit-init-calldata-revert-1 \
+            deposit-init-calldata-revert-2 \
+            deposit-init-calldata-revert-3 \
+            deposit-init-calldata-revert-4 \
+            deposit-init-calldata-revert-5 \
+            deposit-init-calldata-revert-6 \
             deposit-init-revert-1 \
             deposit-init-revert-2 \
             deposit-data-revert \
