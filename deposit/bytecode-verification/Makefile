@@ -36,8 +36,9 @@ SPEC_NAMES:=init-init \
             deposit-add-loop-enter-then \
             deposit-add-loop-enter-else \
             deposit-add-loop-exit \
-            deposit-revert-1 \
-            deposit-revert-2 \
+            deposit-init-revert-1 \
+            deposit-init-revert-2 \
+            deposit-data-revert \
             revert-invalid_function_identifier-lt_4 \
             revert-invalid_function_identifier-ge_4-lt_32 \
             revert-invalid_function_identifier-ge_4-ge_32 \
