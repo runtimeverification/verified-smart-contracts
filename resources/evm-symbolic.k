@@ -7,14 +7,8 @@ module EVM-SYMBOLIC     [symbolic]
     syntax Int ::= #symGas(Int, Int, Int, List, Int) [function]
     syntax Int ::= #symMem(Int, Set) [function]
 
-//  syntax Int ::= #gasUsageUpdate(Int, Int) [function]
     syntax Int ::= Int "-Gas" Int [function]
     syntax Int ::= Int "+Gas" Int [function]
-
-//  syntax Int ::= Ccallstipend(Int) [function]
-
-//  syntax KItem ::= #setupCallGas(Schedule, Int, Int)
-//                 | #setupCallGasAux(Schedule, Int, Int, Int, Int)
 
     syntax Int ::= "pow24"
                  | "pow32"

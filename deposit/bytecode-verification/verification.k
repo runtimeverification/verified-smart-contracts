@@ -80,106 +80,25 @@ module VERIFICATION
     rule X +Int Y <Int X => false requires X >=Int 0 andBool Y >=Int 0 // #range(0 <= (X +Int Y) < pow256)
 
 
-//  rule (X *Int 256 +Int Y) <Int (X *Int 256) => false requires #range(0 <= X < 256  ) andBool #range(0 <= Y < 256)
-//  rule (X *Int 256 +Int Y) <Int (X *Int 256) => false requires #range(0 <= X < pow16) andBool #range(0 <= Y < 256)
-//  rule (X *Int 256 +Int Y) <Int (X *Int 256) => false requires #range(0 <= X < pow24) andBool #range(0 <= Y < 256)
-//  rule (X *Int 256 +Int Y) <Int (X *Int 256) => false requires #range(0 <= X < pow32) andBool #range(0 <= Y < 256)
-//  rule (X *Int 256 +Int Y) <Int (X *Int 256) => false requires #range(0 <= X < pow40) andBool #range(0 <= Y < 256)
-//  rule (X *Int 256 +Int Y) <Int (X *Int 256) => false requires #range(0 <= X < pow48) andBool #range(0 <= Y < 256)
-//  rule (X *Int 256 +Int Y) <Int (X *Int 256) => false requires #range(0 <= X < pow56) andBool #range(0 <= Y < 256)
+  // ########################
+  // Gas Abstraction
+  // ########################
 
+    // see also abstract-semantics.k
 
+    /* Definition
+    rule #symGas(INIT, LB, UB, S, MU) => INIT - [LB, UB] - sum(S) - MU
+    rule #symMem(N, S) => maxInt(N, maxIntSet(S)) up/Int 32
+    */
 
-
-/*
-    syntax Bool ::= #isConcreteItv(Int) [function]
-    rule #isConcreteItv(X) => #isConcrete(X) orBool #getKLabelString(X) ==String "#itv"
-*/
+    // interval abstraction -- both bounds must be concrete
+    syntax Int ::= #itv(Int, Int) [function]
 
     syntax Int ::= #makeItv(Int, Int) [function]
     rule #makeItv(X1, X2) => #itv(X1, X2) requires X1  <Int X2 andBool #isConcrete(X1) andBool #isConcrete(X2)
     rule #makeItv(X1, X2) => X1           requires X1 ==Int X2 andBool #isConcrete(X1) andBool #isConcrete(X2)
 
-    // interval abstraction -- both bounds must be concrete
-    syntax Int ::= #itv(Int, Int) [function]
-
-/*
-    rule #itv(X1, X2) +Int #itv(Y1, Y2) => #makeItv(X1 +Int Y1, X2 +Int Y2)
-    rule #itv(X1, X2) -Int #itv(Y1, Y2) => #makeItv(X1 -Int Y2, X2 -Int Y1)
-    rule #itv(X1, X2) *Int #itv(Y1, Y2) => #makeItv(X1 *Int Y1, X2 *Int Y2)
-    rule #itv(X1, X2) /Int #itv(Y1, Y2) => #makeItv(X1 /Int Y2, X2 /Int Y1)
-
-    rule #itv(X1, X2) +Int Y => #makeItv(X1 +Int Y, X2 +Int Y)  requires #isConcrete(Y)
-    rule #itv(X1, X2) -Int Y => #makeItv(X1 -Int Y, X2 -Int Y)  requires #isConcrete(Y)
-    rule #itv(X1, X2) *Int Y => #makeItv(X1 *Int Y, X2 *Int Y)  requires #isConcrete(Y)
-    rule #itv(X1, X2) /Int Y => #makeItv(X1 /Int Y, X2 /Int Y)  requires #isConcrete(Y)
-
-    rule X +Int #itv(Y1, Y2) => #makeItv(X +Int Y1, X +Int Y2)  requires #isConcrete(X)
-    rule X -Int #itv(Y1, Y2) => #makeItv(X -Int Y2, X -Int Y1)  requires #isConcrete(X)
-    rule X *Int #itv(Y1, Y2) => #makeItv(X *Int Y1, X *Int Y2)  requires #isConcrete(X)
-    rule X /Int #itv(Y1, Y2) => #makeItv(X /Int Y2, X /Int Y1)  requires #isConcrete(X)
-
-    rule #itv(X1, X2)  <Int #itv(Y1, Y2) => true  requires X2  <Int Y1
-    rule #itv(X1, X2)  <Int #itv(Y1, Y2) => false requires X1 >=Int Y2
-    rule #itv(X1, X2) <=Int #itv(Y1, Y2) => true  requires X2 <=Int Y1
-    rule #itv(X1, X2) <=Int #itv(Y1, Y2) => false requires X1  >Int Y2
-
-    rule #itv(X1, X2)  <Int Y => true  requires X2  <Int Y // andBool #isConcrete(Y)
-    rule #itv(X1, X2)  <Int Y => false requires X1 >=Int Y // andBool #isConcrete(Y)
-    rule #itv(X1, X2) <=Int Y => true  requires X2 <=Int Y // andBool #isConcrete(Y)
-    rule #itv(X1, X2) <=Int Y => false requires X1  >Int Y // andBool #isConcrete(Y)
-
-    rule X  <Int #itv(Y1, Y2) => true  requires X  <Int Y1 // andBool #isConcrete(X)
-    rule X  <Int #itv(Y1, Y2) => false requires X >=Int Y2 // andBool #isConcrete(X)
-    rule X <=Int #itv(Y1, Y2) => true  requires X <=Int Y1 // andBool #isConcrete(X)
-    rule X <=Int #itv(Y1, Y2) => false requires X  >Int Y2 // andBool #isConcrete(X)
-
-    syntax Int ::= minItv(Int, Int) [function]
-                 | maxItv(Int, Int) [function]
-
-    rule minItv(#itv(X1, X2), #itv(Y1, Y2)) => #makeItv(minInt(X1, Y1), minInt(X2, Y2))
-    rule maxItv(#itv(X1, X2), #itv(Y1, Y2)) => #makeItv(maxInt(X1, Y1), maxInt(X2, Y2))
-
-    rule minItv(#itv(X1, X2), Y) => #makeItv(minInt(X1, Y), minInt(X2, Y))  requires #isConcrete(Y)
-    rule maxItv(#itv(X1, X2), Y) => #makeItv(maxInt(X1, Y), maxInt(X2, Y))  requires #isConcrete(Y)
-
-    rule minItv(X, #itv(Y1, Y2)) => #makeItv(minInt(X, Y1), minInt(X, Y2))  requires #isConcrete(X)
-    rule maxItv(X, #itv(Y1, Y2)) => #makeItv(maxInt(X, Y1), maxInt(X, Y2))  requires #isConcrete(X)
-
-    rule minItv(X, Y) => minInt(X, Y)  requires #isConcrete(X) andBool #isConcrete(Y)
-    rule maxItv(X, Y) => maxInt(X, Y)  requires #isConcrete(X) andBool #isConcrete(Y)
-*/
-
-
-/*
-    rule maxInt(maxInt(A, B), C) => maxInt(A, C)  requires C  >Int B
-    rule maxInt(maxInt(A, B), C) => maxInt(A, B)  requires C <=Int B
-
-    rule maxInt(A, B) => maxInt(B, A)  requires #isConcrete(A) andBool notBool #isConcrete(B)
-    rule maxInt(maxInt(A, B), C) => maxInt(maxInt(A, C), B)  requires #isConcrete(B) andBool notBool #isConcrete(C)
-
-
-// TODO: move to domains.k
-  rule maxInt(I1:Int, I2:Int) => I1 requires I1 >=Int I2
-  rule maxInt(I1:Int, I2:Int) => I2 requires I1 <=Int I2
-*/
-
-
-//  syntax Int ::= #symGas(Int, Int, Int, List, Int) [function]
-//  syntax Int ::= #symMem(Int, Set) [function]
-
-    /* definition
-    rule #symGas(INIT, LB, UB, S, MU) => INIT - [LB, UB] - sum(S) - MU
-
-    rule #symMem(N, S) => maxInt(N, maxIntSet(S)) up/Int 32
-    */
-
-
-//  // no need to divide
-//  rule #memoryUsageUpdate(MU, START, WIDTH) => maxInt(MU, START +Int WIDTH)
-//      requires WIDTH >Int 0
-//       andBool notBool (#isConcrete(MU) andBool #isConcrete(START) andBool #isConcrete(WIDTH))
-
+    // #memoryUsageUpdate
 
     rule #memoryUsageUpdate(#symMem(MU, MUS), START, WIDTH) => #symMem(maxInt(MU, START +Int WIDTH), MUS)
         requires #isConcrete(MU) andBool #isConcrete(START) andBool #isConcrete(WIDTH)
@@ -190,8 +109,7 @@ module VERIFICATION
     rule #memoryUsageUpdate(        MU,       START, WIDTH) => #symMem(MU, SetItem(START +Int WIDTH) .Set)
         requires #isConcrete(MU) andBool notBool (#isConcrete(START) andBool #isConcrete(WIDTH))
 
-
-//  syntax Int ::= #gasUsageUpdate(Int, Int) [function]
+    // deductGas
 
     rule #symGas(I, LB, UB, S, CMEM) -Gas G              => #symGas(I, LB +Int G,   UB +Int G,               S, CMEM)
         requires #isConcrete(G)
@@ -203,21 +121,7 @@ module VERIFICATION
 
     rule G -Gas (G1 +Int G2) => (G -Gas G1) -Gas G2
 
-
-/*
-    rule #symGas(I, LB, UB, S, CMEM) -Gas (CMEM' -Int CMEM) => #symGas(I, LB, UB, S, CMEM')
-        requires #getKLabelString(CMEM)  ==String "Cmem"
-         andBool #getKLabelString(CMEM') ==String "Cmem"
-
-    rule #symGas(I, LB, UB, S, 0)    -Gas (CMEM' -Int CMEM) => #symGas(I, LB, UB, S, CMEM') -Gas (0 -Int CMEM)
-        requires #isConcrete(CMEM)
-         andBool #getKLabelString(CMEM') ==String "Cmem"
-
-    rule #symGas(I, LB, UB, S, CMEM) -Gas (CMEM' -Int CMEM) => #symGas(I, LB, UB, S, 0)     -Gas CMEM'
-        requires #getKLabelString(CMEM)  ==String "Cmem"
-         andBool #isConcrete(CMEM')
-*/
-
+    // refund
 
     rule #symGas(X,                   LB,          UB,          ListItem(C) S, CMEM) +Gas #symGas(CGASCAP,                   LB', UB', S', CMEM')
       => #symGas(X,                   LB +Int LB', UB +Int UB', S'          S, CMEM) -Gas CMEM'
@@ -227,16 +131,12 @@ module VERIFICATION
       => #symGas(X +Int CCALLSTIPEND, LB +Int LB', UB +Int UB', S'          S, CMEM) -Gas CMEM'
         requires C ==K CGASCAP
 
+    //  Cs*
 
     rule Csstore(SCHED, NEW, CURR, ORIG) => #makeItv(Gsstorereset < SCHED >, Gsstoreset < SCHED >)
         requires #isConcrete(SCHED)
          andBool notBool ( #isConcrete(NEW) andBool #isConcrete(CURR) )
          andBool notBool Ghasdirtysstore << SCHED >>
-
-
-//  rule Ccallstipend(VALUE) => 0                      requires VALUE  ==Int 0
-//  rule Ccallstipend(VALUE) => Gcallstipend < SCHED > requires VALUE =/=Int 0
-
 
 
   // ########################
@@ -401,6 +301,10 @@ module VERIFICATION
        andBool K22 +Int 1 ==Int K23
        andBool K23 +Int 1 ==Int K24
 
+    // for [deposit-init-calldata]
+    rule #take(X, #take(Y, WS)) => #take(X, WS)
+      requires X <=Int Y
+
   // ########################
   // Range
   // ########################
@@ -507,9 +411,5 @@ module VERIFICATION
 
     rule X <=Int #ceil32(X) => true
       requires X >=Int 0
-
-    // for [deposit-init-calldata]
-    rule #take(X, #take(Y, WS)) => #take(X, WS)
-      requires X <=Int Y
 
 endmodule
