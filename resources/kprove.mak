@@ -81,7 +81,7 @@ ifneq ($(TIMEOUT),)
   TIMEOUT_OPT:=--timeout $(TIMEOUT)
 endif
 
-KPROVE:=$(K_BIN)/kprove -v --debug -d $(KEVM_REPO_DIR)/.build/defn/java -m VERIFICATION \
+KPROVE:=time $(K_BIN)/kprove -v --debug -d $(KEVM_REPO_DIR)/.build/defn/java -m VERIFICATION \
         --z3-impl-timeout 500 $(SHUTDOWN_WAIT_TIME_OPT) $(TIMEOUT_OPT) \
         --deterministic-functions --no-exc-wrap \
         --cache-func-optimized --no-alpha-renaming --format-failures --boundary-cells k,pc \
