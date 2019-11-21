@@ -33,6 +33,8 @@
   export OPTS+=",#pc,#result"
   export OPTS+=" --debug-z3-queries"
 
+  bash lemmas.sh >lemmas.k
+
   make clean
   make split-proof-tests
 

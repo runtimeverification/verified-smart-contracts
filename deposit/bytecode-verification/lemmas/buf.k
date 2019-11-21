@@ -15,9 +15,8 @@
     rule #isTake(#takeAux(_,_,_)) => true
 
 
-    // TODO: fix
-    rule #asWord(#buf(SIZE, DATA)) => DATA requires SIZE <=Int 32 // andBool #range(0 <= DATA < (2 ^Int (SIZE *Int 8))) andBool #isConcrete(SIZE)
-    rule #asWord(#buf(32, DATA)) => DATA  requires #rangeUInt(256, DATA)
+    rule #asWord(#buf(SIZE, DATA)) => DATA requires SIZE <=Int 32 andBool #range(0 <= DATA < (2 ^Int (SIZE *Int 8))) andBool #isConcrete(SIZE)
+  //rule #asWord(#buf(32, DATA)) => DATA  requires #rangeUInt(256, DATA)
 
     rule #buf(SIZE, _)        => .WordStack requires SIZE  ==Int 0
     rule #bufSeg(_, _, WIDTH) => .WordStack requires WIDTH ==Int 0

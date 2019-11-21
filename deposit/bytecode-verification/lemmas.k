@@ -222,8 +222,6 @@ module LEMMAS
     // Buffer Abstraction
     //////////////////////////
 
-    rule ( WS1 ++ WS2 ) ++ WS3 => WS1 ++ ( WS2 ++ WS3 )
-
     syntax WordStack ::= #bufSeg ( WordStack , Int , Int ) [function, smtlib(bufSeg)] // BUFFER, START, WIDTH
     syntax Int       ::= #bufElm ( WordStack , Int )       [function] // BUFFER, INDEX
 
@@ -236,7 +234,8 @@ module LEMMAS
     rule #isTake(#takeAux(_,_,_)) => true
 
 
-    rule #asWord(#buf(SIZE, DATA)) => DATA requires SIZE <=Int 32
+    rule #asWord(#buf(SIZE, DATA)) => DATA requires SIZE <=Int 32 andBool #range(0 <= DATA < (2 ^Int (SIZE *Int 8))) andBool #isConcrete(SIZE)
+  //rule #asWord(#buf(32, DATA)) => DATA  requires #rangeUInt(256, DATA)
 
     rule #buf(SIZE, _)        => .WordStack requires SIZE  ==Int 0
     rule #bufSeg(_, _, WIDTH) => .WordStack requires WIDTH ==Int 0
@@ -246,6 +245,7 @@ module LEMMAS
     rule #bufSeg(#bufSeg(BUF, START0, WIDTH0), START, WIDTH)
       => #bufSeg(BUF, START0 +Int START, WIDTH)
       requires 0 <=Int START andBool START +Int WIDTH <=Int WIDTH0
+
 
     // Auxiliary function to make rules compatible with simplification `rule WS ++ .WordStack => WS`
     syntax WordStack ::= #takeAux ( Int , WordStack , WordStack ) [function]
@@ -287,7 +287,12 @@ module LEMMAS
     // simplification
     //
 
-    rule #asWord(#buf(32, DATA)) => DATA  requires #rangeUInt(256, DATA)
+    rule ( WS1 ++ WS2 ) ++ WS3 => WS1 ++ ( WS2 ++ WS3 )
+
+    rule WS ++ .WordStack => WS
+
+//  rule #asWord( 0 : W1 : WS  =>  W1 : WS )
+    rule #asWord( 0 :      WS  =>       WS )
 
     rule #padToWidth(32, #asByteStack(V)) => #buf(32, V) // #asByteStackInWidth(V, 32)
       requires 0 <=Int V andBool V <Int pow256 andBool #notKLabel(V, "#asWord")
@@ -319,8 +324,6 @@ module LEMMAS
     rule #bufSeg(BUF, S0, W0) ++ (#bufSeg(BUF, S1, W1) ++ WS) => #bufSeg(BUF, S0, W0 +Int W1) ++ WS
       requires S1 ==Int S0 +Int W0
 
-    rule WS ++ .WordStack => WS
-
     rule 0 <=Int #sizeWordStack ( _ , _ ) => true [smt-lemma]
 
     rule #sizeWordStack(WS, N) <Int SIZE => #sizeWordStack(WS, 0) +Int N <Int SIZE  requires N =/=Int 0
@@ -345,6 +348,10 @@ module LEMMAS
       requires #isBuf(BUF) andBool MW0 ==Int BW0 andBool MW1 ==Int BW1
        andBool MS1 ==Int MS0 +Int MW0 andBool BS1 ==Int BS0 +Int BW0
 */
+
+    //
+    // nthbyteof
+    //
 
     syntax Int ::= nthbyteof ( Int , Int , Int ) [function, smtlib(smt_nthbyteof), proj]
  // ------------------------------------------------------------------------------------
@@ -385,9 +392,6 @@ module LEMMAS
                 : nthbyteof(V, 31, 32)
                 : .WordStack ) => V
       requires 0 <=Int V andBool V <Int pow256
-
-//  rule #asWord( 0 : W1 : WS  =>  W1 : WS )
-    rule #asWord( 0 :      WS  =>       WS )
 
     rule nthbyteof(N, 0, 1) => N
 
