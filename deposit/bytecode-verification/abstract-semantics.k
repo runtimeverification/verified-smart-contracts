@@ -32,7 +32,7 @@ module ABSTRACT-SEMANTICS
       [trusted, matching(#symGas)]
 
   rule <k> GCALL:Int ~> #allocateCallGas => . ... </k>
-       <previousGas> _ => #symGas(GCALL, 0, 0, .List, 0) </previousGas>
+       <callGas> _ => #symGas(GCALL, 0, 0, .List, 0) </callGas>
       [trusted]
 
   rule <k> #refund G:Int => . ... </k>

@@ -1,10 +1,10 @@
 // {RULENAME} {COMMENT}
 rule
+<kevm>
   <k> {K} </k>
   <exit-code> 1 </exit-code>
   <mode> NORMAL </mode>
   <schedule> {SCHEDULE} </schedule>
-  <analysis> .Map </analysis> // not part of evm
   <ethereum>
     <evm>
       <output> {OUTPUT} </output>
@@ -13,8 +13,8 @@ rule
       <interimStates> _ </interimStates>
       <touchedAccounts> _ => _ </touchedAccounts>
       <callState>
-        <program> #asMapOpCodes(#dasmOpCodes(#parseByteStack({CODE}), {SCHEDULE})) </program>
-        <programBytes> #parseByteStack({CODE}) </programBytes>
+        <program> #parseByteStack({CODE}) </program>
+        <jumpDests> #computeValidJumpDests(#parseByteStack({CODE})) </jumpDests>
         <id> {THIS} </id> // this
         <caller> {MSG_SENDER} </caller> // msg.sender
         <callData> {CALL_DATA} </callData> // msg.data
@@ -24,7 +24,7 @@ rule
         <pc> {PC} </pc>
         <gas> {GAS} </gas>
         <memoryUsed> {MEMORY_USED} </memoryUsed>
-        <previousGas> _ => _ </previousGas>
+        <callGas> _ => _ </callGas>
         <static> false </static> // NOTE: non-static call
         <callDepth> {CALL_DEPTH} </callDepth>
       </callState>
@@ -35,23 +35,25 @@ rule
       </substate>
       <gasPrice> _ </gasPrice>
       <origin> ORIGIN_ID </origin> // tx.origin
-      <previousHash> _ </previousHash>
-      <ommersHash> _ </ommersHash>
-      <coinbase> {COINBASE} </coinbase> // block.coinbase
-      <stateRoot> _ </stateRoot>
-      <transactionsRoot> _ </transactionsRoot>
-      <receiptsRoot> _ </receiptsRoot>
-      <logsBloom> _ </logsBloom>
-      <difficulty> _ </difficulty>
-      <number> BLOCK_NUM </number> // block.number
-      <gasLimit> _ </gasLimit>
-      <gasUsed> _ </gasUsed>
-      <timestamp> NOW </timestamp> // now = block.timestamp
-      <extraData> _ </extraData>
-      <mixHash> _ </mixHash>
-      <blockNonce> _ </blockNonce>
-      <ommerBlockHeaders> _ </ommerBlockHeaders>
-      <blockhash> BLOCK_HASHES </blockhash> // block.blockhash
+      <blockhashes> BLOCK_HASHES </blockhashes> // block.blockhash
+      <block>
+        <previousHash> _ </previousHash>
+        <ommersHash> _ </ommersHash>
+        <coinbase> {COINBASE} </coinbase> // block.coinbase
+        <stateRoot> _ </stateRoot>
+        <transactionsRoot> _ </transactionsRoot>
+        <receiptsRoot> _ </receiptsRoot>
+        <logsBloom> _ </logsBloom>
+        <difficulty> _ </difficulty>
+        <number> BLOCK_NUM </number> // block.number
+        <gasLimit> _ </gasLimit>
+        <gasUsed> _ </gasUsed>
+        <timestamp> NOW </timestamp> // now = block.timestamp
+        <extraData> _ </extraData>
+        <mixHash> _ </mixHash>
+        <blockNonce> _ </blockNonce>
+        <ommerBlockHeaders> _ </ommerBlockHeaders>
+      </block>
     </evm>
     <network>
       <activeAccounts> {ACTIVE_ACCOUNTS} SetItem({THIS}) SetItem(2) SetItem(4) _:Set </activeAccounts>
@@ -90,6 +92,7 @@ rule
       <messages> _ </messages>
     </network>
   </ethereum>
+</kevm>
   requires #rangeAddress(ORIGIN_ID)
    // builtins
    andBool #rangeUInt(256, NOW)
