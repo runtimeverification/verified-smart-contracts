@@ -1,75 +1,7 @@
-requires "edsl.k"
 
-module EVM-DATA-MAP-SYMBOLIC [symbolic]
-    imports K-REFLECTION
-    imports EVM-DATA
-    imports EDSL
-
-    rule ( WS1 ++ WS2 ) ++ WS3 => WS1 ++ ( WS2 ++ WS3 )
-
-    syntax WordStack ::= #bufSeg ( WordStack , Int , Int ) [function, smtlib(bufSeg)] // BUFFER, START, WIDTH
-    syntax Int       ::= #bufElm ( WordStack , Int )       [function] // BUFFER, INDEX
-
-    syntax Bool ::= #isBuf ( WordStack ) [function]
-    rule #isBuf(#buf(_,_)) => true
-    rule #isBuf(#bufSeg(_,_,_)) => true
-
-    syntax Bool ::= #isTake ( WordStack ) [function]
-    rule #isTake(#take(_,_)) => true
-    rule #isTake(#takeAux(_,_,_)) => true
-
-
-    rule #asWord(#buf(SIZE, DATA)) => DATA requires SIZE <=Int 32
-
-    rule #buf(SIZE, _)        => .WordStack requires SIZE  ==Int 0
-    rule #bufSeg(_, _, WIDTH) => .WordStack requires WIDTH ==Int 0
-
-    rule #bufSeg(WS, START, WIDTH) => WS requires START ==Int 0 andBool WIDTH ==Int #sizeWordStack(WS)
-
-    rule #bufSeg(#bufSeg(BUF, START0, WIDTH0), START, WIDTH)
-      => #bufSeg(BUF, START0 +Int START, WIDTH)
-      requires 0 <=Int START andBool START +Int WIDTH <=Int WIDTH0
-
-    // Auxiliary function to make rules compatible with simplification `rule WS ++ .WordStack => WS`
-    syntax WordStack ::= #takeAux ( Int , WordStack , WordStack ) [function]
- // ------------------------------------------------------------------------
-    rule #take(N, BUF      ) => #takeAux(N, BUF, .WordStack)               requires #isBuf(BUF)
-    rule #take(N, BUF ++ WS) => #takeAux(N, BUF, WS)                       requires #isBuf(BUF)
-    rule #takeAux(N, BUF, WS) => #bufSeg(BUF, 0, N)                        requires 0 <=Int N andBool N <=Int #sizeBuffer(BUF)
-    rule #takeAux(N, BUF, WS) => BUF ++ #take(N -Int #sizeBuffer(BUF), WS) requires N >Int #sizeBuffer(BUF)
-
-    rule #take(N, .WordStack) => #buf(N, 0) requires notBool #isConcrete(N)
-
-    syntax WordStack ::= #dropAux ( Int , WordStack , WordStack ) [function]
- // ------------------------------------------------------------------------
-    rule #drop(N, BUF      ) => #dropAux(N, BUF, .WordStack)                    requires #isBuf(BUF)
-    rule #drop(N, BUF ++ WS) => #dropAux(N, BUF, WS)                            requires #isBuf(BUF)
-    rule #dropAux(N, BUF, WS) => #bufSeg(BUF, N, #sizeBuffer(BUF) -Int N) ++ WS requires 0 <=Int N andBool N <=Int #sizeBuffer(BUF)
-    rule #dropAux(N, BUF, WS) => #drop(N -Int #sizeBuffer(BUF), WS)             requires N >=Int #sizeBuffer(BUF)
-
-    syntax Int ::= #getElmAux ( WordStack , WordStack , Int ) [function]
- // --------------------------------------------------------------------
-    rule (BUF      ) [ N ] => #getElmAux(BUF, .WordStack, N)      requires #isBuf(BUF)
-    rule (BUF ++ WS) [ N ] => #getElmAux(BUF, WS, N)              requires #isBuf(BUF)
-    rule #getElmAux(BUF, WS, N) => #bufElm(BUF, N)                requires 0 <=Int N andBool N <Int #sizeBuffer(BUF)
-    rule #getElmAux(BUF, WS, N) => WS [ N -Int #sizeBuffer(BUF) ] requires N >=Int #sizeBuffer(BUF)
-
-
-    rule #sizeWordStack ( BUF ++ WS, SIZE ) => #sizeWordStack(WS, SIZE +Int #sizeBuffer(BUF)) requires #isBuf(BUF) orBool #isTake(BUF)
-    rule #sizeWordStack ( BUF      , SIZE ) =>                    SIZE +Int #sizeBuffer(BUF)  requires #isBuf(BUF) orBool #isTake(BUF)
-
-    syntax Int ::= #sizeBuffer ( WordStack ) [function]
- // ---------------------------------------------------
-    rule #sizeBuffer ( #buf(N,_) )      => N
-    rule #sizeBuffer ( #bufSeg(_,_,N) ) => N
-
-    rule #sizeBuffer ( #take(N,_) )      => N
-    rule #sizeBuffer ( #takeAux(N,_,_) ) => N
-
-
-  // ########################
-  // Symbolic Word Map
-  // ########################
+    //////////////////////////
+    // Map
+    //////////////////////////
 
     syntax Map ::= store  ( Map , Int , Int ) [function, smtlib(storeInt) ]
     syntax Int ::= select ( Map , Int )       [function, smtlib(selectInt)]
@@ -105,6 +37,10 @@ module EVM-DATA-MAP-SYMBOLIC [symbolic]
       requires START <Int START0 +Int WIDTH0 andBool START0 +Int WIDTH0 <Int START +Int WIDTH
        andBool WIDTH0 >=Int 1 // to avoid unnecessary split
 
+    // simplification
+
+    rule store(M, K, select(M, K)) => M
+
     // TODO: check validity: i.e., WS ==K .WordStack
     rule storeRange(M, _, WIDTH, _) => M requires WIDTH ==Int 0
 
@@ -122,4 +58,64 @@ module EVM-DATA-MAP-SYMBOLIC [symbolic]
     // shouldn't have the infinite rule application
     rule select(M, K)                 => #lookup(M, K)           [concrete]
     rule selectRange(M, START, WIDTH) => #range(M, START, WIDTH) [concrete]
-endmodule
+
+    // equalities
+
+    syntax Bool ::= Map "==IMap" Map [function, smtlib(=)]
+    syntax Bool ::= Map "==IMap" Map "except" Set [function]
+ // --------------------------------------------------------
+    rule store(M1, K, _) ==IMap M2 except Ks
+      =>       M1        ==IMap M2 except Ks
+      requires K in Ks
+
+    rule M1 ==IMap store(M2, K, _) except Ks
+      => M1 ==IMap       M2        except Ks
+      requires K in Ks
+
+    rule M1 ==IMap M2 except _ => true
+      requires M1 ==K M2  // structural equality
+
+    syntax Set ::= keys(Map) [function]
+
+    rule K1 in keys(store(M, K2, _)) => true          requires K1  ==Int K2
+    rule K1 in keys(store(M, K2, _)) => K1 in keys(M) requires K1 =/=Int K2
+
+    // in-place update
+
+    // store
+
+    rule store(store(M, K0, V0), K1, V1) => store(M, K0, V1)
+      requires K0 ==Int K1
+
+    rule store(store(M, K0, V0), K1, V1) => store(store(M, K1, V1), K0, V0)
+      requires K0 =/=Int K1 andBool K1 in keys(M)
+
+    // storeRange
+
+    rule storeRange(storeRange(M, K0, W0, V0), K1, W1, V1) => storeRange(M, K0, W0, V1)
+      requires range(K0, W0) ==Range range(K1, W1)
+
+    rule storeRange(storeRange(M, K0, W0, V0), K1, W1, V1) => storeRange(storeRange(M, K1, W1, V1), K0, W0, V0)
+      requires range(K0, W0) <>Range range(K1, W1)
+       andBool range(K1, W1) in keys(M)
+
+    rule storeRange(store(M, K0, V0), K1, W1, V1) => store(storeRange(M, K1, W1, V1), K0, V0)
+      requires range(K0, 1) <>Range range(K1, W1) andBool range(K1, W1) in keys(M)
+
+    rule store(storeRange(M, K0, W0, V0), K1, V1) => storeRange(store(M, K1, V1), K0, W0, V0)
+      requires range(K0, W0) <>Range range(K1, 1) andBool K1 in keys(M)
+
+    syntax Range ::= range(Int, Int)
+
+    rule range(K1, W1) in keys(storeRange(M, K2, W2, _)) => true                     requires range(K1, W1) ==Range range(K2, W2)
+    rule range(K1, W1) in keys(storeRange(M, K2, W2, _)) => range(K1, W1) in keys(M) requires range(K1, W1) <>Range range(K2, W2)
+
+    rule range(K1, W1) in keys(store     (M, K2,     _)) => range(K1, W1) in keys(M) requires range(K1, W1) <>Range range(K2, 1)
+    rule       K1      in keys(storeRange(M, K2, W2, _)) =>       K1      in keys(M) requires range(K1, 1)  <>Range range(K2, W2)
+
+    syntax Bool ::= Range "==Range" Range [function]
+                  | Range "<>Range" Range [function]
+
+    rule range(K1, W1) ==Range range(K2, W2) => K1 ==Int K2 andBool W1 ==Int W2
+    rule range(K1, W1) <>Range range(K2, W2) => K1 +Int W1 <=Int K2 orBool K2 +Int W2 <=Int K1
+
