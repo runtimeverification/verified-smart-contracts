@@ -46,7 +46,11 @@ pipeline {
     stage('Set vars') {
       steps {
         script {
-          env.K_OPTS = "-Xmx12g -Xss48m"
+          if (env.VSC_USE_KSERVER.toBoolean()) {
+            env.K_OPTS = "-Xmx30g -Xss48m"
+          } else {
+            env.K_OPTS = "-Xmx12g -Xss48m"
+          }
           env.NPROCS = sh(script: 'nproc', returnStdout: true)
           if (env.NPROCS.trim().toInteger() > 6) {
             env.NPROCS = "6"
