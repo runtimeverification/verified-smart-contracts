@@ -1,8 +1,7 @@
-requires "evm-symbolic.k"
+requires "verification.k"
 
 module ABSTRACT-SEMANTICS
-  imports EVM-SYMBOLIC
-  imports EVM
+  imports VERIFICATION
 
   // to avoid unnecessary case analyses
   rule <k> LT W0 W1 => bool2Word(W0  <Int W1) ~> #push ... </k> [trusted]

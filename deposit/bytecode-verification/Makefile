@@ -2,7 +2,6 @@ BUILD_DIR:=../../.build
 
 LOCAL_LEMMAS:=verification.k \
 			  abstract-semantics.k \
-			  evm-symbolic.k \
 			  evm-data-map-symbolic.k
 TMPLS:=module-tmpl.k spec-tmpl.k
 
