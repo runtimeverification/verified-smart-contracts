@@ -23,7 +23,7 @@
   export OPTS+=",localMem"
   export OPTS+=",output"
   export OPTS+=",gas"
-  export OPTS+=",previousGas"
+  export OPTS+=",callGas"
   export OPTS+=",memoryUsed"
   export OPTS+=",statusCode"
   export OPTS+=",callData"
@@ -31,56 +31,81 @@
   export OPTS+=",refund"
 # export OPTS+=",accounts"
   export OPTS+=",#pc,#result"
-  export OPTS+=" --debug-z3-queries"
+# export OPTS+=" --debug-z3-queries"
+
+  SPECS=
+  SPECS+=" "~/verified-smart-contracts/specs/deposit/init-init-spec.k
+  SPECS+=" "~/verified-smart-contracts/specs/deposit/init-loop0-spec.k
+  SPECS+=" "~/verified-smart-contracts/specs/deposit/init-loop-enter-spec.k
+  SPECS+=" "~/verified-smart-contracts/specs/deposit/init-loop-exit-spec.k
+  #
+  SPECS+=" "~/verified-smart-contracts/specs/deposit/to_little_endian_64-spec.k
+ #SPECS+=" "~/verified-smart-contracts/specs/deposit/to_little_endian_64-forloop-spec.k
+ #SPECS+=" "~/verified-smart-contracts/specs/deposit/to_little_endian_64-return-spec.k
+  SPECS+=" "~/verified-smart-contracts/specs/deposit/get_deposit_root-init-spec.k
+  SPECS+=" "~/verified-smart-contracts/specs/deposit/get_deposit_root-loop0-then-spec.k
+  SPECS+=" "~/verified-smart-contracts/specs/deposit/get_deposit_root-loop0-else-spec.k
+  SPECS+=" "~/verified-smart-contracts/specs/deposit/get_deposit_root-loop-body-then-spec.k
+  SPECS+=" "~/verified-smart-contracts/specs/deposit/get_deposit_root-loop-body-else-spec.k
+  SPECS+=" "~/verified-smart-contracts/specs/deposit/get_deposit_root-loop-exit-spec.k
+  SPECS+=" "~/verified-smart-contracts/specs/deposit/get_deposit_count-spec.k
+  SPECS+=" "~/verified-smart-contracts/specs/deposit/deposit-init-spec.k
+  SPECS+=" "~/verified-smart-contracts/specs/deposit/deposit-subcall_1-spec.k
+  SPECS+=" "~/verified-smart-contracts/specs/deposit/deposit-subcall_2-spec.k
+  SPECS+=" "~/verified-smart-contracts/specs/deposit/deposit-log-spec.k
+  SPECS+=" "~/verified-smart-contracts/specs/deposit/deposit-data-spec.k
+  SPECS+=" "~/verified-smart-contracts/specs/deposit/deposit-add-init-then-spec.k
+  SPECS+=" "~/verified-smart-contracts/specs/deposit/deposit-add-init-else-spec.k
+  SPECS+=" "~/verified-smart-contracts/specs/deposit/deposit-add-loop-enter-then-spec.k
+  SPECS+=" "~/verified-smart-contracts/specs/deposit/deposit-add-loop-enter-else-spec.k
+  SPECS+=" "~/verified-smart-contracts/specs/deposit/deposit-add-loop-exit-spec.k
+  #
+  SPECS+=" "~/verified-smart-contracts/specs/deposit/deposit-init-calldata-spec.k
+  SPECS+=" "~/verified-smart-contracts/specs/deposit/deposit-init-calldata-revert-1-spec.k
+  SPECS+=" "~/verified-smart-contracts/specs/deposit/deposit-init-calldata-revert-2-spec.k
+  SPECS+=" "~/verified-smart-contracts/specs/deposit/deposit-init-calldata-revert-3-spec.k
+  SPECS+=" "~/verified-smart-contracts/specs/deposit/deposit-init-calldata-revert-4-spec.k
+  SPECS+=" "~/verified-smart-contracts/specs/deposit/deposit-init-calldata-revert-5-spec.k
+  SPECS+=" "~/verified-smart-contracts/specs/deposit/deposit-init-calldata-revert-6-spec.k
+  #
+  SPECS+=" "~/verified-smart-contracts/specs/deposit/deposit-init-revert-1-spec.k
+  SPECS+=" "~/verified-smart-contracts/specs/deposit/deposit-init-revert-2-spec.k
+  SPECS+=" "~/verified-smart-contracts/specs/deposit/deposit-data-revert-spec.k
+  #
+  SPECS+=" "~/verified-smart-contracts/specs/deposit/revert-invalid_function_identifier-lt_4-spec.k
+  SPECS+=" "~/verified-smart-contracts/specs/deposit/revert-invalid_function_identifier-ge_4-lt_32-spec.k
+  SPECS+=" "~/verified-smart-contracts/specs/deposit/revert-invalid_function_identifier-ge_4-ge_32-spec.k
+  SPECS+=" "~/verified-smart-contracts/specs/deposit/revert-init-spec.k
+  SPECS+=" "~/verified-smart-contracts/specs/deposit/revert-get_deposit_root-spec.k
+  SPECS+=" "~/verified-smart-contracts/specs/deposit/revert-get_deposit_count-spec.k
+
+  export LOGDIR=log.`date "+%F-%T-%Z" | sed 's/:/-/g'`
+  mkdir $LOGDIR
 
   bash lemmas.sh >lemmas.k
 
   make clean
   make split-proof-tests
 
-  kprove -v --debug -d ~/evm-semantics/.build/java -m VERIFICATION $OPTS --smt-prelude ~/verified-smart-contracts/deposit/bytecode-verification/evm.smt2 ~/verified-smart-contracts/specs/deposit/init-init-spec.k
-  kprove -v --debug -d ~/evm-semantics/.build/java -m VERIFICATION $OPTS --smt-prelude ~/verified-smart-contracts/deposit/bytecode-verification/evm.smt2 ~/verified-smart-contracts/specs/deposit/init-loop0-spec.k
-  kprove -v --debug -d ~/evm-semantics/.build/java -m VERIFICATION $OPTS --smt-prelude ~/verified-smart-contracts/deposit/bytecode-verification/evm.smt2 ~/verified-smart-contracts/specs/deposit/init-loop-enter-spec.k
-  kprove -v --debug -d ~/evm-semantics/.build/java -m VERIFICATION $OPTS --smt-prelude ~/verified-smart-contracts/deposit/bytecode-verification/evm.smt2 ~/verified-smart-contracts/specs/deposit/init-loop-exit-spec.k
+# for spec in $SPECS; do
+#   kprove -v --debug \
+#     -d ~/evm-semantics/.build/defn/java \
+#     -m VERIFICATION $OPTS \
+#     --smt-prelude ~/verified-smart-contracts/deposit/bytecode-verification/evm.smt2 \
+#     `eval echo $spec` \
+#     >$LOGDIR/`basename $spec`.log 2>&1
+# done
 
-  kprove -v --debug -d ~/evm-semantics/.build/java -m VERIFICATION $OPTS --smt-prelude ~/verified-smart-contracts/deposit/bytecode-verification/evm.smt2 ~/verified-smart-contracts/specs/deposit/to_little_endian_64-spec.k
- #kprove -v --debug -d ~/evm-semantics/.build/java -m VERIFICATION $OPTS --smt-prelude ~/verified-smart-contracts/deposit/bytecode-verification/evm.smt2 ~/verified-smart-contracts/specs/deposit/to_little_endian_64-forloop-spec.k
- #kprove -v --debug -d ~/evm-semantics/.build/java -m VERIFICATION $OPTS --smt-prelude ~/verified-smart-contracts/deposit/bytecode-verification/evm.smt2 ~/verified-smart-contracts/specs/deposit/to_little_endian_64-return-spec.k
-  kprove -v --debug -d ~/evm-semantics/.build/java -m VERIFICATION $OPTS --smt-prelude ~/verified-smart-contracts/deposit/bytecode-verification/evm.smt2 ~/verified-smart-contracts/specs/deposit/get_deposit_root-init-spec.k
-  kprove -v --debug -d ~/evm-semantics/.build/java -m VERIFICATION $OPTS --smt-prelude ~/verified-smart-contracts/deposit/bytecode-verification/evm.smt2 ~/verified-smart-contracts/specs/deposit/get_deposit_root-loop0-then-spec.k
-  kprove -v --debug -d ~/evm-semantics/.build/java -m VERIFICATION $OPTS --smt-prelude ~/verified-smart-contracts/deposit/bytecode-verification/evm.smt2 ~/verified-smart-contracts/specs/deposit/get_deposit_root-loop0-else-spec.k
-  kprove -v --debug -d ~/evm-semantics/.build/java -m VERIFICATION $OPTS --smt-prelude ~/verified-smart-contracts/deposit/bytecode-verification/evm.smt2 ~/verified-smart-contracts/specs/deposit/get_deposit_root-loop-body-then-spec.k
-  kprove -v --debug -d ~/evm-semantics/.build/java -m VERIFICATION $OPTS --smt-prelude ~/verified-smart-contracts/deposit/bytecode-verification/evm.smt2 ~/verified-smart-contracts/specs/deposit/get_deposit_root-loop-body-else-spec.k
-  kprove -v --debug -d ~/evm-semantics/.build/java -m VERIFICATION $OPTS --smt-prelude ~/verified-smart-contracts/deposit/bytecode-verification/evm.smt2 ~/verified-smart-contracts/specs/deposit/get_deposit_root-loop-exit-spec.k
-  kprove -v --debug -d ~/evm-semantics/.build/java -m VERIFICATION $OPTS --smt-prelude ~/verified-smart-contracts/deposit/bytecode-verification/evm.smt2 ~/verified-smart-contracts/specs/deposit/get_deposit_count-spec.k
-  kprove -v --debug -d ~/evm-semantics/.build/java -m VERIFICATION $OPTS --smt-prelude ~/verified-smart-contracts/deposit/bytecode-verification/evm.smt2 ~/verified-smart-contracts/specs/deposit/deposit-init-spec.k
-  kprove -v --debug -d ~/evm-semantics/.build/java -m VERIFICATION $OPTS --smt-prelude ~/verified-smart-contracts/deposit/bytecode-verification/evm.smt2 ~/verified-smart-contracts/specs/deposit/deposit-subcall_1-spec.k
-  kprove -v --debug -d ~/evm-semantics/.build/java -m VERIFICATION $OPTS --smt-prelude ~/verified-smart-contracts/deposit/bytecode-verification/evm.smt2 ~/verified-smart-contracts/specs/deposit/deposit-subcall_2-spec.k
-  kprove -v --debug -d ~/evm-semantics/.build/java -m VERIFICATION $OPTS --smt-prelude ~/verified-smart-contracts/deposit/bytecode-verification/evm.smt2 ~/verified-smart-contracts/specs/deposit/deposit-log-spec.k
-  kprove -v --debug -d ~/evm-semantics/.build/java -m VERIFICATION $OPTS --smt-prelude ~/verified-smart-contracts/deposit/bytecode-verification/evm.smt2 ~/verified-smart-contracts/specs/deposit/deposit-data-spec.k
-  kprove -v --debug -d ~/evm-semantics/.build/java -m VERIFICATION $OPTS --smt-prelude ~/verified-smart-contracts/deposit/bytecode-verification/evm.smt2 ~/verified-smart-contracts/specs/deposit/deposit-add-init-then-spec.k
-  kprove -v --debug -d ~/evm-semantics/.build/java -m VERIFICATION $OPTS --smt-prelude ~/verified-smart-contracts/deposit/bytecode-verification/evm.smt2 ~/verified-smart-contracts/specs/deposit/deposit-add-init-else-spec.k
-  kprove -v --debug -d ~/evm-semantics/.build/java -m VERIFICATION $OPTS --smt-prelude ~/verified-smart-contracts/deposit/bytecode-verification/evm.smt2 ~/verified-smart-contracts/specs/deposit/deposit-add-loop-enter-then-spec.k
-  kprove -v --debug -d ~/evm-semantics/.build/java -m VERIFICATION $OPTS --smt-prelude ~/verified-smart-contracts/deposit/bytecode-verification/evm.smt2 ~/verified-smart-contracts/specs/deposit/deposit-add-loop-enter-else-spec.k
-  kprove -v --debug -d ~/evm-semantics/.build/java -m VERIFICATION $OPTS --smt-prelude ~/verified-smart-contracts/deposit/bytecode-verification/evm.smt2 ~/verified-smart-contracts/specs/deposit/deposit-add-loop-exit-spec.k
+  run_kprove() {
+    kprove -v --debug \
+      -d ~/evm-semantics/.build/defn/java \
+      -m VERIFICATION $OPTS \
+      --smt-prelude ~/verified-smart-contracts/deposit/bytecode-verification/evm.smt2 \
+      `eval echo $1` \
+      >$LOGDIR/`basename $1`.log 2>&1
+  }
+  export -f run_kprove
 
-  kprove -v --debug -d ~/evm-semantics/.build/java -m VERIFICATION $OPTS --smt-prelude ~/verified-smart-contracts/deposit/bytecode-verification/evm.smt2 ~/verified-smart-contracts/specs/deposit/deposit-init-calldata-spec.k
-  kprove -v --debug -d ~/evm-semantics/.build/java -m VERIFICATION $OPTS --smt-prelude ~/verified-smart-contracts/deposit/bytecode-verification/evm.smt2 ~/verified-smart-contracts/specs/deposit/deposit-init-calldata-revert-1-spec.k
-  kprove -v --debug -d ~/evm-semantics/.build/java -m VERIFICATION $OPTS --smt-prelude ~/verified-smart-contracts/deposit/bytecode-verification/evm.smt2 ~/verified-smart-contracts/specs/deposit/deposit-init-calldata-revert-2-spec.k
-  kprove -v --debug -d ~/evm-semantics/.build/java -m VERIFICATION $OPTS --smt-prelude ~/verified-smart-contracts/deposit/bytecode-verification/evm.smt2 ~/verified-smart-contracts/specs/deposit/deposit-init-calldata-revert-3-spec.k
-  kprove -v --debug -d ~/evm-semantics/.build/java -m VERIFICATION $OPTS --smt-prelude ~/verified-smart-contracts/deposit/bytecode-verification/evm.smt2 ~/verified-smart-contracts/specs/deposit/deposit-init-calldata-revert-4-spec.k
-  kprove -v --debug -d ~/evm-semantics/.build/java -m VERIFICATION $OPTS --smt-prelude ~/verified-smart-contracts/deposit/bytecode-verification/evm.smt2 ~/verified-smart-contracts/specs/deposit/deposit-init-calldata-revert-5-spec.k
-  kprove -v --debug -d ~/evm-semantics/.build/java -m VERIFICATION $OPTS --smt-prelude ~/verified-smart-contracts/deposit/bytecode-verification/evm.smt2 ~/verified-smart-contracts/specs/deposit/deposit-init-calldata-revert-6-spec.k
-
-  kprove -v --debug -d ~/evm-semantics/.build/java -m VERIFICATION $OPTS --smt-prelude ~/verified-smart-contracts/deposit/bytecode-verification/evm.smt2 ~/verified-smart-contracts/specs/deposit/deposit-init-revert-1-spec.k
-  kprove -v --debug -d ~/evm-semantics/.build/java -m VERIFICATION $OPTS --smt-prelude ~/verified-smart-contracts/deposit/bytecode-verification/evm.smt2 ~/verified-smart-contracts/specs/deposit/deposit-init-revert-2-spec.k
-  kprove -v --debug -d ~/evm-semantics/.build/java -m VERIFICATION $OPTS --smt-prelude ~/verified-smart-contracts/deposit/bytecode-verification/evm.smt2 ~/verified-smart-contracts/specs/deposit/deposit-data-revert-spec.k
-
-  kprove -v --debug -d ~/evm-semantics/.build/java -m VERIFICATION $OPTS --smt-prelude ~/verified-smart-contracts/deposit/bytecode-verification/evm.smt2 ~/verified-smart-contracts/specs/deposit/revert-invalid_function_identifier-lt_4-spec.k
-  kprove -v --debug -d ~/evm-semantics/.build/java -m VERIFICATION $OPTS --smt-prelude ~/verified-smart-contracts/deposit/bytecode-verification/evm.smt2 ~/verified-smart-contracts/specs/deposit/revert-invalid_function_identifier-ge_4-lt_32-spec.k
-  kprove -v --debug -d ~/evm-semantics/.build/java -m VERIFICATION $OPTS --smt-prelude ~/verified-smart-contracts/deposit/bytecode-verification/evm.smt2 ~/verified-smart-contracts/specs/deposit/revert-invalid_function_identifier-ge_4-ge_32-spec.k
-  kprove -v --debug -d ~/evm-semantics/.build/java -m VERIFICATION $OPTS --smt-prelude ~/verified-smart-contracts/deposit/bytecode-verification/evm.smt2 ~/verified-smart-contracts/specs/deposit/revert-init-spec.k
-  kprove -v --debug -d ~/evm-semantics/.build/java -m VERIFICATION $OPTS --smt-prelude ~/verified-smart-contracts/deposit/bytecode-verification/evm.smt2 ~/verified-smart-contracts/specs/deposit/revert-get_deposit_root-spec.k
-  kprove -v --debug -d ~/evm-semantics/.build/java -m VERIFICATION $OPTS --smt-prelude ~/verified-smart-contracts/deposit/bytecode-verification/evm.smt2 ~/verified-smart-contracts/specs/deposit/revert-get_deposit_count-spec.k
+  echo $SPECS | xargs -d ' ' -n 1 -P 1 -I {} bash -c 'run_kprove "{}"'
 
   date
