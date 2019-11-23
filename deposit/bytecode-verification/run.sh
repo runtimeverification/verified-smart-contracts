@@ -34,6 +34,7 @@
 # export OPTS+=" --debug-z3-queries"
 
   SPECS=
+
   SPECS+=" "~/verified-smart-contracts/specs/deposit/init-init-spec.k
   SPECS+=" "~/verified-smart-contracts/specs/deposit/init-loop0-spec.k
   SPECS+=" "~/verified-smart-contracts/specs/deposit/init-loop-enter-spec.k
@@ -86,15 +87,6 @@
 
   make clean
   make split-proof-tests
-
-# for spec in $SPECS; do
-#   kprove -v --debug \
-#     -d ~/evm-semantics/.build/defn/java \
-#     -m VERIFICATION $OPTS \
-#     --smt-prelude ~/verified-smart-contracts/deposit/bytecode-verification/evm.smt2 \
-#     `eval echo $spec` \
-#     >$LOGDIR/`basename $spec`.log 2>&1
-# done
 
   run_kprove() {
     kprove -v --debug \
