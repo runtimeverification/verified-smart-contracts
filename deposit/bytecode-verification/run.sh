@@ -13,7 +13,7 @@
   export OPTS+=" --boundary-cells k,pc"
   export OPTS+=" --log"
 # export OPTS+=" --log-basic"
-  export OPTS+=" --log-rules"
+# export OPTS+=" --log-rules"
   export OPTS+=" --log-success"
   export OPTS+=" --log-success-pc-diff"
 # export OPTS+=" --log-func-eval"
@@ -80,7 +80,7 @@
   SPECS+=" "~/verified-smart-contracts/specs/deposit/revert-get_deposit_root-spec.k
   SPECS+=" "~/verified-smart-contracts/specs/deposit/revert-get_deposit_count-spec.k
 
-  export LOGDIR=log.`date "+%F-%T-%Z" | sed 's/:/-/g'`
+  export LOGDIR=log.`date "+%F-%T-%Z" | sed 's/://g'`
   mkdir $LOGDIR
 
   bash lemmas.sh >lemmas.k
@@ -95,9 +95,10 @@
       --smt-prelude ~/verified-smart-contracts/deposit/bytecode-verification/evm.smt2 \
       `eval echo $1` \
       >$LOGDIR/`basename $1`.log 2>&1
+    tail -100 $LOGDIR/`basename $1`.log
   }
   export -f run_kprove
 
-  echo $SPECS | xargs -d ' ' -n 1 -P 1 -I {} bash -c 'run_kprove "{}"'
+  echo $SPECS | xargs -d ' ' -n 1 -P 2 -I {} bash -c 'run_kprove "{}"'
 
   date
