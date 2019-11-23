@@ -264,6 +264,8 @@ module LEMMAS
     rule #dropAux(N, BUF, WS) => #bufSeg(BUF, N, #sizeBuffer(BUF) -Int N) ++ WS requires 0 <=Int N andBool N <=Int #sizeBuffer(BUF)
     rule #dropAux(N, BUF, WS) => #drop(N -Int #sizeBuffer(BUF), WS)             requires N >=Int #sizeBuffer(BUF)
 
+    rule #drop(N, (W : WS)) => #drop(N -Int 1, WS) requires N >Int 0 andBool notBool (#isConcrete(N) andBool #isConcrete(W) andBool #isConcrete(WS))
+
     syntax Int ::= #getElmAux ( WordStack , WordStack , Int ) [function]
  // --------------------------------------------------------------------
     rule (BUF      ) [ N ] => #getElmAux(BUF, .WordStack, N)      requires #isBuf(BUF)
