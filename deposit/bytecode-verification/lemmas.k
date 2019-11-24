@@ -246,6 +246,10 @@ module LEMMAS
       => #bufSeg(BUF, START0 +Int START, WIDTH)
       requires 0 <=Int START andBool START +Int WIDTH <=Int WIDTH0
 
+    rule #bufElm(#bufSeg(BUF, START0, WIDTH0), INDEX)
+      => #bufElm(BUF, START0 +Int INDEX)
+      requires 0 <=Int INDEX andBool INDEX <Int WIDTH0
+
 
     // Auxiliary function to make rules compatible with simplification `rule WS ++ .WordStack => WS`
     syntax WordStack ::= #takeAux ( Int , WordStack , WordStack ) [function]
@@ -263,8 +267,6 @@ module LEMMAS
     rule #drop(N, BUF ++ WS) => #dropAux(N, BUF, WS)                            requires #isBuf(BUF)
     rule #dropAux(N, BUF, WS) => #bufSeg(BUF, N, #sizeBuffer(BUF) -Int N) ++ WS requires 0 <=Int N andBool N <=Int #sizeBuffer(BUF)
     rule #dropAux(N, BUF, WS) => #drop(N -Int #sizeBuffer(BUF), WS)             requires N >=Int #sizeBuffer(BUF)
-
-    rule #drop(N, (W : WS)) => #drop(N -Int 1, WS) requires N >Int 0 andBool notBool (#isConcrete(N) andBool #isConcrete(W) andBool #isConcrete(WS))
 
     syntax Int ::= #getElmAux ( WordStack , WordStack , Int ) [function]
  // --------------------------------------------------------------------
