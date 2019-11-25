@@ -43,6 +43,9 @@ module LEMMAS
     rule I +Int B => B          +Int I when #isConcrete(I) andBool notBool #isConcrete(B)
     rule A -Int I => A +Int (0 -Int I) when notBool #isConcrete(A) andBool #isConcrete(I)
 
+    // eDSL
+
+    rule #hashedLocation("Array", BASE, OFFSET OFFSETS) => #hashedLocation("Array", keccakIntList(BASE) +Word OFFSET, OFFSETS)
 
     //////////////////////////
     // Range Predicates
