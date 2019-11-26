@@ -132,4 +132,40 @@ module VERIFICATION
        andBool K22 +Int 1 ==Int K23
        andBool K23 +Int 1 ==Int K24
 
+    rule selectRange(store(store(store(store(store(store(store(store(store(store(store(store(store(store(store(store(M,
+        K1 , 0),
+        K2 , 0),
+        K3 , 0),
+        K4 , 0),
+        K5 , 0),
+        K6 , 0),
+        K7 , 0),
+        K8 , 0),
+        K9 , 0),
+        K10, 0),
+        K11, 0),
+        K12, 0),
+        K13, 0),
+        K14, 0),
+        K15, 0),
+        K16, 0),
+        K, W)
+      => selectRange(storeRange(M, K1, 16, #buf(16, 0)), K, W)
+      requires K1  +Int 1 ==Int K2
+       andBool K2  +Int 1 ==Int K3
+       andBool K3  +Int 1 ==Int K4
+       andBool K4  +Int 1 ==Int K5
+       andBool K5  +Int 1 ==Int K6
+       andBool K6  +Int 1 ==Int K7
+       andBool K7  +Int 1 ==Int K8
+       andBool K8  +Int 1 ==Int K9
+       andBool K9  +Int 1 ==Int K10
+       andBool K10 +Int 1 ==Int K11
+       andBool K11 +Int 1 ==Int K12
+       andBool K12 +Int 1 ==Int K13
+       andBool K13 +Int 1 ==Int K14
+       andBool K14 +Int 1 ==Int K15
+       andBool K15 +Int 1 ==Int K16
+       andBool #getKLabelString(M) =/=String "store"
+
 endmodule
