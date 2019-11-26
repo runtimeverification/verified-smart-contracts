@@ -1,4 +1,4 @@
-BUILD_DIR:=../../.build
+BUILD_DIR:=.build
 
 LOCAL_LEMMAS:=verification.k \
 			  abstract-semantics.k \
@@ -8,7 +8,7 @@ TMPLS:=module-tmpl.k spec-tmpl.k
 SPEC_GROUP:=deposit
 SPEC_INI:=deposit-spec.ini
 
-KPROVE_OPTS:=--smt-prelude $(abspath $(dir $(abspath $(lastword $(MAKEFILE_LIST))))/evm.smt2)
+KPROVE_OPTS:=--smt-prelude $(abspath $(dir $(abspath $(lastword $(MAKEFILE_LIST))))/evm.smt2) --branching-allowed 0
 
 SPEC_NAMES:=init-init \
             init-loop0 \
