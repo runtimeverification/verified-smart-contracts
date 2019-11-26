@@ -8,7 +8,7 @@ TMPLS:=module-tmpl.k spec-tmpl.k
 SPEC_GROUP:=deposit
 SPEC_INI:=deposit-spec.ini
 
-KPROVE_OPTS:=--smt-prelude $(abspath $(dir $(abspath $(lastword $(MAKEFILE_LIST))))/evm.smt2) --branching-allowed 0
+KPROVE_OPTS:=--smt-prelude $(abspath $(dir $(abspath $(lastword $(MAKEFILE_LIST))))/evm.smt2) --branching-allowed 0 --concrete-rules "EVM-DATA.take.zero-pad"
 
 SPEC_NAMES:=init-init \
             init-loop0 \
