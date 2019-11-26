@@ -93,6 +93,7 @@
       -d ~/evm-semantics/.build/defn/java \
       -m VERIFICATION $OPTS \
       --smt-prelude ~/verified-smart-contracts/deposit/bytecode-verification/evm.smt2 \
+      --concrete-rules "EVM-DATA.take.zero-pad" \
       `eval echo $1` \
       >$LOGDIR/`basename $1`.log 2>&1
     tail -100 $LOGDIR/`basename $1`.log
