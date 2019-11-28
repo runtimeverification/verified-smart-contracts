@@ -1,5 +1,7 @@
 requires "edsl.k"
 
+// NOTE: This module includes all lemmas (except assosiativity ones) in both lemmas.md and evm-data-map-symbolic.k
+
 module LEMMAS
     imports K-REFLECTION
     imports EDSL
