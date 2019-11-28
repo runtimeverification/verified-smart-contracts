@@ -1,8 +1,8 @@
 BUILD_DIR:=.build
 
 LOCAL_LEMMAS:=verification.k \
-			  abstract-semantics.k \
-			  lemmas.k
+              abstract-semantics.k \
+              lemmas.k
 TMPLS:=module-tmpl.k spec-tmpl.k
 
 SPEC_GROUP:=deposit
