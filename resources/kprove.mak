@@ -11,6 +11,15 @@ RESOURCES:=$(ROOT)/resources
 SPECS_DIR:=$(ROOT)/specs
 
 #
+# Backend Settings
+#
+
+# java or haskell
+K_BACKEND?=java
+K_MVN_OPTS_java:=-Dllvm.backend.skip -Dhaskell.backend.skip
+K_MVN_OPTS_haskell:=-Dllvm.backend.skip
+
+#
 # Parameters
 #
 
@@ -83,12 +92,14 @@ endif
 
 KPROVE_PREFIX?=
 
-KPROVE:=$(KPROVE_PREFIX) $(K_BIN)/kprove -v --debug -d $(KEVM_REPO_DIR)/.build/defn/java -m VERIFICATION \
+KPROVE_OPTS_java:=--deterministic-functions --cache-func-optimized --format-failures --boundary-cells k,pc \
+				  --log-cells k,output,statusCode,localMem,pc,gas,wordStack,callData,accounts,memoryUsed,\#pc,\#result
+KPROVE_OPTS_haskell:=
+
+KPROVE:=$(KPROVE_PREFIX) $(K_BIN)/kprove -v --debug -d $(KEVM_REPO_DIR)/.build/defn/$(K_BACKEND) -m VERIFICATION \
         --z3-impl-timeout 500 $(SHUTDOWN_WAIT_TIME_OPT) $(TIMEOUT_OPT) \
-        --deterministic-functions --no-exc-wrap \
-        --cache-func-optimized --no-alpha-renaming --format-failures --boundary-cells k,pc \
-        --log-cells k,output,statusCode,localMem,pc,gas,wordStack,callData,accounts,memoryUsed,\#pc,\#result \
-        $(KPROVE_OPTS)
+        --no-exc-wrap --no-alpha-renaming \
+        $(KPROVE_OPTS_$(K_BACKEND)) $(KPROVE_OPTS)
 
 KSERVER_LOG_FILE:=$(SPECS_DIR)/$(SPEC_GROUP)/kserver.log
 SPAWN_KSERVER:=$(K_BIN)/kserver >> "$(KSERVER_LOG_FILE)" 2>&1 &
@@ -104,7 +115,7 @@ export TANGLER
 export LUA_PATH
 
 #
-# Dependencies
+# Dependencies - Java Backend
 #
 
 .PHONY: all clean clean-deps clean-k clean-kevm clean-kevm-cache deps deps-tangle deps-k deps-kevm split-proof-tests test
@@ -124,32 +135,32 @@ clean-kevm-cache:
 
 deps: deps-tangle deps-k deps-kevm
 deps-tangle: $(PANDOC_TANGLE_SUBMODULE)/submodule.timestamp
-deps-k:      $(K_REPO_DIR)/mvn.timestamp
-deps-kevm:   $(KEVM_REPO_DIR)/make.timestamp
+deps-k:      $(K_REPO_DIR)/mvn-$(K_BACKEND).timestamp
+deps-kevm:   $(KEVM_REPO_DIR)/make-$(K_BACKEND).timestamp
 
 %/submodule.timestamp:
 	git submodule update --init --recursive -- $*
 	touch $@
 
-$(K_REPO_DIR)/mvn.timestamp: $(K_VERSION_FILE) | $(K_REPO_DIR)
+$(K_REPO_DIR)/mvn-$(K_BACKEND).timestamp: $(K_VERSION_FILE) | $(K_REPO_DIR)
 	cd $(K_REPO_DIR) \
 		&& git fetch \
 		&& git reset --hard $(K_VERSION) \
 		&& git submodule update --init --recursive \
-		&& mvn package -DskipTests -Dllvm.backend.skip -Dhaskell.backend.skip
+		&& mvn package -DskipTests $(K_MVN_OPTS_$(K_BACKEND))
 	touch $@
 
 $(K_REPO_DIR):
 	git clone $(K_REPO_URL) $(K_REPO_DIR)
 
-$(KEVM_REPO_DIR)/make.timestamp: $(KEVM_VERSION_FILE) $(K_REPO_DIR)/mvn.timestamp | $(KEVM_REPO_DIR)
+$(KEVM_REPO_DIR)/make-$(K_BACKEND).timestamp: $(KEVM_VERSION_FILE) $(K_REPO_DIR)/mvn-$(K_BACKEND).timestamp | $(KEVM_REPO_DIR)
 	cd $(KEVM_REPO_DIR) \
 		&& git fetch \
 		&& git clean -fdx \
 		&& git reset --hard $(KEVM_VERSION) \
 		&& make tangle-deps \
 		&& make defn \
-		&& $(K_BIN)/kompile -v --debug --backend java -I .build/defn/java -d .build/defn/java --main-module ETHEREUM-SIMULATION --syntax-module ETHEREUM-SIMULATION .build/defn/java/driver.k
+		&& $(K_BIN)/kompile -v --debug --backend $(K_BACKEND) -I .build/defn/$(K_BACKEND) -d .build/defn/$(K_BACKEND) --main-module ETHEREUM-SIMULATION --syntax-module ETHEREUM-SIMULATION .build/defn/$(K_BACKEND)/driver.k
 	touch $@
 
 $(KEVM_REPO_DIR):
