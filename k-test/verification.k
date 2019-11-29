@@ -9,11 +9,6 @@ module VERIFICATION
     imports EDSL
     imports LEMMAS
 
-    rule #sizeWordStack ( WS , N:Int )
-      => N +Int #sizeWordStack ( WS , 0 )
-      requires N =/=K 0
-      [lemma]
-
     rule X <Int pow256 => true
        requires X <Int 256
 
