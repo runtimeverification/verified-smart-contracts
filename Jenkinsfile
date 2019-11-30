@@ -72,14 +72,14 @@ pipeline {
           }
       } }
     }
-    stage('Minimal') {
+    /*stage('Minimal') {
       when {
         environment name: 'VSC_MINIMAL_ENABLED', value: 'true'
       }
       steps { ansiColor('xterm') {
           sh ' make jenkins MODE=MINIMAL NPROCS="$NPROCS" '
       } }
-    }
+    }*/
     stage('KTest') {
       when {
         environment name: 'VSC_KTEST_ENABLED', value: 'true'
