@@ -1,3 +1,6 @@
+# Bytecode compiled with old Vyper. Needs KEVM version before Vyper storage layout fix.
+KEVM_VERSION_FILE:=.build/.kevm.rev
+
 LOCAL_LEMMAS:=../verification.k \
 			  ../../resources/abstract-semantics-segmented-gas.k \
 			  ../../resources/evm-symbolic.k \
