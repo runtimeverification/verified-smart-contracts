@@ -7,6 +7,9 @@ THIS_FILE:=$(abspath $(lastword $(MAKEFILE_LIST)))
 # path to root directory
 ROOT:=$(abspath $(dir $(THIS_FILE))/..)
 
+# path to default directory that contains .k.rev and .kevm.rev
+ROOT_BUILD_DIR:=$(ROOT)/.build
+
 RESOURCES:=$(ROOT)/resources
 SPECS_DIR:=$(ROOT)/specs
 
@@ -22,14 +25,6 @@ K_MVN_OPTS_haskell:=-Dllvm.backend.skip
 #
 # Parameters
 #
-
-# path to a directory that contains .k.rev and .kevm.rev
-BUILD_DIR?=$(ROOT)/.build
-
-# check if the build directory exists (note: $(wildcard $(BUILD_DIR)) is not enough since it doesn't check if it is a directory)
-ifeq ($(wildcard $(BUILD_DIR)/.),)
-$(error BUILD_DIR does not exist)
-endif
 
 K_REPO_URL?=https://github.com/kframework/k
 KEVM_REPO_URL?=https://github.com/kframework/evm-semantics
@@ -72,13 +67,21 @@ SHUTDOWN_WAIT_TIME?=5s
 # Settings
 #
 
-K_VERSION_FILE   :=$(BUILD_DIR)/.k.rev
-KEVM_VERSION_FILE:=$(BUILD_DIR)/.kevm.rev
+K_VERSION_FILE   ?=$(ROOT_BUILD_DIR)/.k.rev
+KEVM_VERSION_FILE?=$(ROOT_BUILD_DIR)/.kevm.rev
+# check if the build directory exists (note: $(wildcard $(BUILD_DIR)) is not enough since it doesn't check if it is a directory)
+ifeq ($(wildcard $(K_VERSION_FILE)),)
+$(error K_VERSION_FILE does not exist)
+endif
+ifeq ($(wildcard $(KEVM_VERSION_FILE)),)
+$(error KEVM_VERSION_FILE does not exist)
+endif
+
 K_VERSION        :=$(shell cat $(K_VERSION_FILE))
 KEVM_VERSION     :=$(shell cat $(KEVM_VERSION_FILE))
 
-K_REPO_DIR:=$(abspath $(BUILD_DIR)/k)
-KEVM_REPO_DIR:=$(abspath $(BUILD_DIR)/evm-semantics)
+K_REPO_DIR:=$(abspath $(dir $(K_VERSION_FILE))/k)
+KEVM_REPO_DIR:=$(abspath $(dir $(KEVM_VERSION_FILE))/evm-semantics)
 
 K_BIN:=$(abspath $(K_REPO_DIR)/k-distribution/target/release/k/bin)
 
