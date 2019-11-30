@@ -8,11 +8,12 @@ pipeline {
   environment {
     VSC_USE_KSERVER           = false
 
-    VSC_MINIMAL_ENABLED       = false
+    //For some reason jenkins gets stuck if first stage after Dependencies is disabled. So KTEST must stay enabled.
     VSC_KTEST_ENABLED         = true
+    VSC_MINIMAL_ENABLED       = false
     VSC_ERC20_ENABLED         = false
-    VSC_GNOSIS_ENABLED        = true
-    VSC_BIHU_ENABLED          = false
+    VSC_GNOSIS_ENABLED        = false
+    VSC_BIHU_ENABLED          = true
     VSC_ERC20_MAINNET_ENABLED = false
   }
 
@@ -72,20 +73,20 @@ pipeline {
           }
       } }
     }
-    /*stage('Minimal') {
-      when {
-        environment name: 'VSC_MINIMAL_ENABLED', value: 'true'
-      }
-      steps { ansiColor('xterm') {
-          sh ' make jenkins MODE=MINIMAL NPROCS="$NPROCS" '
-      } }
-    }*/
     stage('KTest') {
       when {
         environment name: 'VSC_KTEST_ENABLED', value: 'true'
       }
       steps { ansiColor('xterm') {
           sh ' make jenkins MODE=KTEST NPROCS="$NPROCS" '
+      } }
+    }
+    stage('Minimal') {
+      when {
+        environment name: 'VSC_MINIMAL_ENABLED', value: 'true'
+      }
+      steps { ansiColor('xterm') {
+          sh ' make jenkins MODE=MINIMAL NPROCS="$NPROCS" '
       } }
     }
     stage('ERC20') {
