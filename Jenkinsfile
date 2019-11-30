@@ -11,6 +11,7 @@ pipeline {
     VSC_MINIMAL_ENABLED       = true
     VSC_KTEST_ENABLED         = true
     VSC_ERC20_ENABLED         = true
+    VSC_DEPOSIT_ENABLED       = true
     VSC_GNOSIS_ENABLED        = true
     VSC_BIHU_ENABLED          = true
     VSC_ERC20_MAINNET_ENABLED = false
@@ -94,6 +95,14 @@ pipeline {
       }
       steps { ansiColor('xterm') {
           sh ' make jenkins MODE=ERC20 NPROCS="$NPROCS" '
+      } }
+    }
+    stage('Deposit') {
+      when {
+        environment name: 'VSC_DEPOSIT_ENABLED', value: 'true'
+      }
+      steps { ansiColor('xterm') {
+          sh ' make jenkins MODE=DEPOSIT NPROCS="$NPROCS" '
       } }
     }
     stage('Gnosis') {
