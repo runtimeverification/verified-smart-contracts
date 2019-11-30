@@ -1,3 +1,6 @@
+# Not the latest working KEVM but one known to work
+KEVM_VERSION_FILE:=.build/.kevm.rev
+
 LOCAL_LEMMAS:=verification.k \
 			  abstract-semantics.k \
 			  ../resources/abstract-semantics-segmented-gas.k \
