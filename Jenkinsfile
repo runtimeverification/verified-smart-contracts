@@ -9,7 +9,7 @@ pipeline {
     VSC_USE_KSERVER           = false
 
     //For some reason jenkins gets stuck if first stage after Dependencies is disabled. So KTEST must stay enabled.
-    VSC_KTEST_ENABLED         = true
+    VSC_KTEST_ENABLED         = false
     VSC_MINIMAL_ENABLED       = false
     VSC_ERC20_ENABLED         = false
     VSC_GNOSIS_ENABLED        = false
