@@ -8,11 +8,11 @@ pipeline {
   environment {
     VSC_USE_KSERVER           = false
 
-    VSC_MINIMAL_ENABLED       = true
-    VSC_KTEST_ENABLED         = true
-    VSC_ERC20_ENABLED         = true
+    VSC_MINIMAL_ENABLED       = false
+    VSC_KTEST_ENABLED         = false
+    VSC_ERC20_ENABLED         = false
     VSC_GNOSIS_ENABLED        = true
-    VSC_BIHU_ENABLED          = true
+    VSC_BIHU_ENABLED          = false
     VSC_ERC20_MAINNET_ENABLED = false
   }
 
