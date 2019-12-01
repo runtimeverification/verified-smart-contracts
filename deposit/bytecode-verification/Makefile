@@ -1,5 +1,3 @@
-BUILD_DIR:=.build
-
 LOCAL_LEMMAS:=verification.k \
               abstract-semantics.k \
               lemmas.k
