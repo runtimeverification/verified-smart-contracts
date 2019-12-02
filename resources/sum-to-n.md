@@ -8,11 +8,13 @@ This program sums the numbers from 1 to N (for sufficiently small N), including 
 
 ```{.k .sum-to-n}
 requires "edsl.k"
+requires "driver.k"
 requires "../lemmas.k"
 
 module VERIFICATION
     imports EDSL
     imports LEMMAS
+    imports ETHEREUM-SIMULATION
 
     rule #sizeWordStack ( WS , N:Int )
       => N +Int #sizeWordStack ( WS , 0 )
