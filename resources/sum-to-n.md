@@ -45,7 +45,6 @@ One challenge in verifying this program is to identify the conditions under whic
 
 ```{.k .sum-to-n}
 module SUM-TO-N-SPEC
-    imports ETHEREUM-SIMULATION
     imports VERIFICATION
 ```
 
