@@ -44,6 +44,7 @@ module ABSTRACT-SEMANTICS
    The out-of-gas exception is not harmful when it comes to safety properties, and it can be avoided by simply providing enough gas.
    The only problematic case is to call sub-functions with a specific amount of gas (instead of all available gas at that point).
    In this case, additional analyses need to be made to ensure that the specific amount of gas is sufficient, for liveness properties.
+   See the lemmas over `+Gas` for the analysis, which checks the remaining (i.e., refuned) gas is positive when returning to the caller.
 
    In particular, the deposit contract involves precompiled contract calls (i.e., SHA256 and ID), where ID calls are fed a specific amount of gas.
    That is, the amount of gas provided to ID calls is "18 + floor(CALLDATASIZE / 10)",
