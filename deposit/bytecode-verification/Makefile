@@ -1,3 +1,5 @@
+BUILD_DIR:=.build
+
 LOCAL_LEMMAS:=verification.k \
               abstract-semantics.k \
               lemmas.k
@@ -6,7 +8,9 @@ TMPLS:=module-tmpl.k spec-tmpl.k
 SPEC_GROUP:=deposit
 SPEC_INI:=deposit-spec.ini
 
-KPROVE_OPTS:=--smt-prelude $(abspath $(dir $(abspath $(lastword $(MAKEFILE_LIST))))/evm.smt2) --branching-allowed 0 --concrete-rules "EVM-DATA.take.zero-pad"
+KPROVE_OPTS:=--smt-prelude $(abspath $(dir $(abspath $(lastword $(MAKEFILE_LIST))))/evm.smt2) \
+             --branching-allowed 0 \
+             --concrete-rules $(shell cat concrete-rules.txt | tr '\n' ',')
 
 SPEC_NAMES:=init-init \
             init-loop0 \
