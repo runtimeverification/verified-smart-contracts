@@ -17,8 +17,6 @@ SPEC_NAMES:=init-init \
             init-loop-enter \
             init-loop-exit \
             to_little_endian_64 \
-            to_little_endian_64-forloop \
-            to_little_endian_64-return \
             get_deposit_root-init \
             get_deposit_root-loop0-then \
             get_deposit_root-loop0-else \
