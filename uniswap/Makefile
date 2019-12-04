@@ -12,7 +12,9 @@ SPEC_NAMES:=addLiquidity-1 \
             ethToTokenSwapInput \
             ethToTokenSwapOutput
 
+override KEVM_BUILD_DIR=$(KEVM_REPO_DIR)/.build/$(K_BACKEND)
+
 include ../resources/kprove.mak
 
-$(SPECS_DIR)/lemmas.k: lemmas.md $(TANGLER)
+$(SPECS_DIR)/uniswap/lemmas.k: lemmas.md $(TANGLER)
 	pandoc --from markdown --to "$(TANGLER)" --metadata=code:".k" $< > $@
