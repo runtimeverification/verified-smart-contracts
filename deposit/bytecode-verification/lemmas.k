@@ -659,10 +659,28 @@ module LEMMAS
     rule #symGas(X,                   LB,          UB,          ListItem(C) S, CMEM) +Gas #symGas(CGASCAP,                   LB', UB', S', CMEM')
       => #symGas(X,                   LB +Int LB', UB +Int UB', S'          S, CMEM) -Gas CMEM'
         requires C ==K CGASCAP
+         andBool isPositiveGas(#symGas(CGASCAP,                   LB', UB', S', CMEM'))
 
     rule #symGas(X,                   LB,          UB,          ListItem(C) S, CMEM) +Gas #symGas(CGASCAP +Int CCALLSTIPEND, LB', UB', S', CMEM')
       => #symGas(X +Int CCALLSTIPEND, LB +Int LB', UB +Int UB', S'          S, CMEM) -Gas CMEM'
         requires C ==K CGASCAP
+         andBool isPositiveGas(#symGas(CGASCAP +Int CCALLSTIPEND, LB', UB', S', CMEM'))
+
+    syntax Bool ::= isPositiveGas(Int) [function]
+
+    syntax Bool ::= isInitGas(Int) [function]
+
+    // call with constant gas (particularly for precompiled contract calls)
+    rule isPositiveGas(#symGas(Cgascap(_, G, #symGas(IG, _, _, _, _), _),                   _, UB, .List, 0)) => G                   >=Int UB
+        requires isInitGas(IG) andBool #isConcrete(G) andBool #isConcrete(UB)
+    rule isPositiveGas(#symGas(Cgascap(_, G, #symGas(IG, _, _, _, _), _) +Int CCALLSTIPEND, _, UB, .List, 0)) => G +Int CCALLSTIPEND >=Int UB
+        requires isInitGas(IG) andBool #isConcrete(G) andBool #isConcrete(UB) andBool #isConcrete(CCALLSTIPEND)
+
+    // call with all available gas
+    rule isPositiveGas(#symGas(Cgascap(_, #symGas(IG, _, _, _, _), _, _),        _, _, _, _)) => true
+        requires isInitGas(IG)
+    rule isPositiveGas(#symGas(Cgascap(_, #symGas(IG, _, _, _, _), _, _) +Int _, _, _, _, _)) => true
+        requires isInitGas(IG)
 
     //  Cs*
 

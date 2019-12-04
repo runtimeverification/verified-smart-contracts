@@ -1,3 +1,5 @@
+KEVM_VERSION_FILE:=.build/.kevm.rev
+
 LOCAL_LEMMAS:=verification.k \
               abstract-semantics.k \
               lemmas.k
@@ -6,15 +8,15 @@ TMPLS:=module-tmpl.k spec-tmpl.k
 SPEC_GROUP:=deposit
 SPEC_INI:=deposit-spec.ini
 
-KPROVE_OPTS:=--smt-prelude $(abspath $(dir $(abspath $(lastword $(MAKEFILE_LIST))))/evm.smt2) --branching-allowed 0 --concrete-rules "EVM-DATA.take.zero-pad"
+KPROVE_OPTS:=--smt-prelude $(abspath $(dir $(abspath $(lastword $(MAKEFILE_LIST))))/evm.smt2) \
+             --branching-allowed 0 \
+             --concrete-rules $(shell cat concrete-rules.txt | tr '\n' ',')
 
 SPEC_NAMES:=init-init \
             init-loop0 \
             init-loop-enter \
             init-loop-exit \
             to_little_endian_64 \
-            to_little_endian_64-forloop \
-            to_little_endian_64-return \
             get_deposit_root-init \
             get_deposit_root-loop0-then \
             get_deposit_root-loop0-else \
