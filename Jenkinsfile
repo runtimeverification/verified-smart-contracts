@@ -14,6 +14,7 @@ pipeline {
     VSC_DEPOSIT_ENABLED       = true
     VSC_GNOSIS_ENABLED        = true
     VSC_BIHU_ENABLED          = true
+    VSC_UNISWAP_ENABLED       = false
     VSC_ERC20_MAINNET_ENABLED = false
   }
 
@@ -119,6 +120,14 @@ pipeline {
       }
       steps { ansiColor('xterm') {
           sh ' make jenkins MODE=BIHU NPROCS="$NPROCS" '
+      } }
+    }
+    stage('Uniswap') {
+      when {
+        environment name: 'VSC_UNISWAP_ENABLED', value: 'true'
+      }
+      steps { ansiColor('xterm') {
+          sh ' make jenkins MODE=UNISWAP NPROCS="$NPROCS" '
       } }
     }
     stage('ERC20 mainnet') {
