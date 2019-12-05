@@ -82,6 +82,7 @@ KEVM_VERSION     :=$(shell cat $(KEVM_VERSION_FILE))
 
 K_REPO_DIR:=$(abspath $(dir $(K_VERSION_FILE))/k)
 KEVM_REPO_DIR:=$(abspath $(dir $(KEVM_VERSION_FILE))/evm-semantics)
+KEVM_BUILD_DIR:=$(KEVM_REPO_DIR)/.build/defn/$(K_BACKEND)
 
 K_BIN:=$(abspath $(K_REPO_DIR)/k-distribution/target/release/k/bin)
 
@@ -99,7 +100,7 @@ KPROVE_OPTS_java:=--deterministic-functions --cache-func-optimized --format-fail
 				  --log-cells k,output,statusCode,localMem,pc,gas,wordStack,callData,accounts,memoryUsed,\#pc,\#result
 KPROVE_OPTS_haskell:=
 
-KPROVE:=$(KPROVE_PREFIX) $(K_BIN)/kprove -v --debug -d $(KEVM_REPO_DIR)/.build/defn/$(K_BACKEND) -m VERIFICATION \
+KPROVE:=$(KPROVE_PREFIX) $(K_BIN)/kprove -v --debug -d $(KEVM_BUILD_DIR) -m VERIFICATION \
         --z3-impl-timeout 500 $(SHUTDOWN_WAIT_TIME_OPT) $(TIMEOUT_OPT) \
         --no-exc-wrap --no-alpha-renaming \
         $(KPROVE_OPTS_$(K_BACKEND)) $(KPROVE_OPTS)
@@ -109,7 +110,7 @@ SPAWN_KSERVER:=$(K_BIN)/kserver >> "$(KSERVER_LOG_FILE)" 2>&1 &
 STOP_KSERVER:=$(K_BIN)/stop-kserver || true
 
 SPEC_FILES:=$(patsubst %,$(SPECS_DIR)/$(SPEC_GROUP)/%-spec.k,$(SPEC_NAMES))
-LEMMAS:=$(SPECS_DIR)/$(SPEC_GROUP)/lemmas.timestamp $(dir $(SPECS_DIR)/$(SPEC_GROUP))/lemmas.k
+LEMMAS:=$(SPECS_DIR)/$(SPEC_GROUP)/lemmas.timestamp $(abspath $(dir $(SPECS_DIR)/$(SPEC_GROUP)))/lemmas.k
 
 PANDOC_TANGLE_SUBMODULE:=$(ROOT)/.build/pandoc-tangle
 TANGLER:=$(PANDOC_TANGLE_SUBMODULE)/tangle.lua
@@ -134,7 +135,7 @@ clean-k:
 clean-kevm:
 	rm -rf $(KEVM_REPO_DIR)
 clean-kevm-cache:
-	rm -rf $(KEVM_REPO_DIR)/.build/defn/java/driver-kompiled/cache.bin
+	rm -rf $(KEVM_BUILD_DIR)/driver-kompiled/cache.bin
 
 deps: deps-tangle deps-k deps-kevm
 deps-tangle: $(PANDOC_TANGLE_SUBMODULE)/submodule.timestamp
@@ -163,7 +164,7 @@ $(KEVM_REPO_DIR)/make-$(K_BACKEND).timestamp: $(KEVM_VERSION_FILE) $(K_REPO_DIR)
 		&& git reset --hard $(KEVM_VERSION) \
 		&& make tangle-deps \
 		&& make defn \
-		&& $(K_BIN)/kompile -v --debug --backend $(K_BACKEND) -I .build/defn/$(K_BACKEND) -d .build/defn/$(K_BACKEND) --main-module ETHEREUM-SIMULATION --syntax-module ETHEREUM-SIMULATION .build/defn/$(K_BACKEND)/driver.k
+		&& $(K_BIN)/kompile -v --debug --backend $(K_BACKEND) -I $(KEVM_BUILD_DIR) -d $(KEVM_BUILD_DIR) --main-module ETHEREUM-SIMULATION --syntax-module ETHEREUM-SIMULATION $(KEVM_BUILD_DIR)/driver.k
 	touch $@
 
 $(KEVM_REPO_DIR):
