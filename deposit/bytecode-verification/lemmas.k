@@ -77,9 +77,8 @@ module LEMMAS
     rule         bool2Word(_) <Int 256    => true
     rule         bool2Word(_) <Int pow256 => true
 
-    // X xorInt (pow256 - 1)
-    rule 0 <=Int X xorInt 115792089237316195423570985008687907853269984665640564039457584007913129639935             => true  requires 0<=Int X andBool X <Int pow256
-    rule         X xorInt 115792089237316195423570985008687907853269984665640564039457584007913129639935 <Int pow256 => true  requires 0<=Int X andBool X <Int pow256
+    rule 0 <=Int X xorInt maxUInt256             => true  requires #rangeUInt(256, X)
+    rule         X xorInt maxUInt256 <Int pow256 => true  requires #rangeUInt(256, X)
 
     rule 0 <=Int #asWord(WS)             => true
     rule         #asWord(WS) <Int pow256 => true
@@ -190,8 +189,7 @@ module LEMMAS
     rule 115792089237316195423570985007226406215939081747436879206741300988257197096960 &Int ADDR => 0
       requires #rangeAddress(ADDR)
 
-    // #asWord(WS) &Int (pow256 - 1)
-    rule #asWord(WS) &Int 115792089237316195423570985008687907853269984665640564039457584007913129639935 => #asWord(WS)
+    rule #asWord(WS) &Int maxUInt256 => #asWord(WS)
 
     //
     // boolean
