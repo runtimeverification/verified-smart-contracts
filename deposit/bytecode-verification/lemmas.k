@@ -398,11 +398,6 @@ module LEMMAS
 
     rule nthbyteof(N, 0, 1) => N
 
-    syntax Bool ::= #isRegularWordStack ( WordStack ) [function]
- // -------------------------------------------------------
-    rule #isRegularWordStack(N : WS => WS)
-    rule #isRegularWordStack(.WordStack) => true
-
     // for Vyper
     rule #padToWidth(N, #asByteStack(#asWord(WS))) => WS
       requires #noOverflow(WS) andBool N ==Int #sizeWordStack(WS)
