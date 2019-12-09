@@ -73,8 +73,8 @@ module LEMMAS
     rule         #bufElm(_, _) <Int pow256 => true
 
     // X xorInt (pow256 - 1)
-    rule 0 <=Int X xorInt 115792089237316195423570985008687907853269984665640564039457584007913129639935             => true  requires 0<=Int X andBool X <Int pow256
-    rule         X xorInt 115792089237316195423570985008687907853269984665640564039457584007913129639935 <Int pow256 => true  requires 0<=Int X andBool X <Int pow256
+    rule 0 <=Int X xorInt maxUInt256             => true  requires 0<=Int X andBool X <Int pow256
+    rule         X xorInt maxUInt256 <Int pow256 => true  requires 0<=Int X andBool X <Int pow256
 
     rule 0 <=Int nthbyteof(V, I, N)             => true
     rule         nthbyteof(V, I, N) <Int 256    => true
@@ -176,21 +176,21 @@ module LEMMAS
     rule N &Int MASK => N  requires MASK ==Int (2 ^Int (log2Int(MASK) +Int 1)) -Int 1 // MASK = 0xffff...f
                             andBool 0 <=Int N andBool N <=Int MASK
 
-    // 0xff..ff00..00 (16 1's followed by 240 0's)
-    rule 115790322390251417039241401711187164934754157181743688420499462401711837020160 &Int #asWord(WS1 ++ WS2)
+    // 0xff00..00 (16 1's followed by 240 0's)
+    rule (pow256 -Int (2 ^Int 240)) &Int #asWord(WS1 ++ WS2)
         => #asWord(WS1 ++ #buf(30, 0))
       requires #sizeWordStack(WS1) ==Int 2
        andBool #sizeWordStack(WS2) ==Int 30
 
     // x &Int (NOT 31)
-    rule X &Int 115792089237316195423570985008687907853269984665640564039457584007913129639904 => (X /Int 32) *Int 32  requires 0 <=Int X
+    rule X &Int (pow256 -Int 32) => (X /Int 32) *Int 32  requires 0 <=Int X
 
     // 2^256 - 2^160 = 0xff..ff00..00 (96 1's followed by 160 0's)
-    rule 115792089237316195423570985007226406215939081747436879206741300988257197096960 &Int ADDR => 0
+    rule (pow256 -Int pow160) &Int ADDR => 0
       requires #rangeAddress(ADDR)
 
     // #asWord(WS) &Int (pow256 - 1)
-    rule #asWord(WS) &Int 115792089237316195423570985008687907853269984665640564039457584007913129639935 => #asWord(WS)
+    rule #asWord(WS) &Int maxUInt256 => #asWord(WS)
 
     //
     // boolean
