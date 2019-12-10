@@ -30,7 +30,8 @@ The symbolic execution results are provided in the [results] directory.  For eac
 
 #### Reproducing results
 
-* Install [KEVM] and [K]
+* Install [K] prerequisites. No need to install K itself as scripts below will do it.
+* Install dependencies
 ```sh
 $ make -C uniswap deps
 ```
@@ -77,8 +78,8 @@ During the verification process, we found several issues, and suggested fixes.  
 [`ethToTokenSwapInput`]: <https://github.com/Uniswap/contracts-vyper/blob/cb4308226f07cafa445b2255b01d148e7ab6af9f/contracts/uniswap_exchange.vy#L145-L153>
 [`ethToTokenSwapOutput`]: <https://github.com/Uniswap/contracts-vyper/blob/cb4308226f07cafa445b2255b01d148e7ab6af9f/contracts/uniswap_exchange.vy#L180-L188>
 
-[K]: <https://github.com/kframework/k/tree/92d21b60ee087a368038a332ef98535455c26b63>
-[KEVM]: <https://github.com/kframework/evm-semantics/tree/f9727f67754ba2b292fbe337f9ca9f53fba5b5b5>
+[K]: <https://github.com/kframework/k>
+[KEVM]: <https://github.com/kframework/evm-semantics/tree/81bcba1a73188942fdc34979c59ee7be7253ece9>
 [instructions]: </resources/instructions.md>
 [erc20]: </erc20/README.md>
 
