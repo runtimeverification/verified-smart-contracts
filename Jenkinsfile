@@ -14,7 +14,7 @@ pipeline {
     VSC_DEPOSIT_ENABLED       = true
     VSC_GNOSIS_ENABLED        = true
     VSC_BIHU_ENABLED          = true
-    VSC_UNISWAP_ENABLED       = false
+    VSC_UNISWAP_ENABLED       = true
     VSC_ERC20_MAINNET_ENABLED = false
   }
 
