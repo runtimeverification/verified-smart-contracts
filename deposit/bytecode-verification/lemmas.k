@@ -99,8 +99,6 @@ module LEMMAS
     rule 0 <=Int select(M, _)             => true requires isStorage(M)
     rule         select(M, _) <Int pow256 => true requires isStorage(M)
 
-    rule 0 <=Int select(M, _) +Int 1      => true requires isStorage(M)
-
 
     //////////////////////////
     // Arithmetic
@@ -131,6 +129,8 @@ module LEMMAS
     rule (A +Int I2) +Int I3 => A +Int (I2 +Int I3) when notBool #isConcrete(A) andBool #isConcrete(I2) andBool #isConcrete(I3)
 
     rule A +Int (I -Int A) => I when notBool #isConcrete(A) andBool #isConcrete(I)
+
+    rule 0 <=Int X +Int Y => true requires 0 <=Int X andBool 0 <=Int Y
 
     //
     // nonlinear
