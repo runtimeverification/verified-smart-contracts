@@ -72,13 +72,14 @@ module LEMMAS
     rule         #bufElm(_, _) <Int 256    => true
     rule         #bufElm(_, _) <Int pow256 => true
 
+    rule 0 <=Int bool2Word(_)             => true
+    rule         bool2Word(_) <Int 2      => true
+    rule         bool2Word(_) <Int 256    => true
+    rule         bool2Word(_) <Int pow256 => true
+
     // X xorInt (pow256 - 1)
     rule 0 <=Int X xorInt 115792089237316195423570985008687907853269984665640564039457584007913129639935             => true  requires 0<=Int X andBool X <Int pow256
     rule         X xorInt 115792089237316195423570985008687907853269984665640564039457584007913129639935 <Int pow256 => true  requires 0<=Int X andBool X <Int pow256
-
-    rule 0 <=Int nthbyteof(V, I, N)             => true
-    rule         nthbyteof(V, I, N) <Int 256    => true
-    rule         nthbyteof(V, I, N) <Int pow256 => true
 
     rule 0 <=Int #asWord(WS)             => true
     rule         #asWord(WS) <Int pow256 => true
@@ -212,10 +213,6 @@ module LEMMAS
 
     rule chop(bool2Word(B)) => bool2Word(B)
 
-    rule #asWord(0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0
-                   : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : nthbyteof(bool2Word( E ), I, N) : .WordStack)
-         => bool2Word( E )
-
 
     //////////////////////////
     // Buffer Abstraction
@@ -297,7 +294,7 @@ module LEMMAS
 //  rule #asWord( 0 : W1 : WS  =>  W1 : WS )
     rule #asWord( 0 :      WS  =>       WS )
 
-    rule #padToWidth(32, #asByteStack(V)) => #buf(32, V) // #asByteStackInWidth(V, 32)
+    rule #padToWidth(32, #asByteStack(V)) => #buf(32, V)
       requires 0 <=Int V andBool V <Int pow256 andBool #notKLabel(V, "#asWord")
 
     rule #buf(32, #asWord(WS)) => WS  requires #sizeWordStack(WS) ==Int 32
@@ -352,59 +349,9 @@ module LEMMAS
        andBool MS1 ==Int MS0 +Int MW0 andBool BS1 ==Int BS0 +Int BW0
 */
 
-    //
-    // nthbyteof
-    //
-
-    syntax Int ::= nthbyteof ( Int , Int , Int ) [function, smtlib(smt_nthbyteof), proj]
- // ------------------------------------------------------------------------------------
-    rule nthbyteof(V, I, N) => nthbyteof(V /Int 256, I, N -Int 1) when N  >Int (I +Int 1) [concrete]
-    rule nthbyteof(V, I, N) =>           V modInt 256             when N ==Int (I +Int 1) [concrete]
-
-    rule #asWord( nthbyteof(V,  0, 32)
-                : nthbyteof(V,  1, 32)
-                : nthbyteof(V,  2, 32)
-                : nthbyteof(V,  3, 32)
-                : nthbyteof(V,  4, 32)
-                : nthbyteof(V,  5, 32)
-                : nthbyteof(V,  6, 32)
-                : nthbyteof(V,  7, 32)
-                : nthbyteof(V,  8, 32)
-                : nthbyteof(V,  9, 32)
-                : nthbyteof(V, 10, 32)
-                : nthbyteof(V, 11, 32)
-                : nthbyteof(V, 12, 32)
-                : nthbyteof(V, 13, 32)
-                : nthbyteof(V, 14, 32)
-                : nthbyteof(V, 15, 32)
-                : nthbyteof(V, 16, 32)
-                : nthbyteof(V, 17, 32)
-                : nthbyteof(V, 18, 32)
-                : nthbyteof(V, 19, 32)
-                : nthbyteof(V, 20, 32)
-                : nthbyteof(V, 21, 32)
-                : nthbyteof(V, 22, 32)
-                : nthbyteof(V, 23, 32)
-                : nthbyteof(V, 24, 32)
-                : nthbyteof(V, 25, 32)
-                : nthbyteof(V, 26, 32)
-                : nthbyteof(V, 27, 32)
-                : nthbyteof(V, 28, 32)
-                : nthbyteof(V, 29, 32)
-                : nthbyteof(V, 30, 32)
-                : nthbyteof(V, 31, 32)
-                : .WordStack ) => V
-      requires 0 <=Int V andBool V <Int pow256
-
-    rule nthbyteof(N, 0, 1) => N
-
     // for Vyper
     rule #padToWidth(N, #asByteStack(#asWord(WS))) => WS
       requires #noOverflow(WS) andBool N ==Int #sizeWordStack(WS)
-
-    // storing a symbolic boolean value in memory
-    rule #padToWidth(32, #asByteStack(bool2Word(E)))
-      => #asByteStackInWidthAux(0, 30, 32, nthbyteof(bool2Word(E), 31, 32) : .WordStack)
 
     // for Solidity
     rule #asWord(WS) /Int D => #asWord(#take(#sizeWordStack(WS) -Int log256Int(D), WS))
@@ -419,15 +366,6 @@ module LEMMAS
 
     rule #noOverflowAux(W : WS)     => 0 <=Int W andBool W <Int 256 andBool #noOverflowAux(WS)
     rule #noOverflowAux(.WordStack) => true
-
-    syntax WordStack ::= #asByteStackInWidth    ( Int, Int )                 [function]
-                       | #asByteStackInWidthAux ( Int, Int, Int, WordStack ) [function]
- // -----------------------------------------------------------------------------------
-    rule #asByteStackInWidth(X, N) => #asByteStackInWidthAux(X, N -Int 1, N, .WordStack)
-      requires #rangeBytes(N, X)
-
-    rule #asByteStackInWidthAux(X, I => I -Int 1, N, WS => nthbyteof(X, I, N) : WS) when I >=Int 0
-    rule #asByteStackInWidthAux(X,            -1, N, WS) => WS
 
 
     //////////////////////////
