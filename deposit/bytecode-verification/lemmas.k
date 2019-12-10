@@ -229,7 +229,6 @@ module LEMMAS
 
 
     rule #asWord(#buf(SIZE, DATA)) => DATA requires SIZE <=Int 32 andBool #range(0 <= DATA < (2 ^Int (SIZE *Int 8))) andBool #isConcrete(SIZE)
-  //rule #asWord(#buf(32, DATA)) => DATA  requires #rangeUInt(256, DATA)
 
     rule #buf(SIZE, _)        => .WordStack requires SIZE  ==Int 0
     rule #bufSeg(_, _, WIDTH) => .WordStack requires WIDTH ==Int 0
@@ -304,7 +303,6 @@ module LEMMAS
     rule #bufSeg(BUF, START, 1) => #bufElm(BUF, START) : .WordStack
     rule #asWord(#bufElm(BUF, INDEX) : .WordStack) => #bufElm(BUF, INDEX)
 
-//  rule #buf(32, DATA) => #padToWidth(32, #asByteStack(DATA))  [concrete]
     rule #buf(SIZE, DATA) => #padToWidth(SIZE, #asByteStack(DATA)) requires #range(0 <= DATA < (2 ^Int (SIZE *Int 8))) [concrete]
 
     rule #asWord(WS0 ++ #buf(MASKWIDTH0, 0)) |Int #asWord(#buf(MASKWIDHT1, 0) ++ WS1)
@@ -350,12 +348,6 @@ module LEMMAS
     // for Vyper
     rule #padToWidth(N, #asByteStack(#asWord(WS))) => WS
       requires #noOverflow(WS) andBool N ==Int #sizeWordStack(WS)
-
-    // for Solidity
-    rule #asWord(WS) /Int D => #asWord(#take(#sizeWordStack(WS) -Int log256Int(D), WS))
-      requires D modInt 256 ==Int 0 andBool D >=Int 0
-       andBool #sizeWordStack(WS) >=Int log256Int(D)
-       andBool #noOverflow(WS)
 
     syntax Bool ::= #noOverflow    ( WordStack ) [function]
                   | #noOverflowAux ( WordStack ) [function]
