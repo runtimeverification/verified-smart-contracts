@@ -205,9 +205,8 @@ module VERIFICATION
     rule #bufElm(_, _) <Int 256    => true
     rule #bufElm(_, _) <Int pow256 => true
 
-    // X xorInt (pow256 - 1)
-    rule 0 <=Int X xorInt 115792089237316195423570985008687907853269984665640564039457584007913129639935             => true  requires 0<=Int X andBool X <Int pow256
-    rule         X xorInt 115792089237316195423570985008687907853269984665640564039457584007913129639935 <Int pow256 => true  requires 0<=Int X andBool X <Int pow256
+    rule 0 <=Int X xorInt maxUInt256             => true  requires #rangeUInt(256, X)
+    rule         X xorInt maxUInt256 <Int pow256 => true  requires #rangeUInt(256, X)
 
 
   // ########################
@@ -241,8 +240,7 @@ module VERIFICATION
        andBool #sizeWordStack(WS0) ==Int MASKWIDHT1
        andBool MASKWIDTH0 ==Int #sizeWordStack(WS1)
 
-    // #asWord(WS) &Int (pow256 - 1)
-    rule #asWord(WS) &Int 115792089237316195423570985008687907853269984665640564039457584007913129639935 => #asWord(WS)
+    rule #asWord(WS) &Int maxUInt256 => #asWord(WS)
 
     // 2^256 - 2^160 = 0xff..ff00..00 (96 1's followed by 160 0's)
     rule 115792089237316195423570985007226406215939081747436879206741300988257197096960 &Int ADDR => 0
