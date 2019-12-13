@@ -8,11 +8,9 @@ This program sums the numbers from 1 to N (for sufficiently small N), including 
 
 ```{.k .sum-to-n}
 requires "edsl.k"
-requires "../lemmas.k"
 
-module VERIFICATION
+module VERIFICATION-COMMON
     imports EDSL
-    imports LEMMAS
     imports EVM-ASSEMBLY
 
     rule #sizeWordStack ( WS , N:Int )
@@ -44,7 +42,7 @@ Note that the program behaves incorrectly/unexpectedly if arithmetic overflow oc
 One challenge in verifying this program is to identify the conditions under which overflow does not occur.
 
 ```{.k .sum-to-n}
-module SUM-TO-N-SPEC
+module SUM-TO-N-COMMON
     imports VERIFICATION
 ```
 

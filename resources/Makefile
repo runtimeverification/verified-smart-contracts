@@ -12,5 +12,14 @@ TMPLS:=
 include kprove.mak
 
 # non-standard spec generation
-$(SPECS_DIR)/$(SPEC_GROUP)/sum-to-n-spec.k: $(RESOURCES)/sum-to-n.md $(TANGLER) $(LEMMAS)
+$(SPECS_DIR)/$(SPEC_GROUP)/sum-to-n-common.k: \
+		$(RESOURCES)/sum-to-n-common.md $(TANGLER) \
+		$(LEMMAS)
+	pandoc --from markdown --to "$(TANGLER)" --metadata="code:.sum-to-n" $< > $@
+
+$(SPECS_DIR)/$(SPEC_GROUP)/sum-to-n-$(K_BACKEND)-spec.k: \
+		$(RESOURCES)/sum-to-n-$(K_BACKEND).md \
+		$(TANGLER) \
+		$(LEMMAS) \
+		$(SPECS_DIR)/$(SPEC_GROUP)/sum-to-n-common.k
 	pandoc --from markdown --to "$(TANGLER)" --metadata="code:.sum-to-n" $< > $@

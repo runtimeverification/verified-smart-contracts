@@ -108,8 +108,11 @@ KSERVER_LOG_FILE:=$(SPECS_DIR)/$(SPEC_GROUP)/kserver.log
 SPAWN_KSERVER:=$(K_BIN)/kserver >> "$(KSERVER_LOG_FILE)" 2>&1 &
 STOP_KSERVER:=$(K_BIN)/stop-kserver || true
 
-SPEC_FILES:=$(patsubst %,$(SPECS_DIR)/$(SPEC_GROUP)/%-spec.k,$(SPEC_NAMES))
-LEMMAS:=$(SPECS_DIR)/$(SPEC_GROUP)/lemmas.timestamp $(dir $(SPECS_DIR)/$(SPEC_GROUP))/lemmas.k
+SPEC_FILES:=$(patsubst %,$(SPECS_DIR)/$(SPEC_GROUP)/%-$(K_BACKEND)-spec.k,$(SPEC_NAMES))
+LEMMAS:= \
+	$(SPECS_DIR)/$(SPEC_GROUP)/lemmas.timestamp $(dir $(SPECS_DIR)/$(SPEC_GROUP))/lemmas.k \
+	$(dir $(SPECS_DIR)/$(SPEC_GROUP))/lemmas-common.k \
+	$(dir $(SPECS_DIR)/$(SPEC_GROUP))/lemmas-$(K_BACKEND).k
 
 PANDOC_TANGLE_SUBMODULE:=$(ROOT)/.build/pandoc-tangle
 TANGLER:=$(PANDOC_TANGLE_SUBMODULE)/tangle.lua
@@ -188,11 +191,17 @@ $(SPEC_INI): $(SPEC_INI:.ini=.md) $(PANDOC_TANGLE_SUBMODULE)/submodule.timestamp
 	pandoc --from markdown --to "$(TANGLER)" --metadata=code:".ini" $< > $@
 endif
 
-%/lemmas.k: $(RESOURCES)/lemmas.md $(PANDOC_TANGLE_SUBMODULE)/submodule.timestamp
+%/lemmas-common.k: $(RESOURCES)/lemmas-common.md $(PANDOC_TANGLE_SUBMODULE)/submodule.timestamp
+	pandoc --from markdown --to "$(TANGLER)" --metadata=code:".k" $< > $@
+
+%/lemmas.k: $(RESOURCES)/lemmas-java.md $(PANDOC_TANGLE_SUBMODULE)/submodule.timestamp %/lemmas-common.k
+	pandoc --from markdown --to "$(TANGLER)" --metadata=code:".k" $< > $@
+
+%/lemmas-$(K_BACKEND).k: $(RESOURCES)/lemmas-$(K_BACKEND).md $(PANDOC_TANGLE_SUBMODULE)/submodule.timestamp %/lemmas-common.k
 	pandoc --from markdown --to "$(TANGLER)" --metadata=code:".k" $< > $@
 
 # When building a -spec.k file, build all run dependencies.
-$(SPECS_DIR)/$(SPEC_GROUP)/%-spec.k: $(TMPLS) $(SPEC_INI) $(LEMMAS)
+$(SPECS_DIR)/$(SPEC_GROUP)/%-$(K_BACKEND)-spec.k: $(TMPLS) $(SPEC_INI) $(LEMMAS)
 	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) $* $* > $@
 
 #
@@ -201,7 +210,7 @@ $(SPECS_DIR)/$(SPEC_GROUP)/%-spec.k: $(TMPLS) $(SPEC_INI) $(LEMMAS)
 
 test: $(addsuffix .test,$(SPEC_FILES))
 
-$(SPECS_DIR)/$(SPEC_GROUP)/%-spec.k.test: $(SPECS_DIR)/$(SPEC_GROUP)/%-spec.k
+$(SPECS_DIR)/$(SPEC_GROUP)/%-spec.k.test: $(SPECS_DIR)/$(SPEC_GROUP)/%-$(K_BACKEND)-spec.k
 	$(KPROVE) $<
 
 spawn-kserver:
