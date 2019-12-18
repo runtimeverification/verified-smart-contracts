@@ -92,7 +92,7 @@ It reduces the reasoning efforts of the underlying theorem prover, factoring out
     rule #isRegularWordStack(.WordStack) => true
 
     // for Vyper
-    //todo rule superseded by rules in verification.k
+    //superseded by rules in erc20/verification.k
     rule #padToWidth(N, #asByteStack(#asWord(WS))) => WS
       requires #noOverflow(WS) andBool N ==Int #sizeWordStack(WS)
 
