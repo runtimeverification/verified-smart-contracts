@@ -7,7 +7,7 @@ Behavior
   ```
   zero_hashes[i] <- ZERO_HASHES_i  for 1 <= i < 32
   ```
-
+where
 ```
 ZERO_HASHES_{i+1} = #sha256(#buf(32, ZERO_HASHES_i) ++ #buf(32, ZERO_HASHES_i))  for 0 <= i < 31
 ZERO_HASHES_0 = 0
@@ -17,7 +17,7 @@ ZERO_HASHES_0 = 0
 ## At beginning
 
 - revert when calldatasize < 4
-- revert when msg.data[0..4] does not match to the signature of any public functions, `get_deposit_root()`, `get_deposit_count()`, and `deposit()`
+- revert when msg.data[0..4] does not match the signature of any public functions `get_deposit_root()`, `get_deposit_count()`, or `deposit(bytes,bytes,bytes,bytes32)`
 
 
 ## `get_deposit_root()`
