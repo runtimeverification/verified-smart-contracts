@@ -1,11 +1,11 @@
 requires "evm-symbolic.k"
-requires "evm-data-map-concrete.k"
+requires "evm-data-map-concrete-buf.k"
 requires "edsl.k"
 requires "../lemmas.k"
 
 module VERIFICATION
     imports EVM-SYMBOLIC
-    imports EVM-DATA-MAP-CONCRETE
+    imports EVM-DATA-MAP-CONCRETE-BUF
     imports EDSL
     imports LEMMAS
 
