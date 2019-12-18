@@ -92,6 +92,7 @@ It reduces the reasoning efforts of the underlying theorem prover, factoring out
     rule #isRegularWordStack(.WordStack) => true
 
     // for Vyper
+    //superseded by rules in erc20/verification.k, for #buf storage model only
     rule #padToWidth(N, #asByteStack(#asWord(WS))) => WS
       requires #noOverflow(WS) andBool N ==Int #sizeWordStack(WS)
 
