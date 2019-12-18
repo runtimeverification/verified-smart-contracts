@@ -3,7 +3,7 @@
 LOCAL_LEMMAS:=verification.k \
 			  ../../resources/abstract-semantics-segmented-gas.k \
 			  ../../resources/evm-symbolic.k \
-			  ../../resources/evm-data-map-concrete.k
+			  ../../resources/evm-data-map-concrete-buf.k
 TMPLS:=../module-tmpl.k ../spec-tmpl.k
 
 SPEC_NAMES:=totalSupply \
