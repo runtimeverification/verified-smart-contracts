@@ -1,6 +1,6 @@
 .NOTPARALLEL:
 
-MINIMAL_DIRS:=   resources erc20/vyper erc20/zeppelin
+MINIMAL_DIRS:=   resources erc20/vyper erc20/zeppelin erc20/zeppelin-direct-gas
 KTEST_DIRS:=     k-test
 ERC20_DIRS:=     erc20/hkg erc20/hobby erc20/ds-token
 DEPOSIT_DIRS:=   deposit/bytecode-verification
