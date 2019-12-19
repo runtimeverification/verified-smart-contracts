@@ -10,7 +10,7 @@ module VERIFICATION
     imports LEMMAS
 
     rule #padToWidth(32, #asByteStack(V)) => #buf(32, V) // #asByteStackInWidth(V, 32)
-      requires 0 <=Int V andBool V <Int pow256 //andBool #notKLabel(V, "#asWord") //todo #notKLabel disabling for test
+      requires 0 <=Int V andBool V <Int pow256
 
     rule #buf(N, #asWord(WS)) => WS
       requires #noOverflow(WS) andBool N ==Int #sizeWordStack(WS)
