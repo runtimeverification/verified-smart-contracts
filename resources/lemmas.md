@@ -213,11 +213,6 @@ These rules are specific to reasoning about EVM programs.
 
     // for gas calculation
     rule A -Int (#if C #then B1 #else B2 #fi) => #if C #then (A -Int B1) #else (A -Int B2) #fi
-
-    //todo disabling to see if ERC20 works without it.
-    //rule (#if C #then B1 #else B2 #fi) -Int A => #if C #then (B1 -Int A) #else (B2 -Int A) #fi 
-    //    when notBool #isConcrete(A) andBool #notKLabel(A, "#if_#then_#else_#fi_K-EQUAL")
-
     rule (#if C #then B1 #else B2 #fi) +Int A => #if C #then (B1 +Int A) #else (B2 +Int A) #fi
 ```
 
