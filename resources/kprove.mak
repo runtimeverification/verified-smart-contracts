@@ -73,6 +73,7 @@ SHUTDOWN_WAIT_TIME?=5s
 
 K_VERSION_FILE   ?=$(ROOT_BUILD_DIR)/.k.rev
 KEVM_VERSION_FILE?=$(ROOT_BUILD_DIR)/.kevm.rev
+CONCRETE_RULES_FILE?=$(wildcard $(abspath $(dir $(KEVM_VERSION_FILE)))/concrete-rules.txt)
 # check if the build directory exists (note: $(wildcard $(BUILD_DIR)) is not enough since it doesn't check if it is a directory)
 ifeq ($(wildcard $(K_VERSION_FILE)),)
 $(error K_VERSION_FILE does not exist)
@@ -98,6 +99,10 @@ ifneq ($(TIMEOUT),)
   TIMEOUT_OPT:=--timeout $(TIMEOUT)
 endif
 
+ifneq ($(CONCRETE_RULES_FILE),)
+  CONCRETE_RULES_OPT:=--concrete-rules $(shell cat $(CONCRETE_RULES_FILE) | tr '\n' ',')
+endif
+
 KPROVE_PREFIX?=
 
 KPROVE_OPTS_java:=--deterministic-functions --cache-func-optimized --format-failures --boundary-cells k,pc \
@@ -105,7 +110,7 @@ KPROVE_OPTS_java:=--deterministic-functions --cache-func-optimized --format-fail
 KPROVE_OPTS_haskell:=
 
 KPROVE:=$(KPROVE_PREFIX) $(K_BIN)/kprove -v --debug -d $(KEVM_BUILD_DIR) -m VERIFICATION \
-        --z3-impl-timeout 500 $(SHUTDOWN_WAIT_TIME_OPT) $(TIMEOUT_OPT) \
+        --z3-impl-timeout 500 $(SHUTDOWN_WAIT_TIME_OPT) $(TIMEOUT_OPT) $(CONCRETE_RULES_OPT) \
         --no-exc-wrap --no-alpha-renaming \
         $(KPROVE_OPTS_$(K_BACKEND)) $(KPROVE_OPTS)
 
