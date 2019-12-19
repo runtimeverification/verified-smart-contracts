@@ -1,3 +1,4 @@
+BASEDIR_LEMMAS:=lemmas.md
 LOCAL_LEMMAS:=verification.k \
 			  ../../resources/abstract-semantics-direct-gas.k \
 			  ../../resources/evm-symbolic.k \
