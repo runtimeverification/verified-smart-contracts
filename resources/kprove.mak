@@ -10,15 +10,16 @@ ROOT:=$(abspath $(dir $(THIS_FILE))/..)
 # path to default directory that contains .k.rev and .kevm.rev
 ROOT_BUILD_DIR:=$(ROOT)/.build
 
+# java or haskell
+K_BACKEND?=java
+
 RESOURCES:=$(ROOT)/resources
-SPECS_DIR:=$(ROOT)/specs
+SPECS_DIR:=$(ROOT)/specs/$(K_BACKEND)
 
 #
 # Backend Settings
 #
 
-# java or haskell
-K_BACKEND?=java
 K_MVN_OPTS_java:=-Dllvm.backend.skip -Dhaskell.backend.skip
 K_MVN_OPTS_haskell:=-Dllvm.backend.skip
 
@@ -44,6 +45,9 @@ ifndef SPEC_NAMES
 $(error SPEC_NAMES is not set)
 endif
 
+# List of .k and .md lemma files that will be compiled to base directory of $(SPECS_DIR)/$(SPEC_GROUP)
+BASEDIR_LEMMAS?=$(RESOURCES)/lemmas.md
+# List of .k and .md lemma files that will be compiled to $(SPECS_DIR)/$(SPEC_GROUP)
 LOCAL_LEMMAS?=../resources/abstract-semantics-direct-gas.k ../resources/evm-direct-gas.k \
               ../resources/evm-data-map-concrete.k verification.k
 TMPLS?=module-tmpl.k spec-tmpl.k
@@ -109,10 +113,15 @@ KSERVER_LOG_FILE:=$(SPECS_DIR)/$(SPEC_GROUP)/kserver.log
 SPAWN_KSERVER:=$(K_BIN)/kserver >> "$(KSERVER_LOG_FILE)" 2>&1 &
 STOP_KSERVER:=$(K_BIN)/stop-kserver || true
 
-SPEC_FILES:=$(patsubst %,$(SPECS_DIR)/$(SPEC_GROUP)/%-spec.k,$(SPEC_NAMES))
-LEMMAS:=$(SPECS_DIR)/$(SPEC_GROUP)/lemmas.timestamp $(abspath $(dir $(SPECS_DIR)/$(SPEC_GROUP)))/lemmas.k
+SPEC_LOCAL_DIR:=$(SPECS_DIR)/$(SPEC_GROUP)
+SPEC_FILES:=$(patsubst %,$(SPEC_LOCAL_DIR)/%-spec.k,$(SPEC_NAMES))
+SPEC_BASEDIR:=$(abspath $(dir $(SPEC_LOCAL_DIR)))
+BASEDIR_LEMMAS_TIMESTAMP:=$(SPEC_BASEDIR)/basedir-lemmas.timestamp
+LOCAL_LEMMAS_TIMESTAMP:=$(SPEC_LOCAL_DIR)/lemmas.timestamp
+LEMMAS:=$(BASEDIR_LEMMAS_TIMESTAMP) $(LOCAL_LEMMAS_TIMESTAMP)
 
 PANDOC_TANGLE_SUBMODULE:=$(ROOT)/.build/pandoc-tangle
+PANDOC_TANGLE_TIMESTAMP:=$(PANDOC_TANGLE_SUBMODULE)/submodule.timestamp
 TANGLER:=$(PANDOC_TANGLE_SUBMODULE)/tangle.lua
 LUA_PATH:=$(PANDOC_TANGLE_SUBMODULE)/?.lua;;
 export TANGLER
@@ -138,7 +147,7 @@ clean-kevm-cache:
 	rm -rf $(KEVM_BUILD_DIR)/driver-kompiled/cache.bin
 
 deps: deps-tangle deps-k deps-kevm
-deps-tangle: $(PANDOC_TANGLE_SUBMODULE)/submodule.timestamp
+deps-tangle: $(PANDOC_TANGLE_TIMESTAMP)
 deps-k:      $(K_REPO_DIR)/mvn-$(K_BACKEND).timestamp
 deps-kevm:   $(KEVM_REPO_DIR)/make-$(K_BACKEND).timestamp
 
@@ -177,20 +186,34 @@ $(KEVM_REPO_DIR):
 # makes all these files non-intermediary
 split-proof-tests: $(SPEC_FILES) $(LEMMAS)
 
-$(SPECS_DIR)/$(SPEC_GROUP)/lemmas.timestamp: $(LOCAL_LEMMAS)
-	mkdir -p $(SPECS_DIR)/$(SPEC_GROUP)
-ifneq ($(strip $(LOCAL_LEMMAS)),)
-	cp $(LOCAL_LEMMAS) $(SPECS_DIR)/$(SPEC_GROUP)
+$(BASEDIR_LEMMAS_TIMESTAMP): $(BASEDIR_LEMMAS) $(PANDOC_TANGLE_TIMESTAMP)
+	mkdir -p $(SPEC_BASEDIR)
+	#processing .k lemmas
+ifneq ($(wildcard $(BASEDIR_LEMMAS:.md=.k)),)
+	cp $(wildcard $(BASEDIR_LEMMAS:.md=.k)) $(SPEC_BASEDIR)
 endif
+	#processing .md lemmas
+	for i in $(wildcard $(BASEDIR_LEMMAS:.k=.md)); do \
+		pandoc --from markdown --to "$(TANGLER)" --metadata=code:".k" $$i > $(SPEC_BASEDIR)/"$$(basename $$i .md)".k; \
+	done
+	touch $@
+
+$(LOCAL_LEMMAS_TIMESTAMP): $(LOCAL_LEMMAS) $(PANDOC_TANGLE_TIMESTAMP)
+	mkdir -p $(SPEC_LOCAL_DIR)
+	#processing .k local lemmas
+ifneq ($(wildcard $(LOCAL_LEMMAS:.md=.k)),)
+	cp $(wildcard $(LOCAL_LEMMAS:.md=.k)) $(SPEC_LOCAL_DIR)
+endif
+	#processing .md local lemmas
+	for i in $(wildcard $(LOCAL_LEMMAS:.k=.md)); do \
+		pandoc --from markdown --to "$(TANGLER)" --metadata=code:".k" $$i > $(SPEC_LOCAL_DIR)/"$$(basename $$i .md)".k; \
+	done
 	touch $@
 
 ifneq ($(wildcard $(SPEC_INI:.ini=.md)),)
-$(SPEC_INI): $(SPEC_INI:.ini=.md) $(PANDOC_TANGLE_SUBMODULE)/submodule.timestamp
+$(SPEC_INI): $(SPEC_INI:.ini=.md) $(PANDOC_TANGLE_TIMESTAMP)
 	pandoc --from markdown --to "$(TANGLER)" --metadata=code:".ini" $< > $@
 endif
-
-%/lemmas.k: $(RESOURCES)/lemmas.md $(PANDOC_TANGLE_SUBMODULE)/submodule.timestamp
-	pandoc --from markdown --to "$(TANGLER)" --metadata=code:".k" $< > $@
 
 # When building a -spec.k file, build all run dependencies.
 $(SPECS_DIR)/$(SPEC_GROUP)/%-spec.k: $(TMPLS) $(SPEC_INI) $(LEMMAS)
