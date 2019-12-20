@@ -10,8 +10,7 @@ SPEC_INI:=deposit-spec.ini
 
 KPROVE_OPTS:=--smt-prelude $(abspath $(dir $(abspath $(lastword $(MAKEFILE_LIST))))/evm.smt2) \
              --branching-allowed 0 \
-             --z3-cnstr-timeout 100 \
-             --concrete-rules $(shell cat concrete-rules.txt | tr '\n' ',')
+             --z3-cnstr-timeout 100
 
 SPEC_NAMES:=init-init \
             init-loop0 \
