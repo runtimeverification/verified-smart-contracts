@@ -71,7 +71,7 @@ Due to its deviation from ERC20-K, we could not verify the HKG token against the
     k: #execute => #halt
     callData: #abiCallData("totalSupply", .TypedArgs)
     localMem: .Map => _:Map
-    gas: {GASCAP} => _
+    gas: #gas({GASCAP}, 0, 0) => _
     log: _
     refund: _
     storage: _:Map
