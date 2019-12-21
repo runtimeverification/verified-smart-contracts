@@ -1,6 +1,6 @@
 LOCAL_LEMMAS:=../verification.k \
 			  ../abstract-semantics.k \
-			  ../../resources/abstract-semantics-segmented-gas.k \
+			  ../abstract-semantics-segmented-gas.k \
 			  ../../resources/evm-symbolic.k \
 			  ../../resources/evm-data-map-symbolic.k \
 			  ../../resources/ecrec-symbolic.k
