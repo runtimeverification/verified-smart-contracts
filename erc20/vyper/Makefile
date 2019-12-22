@@ -3,6 +3,7 @@ KEVM_VERSION_FILE:=.build/.kevm.rev
 
 DEFINITION_MODULE:=VYPER-VERIFICATION
 
+BASEDIR_LEMMAS=$(RESOURCES)/lemmas-buf.md
 # We need gnosis version of abstract-semantics-segmented-gas.k because we use an older KEVM.
 LOCAL_LEMMAS:=vyper-verification.k \
 			  ../verification.k \
