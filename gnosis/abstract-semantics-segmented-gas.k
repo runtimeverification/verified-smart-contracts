@@ -1,9 +1,11 @@
 requires "evm-symbolic.k"
+requires "not-KLabel.k"
 
 //Older version that uses #notKLabel
 module ABSTRACT-SEMANTICS-SEGMENTED-GAS
   imports EVM
   imports EVM-SYMBOLIC
+  imports NOT-KLABEL
 
   // to avoid unnecessary case analyses
   rule <k> LT W0 W1 => bool2Word(W0  <Int W1) ~> #push ... </k> [trusted]

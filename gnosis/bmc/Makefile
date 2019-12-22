@@ -1,4 +1,4 @@
-LOCAL_LEMMAS:=../abstract-semantics.k ../verification.k abstract-semantics-segmented-gas.k
+LOCAL_LEMMAS:=../abstract-semantics.k ../verification.k ../abstract-semantics-segmented-gas.k ../../resources/not-KLabel.k
 TMPLS:=../module-tmpl.k ../spec-tmpl.k
 
 KPROVE_OPTS:=--smt-prelude $(abspath $(dir $(abspath $(lastword $(MAKEFILE_LIST))))/../evm.smt2)
