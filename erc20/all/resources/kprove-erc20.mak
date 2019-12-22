@@ -3,7 +3,8 @@ ROOT_DIR:=$(abspath $(THIS_FILE_DIR)/../../..)
 RESOURCES_DIR:=$(ROOT_DIR)/resources
 LOCAL_RESOURCES_DIR:=$(THIS_FILE_DIR)
 
-LOCAL_LEMMAS:=$(LOCAL_RESOURCES_DIR)/verification.k \
+BASEDIR_LEMMAS=$(RESOURCES)/lemmas-buf.md
+LOCAL_LEMMAS:=$(ROOT_DIR)/erc20/verification.k \
 			  $(RESOURCES_DIR)/abstract-semantics-segmented-gas.k \
 			  $(RESOURCES_DIR)/evm-symbolic.k \
 			  $(RESOURCES_DIR)/evm-data-map-symbolic.k
