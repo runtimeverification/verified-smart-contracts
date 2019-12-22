@@ -1,7 +1,7 @@
 requires "evm-symbolic.k"
 requires "evm-data-map-symbolic.k"
 requires "edsl.k"
-requires "../lemmas.k"
+requires "../lemmas-buf.k"
 
 module VERIFICATION
     imports EVM-SYMBOLIC
