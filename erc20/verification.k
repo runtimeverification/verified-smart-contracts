@@ -49,6 +49,8 @@ module VERIFICATION
 
     rule #bufSeg(BUF, 0, WIDTH) => BUF  requires WIDTH ==Int #sizeWordStack(BUF)
 
+    rule #buf(SIZE, DATA) => #padToWidth(SIZE, #asByteStack(DATA)) requires #range(0 <= DATA < (2 ^Int (SIZE *Int 8))) [concrete]
+
 
   // ########################
   // Memory Reasoning
