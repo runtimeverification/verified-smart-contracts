@@ -13,8 +13,8 @@ rule
       <interimStates> _ </interimStates>
       <touchedAccounts> _ => _ </touchedAccounts>
       <callState>
-        <program> #asMapOpCodes(#dasmOpCodes(#parseByteStack({CODE}), {SCHEDULE})) </program>
-        <programBytes> #parseByteStack({CODE}) </programBytes>
+        <program> #parseByteStack({CODE}) </program>
+        <jumpDests> #computeValidJumpDests(#parseByteStack({CODE})) </jumpDests>
         <id> ACCT_ID </id> // this
         <caller> CALLER_ID </caller> // msg.sender
         <callData> {CALLDATA} </callData> // msg.data
@@ -35,23 +35,26 @@ rule
       </substate>
       <gasPrice> _ </gasPrice>
       <origin> ORIGIN_ID </origin> // tx.origin
-      <previousHash> _ </previousHash>
-      <ommersHash> _ </ommersHash>
-      <coinbase> _ </coinbase>
-      <stateRoot> _ </stateRoot>
-      <transactionsRoot> _ </transactionsRoot>
-      <receiptsRoot> _ </receiptsRoot>
-      <logsBloom> _ </logsBloom>
-      <difficulty> _ </difficulty>
-      <number> _ </number>
-      <gasLimit> _ </gasLimit>
-      <gasUsed> _ </gasUsed>
-      <timestamp> _ </timestamp>
-      <extraData> _ </extraData>
-      <mixHash> _ </mixHash>
-      <blockNonce> _ </blockNonce>
-      <ommerBlockHeaders> _ </ommerBlockHeaders>
-      <blockhash> _ </blockhash>
+      <blockhashes> _ </blockhashes>
+      <block>
+        <previousHash> _ </previousHash>
+        <ommersHash> _ </ommersHash>
+        <coinbase> _ </coinbase>
+        <stateRoot> _ </stateRoot>
+        <transactionsRoot> _ </transactionsRoot>
+        <receiptsRoot> _ </receiptsRoot>
+        <logsBloom> _ </logsBloom>
+        <difficulty> _ </difficulty>
+        <number> _ </number>
+        <gasLimit> _ </gasLimit>
+        <gasUsed> _ </gasUsed>
+        <timestamp> _ </timestamp>
+        <extraData> _ </extraData>
+        <mixHash> _ </mixHash>
+        <blockNonce> _ </blockNonce>
+
+        <ommerBlockHeaders> _ </ommerBlockHeaders>
+      </block>
     </evm>
     <network>
       <activeAccounts> SetItem(ACCT_ID) _:Set </activeAccounts>
