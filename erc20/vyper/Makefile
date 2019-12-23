@@ -1,6 +1,9 @@
 # Bytecode compiled with old Vyper. Needs KEVM version before Vyper storage layout fix.
 KEVM_VERSION_FILE:=.build/.kevm.rev
 
+# Required to have different lemmas dir from non-#buf ERC20 specs.
+SPEC_GROUP:=erc20/buf/vyper
+
 DEFINITION_MODULE:=VYPER-VERIFICATION
 
 BASEDIR_LEMMAS=$(RESOURCES)/lemmas-buf.md
