@@ -173,6 +173,8 @@ $(K_REPO_DIR)/mvn-$(K_BACKEND).timestamp: $(K_VERSION_FILE) | $(K_REPO_DIR)
 $(K_REPO_DIR):
 	git clone $(K_REPO_URL) $(K_REPO_DIR)
 
+KOMPILE_COMMAND?=make build-$(K_BACKEND) K_BIN=$(K_BIN)
+
 $(KEVM_REPO_DIR)/make-$(K_BACKEND).timestamp: $(KEVM_VERSION_FILE) $(K_REPO_DIR)/mvn-$(K_BACKEND).timestamp | $(KEVM_REPO_DIR)
 	cd $(KEVM_REPO_DIR) \
 		&& git fetch \
@@ -180,7 +182,7 @@ $(KEVM_REPO_DIR)/make-$(K_BACKEND).timestamp: $(KEVM_VERSION_FILE) $(K_REPO_DIR)
 		&& git reset --hard $(KEVM_VERSION) \
 		&& make tangle-deps \
 		&& make defn \
-		&& $(K_BIN)/kompile -v --debug --backend $(K_BACKEND) -I $(KEVM_BUILD_DIR) -d $(KEVM_BUILD_DIR) --main-module ETHEREUM-SIMULATION --syntax-module ETHEREUM-SIMULATION $(KEVM_BUILD_DIR)/driver.k
+		&& $(KOMPILE_COMMAND)
 	touch $@
 
 $(KEVM_REPO_DIR):
