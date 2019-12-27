@@ -1,4 +1,5 @@
 KEVM_VERSION_FILE:=.build/.kevm.rev
+KOMPILE_COMMAND=make build-specs K_BIN=$(K_BIN)
 
 # Required to have different lemmas dir from non-#buf ERC20 specs.
 SPEC_GROUP:=erc20/buf/solar
