@@ -8,6 +8,7 @@ pipeline {
   environment {
     VSC_USE_KSERVER           = false
 
+    VSC_ERC20_SOLAR_ENABLED   = true
     VSC_MINIMAL_ENABLED       = true
     VSC_MAINNET_TEST_ENABLED  = true
     VSC_KTEST_ENABLED         = true
@@ -73,6 +74,15 @@ pipeline {
               '''
             }
           }
+      } }
+    }
+    //todo move after Minimal
+    stage('Solar') {
+      when {
+        environment name: 'VSC_ERC20_SOLAR_ENABLED', value: 'true'
+      }
+      steps { ansiColor('xterm') {
+          sh ' make jenkins MODE=SOLAR NPROCS="$NPROCS" '
       } }
     }
     stage('Minimal') {
