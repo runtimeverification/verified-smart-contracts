@@ -7,4 +7,8 @@ module SOLAR-ABSTRACT-SEMANTICS
     ensures V1 ==K V2
     [trusted]
 
+  rule assertEq V1:KResult V2:KResult => .
+    requires V1 ==K V2
+    [trusted]
+
 endmodule
