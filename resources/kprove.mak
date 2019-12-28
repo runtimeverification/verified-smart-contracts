@@ -173,7 +173,7 @@ $(K_REPO_DIR)/mvn-$(K_BACKEND).timestamp: $(K_VERSION_FILE) | $(K_REPO_DIR)
 $(K_REPO_DIR):
 	git clone $(K_REPO_URL) $(K_REPO_DIR)
 
-KOMPILE_COMMAND?=make build-$(K_BACKEND) K_BIN=$(K_BIN)
+KOMPILE_COMMAND?=$(MAKE) build-$(K_BACKEND) K_BIN=$(K_BIN)
 
 $(KEVM_REPO_DIR)/make-$(K_BACKEND).timestamp: $(KEVM_VERSION_FILE) $(K_REPO_DIR)/mvn-$(K_BACKEND).timestamp | $(KEVM_REPO_DIR)
 	cd $(KEVM_REPO_DIR) \
