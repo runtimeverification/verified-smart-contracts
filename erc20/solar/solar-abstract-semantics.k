@@ -7,8 +7,4 @@ module SOLAR-ABSTRACT-SEMANTICS
     ensures R
     [trusted]
 
-  rule #assert R:Bool => .
-    requires R
-    [trusted]
-
 endmodule
