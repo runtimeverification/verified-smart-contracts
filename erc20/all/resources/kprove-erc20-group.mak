@@ -11,10 +11,13 @@ KPROVE_MAK_FILE?=$(LOCAL_RESOURCES_DIR)/kprove-erc20.mak
 #
 # Settings
 
+# java or haskell
+K_BACKEND?=java
+
 LOCAL_RESOURCES_DIR:=$(THIS_FILE_DIR)
 ROOT:=$(abspath $(THIS_FILE_DIR)/../../..)
 RELATIVE_CURDIR:=$(strip $(patsubst $(ROOT)/%, %, $(filter $(ROOT)/%, $(CURDIR))))
-SPECS_DIR:=$(ROOT)/specs
+SPECS_DIR:=$(ROOT)/specs/$(K_BACKEND)
 FRAGMENT_INI_FILES:=$(sort $(wildcard $(FRAGMENT_INI_DIR)/*.ini))
 MAIN_INI_FILES:=$(sort $(wildcard *.ini))
 SPEC_INI_FILES:=$(patsubst %.ini, $(SPECS_DIR)/$(RELATIVE_CURDIR)/%/erc20-spec.ini, $(MAIN_INI_FILES))
