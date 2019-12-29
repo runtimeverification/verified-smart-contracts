@@ -6,6 +6,7 @@ THIS_FILE_DIR:=$(dir $(realpath $(lastword $(MAKEFILE_LIST))))
 NPROCS?=2
 TIMEOUT?=
 FRAGMENT_INI_DIR?=$(abspath $(THIS_FILE_DIR)/../fragments)
+KPROVE_MAK_FILE?=$(LOCAL_RESOURCES_DIR)/kprove-erc20.mak
 
 #
 # Settings
@@ -34,10 +35,10 @@ clean:
 	rm -rf $(SPECS_DIR)
 
 deps:
-	$(MAKE) -f $(LOCAL_RESOURCES_DIR)/kprove-erc20.mak deps SPEC_GROUP=resources SPEC_INI=mock.ini
+	$(MAKE) -f $(KPROVE_MAK_FILE) deps SPEC_GROUP=resources SPEC_INI=mock.ini
 
 clean-deps:
-	$(MAKE) -f $(LOCAL_RESOURCES_DIR)/kprove-erc20.mak clean-deps SPEC_GROUP=resources SPEC_INI=mock.ini
+	$(MAKE) -f $(KPROVE_MAK_FILE) clean-deps SPEC_GROUP=resources SPEC_INI=mock.ini
 
 .SECONDEXPANSION:
 $(SPECS_DIR)/%/erc20-spec.ini: $$(notdir $$*).ini $(FRAGMENT_INI_FILES)
@@ -46,14 +47,14 @@ $(SPECS_DIR)/%/erc20-spec.ini: $$(notdir $$*).ini $(FRAGMENT_INI_FILES)
 
 # Calling "clean-kevm-cache all" here leads to very long parse times on Jenkins, 30m+ on some specs, doesn't finish in 12+ hours.
 $(SPECS_DIR)/%/erc20-spec.ini.split-proof-tests: $(SPECS_DIR)/%/erc20-spec.ini
-	$(MAKE) -f $(LOCAL_RESOURCES_DIR)/kprove-erc20.mak all  SPEC_GROUP=$* SPEC_INI=$(basename $@)
+	$(MAKE) -f $(KPROVE_MAK_FILE) all  SPEC_GROUP=$* SPEC_INI=$(basename $@)
 
 $(SPECS_DIR)/%/erc20-spec.ini.test: $(SPECS_DIR)/%/erc20-spec.ini.split-proof-tests
-	$(MAKE) -f $(LOCAL_RESOURCES_DIR)/kprove-erc20.mak test SPEC_GROUP=$* SPEC_INI=$(basename $@) TIMEOUT=$(TIMEOUT) -i -j$(NPROCS)
+	$(MAKE) -f $(KPROVE_MAK_FILE) test SPEC_GROUP=$* SPEC_INI=$(basename $@) TIMEOUT=$(TIMEOUT) -i -j$(NPROCS)
 
 # Command to run just one spec. Argument: <absolute path to k>.test
 # patsubst below needed because $(dir ...) leaves a trailing slash.
 # TODO define function mydir - same as dir but without trailing slash
 .SECONDEXPANSION:
 $(SPECS_DIR)/%-spec.k.test: $$(dir $$@)erc20-spec.ini
-	$(MAKE) -f $(LOCAL_RESOURCES_DIR)/kprove-erc20.mak $@ SPEC_GROUP=$(patsubst %/,%,$(dir $*)) SPEC_INI=$(dir $@)erc20-spec.ini TIMEOUT=$(TIMEOUT)
+	$(MAKE) -f $(KPROVE_MAK_FILE) $@ SPEC_GROUP=$(patsubst %/,%,$(dir $*)) SPEC_INI=$(dir $@)erc20-spec.ini TIMEOUT=$(TIMEOUT)
