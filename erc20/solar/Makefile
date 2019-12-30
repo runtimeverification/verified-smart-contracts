@@ -26,6 +26,7 @@ SPEC_NAMES:=totalSupply \
             transfer-success-2 \
             transfer-failure-1-a \
             transfer-failure-1-b \
-            transfer-failure-2
+            transfer-failure-2 \
+            transferFrom-success-1
 
 include ../../resources/kprove.mak
