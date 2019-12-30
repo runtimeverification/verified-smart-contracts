@@ -89,6 +89,9 @@ module VERIFICATION
 
     rule notBool( hash2(K1,V1) ==K hash2(K2,V2) ) => K1 =/=Int K2 orBool V1 =/=Int V2
 
+    rule A ==K hash2(K,V) => hash2(K,V) ==K A
+      requires #isConcrete(A)
+
     //Assumption of non-collision between hashes and small constants that likely represent memory addresses or offsets.
     rule notBool( hash2(_,_) ==K A ) => true
       requires #isConcrete(A) andBool A <=Int 20
