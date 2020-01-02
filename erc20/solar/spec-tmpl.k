@@ -89,6 +89,6 @@
      andBool #rangeAddress(CALLER_ID)
      andBool #rangeAddress(ORIGIN_ID)
      andBool #range(0 <= CALL_DEPTH < 1020) // providing enough room for 4 calls, including test calls
-     andBool notBool ACCT_ID in #precompiledAccounts(CONSTANTINOPLE) //new, fixme verify if needed
+     andBool notBool ACCT_ID in #precompiledAccounts({SCHEDULE}) //new, fixme verify if needed
      {REQUIRES}
      {ENSURES}
