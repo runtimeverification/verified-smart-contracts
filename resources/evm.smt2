@@ -2,6 +2,9 @@
 ; (set-option :smt.mbqi false)
 ; (set-option :smt.array.extensional false)
 
+; Required when builtin List is used
+(declare-sort IntSeq)
+
 ; int extra
 (define-fun int_max ((x Int) (y Int)) Int (ite (< x y) y x))
 (define-fun int_min ((x Int) (y Int)) Int (ite (< x y) x y))
