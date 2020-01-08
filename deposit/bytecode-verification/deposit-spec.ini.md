@@ -36,7 +36,7 @@ Behavior:
 - It reverts when the call value is non-zero.
 - It does not alter the storage state.
 - It silently ignores any extra contents in `msg.data`. *(We have not found yet any attack that can exploit this behavior.)*
-- It returns `#sha256(#buf(32, NODE_32) ++ #buf(32, Y8)[24 .. 8] ++ #buf(24, 0))`.
+- It returns `#sha256(#buf(32, NODE_32) ++ #buf(32, Y8)[24..8] ++ #buf(24, 0))`.
 
 where:
 
@@ -86,9 +86,9 @@ Behavior:
 - It reverts when the call value is non-zero.
 - It does not alter the storage state.
 - It silently ignores any extra contents in `msg.data`. *(We have not found yet any attack that can exploit this behavior.)*
-- It returns `#encodeArgs(#bytes(#buf(32, Y8)[24 .. 8]))`
+- It returns `#encodeArgs(#bytes(#buf(32, Y8)[24 .. 8]))`.
 
-`#encodeArgs` is defined in [eDSL](https://github.com/kframework/evm-semantics/blob/master/edsl.md#abi-call-data) which formalizes [the ABI encoding specification](https://solidity.readthedocs.io/en/v0.6.1/abi-spec.html).
+Here `#encodeArgs` is defined in [eDSL](https://github.com/kframework/evm-semantics/blob/master/edsl.md#abi-call-data) which formalizes [the ABI encoding specification](https://solidity.readthedocs.io/en/v0.6.1/abi-spec.html).
 
 
 ## Function `deposit(pubkey, withdrawal_credentials, signature, deposit_data_root)`
