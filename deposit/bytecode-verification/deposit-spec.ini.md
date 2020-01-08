@@ -12,14 +12,15 @@ Behavior:
   ```
   zero_hashes[i] <- ZERO_HASHES_i  for 1 <= i < 32
   ```
-  where `ZERO_HASHES_i` is recursively defined as follows:
-  ```
-  ZERO_HASHES_{i+1} = #sha256(#buf(32, ZERO_HASHES_i) ++ #buf(32, ZERO_HASHES_i))  for 0 <= i < 31
-  ZERO_HASHES_0 = 0
-  ```
-  where `#sha256` denotes the SHA2-256 hash function,
-  `#buf(SIZE, DATA)` denotes the byte representation of `DATA` in `SIZE` bytes,
-  and `++` denotes the byte concatenation.
+
+Here `ZERO_HASHES_i` is recursively defined as follows:
+```
+ZERO_HASHES_{i+1} = #sha256(#buf(32, ZERO_HASHES_i) ++ #buf(32, ZERO_HASHES_i))  for 0 <= i < 31
+ZERO_HASHES_0 = 0
+```
+where `#sha256` denotes the SHA2-256 hash function,
+`#buf(SIZE, DATA)` denotes the byte representation of `DATA` in `SIZE` bytes,
+and `++` denotes the byte concatenation.
 
 
 ## Common behavior at the entry of the deployed bytecode
@@ -27,7 +28,7 @@ Behavior:
 - It reverts when `calldatasize < 4`.
 - It reverts when `msg.data[0..4]` does not match the signature of any public functions `get_deposit_root()`, `get_deposit_count()`, or `deposit(bytes,bytes,bytes,bytes32)`.
 
-  Here `BUF [ START .. WIDTH ]` denotes the segment of `BUF` beginning with `START` of width `WIDTH`.
+Here `BUF [ START .. WIDTH ]` denotes the segment of `BUF` beginning with `START` of width `WIDTH`.
 
 
 ## Function `get_deposit_count()`
@@ -38,34 +39,34 @@ Behavior:
 - It silently ignores any extra contents in `msg.data`. *(We have not yet found any attack that can exploit this behavior.)*
 - It returns `#encodeArgs(#bytes(#buf(32, Y8)[24..8]))`,
   
-  where:
+Here:
 
-  `#encodeArgs` is defined in [eDSL](https://github.com/kframework/evm-semantics/blob/master/edsl.md#abi-call-data) which formalizes [the ABI encoding specification](https://solidity.readthedocs.io/en/v0.6.1/abi-spec.html),
+`#encodeArgs` is defined in [eDSL](https://github.com/kframework/evm-semantics/blob/master/edsl.md#abi-call-data) which formalizes [the ABI encoding specification](https://solidity.readthedocs.io/en/v0.6.1/abi-spec.html),
   
-  and:
+and:
 
-  `Y8` is the return value of `to_little_endian_64(deposit_count)`, i.e., the 64-bit little-endian representation of `deposit_count`, defined as follows:
-  ```
-  Y8 = (Y7 * 256) + (X7 & 255)
-  Y7 = (Y6 * 256) + (X6 & 255)
-  Y6 = (Y5 * 256) + (X5 & 255)
-  Y5 = (Y4 * 256) + (X4 & 255)
-  Y4 = (Y3 * 256) + (X3 & 255)
-  Y3 = (Y2 * 256) + (X2 & 255)
-  Y2 = (Y1 * 256) + (X1 & 255)
-  Y1 =    deposit_count & 255
-  ```
-  with
-  ```
-  X7 = floor(X6            / 256)
-  X6 = floor(X5            / 256)
-  X5 = floor(X4            / 256)
-  X4 = floor(X3            / 256)
-  X3 = floor(X2            / 256)
-  X2 = floor(X1            / 256)
-  X1 = floor(deposit_count / 256)
-  ```
-  Note that `to_little_endian_64(deposit_count)` is well defined because `deposit_count < 2^32 < 2^64`.
+`Y8` is the return value of `to_little_endian_64(deposit_count)`, i.e., the 64-bit little-endian representation of `deposit_count`, defined as follows:
+```
+Y8 = (Y7 * 256) + (X7 & 255)
+Y7 = (Y6 * 256) + (X6 & 255)
+Y6 = (Y5 * 256) + (X5 & 255)
+Y5 = (Y4 * 256) + (X4 & 255)
+Y4 = (Y3 * 256) + (X3 & 255)
+Y3 = (Y2 * 256) + (X2 & 255)
+Y2 = (Y1 * 256) + (X1 & 255)
+Y1 =    deposit_count & 255
+```
+where:
+```
+X7 = floor(X6            / 256)
+X6 = floor(X5            / 256)
+X5 = floor(X4            / 256)
+X4 = floor(X3            / 256)
+X3 = floor(X2            / 256)
+X2 = floor(X1            / 256)
+X1 = floor(deposit_count / 256)
+```
+Note that `to_little_endian_64(deposit_count)` is well defined because `deposit_count < 2^32 < 2^64`.
 
 
 ## Function `get_deposit_root()`
@@ -76,21 +77,19 @@ Behavior:
 - It silently ignores any extra contents in `msg.data`. *(We have not yet found any attack that can exploit this behavior.)*
 - It returns `#sha256(#buf(32, NODE_32) ++ #buf(32, Y8)[24..8] ++ #buf(24, 0))`.
 
-  where:
-
-  `NODE_32` is the Merklee tree root value, recursively defined as follows:
-  ```
-  NODE_{i+1} = if SIZE_i & 1 == 1
-               then #sha256(#buf(32, branch[i]) ++ #buf(32, NODE_i))
-               else #sha256(#buf(32, NODE_i) ++ #buf(32, zero_hashes[i]))
-               for 0 <= i < 32
-  NODE_0 = 0
-  ```
-  where:
-  ```
-  SIZE_{i+1} = floor(SIZE_i / 2)  for 0 <= i < 32
-  SIZE_0 = deposit_count
-  ```
+Here `NODE_32` is the Merklee tree root value, recursively defined as follows:
+```
+NODE_{i+1} = if SIZE_i & 1 == 1
+             then #sha256(#buf(32, branch[i]) ++ #buf(32, NODE_i))
+             else #sha256(#buf(32, NODE_i) ++ #buf(32, zero_hashes[i]))
+             for 0 <= i < 32
+NODE_0 = 0
+```
+where:
+```
+SIZE_{i+1} = floor(SIZE_i / 2)  for 0 <= i < 32
+SIZE_0 = deposit_count
+```
 
 
 ## Function `deposit(pubkey, withdrawal_credentials, signature, deposit_data_root)`
@@ -136,7 +135,7 @@ Behavior:
   SIZE_{i+1} = floor(SIZE_i / 2)  for 0 <= i < 32 - 1
   SIZE_0 = old(deposit_count) + 1
   ```
-  Note that such K always exists, since `old(deposit_count) < 2^32 - 1`.
+  Note that such `K` always exists, since `old(deposit_count) < 2^32 - 1`.
   
 Here:
 
