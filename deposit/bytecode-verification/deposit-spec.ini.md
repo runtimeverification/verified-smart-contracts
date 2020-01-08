@@ -58,14 +58,14 @@ Y1 =              (X0 & 255)
 ```
 where:
 ```
-X7 = floor(X6            / 256)
-X6 = floor(X5            / 256)
-X5 = floor(X4            / 256)
-X4 = floor(X3            / 256)
-X3 = floor(X2            / 256)
-X2 = floor(X1            / 256)
-X1 = floor(deposit_count / 256)
-X0 =       deposit_count
+X7 = floor(X6 / 256)
+X6 = floor(X5 / 256)
+X5 = floor(X4 / 256)
+X4 = floor(X3 / 256)
+X3 = floor(X2 / 256)
+X2 = floor(X1 / 256)
+X1 = floor(X0 / 256)
+X0 = deposit_count
 ```
 Note that `to_little_endian_64(deposit_count)` is well defined because `deposit_count < 2^32 < 2^64`.
 
@@ -189,15 +189,16 @@ YY5 = (YY4 * 256) + (XX4 & 255)
 YY4 = (YY3 * 256) + (XX3 & 255)
 YY3 = (YY2 * 256) + (XX2 & 255)
 YY2 = (YY1 * 256) + (XX1 & 255)
-YY1 =     DEPOSIT_AMOUNT & 255
+YY1 =               (XX0 & 255)
 
-XX7 = floor(XX6            / 256)
-XX6 = floor(XX5            / 256)
-XX5 = floor(XX4            / 256)
-XX4 = floor(XX3            / 256)
-XX3 = floor(XX2            / 256)
-XX2 = floor(XX1            / 256)
-XX1 = floor(DEPOSIT_AMOUNT / 256)
+XX7 = floor(XX6 / 256)
+XX6 = floor(XX5 / 256)
+XX5 = floor(XX4 / 256)
+XX4 = floor(XX3 / 256)
+XX3 = floor(XX2 / 256)
+XX2 = floor(XX1 / 256)
+XX1 = floor(XX0 / 256)
+XX0 = DEPOSIT_AMOUNT
 
 DEPOSIT_AMOUNT = floor(msg.value / 10^9)
 ```
