@@ -10,13 +10,13 @@ Behavior:
 - It reverts when the call value is non-zero.
 - Otherwise, it updates the storage state as follows:
   ```
-  zero_hashes[i] <- ZERO_HASHES_i  for 1 <= i < 32
+  zero_hashes[i] <- ZERO_HASHES(i)  for 1 <= i < 32
   ```
 
-Here `ZERO_HASHES_i` is recursively defined as follows:
+Here `ZERO_HASHES(i)` is recursively defined as follows:
 ```
-ZERO_HASHES_{i+1} = #sha256(#buf(32, ZERO_HASHES_i) ++ #buf(32, ZERO_HASHES_i))  for 0 <= i < 31
-ZERO_HASHES_0 = 0
+ZERO_HASHES(i+1) = #sha256(#buf(32, ZERO_HASHES(i)) ++ #buf(32, ZERO_HASHES(i)))  for 0 <= i < 31
+ZERO_HASHES(0) = 0
 ```
 where `#sha256` denotes the SHA2-256 hash function,
 `#buf(SIZE, DATA)` denotes the byte representation of `DATA` in `SIZE` bytes,
@@ -84,20 +84,20 @@ Behavior:
 - It reverts when the call value is non-zero.
 - It does not alter the storage state.
 - It silently ignores any extra contents in `msg.data`. *(We have not yet found any attack that can exploit this behavior.)*
-- It returns `#sha256(#buf(32, NODE_32) ++ #buf(32, Y8)[24..8] ++ #buf(24, 0))`.
+- It returns `#sha256(#buf(32, NODE(32)) ++ #buf(32, Y8)[24..8] ++ #buf(24, 0))`.
 
-Here `NODE_32` is the Merklee tree root value, recursively defined as follows:
+Here `NODE(32)` is the Merklee tree root value, recursively defined as follows:
 ```
-NODE_{i+1} = if SIZE_i & 1 == 1
-             then #sha256(#buf(32, branch[i]) ++ #buf(32, NODE_i))
-             else #sha256(#buf(32, NODE_i) ++ #buf(32, zero_hashes[i]))
+NODE(i+1) = if SIZE(i) & 1 == 1
+             then #sha256(#buf(32, branch[i]) ++ #buf(32, NODE(i)))
+             else #sha256(#buf(32, NODE(i)) ++ #buf(32, zero_hashes[i]))
              for 0 <= i < 32
-NODE_0 = 0
+NODE(0) = 0
 ```
 where:
 ```
-SIZE_{i+1} = floor(SIZE_i / 2)  for 0 <= i < 32
-SIZE_0 = deposit_count
+SIZE(i+1) = floor(SIZE(i) / 2)  for 0 <= i < 32
+SIZE(0) = deposit_count
 ```
 
 
@@ -111,6 +111,7 @@ Behavior:
   - `WITHDRAWAL_CREDENTIALS_ARGUMENT_SIZE == WITHDRAWAL_CREDENTIALS_LENGTH`
   - `SIGNATURE_ARGUMENT_SIZE              == SIGNATURE_LENGTH`
   - `NODE == deposit_data_root`
+  where `old(deposit_count)` denotes the value of `deposit_count` at the beginning of the function.
 - Otherwise, it emits a DepositEvent log:
   ```
   #abiEventLog(THIS, "DepositEvent",
@@ -126,22 +127,22 @@ Behavior:
 - Also, it updates the storage state as follows:
   ```
   deposit_count <- old(deposit_count) + 1
-  branch[K] <- NODE_K
+  branch[K] <- NODE(K)
   ```
-  where `NODE_i` is recursively defined as follows:
+  where `NODE(i)` is recursively defined as follows:
   ```
-  NODE_{i+1} = #sha256(#buf(32, branch[i]) ++ #buf(32, NODE_i))  for 0 <= i < 32
-  NODE_0 = NODE
+  NODE(i+1) = #sha256(#buf(32, branch[i]) ++ #buf(32, NODE(i)))  for 0 <= i < 32
+  NODE(0) = NODE
   ```
   and `K` is the largest index less than 32 such that:
   ```
-  SIZE_i & 1 == 0  for 0 <= i < K
-  SIZE_K & 1 == 1
+  SIZE(i) & 1 == 0  for 0 <= i < K
+  SIZE(K) & 1 == 1
   ```
-  where `SIZE_i` is recursively defined as follows:
+  where `SIZE(i)` is recursively defined as follows:
   ```
-  SIZE_{i+1} = floor(SIZE_i / 2)  for 0 <= i < 32
-  SIZE_0 = old(deposit_count) + 1
+  SIZE(i+1) = floor(SIZE(i) / 2)  for 0 <= i < 32
+  SIZE(0) = old(deposit_count) + 1
   ```
   Note that such `K` always exists, since `old(deposit_count) < 2^32 - 1` (because of the assertion at the beginning of the function).
   In other words, the loop always terminates by reaching the break statement, because of the assertion `old(deposit_count) < 2^32 - 1`.
