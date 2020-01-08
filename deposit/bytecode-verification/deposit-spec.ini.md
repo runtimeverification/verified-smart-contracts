@@ -140,9 +140,9 @@ Here:
 
 The non-static-type function arguments (`PUBKEY`, `WITHDRAWAL_CREDENTIALS`, and `SIGNATURE`) are decoded as follows:
 ```
-PUBKEY_OFFSET                 = 4 +Word (msg.data [  4 .. 32 ])
-WITHDRAWAL_CREDENTIALS_OFFSET = 4 +Word (msg.data [ 36 .. 32 ])
-SIGNATURE_OFFSET              = 4 +Word (msg.data [ 68 .. 32 ])
+PUBKEY_OFFSET                 = (4 + msg.data[ 4..32]) mod 2^256
+WITHDRAWAL_CREDENTIALS_OFFSET = (4 + msg.data[36..32]) mod 2^256
+SIGNATURE_OFFSET              = (4 + msg.data[68..32]) mod 2^256
 
 PUBKEY_ARGUMENT_SIZE                 = msg.data [ PUBKEY_OFFSET                 .. 32 ]
 WITHDRAWAL_CREDENTIALS_ARGUMENT_SIZE = msg.data [ WITHDRAWAL_CREDENTIALS_OFFSET .. 32 ]
@@ -152,6 +152,12 @@ PUBKEY                 = msg.data [ (PUBKEY_OFFSET                 + 32) .. PUBK
 WITHDRAWAL_CREDENTIALS = msg.data [ (WITHDRAWAL_CREDENTIALS_OFFSET + 32) .. WITHDRAWAL_CREDENTIALS_LENGTH ]
 SIGNATURE              = msg.data [ (SIGNATURE_OFFSET              + 32) .. SIGNATURE_LENGTH              ]
 ```
+**NOTE**: The argument decoding process of the Vyper-compiled bytecode does not explicitly check the well-formedness of the calldata (`msg.data`).
+Specifically, the addition overflow may happen when decoding the offsets (`*_OFFSET`).
+Also, the decoded offsets may be larger than the size of calldata, leading to out-of-bounds access, although the out-of-bounds access to calldata simply returns zero bytes.
+We note that the Solidity-compiled bytecode contains more runtime checks to avoid aforementioned behaviors.
+Currently, the deposit contract relies on the checksum (`deposit_data_root`) to finally reject ill-formed calldata.
+We have not found yet any attack that can exploit this behavior in the presence of the checksum.
 
 The deposit data root `NODE` is computed as follows:
 ```
