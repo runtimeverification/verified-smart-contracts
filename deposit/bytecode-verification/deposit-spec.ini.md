@@ -86,7 +86,7 @@ Behavior:
 - It reverts when the call value is non-zero.
 - It does not alter the storage state.
 - It silently ignores any extra contents in `msg.data`. *(We have not found yet any attack that can exploit this behavior.)*
-- It returns `#encodeArgs(#bytes(#buf(32, Y8)[24 .. 8]))`.
+- It returns `#encodeArgs(#bytes(#buf(32, Y8)[24..8]))`.
 
 Here `#encodeArgs` is defined in [eDSL](https://github.com/kframework/evm-semantics/blob/master/edsl.md#abi-call-data) which formalizes [the ABI encoding specification](https://solidity.readthedocs.io/en/v0.6.1/abi-spec.html).
 
@@ -106,9 +106,9 @@ Behavior:
   #abiEventLog(THIS, "DepositEvent",
                #bytes(#buf(PUBKEY_LENGTH, PUBKEY)),
                #bytes(#buf(WITHDRAWAL_CREDENTIALS_LENGTH, WITHDRAWAL_CREDENTIALS)),
-               #bytes(#buf(32, YY8)[24 .. 8]),
+               #bytes(#buf(32, YY8)[24..8]),
                #bytes(#buf(SIGNATURE_LENGTH, SIGNATURE)),
-               #bytes(#buf(32, Y8)[24 .. 8])
+               #bytes(#buf(32, Y8)[24..8])
               )
   ```
   where `#abiEventLog` is defined in [eDSL](https://github.com/kframework/evm-semantics/blob/master/edsl.md#abi-event-logs) which formalizes [the ABI event encoding specification](https://solidity.readthedocs.io/en/v0.6.1/abi-spec.html#events).
@@ -148,40 +148,40 @@ PUBKEY_ARGUMENT_SIZE                 = msg.data [ PUBKEY_OFFSET                 
 WITHDRAWAL_CREDENTIALS_ARGUMENT_SIZE = msg.data [ WITHDRAWAL_CREDENTIALS_OFFSET .. 32 ]
 SIGNATURE_ARGUMENT_SIZE              = msg.data [ SIGNATURE_OFFSET              .. 32 ]
 
-PUBKEY                 = msg.data [ PUBKEY_OFFSET                 + 32 .. PUBKEY_LENGTH                 ]
-WITHDRAWAL_CREDENTIALS = msg.data [ WITHDRAWAL_CREDENTIALS_OFFSET + 32 .. WITHDRAWAL_CREDENTIALS_LENGTH ]
-SIGNATURE              = msg.data [ SIGNATURE_OFFSET              + 32 .. SIGNATURE_LENGTH              ]
+PUBKEY                 = msg.data [ (PUBKEY_OFFSET                 + 32) .. PUBKEY_LENGTH                 ]
+WITHDRAWAL_CREDENTIALS = msg.data [ (WITHDRAWAL_CREDENTIALS_OFFSET + 32) .. WITHDRAWAL_CREDENTIALS_LENGTH ]
+SIGNATURE              = msg.data [ (SIGNATURE_OFFSET              + 32) .. SIGNATURE_LENGTH              ]
 ```
 
 The deposit data root `NODE` is computed as follows:
 ```
 PUBKEY_ROOT    = #sha256(#buf(48, PUBKEY) ++ #buf(16, 0))
-TMP1           = #sha256(#buf(96, SIGNATURE)[0 .. 64])
-TMP2           = #sha256(#buf(96, SIGNATURE)[64 .. 32] ++ #buf(32, 0))
+TMP1           = #sha256(#buf(96, SIGNATURE)[0..64])
+TMP2           = #sha256(#buf(96, SIGNATURE)[64..32] ++ #buf(32, 0))
 SIGNATURE_ROOT = #sha256(#buf(32, TMP1) ++ #buf(32, TMP2))
 TMP3           = #sha256(#buf(32, PUBKEY_ROOT) ++ #buf(32, WITHDRAWAL_CREDENTIALS))
-TMP4           = #sha256(#buf(32, YY8)[24 .. 8] ++ #buf(24, 0) ++ #buf(32, SIGNATURE_ROOT))
+TMP4           = #sha256(#buf(32, YY8)[24..8] ++ #buf(24, 0) ++ #buf(32, SIGNATURE_ROOT))
 NODE           = #sha256(#buf(32, TMP3) ++ #buf(32, TMP4))
 ```
 
 The 64-bit little endian representation of the deposit amount, `to_little_endian_64(deposit_amount)`, is computed as follows:
 ```
-YY1 =     DEPOSIT_AMOUNT & 255
-YY2 = (YY1 * 256) + (XX1 & 255)
-YY3 = (YY2 * 256) + (XX2 & 255)
-YY4 = (YY3 * 256) + (XX3 & 255)
-YY5 = (YY4 * 256) + (XX4 & 255)
-YY6 = (YY5 * 256) + (XX5 & 255)
-YY7 = (YY6 * 256) + (XX6 & 255)
 YY8 = (YY7 * 256) + (XX7 & 255)
+YY7 = (YY6 * 256) + (XX6 & 255)
+YY6 = (YY5 * 256) + (XX5 & 255)
+YY5 = (YY4 * 256) + (XX4 & 255)
+YY4 = (YY3 * 256) + (XX3 & 255)
+YY3 = (YY2 * 256) + (XX2 & 255)
+YY2 = (YY1 * 256) + (XX1 & 255)
+YY1 =     DEPOSIT_AMOUNT & 255
 
-XX1 = DEPOSIT_AMOUNT /Int 256
-XX2 = XX1            /Int 256
-XX3 = XX2            /Int 256
-XX4 = XX3            /Int 256
-XX5 = XX4            /Int 256
-XX6 = XX5            /Int 256
-XX7 = XX6            /Int 256
+XX7 = floor(XX6            / 256)
+XX6 = floor(XX5            / 256)
+XX5 = floor(XX4            / 256)
+XX4 = floor(XX3            / 256)
+XX3 = floor(XX2            / 256)
+XX2 = floor(XX1            / 256)
+XX1 = floor(DEPOSIT_AMOUNT / 256)
 
 DEPOSIT_AMOUNT = floor(msg.value / 10^9)
 ```
