@@ -7,7 +7,7 @@ We do not explicitly specify the out-of-gas exception.
 ## Storage state variables
 
 - `deposit_count` (an unsigned 256-bit integer) keeps track of the number of deposits made.
-- `branch` and `zero_hashes` (an array of 32-byte words of size 32) are internal data structures for the incremental Merkle tree algorithm.
+- `branch` and `zero_hashes` (arrays of 32-byte words of size 32) are internal data structures for the incremental Merkle tree algorithm.
 
 
 ## Constructor `__init__()` (executed once at the deployment)
@@ -51,7 +51,8 @@ Here:
   
 and:
 
-`LE(V)` is essentially the return value of `to_little_endian_64(V)`, i.e., the 64-bit little-endian representation of `V`, defined as follows:
+`LE(V)` is essentially the return value of `to_little_endian_64(V)`, i.e., the 64-bit little-endian representation of `V`, defined as follows.
+For `0 <= V < 2^64`:
 ```
 LE(V) = (Y7(V) * 256) + (X7(V) & 255)
 Y7(V) = (Y6(V) * 256) + (X6(V) & 255)
@@ -73,7 +74,6 @@ X2(V) = floor(X1(V) / 256)
 X1(V) = floor(X0(V) / 256)
 X0(V) = V
 ```
-for `0 <= V < 2^64`.
 Note that `LE(deposit_count)` is well defined because `deposit_count < 2^32 < 2^64`.
 
 The byte sequence of the return value is as follows (in hexadecimal notation):
@@ -96,9 +96,9 @@ Behavior:
 Here `NODE(32)` is the Merklee tree root value, recursively defined as follows:
 ```
 NODE(i+1) = if SIZE(i) & 1 == 1
-             then #sha256(#buf(32, branch[i]) ++ #buf(32, NODE(i)))
-             else #sha256(#buf(32, NODE(i)) ++ #buf(32, zero_hashes[i]))
-             for 0 <= i < 32
+            then #sha256(#buf(32, branch[i]) ++ #buf(32, NODE(i)))
+            else #sha256(#buf(32, NODE(i)) ++ #buf(32, zero_hashes[i]))
+            for 0 <= i < 32
 NODE(0) = 0
 ```
 where:
