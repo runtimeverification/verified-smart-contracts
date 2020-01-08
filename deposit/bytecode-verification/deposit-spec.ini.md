@@ -45,7 +45,7 @@ Here:
   
 and:
 
-`Y8` is the return value of `to_little_endian_64(deposit_count)`, i.e., the 64-bit little-endian representation of `deposit_count`, defined as follows:
+`Y8` is essentially the return value of `to_little_endian_64(deposit_count)`, i.e., the 64-bit little-endian representation of `deposit_count`, defined as follows:
 ```
 Y8 = (Y7 * 256) + (X7 & 255)
 Y7 = (Y6 * 256) + (X6 & 255)
