@@ -185,3 +185,4 @@ XX1 = floor(DEPOSIT_AMOUNT / 256)
 
 DEPOSIT_AMOUNT = floor(msg.value / 10^9)
 ```
+Note that `to_little_endian_64(deposit_amount)` is well defined only when `deposit_amount` is less than `2^64` gwei (~ 18 billion Ether), which is very likely the case especially considering the current total supply of Ether (~ 110 million).
