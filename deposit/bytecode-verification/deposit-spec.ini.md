@@ -31,7 +31,7 @@ and `++` denotes the byte concatenation.
 Here `BUF [ START .. WIDTH ]` denotes the segment of `BUF` beginning with `START` of width `WIDTH`.
 
 
-## Function `get_deposit_count() -> bytes[8]`
+## Function `get_deposit_count()`
 
 Behavior:
 - It reverts when the call value is non-zero.
@@ -129,9 +129,8 @@ Behavior:
   branch[K] <- NODE_K
   ```
   where `NODE_i` is recursively defined as follows:
-  (Note that `i < 32 - 1`, since the break statement is always executed because `old(deposit_count) < 2^32 - 1`.)
   ```
-  NODE_{i+1} = #sha256(#buf(32, branch[i]) ++ #buf(32, NODE_i))  for 0 <= i < 32 - 1
+  NODE_{i+1} = #sha256(#buf(32, branch[i]) ++ #buf(32, NODE_i))  for 0 <= i < 32
   NODE_0 = NODE
   ```
   and `K` is the largest index less than 32 such that:
@@ -141,11 +140,12 @@ Behavior:
   ```
   where `SIZE_i` is recursively defined as follows:
   ```
-  SIZE_{i+1} = floor(SIZE_i / 2)  for 0 <= i < 32 - 1
+  SIZE_{i+1} = floor(SIZE_i / 2)  for 0 <= i < 32
   SIZE_0 = old(deposit_count) + 1
   ```
-  Note that such `K` always exists, since `old(deposit_count) < 2^32 - 1`.
-  
+  Note that such `K` always exists, since `old(deposit_count) < 2^32 - 1` (because of the assertion at the beginning of the function).
+  In other words, the loop always terminates by reaching the break statement, because of the assertion `old(deposit_count) < 2^32 - 1`.
+
 Here:
 
 The non-static-type function arguments (`PUBKEY`, `WITHDRAWAL_CREDENTIALS`, and `SIGNATURE`) are decoded as follows:
@@ -166,8 +166,8 @@ SIGNATURE              = msg.data [ (SIGNATURE_OFFSET              + 32) .. SIGN
 Specifically, the addition overflow may happen when decoding the offsets (`*_OFFSET`).
 Also, the decoded offsets may be larger than the size of calldata, leading to out-of-bounds access, although the out-of-bounds access to calldata simply returns zero bytes.
 We note that the Solidity-compiled bytecode contains more runtime checks to avoid aforementioned behaviors.
-Currently, the deposit contract relies on the checksum (`deposit_data_root`) to finally reject ill-formed calldata.
-We have not yet found any attack that can exploit this behavior in the presence of the checksum.
+Currently, the deposit contract relies on the checksum (`deposit_data_root`) to finally reject such ill-formed calldata.
+We have not yet found any attack that can exploit this behavior especially in the presence of the checksum.
 
 The deposit data root `NODE` is computed as follows:
 ```
@@ -201,4 +201,4 @@ XX1 = floor(DEPOSIT_AMOUNT / 256)
 
 DEPOSIT_AMOUNT = floor(msg.value / 10^9)
 ```
-Note that `to_little_endian_64(deposit_amount)` is well defined only when `deposit_amount` is less than `2^64` gwei (~ 18 billion Ether), which is very likely the case especially considering the current total supply of Ether (~ 110 million).
+Note that `to_little_endian_64(deposit_amount)` is well defined only when `deposit_amount` is less than `2^64` gwei (~ 18 billion Ether), which is very likely the case especially considering the current total supply of Ether (~ 110 million) and the history of its growth rate.
