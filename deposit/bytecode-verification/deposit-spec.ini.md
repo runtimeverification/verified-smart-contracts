@@ -111,6 +111,7 @@ Behavior:
   - `WITHDRAWAL_CREDENTIALS_ARGUMENT_SIZE == WITHDRAWAL_CREDENTIALS_LENGTH`
   - `SIGNATURE_ARGUMENT_SIZE              == SIGNATURE_LENGTH`
   - `NODE == deposit_data_root`
+  
   where `old(deposit_count)` denotes the value of `deposit_count` at the beginning of the function.
 - Otherwise, it emits a DepositEvent log:
   ```
