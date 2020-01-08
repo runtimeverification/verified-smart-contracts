@@ -100,6 +100,8 @@ SIZE(i+1) = floor(SIZE(i) / 2)  for 0 <= i < 32
 SIZE(0) = deposit_count
 ```
 
+`Y8` is the same with the one defined in the specification of the `get_deposit_count()` function above.
+
 
 ## Function `deposit(pubkey, withdrawal_credentials, signature, deposit_data_root)`
 
@@ -124,7 +126,8 @@ Behavior:
               )
   ```
   where `#abiEventLog` is defined in [eDSL](https://github.com/kframework/evm-semantics/blob/master/edsl.md#abi-event-logs) which formalizes [the ABI event encoding specification](https://solidity.readthedocs.io/en/v0.6.1/abi-spec.html#events).
-  See below for the definition of the event log arguments.
+  `Y8` is the same with the one defined in the specification of the `get_deposit_count()` function above.
+  See below for the definition of the other event log arguments.
 - Also, it updates the storage state as follows:
   ```
   deposit_count <- old(deposit_count) + 1
