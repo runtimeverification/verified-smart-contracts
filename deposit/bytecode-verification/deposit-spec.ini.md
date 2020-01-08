@@ -31,13 +31,13 @@ and `++` denotes the byte concatenation.
 Here `BUF [ START .. WIDTH ]` denotes the segment of `BUF` beginning with `START` of width `WIDTH`.
 
 
-## Function `get_deposit_count()`
+## Function `get_deposit_count() -> bytes[8]`
 
 Behavior:
 - It reverts when the call value is non-zero.
 - It does not alter the storage state.
 - It silently ignores any extra contents in `msg.data`. *(We have not yet found any attack that can exploit this behavior.)*
-- It returns `#encodeArgs(#bytes(#buf(32, Y8)[24..8]))`,
+- It returns `#encodeArgs(#bytes(#buf(32, Y8)[24..8]))`.
   
 Here:
 
@@ -54,7 +54,7 @@ Y5 = (Y4 * 256) + (X4 & 255)
 Y4 = (Y3 * 256) + (X3 & 255)
 Y3 = (Y2 * 256) + (X2 & 255)
 Y2 = (Y1 * 256) + (X1 & 255)
-Y1 =    deposit_count & 255
+Y1 =              (X0 & 255)
 ```
 where:
 ```
@@ -65,8 +65,17 @@ X4 = floor(X3            / 256)
 X3 = floor(X2            / 256)
 X2 = floor(X1            / 256)
 X1 = floor(deposit_count / 256)
+X0 =       deposit_count
 ```
 Note that `to_little_endian_64(deposit_count)` is well defined because `deposit_count < 2^32 < 2^64`.
+
+The byte sequence of the return value is as follows (in hexadecimal notation):
+```
+0x0000000000000000000000000000000000000000000000000000000000000020
+  0000000000000000000000000000000000000000000000000000000000000008
+  deadbeefdeadbeef000000000000000000000000000000000000000000000000
+```
+This byte sequence encodes the returned byte array of type `bytes[8]`, where the first 32 bytes (in the first line) denote the offset (32 = `0x20`) to the byte array, the second 32 bytes (in the second line) denote the size of the byte array (8 = `0x8`), and the `deadbeefdeadbeef` (in the third line) denotes the content of the byte array, i.e., the sequence of 8 bytes that consists of `X0 & 255`, `X1 & 255`, ..., and `X7 & 255` in that order. The remaining 24 zero-bytes denote zero-padding for the 32-byte alignment. This byte sequence conforms to the ABI encoding specification. Note that the original sequence of bytes (i.e., the big-endian representaion) of `deposit_count` consists of `X7 & 255`, `X6 & 255`, ..., and `X0 & 255` in that order.
 
 
 ## Function `get_deposit_root()`
