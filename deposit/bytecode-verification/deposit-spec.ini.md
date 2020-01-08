@@ -4,6 +4,12 @@ Here we specify all possible behaviors of the compiled bytecode of the deposit c
 We do not explicitly specify the out-of-gas exception.
 
 
+## Storage state variables
+
+- `deposit_count` (an unsigned 256-bit integer) keeps track of the number of deposits made.
+- `branch` and `zero_hashes` (an array of 32-byte words of size 32) are internal data structures for the incremental Merkle tree algorithm.
+
+
 ## Constructor `__init__()` (executed once at the deployment)
 
 Behavior:
@@ -37,7 +43,7 @@ Behavior:
 - It reverts when the call value is non-zero.
 - It does not alter the storage state.
 - It silently ignores any extra contents in `msg.data`. *(We have not yet found any attack that can exploit this behavior.)*
-- It returns `#encodeArgs(#bytes(#buf(32, Y8)[24..8]))`.
+- It returns `#encodeArgs(#bytes(#buf(32, LE(deposit_count))[24..8]))`.
   
 Here:
 
@@ -45,29 +51,30 @@ Here:
   
 and:
 
-`Y8` is essentially the return value of `to_little_endian_64(deposit_count)`, i.e., the 64-bit little-endian representation of `deposit_count`, defined as follows:
+`LE(V)` is essentially the return value of `to_little_endian_64(V)`, i.e., the 64-bit little-endian representation of `V`, defined as follows:
 ```
-Y8 = (Y7 * 256) + (X7 & 255)
-Y7 = (Y6 * 256) + (X6 & 255)
-Y6 = (Y5 * 256) + (X5 & 255)
-Y5 = (Y4 * 256) + (X4 & 255)
-Y4 = (Y3 * 256) + (X3 & 255)
-Y3 = (Y2 * 256) + (X2 & 255)
-Y2 = (Y1 * 256) + (X1 & 255)
-Y1 =              (X0 & 255)
+LE(V) = (Y7(V) * 256) + (X7(V) & 255)
+Y7(V) = (Y6(V) * 256) + (X6(V) & 255)
+Y6(V) = (Y5(V) * 256) + (X5(V) & 255)
+Y5(V) = (Y4(V) * 256) + (X4(V) & 255)
+Y4(V) = (Y3(V) * 256) + (X3(V) & 255)
+Y3(V) = (Y2(V) * 256) + (X2(V) & 255)
+Y2(V) = (Y1(V) * 256) + (X1(V) & 255)
+Y1(V) =                 (X0(V) & 255)
 ```
 where:
 ```
-X7 = floor(X6 / 256)
-X6 = floor(X5 / 256)
-X5 = floor(X4 / 256)
-X4 = floor(X3 / 256)
-X3 = floor(X2 / 256)
-X2 = floor(X1 / 256)
-X1 = floor(X0 / 256)
-X0 = deposit_count
+X7(V) = floor(X6(V) / 256)
+X6(V) = floor(X5(V) / 256)
+X5(V) = floor(X4(V) / 256)
+X4(V) = floor(X3(V) / 256)
+X3(V) = floor(X2(V) / 256)
+X2(V) = floor(X1(V) / 256)
+X1(V) = floor(X0(V) / 256)
+X0(V) = V
 ```
-Note that `to_little_endian_64(deposit_count)` is well defined because `deposit_count < 2^32 < 2^64`.
+for `0 <= V < 2^64`.
+Note that `LE(deposit_count)` is well defined because `deposit_count < 2^32 < 2^64`.
 
 The byte sequence of the return value is as follows (in hexadecimal notation):
 ```
@@ -75,7 +82,7 @@ The byte sequence of the return value is as follows (in hexadecimal notation):
   0000000000000000000000000000000000000000000000000000000000000008
   deadbeefdeadbeef000000000000000000000000000000000000000000000000
 ```
-This byte sequence encodes the returned byte array of type `bytes[8]`, where the first 32 bytes (in the first line) denote the offset (32 = `0x20`) to the byte array, the second 32 bytes (in the second line) denote the size of the byte array (8 = `0x8`), and the `deadbeefdeadbeef` (in the third line) denotes the content of the byte array, i.e., the sequence of 8 bytes that consists of `X0 & 255`, `X1 & 255`, ..., and `X7 & 255` in that order. The remaining 24 zero-bytes denote zero-padding for the 32-byte alignment. This byte sequence conforms to the ABI encoding specification. Note that the original sequence of bytes (i.e., the big-endian representaion) of `deposit_count` consists of `X7 & 255`, `X6 & 255`, ..., and `X0 & 255` in that order.
+This byte sequence encodes the returned byte array of type `bytes[8]`, where the first 32 bytes (in the first line) denote the offset (32 = `0x20`) to the byte array, the second 32 bytes (in the second line) denote the size of the byte array (8 = `0x8`), and the `deadbeefdeadbeef` (in the third line) denotes the content of the byte array, i.e., the sequence of 8 bytes that consists of `X0 & 255`, `X1 & 255`, ..., and `X7 & 255` in that order. The remaining 24 zero-bytes denote zero-padding for the 32-byte alignment. This byte sequence conforms to the ABI encoding specification. Note that the original sequence of bytes (i.e., the big-endian representation) of `deposit_count` consists of `X7 & 255`, `X6 & 255`, ..., and `X0 & 255` in that order.
 
 
 ## Function `get_deposit_root()`
@@ -84,7 +91,7 @@ Behavior:
 - It reverts when the call value is non-zero.
 - It does not alter the storage state.
 - It silently ignores any extra contents in `msg.data`. *(We have not yet found any attack that can exploit this behavior.)*
-- It returns `#sha256(#buf(32, NODE(32)) ++ #buf(32, Y8)[24..8] ++ #buf(24, 0))`.
+- It returns `#sha256(#buf(32, NODE(32)) ++ #buf(32, LE(deposit_count))[24..8] ++ #buf(24, 0))`.
 
 Here `NODE(32)` is the Merklee tree root value, recursively defined as follows:
 ```
@@ -100,7 +107,7 @@ SIZE(i+1) = floor(SIZE(i) / 2)  for 0 <= i < 32
 SIZE(0) = deposit_count
 ```
 
-`Y8` is the same with the one defined in the specification of the `get_deposit_count()` function above.
+`LE(deposit_count)` is the same with the one defined in the specification of the `get_deposit_count()` function above.
 
 
 ## Function `deposit(pubkey, withdrawal_credentials, signature, deposit_data_root)`
@@ -108,26 +115,29 @@ SIZE(0) = deposit_count
 Behavior:
 - It reverts if either of the following is not met:
   - `old(deposit_count) < 2^32 - 1`
-  - `floor(msg.value / 10^9) >= 10^9`
+  - `DEPOSIT_AMOUNT >= 10^9`
   - `PUBKEY_ARGUMENT_SIZE                 == PUBKEY_LENGTH`
   - `WITHDRAWAL_CREDENTIALS_ARGUMENT_SIZE == WITHDRAWAL_CREDENTIALS_LENGTH`
   - `SIGNATURE_ARGUMENT_SIZE              == SIGNATURE_LENGTH`
   - `NODE == deposit_data_root`
   
-  where `old(deposit_count)` denotes the value of `deposit_count` at the beginning of the function.
+  where `old(deposit_count)` denotes the value of `deposit_count` at the beginning of the function,
+  and `DEPOSIT_AMOUNT` is the amount of deposit (in gwei), that is, `floor(msg.value / 10^9)`.
 - Otherwise, it emits a DepositEvent log:
   ```
   #abiEventLog(THIS, "DepositEvent",
                #bytes(#buf(PUBKEY_LENGTH, PUBKEY)),
                #bytes(#buf(WITHDRAWAL_CREDENTIALS_LENGTH, WITHDRAWAL_CREDENTIALS)),
-               #bytes(#buf(32, YY8)[24..8]),
+               #bytes(#buf(32, LE(DEPOSIT_AMOUNT))[24..8]),
                #bytes(#buf(SIGNATURE_LENGTH, SIGNATURE)),
-               #bytes(#buf(32, Y8)[24..8])
+               #bytes(#buf(32, LE(old(deposit_count)))[24..8])
               )
   ```
-  where `#abiEventLog` is defined in [eDSL](https://github.com/kframework/evm-semantics/blob/master/edsl.md#abi-event-logs) which formalizes [the ABI event encoding specification](https://solidity.readthedocs.io/en/v0.6.1/abi-spec.html#events).
-  `Y8` is the same with the one defined in the specification of the `get_deposit_count()` function above.
+  where `#abiEventLog` is defined in [eDSL](https://github.com/kframework/evm-semantics/blob/master/edsl.md#abi-event-logs) which formalizes [the ABI event encoding specification](https://solidity.readthedocs.io/en/v0.6.1/abi-spec.html#events),
+  and `LE(V)` is the 64-bit little-endian representation of `V` which is defined in the specification of the `get_deposit_count()` function above.
   See below for the definition of the other event log arguments.
+
+  Note that `LE(DEPOSIT_AMOUNT)` is well defined only when `DEPOSIT_AMOUNT` is less than `2^64` gwei (~ 18 billion Ether), which is very likely the case especially considering the current total supply of Ether (~ 110 million) and the history of its growth rate.
 - Also, it updates the storage state as follows:
   ```
   deposit_count <- old(deposit_count) + 1
@@ -171,7 +181,7 @@ SIGNATURE              = msg.data [ (SIGNATURE_OFFSET              + 32) .. SIGN
 Specifically, the addition overflow may happen when decoding the offsets (`*_OFFSET`).
 Also, the decoded offsets may be larger than the size of calldata, leading to out-of-bounds access, although the out-of-bounds access to calldata simply returns zero bytes.
 We note that the Solidity-compiled bytecode contains more runtime checks to avoid aforementioned behaviors.
-Currently, the deposit contract relies on the checksum (`deposit_data_root`) to finally reject such ill-formed calldata.
+Currently, the deposit contract relies on the checksum (the `deposit_data_root` argument) to finally reject such ill-formed calldata.
 We have not yet found any attack that can exploit this behavior especially in the presence of the checksum.
 
 The deposit data root `NODE` is computed as follows:
@@ -181,30 +191,7 @@ TMP1           = #sha256(#buf(96, SIGNATURE)[0..64])
 TMP2           = #sha256(#buf(96, SIGNATURE)[64..32] ++ #buf(32, 0))
 SIGNATURE_ROOT = #sha256(#buf(32, TMP1) ++ #buf(32, TMP2))
 TMP3           = #sha256(#buf(32, PUBKEY_ROOT) ++ #buf(32, WITHDRAWAL_CREDENTIALS))
-TMP4           = #sha256(#buf(32, YY8)[24..8] ++ #buf(24, 0) ++ #buf(32, SIGNATURE_ROOT))
+TMP4           = #sha256(#buf(32, LE(DEPOSIT_AMOUNT))[24..8] ++ #buf(24, 0) ++ #buf(32, SIGNATURE_ROOT))
 NODE           = #sha256(#buf(32, TMP3) ++ #buf(32, TMP4))
 ```
 
-The 64-bit little endian representation of the deposit amount, `to_little_endian_64(deposit_amount)`, is computed as follows:
-```
-YY8 = (YY7 * 256) + (XX7 & 255)
-YY7 = (YY6 * 256) + (XX6 & 255)
-YY6 = (YY5 * 256) + (XX5 & 255)
-YY5 = (YY4 * 256) + (XX4 & 255)
-YY4 = (YY3 * 256) + (XX3 & 255)
-YY3 = (YY2 * 256) + (XX2 & 255)
-YY2 = (YY1 * 256) + (XX1 & 255)
-YY1 =               (XX0 & 255)
-
-XX7 = floor(XX6 / 256)
-XX6 = floor(XX5 / 256)
-XX5 = floor(XX4 / 256)
-XX4 = floor(XX3 / 256)
-XX3 = floor(XX2 / 256)
-XX2 = floor(XX1 / 256)
-XX1 = floor(XX0 / 256)
-XX0 = DEPOSIT_AMOUNT
-
-DEPOSIT_AMOUNT = floor(msg.value / 10^9)
-```
-Note that `to_little_endian_64(deposit_amount)` is well defined only when `deposit_amount` is less than `2^64` gwei (~ 18 billion Ether), which is very likely the case especially considering the current total supply of Ether (~ 110 million) and the history of its growth rate.
