@@ -30,33 +30,19 @@ and `++` denotes the byte concatenation.
 Here `BUF [ START .. WIDTH ]` denotes the segment of `BUF` beginning with `START` of width `WIDTH`.
 
 
-## Function `get_deposit_root()`
+## Function `get_deposit_count()`
 
 Behavior:
 - It reverts when the call value is non-zero.
 - It does not alter the storage state.
-- It silently ignores any extra contents in `msg.data`. *(We have not found yet any attack that can exploit this behavior.)*
-- It returns `#sha256(#buf(32, NODE_32) ++ #buf(32, Y8)[24..8] ++ #buf(24, 0))`.
-
-where:
-
-`NODE_32` is the Merklee tree root value, recursively defined as follows:
-```
-NODE_{i+1} = if SIZE_i & 1 == 1
-             then #sha256(#buf(32, branch[i]) ++ #buf(32, NODE_i))
-             else #sha256(#buf(32, NODE_i) ++ #buf(32, zero_hashes[i]))
-             for 0 <= i < 32
-NODE_0 = 0
-```
-with
-```
-SIZE_{i+1} = floor(SIZE_i / 2)  for 0 <= i < 32
-SIZE_0 = deposit_count
-```
-
-and:
-
-`Y8` is the return value of `to_little_endian_64(deposit_count)`, i.e., the 64-bit little-endian representation of `deposit_count`, defined as follows:
+- It silently ignores any extra contents in `msg.data`. *(We have not yet found any attack that can exploit this behavior.)*
+- It returns `#encodeArgs(#bytes(#buf(32, Y8)[24..8]))`,
+  
+  where:
+  `#encodeArgs` is defined in [eDSL](https://github.com/kframework/evm-semantics/blob/master/edsl.md#abi-call-data) which formalizes [the ABI encoding specification](https://solidity.readthedocs.io/en/v0.6.1/abi-spec.html),
+  
+  and:
+  `Y8` is the return value of `to_little_endian_64(deposit_count)`, i.e., the 64-bit little-endian representation of `deposit_count`, defined as follows:
 ```
 Y8 = (Y7 * 256) + (X7 & 255)
 Y7 = (Y6 * 256) + (X6 & 255)
@@ -80,15 +66,30 @@ X1 = floor(deposit_count / 256)
 Note that `to_little_endian_64(deposit_count)` is well defined because `deposit_count < 2^32 < 2^64`.
 
 
-## Function `get_deposit_count()`
+
+## Function `get_deposit_root()`
 
 Behavior:
 - It reverts when the call value is non-zero.
 - It does not alter the storage state.
-- It silently ignores any extra contents in `msg.data`. *(We have not found yet any attack that can exploit this behavior.)*
-- It returns `#encodeArgs(#bytes(#buf(32, Y8)[24..8]))`.
+- It silently ignores any extra contents in `msg.data`. *(We have not yet found any attack that can exploit this behavior.)*
+- It returns `#sha256(#buf(32, NODE_32) ++ #buf(32, Y8)[24..8] ++ #buf(24, 0))`.
+  where:
 
-Here `#encodeArgs` is defined in [eDSL](https://github.com/kframework/evm-semantics/blob/master/edsl.md#abi-call-data) which formalizes [the ABI encoding specification](https://solidity.readthedocs.io/en/v0.6.1/abi-spec.html).
+`NODE_32` is the Merklee tree root value, recursively defined as follows:
+```
+NODE_{i+1} = if SIZE_i & 1 == 1
+             then #sha256(#buf(32, branch[i]) ++ #buf(32, NODE_i))
+             else #sha256(#buf(32, NODE_i) ++ #buf(32, zero_hashes[i]))
+             for 0 <= i < 32
+NODE_0 = 0
+```
+where:
+```
+SIZE_{i+1} = floor(SIZE_i / 2)  for 0 <= i < 32
+SIZE_0 = deposit_count
+```
+
 
 
 ## Function `deposit(pubkey, withdrawal_credentials, signature, deposit_data_root)`
@@ -157,7 +158,7 @@ Specifically, the addition overflow may happen when decoding the offsets (`*_OFF
 Also, the decoded offsets may be larger than the size of calldata, leading to out-of-bounds access, although the out-of-bounds access to calldata simply returns zero bytes.
 We note that the Solidity-compiled bytecode contains more runtime checks to avoid aforementioned behaviors.
 Currently, the deposit contract relies on the checksum (`deposit_data_root`) to finally reject ill-formed calldata.
-We have not found yet any attack that can exploit this behavior in the presence of the checksum.
+We have not yet found any attack that can exploit this behavior in the presence of the checksum.
 
 The deposit data root `NODE` is computed as follows:
 ```
