@@ -2,6 +2,7 @@
 
 Here we summarize all possible behaviors of the compiled bytecode of the deposit contract that we formally verified.
 We do not explicitly specify the out-of-gas exceptional behaviors.
+
 Refer to [`deposit-spec.ini`](deposit-spec.ini) for the full formal specification.
 
 
