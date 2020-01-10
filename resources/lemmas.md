@@ -91,10 +91,6 @@ It reduces the reasoning efforts of the underlying theorem prover, factoring out
     rule #isRegularWordStack(N : WS => WS)
     rule #isRegularWordStack(.WordStack) => true
 
-    // for Vyper
-    rule #padToWidth(N, #asByteStack(#asWord(WS))) => WS
-      requires #noOverflow(WS) andBool N ==Int #sizeWordStack(WS)
-
     // storing a symbolic boolean value in memory
     rule #padToWidth(32, #asByteStack(bool2Word(E)))
       => #asByteStackInWidthAux(0, 30, 32, nthbyteof(bool2Word(E), 31, 32) : .WordStack)
@@ -212,10 +208,6 @@ These rules are specific to reasoning about EVM programs.
 
     // for gas calculation
     rule A -Int (#if C #then B1 #else B2 #fi) => #if C #then (A -Int B1) #else (A -Int B2) #fi
-
-    rule (#if C #then B1 #else B2 #fi) -Int A => #if C #then (B1 -Int A) #else (B2 -Int A) #fi 
-        when notBool #isConcrete(A) andBool #notKLabel(A, "#if_#then_#else_#fi_K-EQUAL")
-
     rule (#if C #then B1 #else B2 #fi) +Int A => #if C #then (B1 +Int A) #else (B2 +Int A) #fi
 ```
 
@@ -344,14 +336,6 @@ They cause a major increase in the number of Z3 queries and slowdown.
 
 ```k
     rule chop(I) => I requires 0 <=Int I andBool I <Int pow256
-```
-
-### #getKLabelString helpers
-
-Function below returns true if the KLabel of `T` is not `L`, or if `T` is a variable.
-```k
-    syntax Bool ::= #notKLabel ( K , String ) [function]
-    rule #notKLabel(T, L) => #getKLabelString(T) =/=String L orBool #isVariable(T)
 ```
 
 ### Wordstack

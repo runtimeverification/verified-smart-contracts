@@ -1,11 +1,16 @@
 # Bytecode compiled with old Vyper. Needs KEVM version before Vyper storage layout fix.
 KEVM_VERSION_FILE:=.build/.kevm.rev
 
-LOCAL_LEMMAS:=../verification.k \
-			  ../../resources/abstract-semantics-segmented-gas.k \
+DEFINITION_MODULE:=VYPER-VERIFICATION
+
+# We need gnosis version of abstract-semantics-segmented-gas.k because we use an older KEVM.
+LOCAL_LEMMAS:=vyper-verification.k \
+			  ../verification.k \
+			  ../../gnosis/abstract-semantics-segmented-gas.k \
 			  ../../resources/evm-symbolic.k \
-			  ../../resources/evm-data-map-symbolic.k
-TMPLS:=../module-tmpl.k ../spec-tmpl.k
+			  ../../resources/evm-data-map-symbolic.k \
+			  ../../resources/not-KLabel.k
+TMPLS:=module-tmpl.k ../spec-tmpl.k
 
 KPROVE_OPTS:=--smt-prelude $(abspath $(dir $(abspath $(lastword $(MAKEFILE_LIST))))/../../resources/evm.smt2)
 
