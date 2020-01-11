@@ -1,7 +1,7 @@
 requires "evm-symbolic.k"
 requires "evm-data-map-symbolic.k"
 requires "edsl.k"
-requires "../lemmas.k"
+requires "../lemmas-buf.k"
 
 module VERIFICATION
     imports EVM-SYMBOLIC
@@ -49,6 +49,8 @@ module VERIFICATION
 
     rule #bufSeg(BUF, 0, WIDTH) => BUF  requires WIDTH ==Int #sizeWordStack(BUF)
 
+    rule #buf(SIZE, DATA) => #padToWidth(SIZE, #asByteStack(DATA)) requires #range(0 <= DATA < (2 ^Int (SIZE *Int 8))) [concrete]
+
 
   // ########################
   // Memory Reasoning
@@ -91,5 +93,7 @@ module VERIFICATION
 
     rule A -Int B +Int B => A
     rule A +Int B -Int B => A
+    rule A +Int B -Int A => B
+    rule A +Int (B -Int A) => B
 
 endmodule

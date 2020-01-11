@@ -1,3 +1,7 @@
+# Required to have different lemmas dir from non-#buf ERC20 specs.
+SPEC_GROUP:=erc20/buf/zeppelin
+
+BASEDIR_LEMMAS=$(RESOURCES)/lemmas-buf.md
 LOCAL_LEMMAS:=../verification.k \
 			  ../../resources/abstract-semantics-segmented-gas.k \
 			  ../../resources/evm-symbolic.k \
