@@ -1,11 +1,13 @@
 requires "evm-symbolic.k"
 requires "evm-data-map-symbolic.k"
+requires "not-KLabel.k"
 requires "edsl.k"
 requires "../lemmas.k"
 
 module VERIFICATION
     imports EVM-SYMBOLIC
     imports EVM-DATA-MAP-SYMBOLIC
+    imports NOT-KLABEL
     imports EDSL
     imports LEMMAS
 
@@ -219,7 +221,10 @@ module VERIFICATION
     rule #asWord(#buf(32, DATA)) => DATA  requires #rangeUInt(256, DATA)
 
     rule #padToWidth(32, #asByteStack(V)) => #buf(32, V) // #asByteStackInWidth(V, 32)
-      requires 0 <=Int V andBool V <Int pow256 andBool #notKLabel(V, "#asWord")
+      requires 0 <=Int V andBool V <Int pow256
+
+    rule #asByteStackInWidth(#asWord(WS), N) => WS
+      requires #noOverflow(WS) andBool N ==Int #sizeWordStack(WS)
 
     rule #buf(32, #asWord(WS)) => WS  requires #sizeWordStack(WS) ==Int 32
     rule #buf(32, #asWord(#bufSeg(BUF, START, WIDTH))) => #bufSeg(BUF, START +Int WIDTH -Int 32, 32)  requires WIDTH >=Int 32

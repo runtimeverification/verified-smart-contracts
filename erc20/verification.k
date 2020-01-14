@@ -1,7 +1,7 @@
 requires "evm-symbolic.k"
 requires "evm-data-map-symbolic.k"
 requires "edsl.k"
-requires "../lemmas.k"
+requires "../lemmas-buf.k"
 
 module VERIFICATION
     imports EVM-SYMBOLIC
@@ -10,7 +10,10 @@ module VERIFICATION
     imports LEMMAS
 
     rule #padToWidth(32, #asByteStack(V)) => #buf(32, V) // #asByteStackInWidth(V, 32)
-      requires 0 <=Int V andBool V <Int pow256 andBool #notKLabel(V, "#asWord")
+      requires 0 <=Int V andBool V <Int pow256
+
+    rule #buf(N, #asWord(WS)) => WS
+      requires #noOverflow(WS) andBool N ==Int #sizeWordStack(WS)
 
     rule chop ( W0:Int +Int W1:Int ) -Word W1:Int => chop ( W0 )
       requires #rangeUInt(256, W0) andBool #rangeUInt(256, W1)
@@ -45,6 +48,8 @@ module VERIFICATION
     rule #sizeWordStack(WS, N) <=Int SIZE => #sizeWordStack(WS, 0) +Int N <=Int SIZE requires N =/=Int 0
 
     rule #bufSeg(BUF, 0, WIDTH) => BUF  requires WIDTH ==Int #sizeWordStack(BUF)
+
+    rule #buf(SIZE, DATA) => #padToWidth(SIZE, #asByteStack(DATA)) requires #range(0 <= DATA < (2 ^Int (SIZE *Int 8))) [concrete]
 
 
   // ########################
@@ -88,5 +93,7 @@ module VERIFICATION
 
     rule A -Int B +Int B => A
     rule A +Int B -Int B => A
+    rule A +Int B -Int A => B
+    rule A +Int (B -Int A) => B
 
 endmodule

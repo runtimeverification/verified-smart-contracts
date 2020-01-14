@@ -1,9 +1,10 @@
 LOCAL_LEMMAS:=../verification.k \
 			  ../abstract-semantics.k \
-			  ../../resources/abstract-semantics-segmented-gas.k \
+			  ../abstract-semantics-segmented-gas.k \
 			  ../../resources/evm-symbolic.k \
 			  ../../resources/evm-data-map-symbolic.k \
-			  ../../resources/ecrec-symbolic.k
+			  ../../resources/ecrec-symbolic.k \
+			  ../../resources/not-KLabel.k
 TMPLS:=../module-tmpl.k ../spec-tmpl.k
 
 KPROVE_OPTS:=--smt-prelude $(abspath $(dir $(abspath $(lastword $(MAKEFILE_LIST))))/../evm.smt2)

@@ -26,9 +26,6 @@ module LEMMAS
     syntax Bool ::= #regularAddress(Schedule, Int)
     rule #regularAddress(SCHEDULE, X) => X >Int 0 andBool (notBool X in #precompiledAccounts(SCHEDULE))  [macro]
 
-    syntax Bool ::= #notKLabel ( K , String ) [function]
-    rule #notKLabel(T, L) => #getKLabelString(T) =/=String L orBool #isVariable(T)
-
     // normalization
 
     rule X <=Int maxUInt256 => X <Int pow256
@@ -292,7 +289,10 @@ module LEMMAS
     rule #asWord( 0 :      WS  =>       WS )
 
     rule #padToWidth(32, #asByteStack(V)) => #buf(32, V)
-      requires 0 <=Int V andBool V <Int pow256 andBool #notKLabel(V, "#asWord")
+      requires 0 <=Int V andBool V <Int pow256
+
+    rule #buf(N, #asWord(WS)) => WS
+      requires #noOverflow(WS) andBool N ==Int #sizeWordStack(WS)
 
     rule #buf(32, #asWord(WS)) => WS  requires #sizeWordStack(WS) ==Int 32
     rule #buf(32, #asWord(#bufSeg(BUF, START, WIDTH))) => #bufSeg(BUF, START +Int WIDTH -Int 32, 32)  requires WIDTH >=Int 32
@@ -344,10 +344,6 @@ module LEMMAS
       requires #isBuf(BUF) andBool MW0 ==Int BW0 andBool MW1 ==Int BW1
        andBool MS1 ==Int MS0 +Int MW0 andBool BS1 ==Int BS0 +Int BW0
 */
-
-    // for Vyper
-    rule #padToWidth(N, #asByteStack(#asWord(WS))) => WS
-      requires #noOverflow(WS) andBool N ==Int #sizeWordStack(WS)
 
     syntax Bool ::= #noOverflow    ( WordStack ) [function]
                   | #noOverflowAux ( WordStack ) [function]

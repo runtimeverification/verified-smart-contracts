@@ -91,6 +91,8 @@ KEVM_BUILD_DIR:=$(KEVM_REPO_DIR)/.build/defn/$(K_BACKEND)
 
 K_BIN:=$(abspath $(K_REPO_DIR)/k-distribution/target/release/k/bin)
 
+DEFINITION_MODULE?=VERIFICATION
+
 ifneq ($(SHUTDOWN_WAIT_TIME),)
   SHUTDOWN_WAIT_TIME_OPT:=--shutdown-wait-time $(SHUTDOWN_WAIT_TIME)
 endif
@@ -109,7 +111,7 @@ KPROVE_OPTS_java:=--deterministic-functions --cache-func-optimized --format-fail
 				  --log-cells k,output,statusCode,localMem,pc,gas,wordStack,callData,accounts,memoryUsed,\#pc,\#result
 KPROVE_OPTS_haskell:=
 
-KPROVE:=$(KPROVE_PREFIX) $(K_BIN)/kprove -v --debug -d $(KEVM_BUILD_DIR) -m VERIFICATION \
+KPROVE:=$(KPROVE_PREFIX) $(K_BIN)/kprove -v --debug -d $(KEVM_BUILD_DIR) -m $(DEFINITION_MODULE) \
         --z3-impl-timeout 500 $(SHUTDOWN_WAIT_TIME_OPT) $(TIMEOUT_OPT) $(CONCRETE_RULES_OPT) \
         --no-exc-wrap --no-alpha-renaming \
         $(KPROVE_OPTS_$(K_BACKEND)) $(KPROVE_OPTS)

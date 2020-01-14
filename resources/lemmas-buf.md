@@ -1,6 +1,8 @@
 Verification Lemmas
 ===================
 
+Version for specs that only use `#buf` abstraction for `WordStack/ByteArray`, `not nthbyteof()`.
+ 
 ```k
 requires "evm.k"
 requires "edsl.k"
@@ -16,64 +18,6 @@ module LEMMAS
 We present an abstraction for the EVM memory to allow the word-level reasoning.
 The word is considered as the smallest unit of values in the surface language level (thus in the contract developers’ mind as well), but the EVM memory is byte-addressable.
 Our abstraction helps to fill the gap and make the reasoning easier.
-
-Specifically, we introduce uninterpreted function abstractions and refinements for the word-level reasoning.
-
-The term `nthbyteof(v, i, n)` represents the i-th byte of the two's complement representation of v in n bytes (i=0 being the MSB), with high-order bytes discarded when v does not fit in n bytes.
-
-```k
-    syntax Int ::= nthbyteof ( Int , Int , Int ) [function, smtlib(smt_nthbyteof), proj]
- // ------------------------------------------------------------------------------------
-    rule nthbyteof(V, I, N) => nthbyteof(V /Int 256, I, N -Int 1) when N  >Int (I +Int 1) [concrete]
-    rule nthbyteof(V, I, N) =>           V modInt 256             when N ==Int (I +Int 1) [concrete]
-```
-
-However, we'd like to keep it uninterpreted, if the arguments are symbolic, to avoid the non-linear arithmetic reasoning, which even the state-of-the-art theorem provers cannot handle very well.
-Instead, we introduce lemmas over the uninterpreted functional terms.
-
-The following lemmas are used for symbolic reasoning about `MLOAD` and `MSTORE` instructions.
-They capture the essential mechanisms used by the two instructions: splitting a word into the byte-array and merging it back to the word.
-
-```k
-    rule #asWord( nthbyteof(V,  0, 32)
-                : nthbyteof(V,  1, 32)
-                : nthbyteof(V,  2, 32)
-                : nthbyteof(V,  3, 32)
-                : nthbyteof(V,  4, 32)
-                : nthbyteof(V,  5, 32)
-                : nthbyteof(V,  6, 32)
-                : nthbyteof(V,  7, 32)
-                : nthbyteof(V,  8, 32)
-                : nthbyteof(V,  9, 32)
-                : nthbyteof(V, 10, 32)
-                : nthbyteof(V, 11, 32)
-                : nthbyteof(V, 12, 32)
-                : nthbyteof(V, 13, 32)
-                : nthbyteof(V, 14, 32)
-                : nthbyteof(V, 15, 32)
-                : nthbyteof(V, 16, 32)
-                : nthbyteof(V, 17, 32)
-                : nthbyteof(V, 18, 32)
-                : nthbyteof(V, 19, 32)
-                : nthbyteof(V, 20, 32)
-                : nthbyteof(V, 21, 32)
-                : nthbyteof(V, 22, 32)
-                : nthbyteof(V, 23, 32)
-                : nthbyteof(V, 24, 32)
-                : nthbyteof(V, 25, 32)
-                : nthbyteof(V, 26, 32)
-                : nthbyteof(V, 27, 32)
-                : nthbyteof(V, 28, 32)
-                : nthbyteof(V, 29, 32)
-                : nthbyteof(V, 30, 32)
-                : nthbyteof(V, 31, 32)
-                : .WordStack ) => V
-      requires 0 <=Int V andBool V <Int pow256
-
-    rule #asWord( 0 : W1 : WS  =>  W1 : WS )
-
-    rule nthbyteof(N, 0, 1) => N
-```
 
 Another type of byte-array manipulating operation is used to extract the function signature from the call data.
 The function signature is located in the first four bytes of the call data, but there is no atomic EVM instruction that can load only the four bytes, thus some kind of byte-twiddling operations are necessary.
@@ -91,10 +35,6 @@ It reduces the reasoning efforts of the underlying theorem prover, factoring out
     rule #isRegularWordStack(N : WS => WS)
     rule #isRegularWordStack(.WordStack) => true
 
-    // storing a symbolic boolean value in memory
-    rule #padToWidth(32, #asByteStack(bool2Word(E)))
-      => #asByteStackInWidthAux(0, 30, 32, nthbyteof(bool2Word(E), 31, 32) : .WordStack)
-
     // for Solidity
     rule #asWord(WS) /Int D => #asWord(#take(#sizeWordStack(WS) -Int log256Int(D), WS))
       requires D ==Int 256 ^Int log256Int(D) andBool D >=Int 0
@@ -108,15 +48,6 @@ It reduces the reasoning efforts of the underlying theorem prover, factoring out
 
     rule #noOverflowAux(W : WS)     => 0 <=Int W andBool W <Int 256 andBool #noOverflowAux(WS)
     rule #noOverflowAux(.WordStack) => true
-
-    syntax WordStack ::= #asByteStackInWidth    ( Int, Int )                 [function]
-                       | #asByteStackInWidthAux ( Int, Int, Int, WordStack ) [function]
- // -----------------------------------------------------------------------------------
-    rule #asByteStackInWidth(X, N) => #asByteStackInWidthAux(X, N -Int 1, N, .WordStack)
-      requires #rangeBytes(N, X)
-
-    rule #asByteStackInWidthAux(X, I => I -Int 1, N, WS => nthbyteof(X, I, N) : WS) when I >=Int 0
-    rule #asByteStackInWidthAux(X,            -1, N, WS) => WS
 ```
 
 ### Hashed Location
@@ -244,10 +175,6 @@ In EVM, no boolean value exist but instead, 1 and 0 are used to represent true a
     rule bool2Word(A) =/=K 1 => notBool(A)
 
     rule chop(bool2Word(B)) => bool2Word(B)
-
-    rule #asWord(0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0
-                   : 0 : 0 : 0 : 0 : 0 : 0 : 0 : 0 : nthbyteof(bool2Word( E ), I, N) : .WordStack)
-         => bool2Word( E )
 ```
 
 Some lemmas over the comparison operators are also provided.
@@ -271,10 +198,6 @@ from their concrete semantics.
 Below are the most common such range matching lemmas.
 
 ```k
-    rule 0 <=Int nthbyteof(V, I, N)             => true
-    rule         nthbyteof(V, I, N) <Int 256    => true
-    rule         nthbyteof(V, I, N) <Int pow256 => true
-
     rule 0 <=Int #asWord(WS)          => true
     rule #asWord(WS) <Int pow256      => true
 
@@ -298,6 +221,11 @@ Below are the most common such range matching lemmas.
 
     rule         N &Int X <Int pow256 => true
       requires N <Int pow256
+
+    rule 0 <=Int bool2Word(_)             => true
+    rule         bool2Word(_) <Int 2      => true
+    rule         bool2Word(_) <Int 256    => true
+    rule         bool2Word(_) <Int pow256 => true
 ```
 
 Because lemmas are applied as plain K rewrite rule, they have to match exactly, without any deductive reasoning.
