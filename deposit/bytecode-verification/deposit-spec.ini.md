@@ -186,6 +186,12 @@ We note that the Solidity-compiled bytecode contains more runtime checks to avoi
 Currently, the deposit contract relies on the checksum (the `deposit_data_root` argument) to finally reject such ill-formed calldata.
 We have not yet found any attack that can exploit this behavior especially in the presence of the checksum.
 
+Remark:
+When decoding the actual contents of arguments (i.e., `PUBKEY`, `WITHDRAWAL_CREDENTIALS`, and `SIGNATURE`), it reads the calldata using the expected size (`*_LENGTH`) not the decoded size (`*_SIZE`).
+Thanks to this, the amount of gas consumed by the decoding process is constant, regardless of the well-formedness of calldata, which is desired.
+On the other hand, the [length-checking assertions](https://github.com/ethereum/eth2.0-specs/blob/v0.10.0/deposit_contract/contracts/validator_registration.vy#L78-L81) ensures that the decoded size (`*_SIZE`) of arguments is equal to the expected value (`*_LENGTH`), but they are performed only after decoding the actual contents of arguments (`PUBKEY`, `WITHDRAWAL_CREDENTIALS`, and `SIGNATURE`).
+However, the length-checking assertions are still needed to prevent wasting gas, because without them, the later uses of the decoded arguments involve memory copies of them, whose gas cost depends on the decoded size (`*_SIZE`) which could be very large in certain ill-formed calldata.
+
 The deposit data root `NODE` is computed as follows:
 ```
 PUBKEY_ROOT    = #sha256(#buf(48, PUBKEY) ++ #buf(16, 0))
