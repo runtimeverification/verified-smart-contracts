@@ -5,6 +5,10 @@ module EVM-DATA-MAP-SYMBOLIC [symbolic]
     imports EVM-DATA
     imports EDSL
 
+  // ########################
+  // Buffer Reasoning
+  // ########################
+
     rule ( WS1 ++ WS2 ) ++ WS3 => WS1 ++ ( WS2 ++ WS3 )
 
     syntax WordStack ::= #bufSeg ( WordStack , Int , Int ) [function, smtlib(bufSeg)] // BUFFER, START, WIDTH
