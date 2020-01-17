@@ -7,6 +7,8 @@ LOCAL_LEMMAS:=../verification.k \
 			  ../../resources/evm-data-map-symbolic.k
 TMPLS:=../module-tmpl.k ../spec-tmpl.k
 
+KPROVE_OPTS=--smt-prelude $(RESOURCES)/evm.smt2
+
 SPEC_NAMES:=totalSupply \
             balanceOf \
             allowance \
