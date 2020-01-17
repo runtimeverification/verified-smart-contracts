@@ -91,7 +91,7 @@ Due to its deviation from ERC20-K, we could not verify the HKG token against the
 
     ```
     k: #execute => (RETURN RET_ADDR:Int 32 ~> _)
-    localMem: .Map => .Map[ RET_ADDR := #asByteStackInWidth(0, 32) ] _:Map
+    localMem: .Map => .Map[ RET_ADDR := #buf(32, 0) ] _:Map
     ```
 
     The modified parameter values specify that it returns `false` (denoted by 0) instead of throwing an exception. We changed the `transferFrom-failure` section similarly as the above.
