@@ -16,7 +16,7 @@ LOCAL_LEMMAS:=vyper-verification.k \
 			  ../../resources/not-KLabel.k
 TMPLS:=module-tmpl.k ../spec-tmpl.k
 
-KPROVE_OPTS:=--smt-prelude $(abspath $(dir $(abspath $(lastword $(MAKEFILE_LIST))))/../../resources/evm.smt2)
+KPROVE_OPTS=--smt-prelude $(RESOURCES)/evm.smt2
 
 SPEC_NAMES:=totalSupply \
             balanceOf \
