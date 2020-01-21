@@ -1,25 +1,17 @@
-# Formal Verification of Ethereum 2.0 Deposit Contract
+# End-to-End Formal Verification of Ethereum 2.0 Deposit Contract
 
-This directory contains the intermediate result of our (ongoing) formal verification of the [deposit contract].
+This directory provides the result of our end-to-end formal verification of the Ethereum 2.0 [deposit contract].
 
 Documents:
- * [Formalization of the incremental Merkle tree algorithm and its correctness proof](formal-incremental-merkle-tree-algorithm.pdf)
- * [Blog post](https://runtimeverification.com/blog/formal-verification-of-ethereum-2-0-deposit-contract-part-1)
+ * Final report: [`deposit-formal-verification.pdf`](deposit-formal-verification.pdf)
+ * Blog post: https://runtimeverification.com/blog/end-to-end-formal-verification-of-ethereum-2-0-deposit-smart-contract/
 
-Mechanized specifications and proofs in K:
- * [deposit.k](deposit.k): Formal model of the incremental Merkle tree algorithm
- * [deposit-spec.k](deposit-spec.k): Correctness specifications
- * [deposit-symbolic.k](deposit-symbolic.k): Lemmas (trusted)
-
-To prove the specifications:
-```
-$ ./run.sh
-```
-Prerequisites:
- * Install K: https://github.com/kframework/k/releases
+Verification artifacts:
+ * [`algorithm-correctness/`](algorithm-correctness): Formalization and correctness proof of incremental Merkle tree algorithm
+ * [`bytecode-verification/`](bytecode-verification): Bytecode verification of the deposit contract
 
 ## [Resources](/README.md#resources)
 
 ## [Disclaimer](/README.md#disclaimer)
 
-[deposit contract]: <https://github.com/ethereum/eth2.0-specs/blob/master/deposit_contract/contracts/validator_registration.v.py>
+[deposit contract]: <https://github.com/ethereum/eth2.0-specs/blob/v0.10.0/deposit_contract/contracts/validator_registration.vy>
