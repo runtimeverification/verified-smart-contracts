@@ -30,6 +30,7 @@ making use of SMT solvers like [Z3] to solve the mathematical domain constraints
 
 ## List of Verified Smart Contracts
 
+* **2020-01-21** [Ethereum 2.0 Deposit contract](/deposit/README.md)
 * **2019-02-27** [GnosisSafe contract](/gnosis/GnosisSafe_RuntimeVerification.pdf)
 * **2018-10-12** [Uniswap contract](/uniswap/README.md)
 * **2018-07-12** [Ethereum Casper FFG contract](/casper/README.md)
