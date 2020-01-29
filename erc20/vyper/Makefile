@@ -14,7 +14,7 @@ LOCAL_LEMMAS:=vyper-verification.k \
 			  ../../resources/evm-symbolic.k \
 			  ../../resources/evm-data-map-symbolic.k \
 			  ../../resources/not-KLabel.k
-TMPLS:=module-tmpl.k ../spec-tmpl.k
+TMPLS:=module-tmpl.k spec-tmpl.k
 
 KPROVE_OPTS=--smt-prelude $(RESOURCES)/evm.smt2
 

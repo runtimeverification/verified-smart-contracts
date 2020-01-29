@@ -64,6 +64,7 @@
         </block>
       </evm>
       <network>
+        <chainID> 0 </chainID>
         <activeAccounts> SetItem(MASTER_COPY_ID) SetItem(PROXY_ID) SetItem(CREATOR_ID) _:Set </activeAccounts>
         <accounts>
           <account>

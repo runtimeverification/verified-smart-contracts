@@ -65,6 +65,7 @@
       </evm>
 
       <network>
+        <chainID> 0 </chainID>
         <activeAccounts> SetItem(ACCT_ID) SetItem(1) _:Set </activeAccounts>
 
         <accounts>
