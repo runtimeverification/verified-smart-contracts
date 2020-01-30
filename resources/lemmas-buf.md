@@ -30,11 +30,6 @@ The following lemmas essentially capture the signature extraction mechanisms.
 It reduces the reasoning efforts of the underlying theorem prover, factoring out the essence of the byte-twiddling operations.
 
 ```k
-    syntax Bool ::= #isRegularWordStack ( WordStack ) [function]
- // -------------------------------------------------------
-    rule #isRegularWordStack(N : WS => WS)
-    rule #isRegularWordStack(.WordStack) => true
-
     // for Solidity
     rule #asWord(WS) /Int D => #asWord(#take(#sizeWordStack(WS) -Int log256Int(D), WS))
       requires D ==Int 256 ^Int log256Int(D) andBool D >=Int 0
