@@ -1,10 +1,13 @@
-#BUILD_DIR:=../.build
+SPEC_GROUP:=erc20/buf/hkg
 
-LOCAL_LEMMAS:=../resources-concrete/verification.k \
+BASEDIR_LEMMAS=$(RESOURCES)/lemmas-buf.md
+LOCAL_LEMMAS:=../verification.k \
 			  ../../resources/abstract-semantics-segmented-gas.k \
 			  ../../resources/evm-symbolic.k \
-			  ../../resources/evm-data-map-concrete.k
+			  ../../resources/evm-data-map-symbolic.k
 TMPLS:=../module-tmpl.k ../spec-tmpl.k
+
+KPROVE_OPTS=--smt-prelude $(RESOURCES)/evm.smt2
 
 SPEC_NAMES:=totalSupply \
             balanceOf \
