@@ -1,3 +1,5 @@
+KEVM_VERSION_FILE:=../.build/.kevm.rev
+
 LOCAL_LEMMAS:=../abstract-semantics.k ../verification.k ../abstract-semantics-segmented-gas.k ../../resources/not-KLabel.k
 TMPLS:=../module-tmpl.k ../spec-tmpl.k
 
