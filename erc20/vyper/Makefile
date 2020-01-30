@@ -6,7 +6,7 @@ SPEC_GROUP:=erc20/buf/vyper
 
 DEFINITION_MODULE:=VYPER-VERIFICATION
 
-BASEDIR_LEMMAS=$(RESOURCES)/lemmas-buf.md
+BASEDIR_LEMMAS=lemmas-buf.md
 # We need gnosis version of abstract-semantics-segmented-gas.k because we use an older KEVM.
 LOCAL_LEMMAS:=vyper-verification.k \
 			  ../verification.k \
