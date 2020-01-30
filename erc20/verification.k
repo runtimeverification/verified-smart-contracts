@@ -36,8 +36,6 @@ module VERIFICATION
     rule #noOverflowAux(BUF) => true requires #isBuf(BUF)
     rule #noOverflowAux(WS1 ++ WS2) => #noOverflowAux(WS1) andBool #noOverflowAux(WS2)
 
-    rule #bufSeg(BUF, 0, WIDTH) => BUF  requires WIDTH ==Int #sizeByteArray(BUF)
-
     // #buf unfolding, for concrete DATA
     rule #buf(SIZE, DATA) => #padToWidth(SIZE, #asByteStack(DATA)) requires #range(0 <= DATA < (2 ^Int (SIZE *Int 8))) [concrete]
 
@@ -84,52 +82,6 @@ module VERIFICATION
     //Assumption of non-collision between hashes and small constants that likely represent memory addresses or offsets.
     rule notBool( hash2(_,_) ==K A ) => true
       requires #isConcrete(A) andBool A <=Int 20
-
-  // ########################
-  // Byte Array
-  // ########################
-
-    rule WS ++ .ByteArray => WS
-
-    rule #sizeByteArray(W : WS)        => 1 +Int #sizeByteArray(WS)
-    rule #sizeByteArray(#buf(N, _)  )  => N
-    rule #sizeByteArray(BUF1 ++ BUF2)  => #sizeByteArray(BUF1) +Int #sizeByteArray(BUF2)
-    rule #sizeByteArray(#drop(N, BUF)) => maxInt(#sizeByteArray(BUF) -Int N, 0)
-
-    rule #take(N, BUF)          => BUF                                              requires N ==Int #sizeByteArray(BUF)
-    rule #take(N, BUF1 ++ BUF2) => #take(N, BUF1)                                   requires N <=Int #sizeByteArray(BUF1)
-    rule #take(N, BUF1 ++ BUF2) => BUF1 ++ #take(N -Int #sizeByteArray(BUF1), BUF2) requires N  >Int #sizeByteArray(BUF1)
-
-    rule #drop(N, BUF)           => .ByteArray                               requires #sizeByteArray(BUF) <=Int N
-    rule #drop(N, BUF1 ++ BUF2)  => #drop(N -Int #sizeByteArray(BUF1), BUF2) requires N >=Int #sizeByteArray(BUF1)
-    rule #drop(N, BUF1 ++ BUF2)  => #drop(N, BUF1) ++ BUF2                   requires N <Int #sizeByteArray(BUF1)
-
-    rule #asWord(#buf(N, BUF)) => BUF
-
-    rule #asWord(BUF) /Int 26959946667150639794667015087019630673637144422540572481103610249216 => #asWord(#take(4, BUF))
-
-    rule M [ N := BUF ] [ N := BUF' ] => M [ N := BUF' ] requires #sizeByteArray(BUF) ==Int #sizeByteArray(BUF')
-
-    rule BUF [ L .. W ] => .ByteArray requires W <=Int 0
-    rule BUF [ 0 .. W ] => BUF        requires W ==Int #sizeByteArray(BUF)
-    rule BUF [ L .. W ] => .ByteArray requires L  >Int #sizeByteArray(BUF)
-
-    rule #range(M, N, K) => .ByteArray requires notBool K >Int 0
-
-    rule #range(M [ N := BUF:ByteArray ], L, K) => #range(M, L, minInt(K, N -Int L)) ++ #range(M [ N := BUF ], N, K -Int minInt(K, N -Int L))
-      requires K >Int 0
-       andBool L <Int N
-
-    rule #range(M [ N := BUF ], L, K) => BUF [ L -Int N .. minInt(K, #sizeByteArray(BUF) -Int (L -Int N)) ] ++ #range(M, N +Int #sizeByteArray(BUF), K -Int minInt(K, #sizeByteArray(BUF) -Int (L -Int N)))
-      requires K  >Int 0
-       andBool L >=Int N
-       andBool L  <Int N +Int #sizeByteArray(BUF)
-
-    rule #range(M [ N := BUF ], L, K) => #range(M, L, K)
-      requires K  >Int 0
-       andBool L >=Int N +Int #sizeByteArray(BUF)
-
-    rule keccak(BUF1 ++ BUF2) => hash2(#asWord(BUF1), #asWord(BUF2)) requires #sizeByteArray(BUF1) ==Int 32 andBool #sizeByteArray(BUF2) ==Int 32
 
   // ########################
   // Arithmetic
