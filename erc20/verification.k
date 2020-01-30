@@ -96,6 +96,51 @@ module VERIFICATION
     rule notBool( hash2(_,_) ==K A ) => true
       requires #isConcrete(A) andBool A <=Int 20
 
+  // ########################
+  // Byte Array
+  // ########################
+
+    rule WS ++ .WordStack => WS
+
+    rule #sizeWordStack(#buf(N, _)  , M) => M +Int N
+    rule #sizeWordStack(BUF1 ++ BUF2, M) => M +Int #sizeWordStack(BUF1) +Int #sizeWordStack(BUF2)
+    rule #sizeWordStack(#drop(N, BUF))   => maxInt(#sizeWordStack(BUF) -Int N, 0)
+
+    rule #take(N, BUF)          => BUF                                              requires N ==Int #sizeWordStack(BUF)
+    rule #take(N, BUF1 ++ BUF2) => #take(N, BUF1)                                   requires N <=Int #sizeWordStack(BUF1)
+    rule #take(N, BUF1 ++ BUF2) => BUF1 ++ #take(N -Int #sizeWordStack(BUF1), BUF2) requires N  >Int #sizeWordStack(BUF1)
+
+    rule #drop(N, BUF)           => .WordStack                               requires #sizeWordStack(BUF) <=Int N
+    rule #drop(N, #drop(M, BUF)) => #drop(N +Int M, BUF)
+    rule #drop(N, BUF1 ++ BUF2)  => #drop(N -Int #sizeWordStack(BUF1), BUF2) requires N >=Int #sizeWordStack(BUF1)
+    rule #drop(N, BUF1 ++ BUF2)  => #drop(N, BUF1) ++ BUF2                   requires N <Int #sizeWordStack(BUF1)
+
+    rule #asWord(#buf(N, BUF)) => BUF
+
+    rule #asWord(W0 : W1 : W2 : W3 : #take(28, BUF)) /Int 26959946667150639794667015087019630673637144422540572481103610249216 => #asWord(W0 : W1 : W2 : W3 : .WordStack)
+
+    rule M [ N := BUF ] [ N := BUF' ] => M [ N := BUF' ] requires #sizeWordStack(BUF) ==Int #sizeWordStack(BUF')
+
+    rule BUF:WordStack [ L .. W ] => .ByteArray requires W <=Int 0
+    rule BUF           [ 0 .. W ] => BUF        requires W ==Int #sizeWordStack(BUF)
+    rule BUF           [ L .. W ] => .ByteArray requires L  >Int #sizeWordStack(BUF)
+
+    rule #range(M, N, K) => .ByteArray requires notBool K >Int 0
+
+    rule #range(M [ N := BUF:WordStack ], L, K) => #range(M, L, minInt(K, N -Int L)) ++ #range(M [ N := BUF ], N, K -Int minInt(K, N -Int L))
+      requires K >Int 0
+       andBool L <Int N
+
+    rule #range(M [ N := BUF ], L, K) => BUF [ L -Int N .. minInt(K, #sizeWordStack(BUF) -Int (L -Int N)) ] ++ #range(M, N +Int #sizeWordStack(BUF), K -Int minInt(K, #sizeWordStack(BUF) -Int (L -Int N)))
+      requires K  >Int 0
+       andBool L >=Int N
+       andBool L  <Int N +Int #sizeWordStack(BUF)
+
+    rule #range(M [ N := BUF ], L, K) => #range(M, L, K)
+      requires K  >Int 0
+       andBool L >=Int N +Int #sizeWordStack(BUF)
+
+    rule keccak(BUF1 ++ BUF2) => hash2(#asWord(BUF1), #asWord(BUF2)) requires #sizeWordStack(BUF1) ==Int 32 andBool #sizeWordStack(BUF2) ==Int 32
 
   // ########################
   // Arithmetic

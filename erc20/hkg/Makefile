@@ -1,3 +1,5 @@
+KEVM_VERSION_FILE:=../.build/.kevm.rev
+
 SPEC_GROUP:=erc20/buf/hkg
 
 BASEDIR_LEMMAS=$(RESOURCES)/lemmas-buf.md
