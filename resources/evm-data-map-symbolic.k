@@ -9,6 +9,7 @@ module EVM-DATA-MAP-SYMBOLIC [symbolic]
   // Buffer Reasoning
   // ########################
 
+    rule WS ++ .WordStack => WS
     rule ( WS1 ++ WS2 ) ++ WS3 => WS1 ++ ( WS2 ++ WS3 )
 
     syntax WordStack ::= #bufSeg ( WordStack , Int , Int ) [function, smtlib(bufSeg)] // BUFFER, START, WIDTH
