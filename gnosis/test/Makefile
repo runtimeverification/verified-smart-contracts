@@ -1,3 +1,5 @@
+KEVM_VERSION_FILE:=../.build/.kevm.rev
+
 LOCAL_LEMMAS:=../verification.k \
 			  ../abstract-semantics.k \
 			  ../abstract-semantics-segmented-gas.k \
