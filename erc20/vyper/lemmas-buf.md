@@ -1,7 +1,7 @@
 Verification Lemmas
 ===================
 
-Version for specs that only use `#buf` abstraction for `ByteArray/ByteArray`, `not nthbyteof()`.
+Version for specs that only use `#buf` abstraction for `WordStack/ByteArray`, `not nthbyteof()`.
  
 ```k
 requires "evm.k"
@@ -31,18 +31,18 @@ It reduces the reasoning efforts of the underlying theorem prover, factoring out
 
 ```k
     // for Solidity
-    rule #asWord(WS) /Int D => #asWord(#take(#sizeByteArray(WS) -Int log256Int(D), WS))
+    rule #asWord(WS) /Int D => #asWord(#take(#sizeWordStack(WS) -Int log256Int(D), WS))
       requires D ==Int 256 ^Int log256Int(D) andBool D >=Int 0
-       andBool #sizeByteArray(WS) >=Int log256Int(D)
+       andBool #sizeWordStack(WS) >=Int log256Int(D)
        andBool #noOverflow(WS)
 
-    syntax Bool ::= #noOverflow    ( ByteArray ) [function]
-                  | #noOverflowAux ( ByteArray ) [function]
+    syntax Bool ::= #noOverflow    ( WordStack ) [function]
+                  | #noOverflowAux ( WordStack ) [function]
  // -------------------------------------------------------
-    rule #noOverflow(WS) => #sizeByteArray(WS) <=Int 32 andBool #noOverflowAux(WS)
+    rule #noOverflow(WS) => #sizeWordStack(WS) <=Int 32 andBool #noOverflowAux(WS)
 
     rule #noOverflowAux(W : WS)     => 0 <=Int W andBool W <Int 256 andBool #noOverflowAux(WS)
-    rule #noOverflowAux(.ByteArray) => true
+    rule #noOverflowAux(.WordStack) => true
 ```
 
 ### Hashed Location
@@ -69,7 +69,7 @@ It reduces the reasoning efforts of the underlying theorem prover, factoring out
     // for terms came from bytecode not via #hashedLocation
     rule keccak(WS) => keccakIntList(byteStack2IntList(WS))
       requires ( notBool #isConcrete(WS) )
-       andBool ( #sizeByteArray(WS) ==Int 32 orBool #sizeByteArray(WS) ==Int 64 )
+       andBool ( #sizeWordStack(WS) ==Int 32 orBool #sizeWordStack(WS) ==Int 64 )
 ```
 
 ### Integer Expression Simplification Rules
@@ -261,6 +261,12 @@ They cause a major increase in the number of Z3 queries and slowdown.
     rule chop(I) => I requires 0 <=Int I andBool I <Int pow256
 ```
 
+### Wordstack
+
+These lemmas abstract some properties about `#sizeWordStack`:
+
 ```k
+    rule 0 <=Int #sizeWordStack ( _ , _ ) => true [smt-lemma]
+
 endmodule
 ```

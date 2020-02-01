@@ -9,11 +9,8 @@ module VERIFICATION
     imports EDSL
     imports LEMMAS
 
-    rule #padToWidth(32, #asByteStack(V)) => #buf(32, V) // #asByteStackInWidth(V, 32)
-      requires 0 <=Int V andBool V <Int pow256
-
     rule #buf(N, #asWord(WS)) => WS
-      requires #noOverflow(WS) andBool N ==Int #sizeWordStack(WS)
+      requires #noOverflow(WS) andBool N ==Int #sizeByteArray(WS)
 
     rule chop ( W0:Int +Int W1:Int ) -Word W1:Int => chop ( W0 )
       requires #rangeUInt(256, W0) andBool #rangeUInt(256, W1)
@@ -39,18 +36,11 @@ module VERIFICATION
     rule #noOverflowAux(BUF) => true requires #isBuf(BUF)
     rule #noOverflowAux(WS1 ++ WS2) => #noOverflowAux(WS1) andBool #noOverflowAux(WS2)
 
-    rule WS ++ .WordStack => WS
-
-    rule #sizeWordStack(WS, N) <Int SIZE => #sizeWordStack(WS, 0) +Int N <Int SIZE  requires N =/=Int 0
-    rule SIZELIMIT <Int #sizeWordStack(WS, N) +Int DELTA  => SIZELIMIT <Int (#sizeWordStack(WS, 0) +Int N) +Int DELTA  requires N =/=Int 0
-    rule SIZELIMIT <Int #sizeWordStack(WS, N)             => SIZELIMIT <Int #sizeWordStack(WS, 0) +Int N               requires N =/=Int 0
-
-    rule #sizeWordStack(WS, N) <=Int SIZE => #sizeWordStack(WS, 0) +Int N <=Int SIZE requires N =/=Int 0
-
-    rule #bufSeg(BUF, 0, WIDTH) => BUF  requires WIDTH ==Int #sizeWordStack(BUF)
-
+    // #buf unfolding, for concrete DATA
     rule #buf(SIZE, DATA) => #padToWidth(SIZE, #asByteStack(DATA)) requires #range(0 <= DATA < (2 ^Int (SIZE *Int 8))) [concrete]
 
+    // #buf folding, for symbolic DATA - todo test - might apply in too many places
+    rule #padToWidth(SIZE, #asByteStack(DATA)) => #buf(SIZE, DATA) requires notBool #isConcrete(DATA)
 
   // ########################
   // Memory Reasoning
@@ -92,7 +82,6 @@ module VERIFICATION
     //Assumption of non-collision between hashes and small constants that likely represent memory addresses or offsets.
     rule notBool( hash2(_,_) ==K A ) => true
       requires #isConcrete(A) andBool A <=Int 20
-
 
   // ########################
   // Arithmetic
