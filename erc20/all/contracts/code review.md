@@ -4,14 +4,25 @@ Source: https://etherscan.io/tokens?ps=100&p=1
 - Top 15 in this list are as of 21/10
 - Top 16-30 as of 29/10
 - Top 31-41 as of 30/10
+- Top 44-57 as of 03/02/2020
+Total contracts: 53 Numbers are not consecutive.
 
 ## 1 Tether
 Status: not compatible
-- ERC20 functions do external calls.
+
+Multiple features outside our scope:
+  - calls to external contracts
+  - transfer of fee alongside the main transfer
+  - senders blacklist system.
 
 ## 2 BNB
 Status: compatible
-- 4 failures because contract is not compliant with ERC20.
+- 3 failures because contract is not compliant with ERC20.
+
+Extra functionality:
+    - burn() - standard functionality. reduces balance and totalSupply.
+    - freeze/unfreeze - allows certain balance to be frozen. Straightforward impl.
+    - withdrawEther - contract-specific
 
 ## 3 Bitfinex
 Status: not compatible
@@ -23,11 +34,20 @@ Status: compatible
 - 11 specs out of 12 pass.
 - totalSupply fails because is constant, we can adapt that in our template.
 
+Extra functionality:
+    - also implements ERC677 - transferAndCall
+    - increaseApproval/decreaseApproval - straightforward extensions to approve.
+
 ## 5 Huobi
 Status: compatible
+    - completely standard ERC20.
 
 ## 6 Maker
 Status: compatible
+
+Extra functionality:
+    - mint/burn, but with custom authorization procedure that includes external call.
+    - stoppable functionality - fits relaxed principle.
 
 ## 7 USD Coin
 Status: proxy pattern
@@ -36,14 +56,32 @@ Status: proxy pattern
 Status: relaxed template
 - Has extra checks, otherwise standard.
 
+Extra functionality:
+    - mint() functionality with extra checks. Fits relaxed principle.
+
 ## 9 Ino Coin (INO)
 Status: compatible
+
+Extra:
+    - approveAndCall from ERC677.
+    - burn() - standard
+    - burnFrom() - similar principle to transferFrom(), standard.
 
 ## 10 BAT (BAT)
 Status: compatible
 
+Extra:
+    - createTokens() - Accepts ether and creates new BAT tokens. Totally custom.
+    - finalize() - custom: Ends the funding period and sends the ETH home
+    - refund() - custom: Allows contributors to recover their ether in the case of a failed funding campaign.
+    
+Summary: an ERC20 token with a crowdsale initial period in ether, that allows refunds.
+
 ## 11 Insight Chain (INB)
 Status: relaxed template
+
+Extra:
+    - increaseApproval/decreaseApproval. Standard.
 
 ## 12 Paxos Standard (PAX)
 Status: proxy pattern
@@ -51,9 +89,14 @@ Status: proxy pattern
 ## 13 HEDG
 Status: relaxed template
 
+Extra:
+    - mint, burn. Standard. 2 events fired for a function call.
+
 ## 14 ZRX (ZRX)
 Status: compatible
 - nr 16 on 29/10
+
+Extra: none
 
 ## 15 VeChain (VEN)
 Status: not compatible
@@ -67,10 +110,18 @@ Status: proxy pattern
 Status: relaxed template
 - standard data structures
 
+Extra: 
+    - increaseApproval, decreaseApproval. Standard.
+    - mint/burn with some security checks. Only minter/destroyer can mint/burn and they are set by the owner. 
+
 ## 18 OmiseGO (OMG)
 Status: relaxed template
 - operations allowed when paused == false
 - I saw this #11 Insight, possibly same code.
+
+Extra:
+    - mintTimelocked - totally custom
+    - mint() with some security checks - only owner can mint
 
 ## 19 ZBToken (ZB)
 Status: source code not available
@@ -79,9 +130,14 @@ Status: source code not available
 Status: compatible
 - Source code also contains a proxy, so it depends who's bytecode is on etherscan page: master or proxy.
 
+Extra: 2 custom functions, out of scope.
+
 ## 21 Bytom (BTM)
 Status: compatible
 - No overflow check!
+
+Extra:
+    - approveAndCall
 
 ## Kucoin Shares (KCS)
 Status: incomplete ERC20
@@ -91,6 +147,9 @@ Status: incomplete ERC20
 Status: compatible
 - transfer() allows burning tokens by sending to 0x00
 - this is not compliant with ERC20. Otherwise fully compatible.
+
+Extra:
+    - burn
 
 ## 24 Synthetix Network Token (SNX)
 Status: proxy pattern
@@ -103,21 +162,43 @@ Status: source code not available
 Status: relaxed template
 - Extra checks access block.number This probably needs extra preconditions.
 
+Extra:
+    - mint
+
 ## 27 Swipe (SXP)
 Status: relaxed template
+    - uses blacklist-based security
+
+Extra:
+    - approveAndCall
+    - burn
+    - burnForAllowance - totally custom
 
 ## 28 Dai Stablecoin v1.0 (DAI)
 Status: relaxed template
 - transfer() calls transferFrom()
 
+Extra:
+    - burn/mint
+    - burn/mint from another account. Should be burnFrom/mintFrom.
+
 ## 29 ICON (ICX)
 Status: relaxed template
+
+Extra:
+    - burnTokens. Same as Burn in others. logs TokenBurned event.
 
 ## 30 KaratBank Coin (KBC)
 Status: compatible
 
+Extra:
+    - increaseApproval, decreaseApproval
+    - a couple of totally custom functions.
+
 ## 31 Mixin (XIN)
 Status: compatible
+
+Extra: none
 
 ## 32 - nothing new
 On 30/10 KaratBank is #32, already reviewed.
@@ -126,16 +207,29 @@ On 30/10 KaratBank is #32, already reviewed.
 Status: compatible
 - No overflow checks!
 
+Extra: none
+
 ## 34 Quant (QNT)
 Status: compatible
+
+Extra:
+    - increaseApproval, decreaseApproval
+    - mint
 
 ## 35 MCO (MCO)
 Status: relaxed template
 - A unique check for short address attack. Probably requires unique lemma/check.
 - It is worth studying whether it is necessary to protect from this attack and craft a spec for it.
 
+Extra:
+    - multiple custom functions
+    - mint
+
 ## 36 Aeternity (AE)
 Status: relaxed template
+
+Extra:
+    - approveAndCall
 
 ## 37 OKB (OKB)
 Status: source code not available
@@ -147,13 +241,22 @@ Status: source code not available
 Status: compatible
 - constant totalSupply
 
+Extra:
+    - very custom logic.
+    - increaseApproval, decreaseApproval
+
 ## 40 Clipper Coin Capital (CCCX)
 Status: relaxed template
+
+Extra:
+    - burn, burnFrom, approveAndCall
 
 ## 41 RLC (RLC)
 Status: relaxed template
 - Required to have 40 in total. #32 is missing.
 
+Extra:
+    - approveAndCall, burn
 
 # Summary for top 40 (30/10)
 - Compatible:                   15
@@ -164,3 +267,84 @@ Status: relaxed template
 - Incomplete ERC20:              1
 
 Total compatible out of contracts with full code: 28/31 = 90%
+
+## 44 NOAHCOIN (NOAH)
+Status: compatible
+Extra: increaseApproval, decreaseApproval
+
+## 45 KyberNetwork (KNC)
+Status: relaxed template
+Extra: burn, burnFrom
+
+## 46 BitMax token (BTMX)
+Status: relaxed template
+Extra: burn, increaseApproval, decreaseApproval
+
+## 47 DxChain Token (DX)
+Status: relaxed template (pausable)
+Extra: increaseApproval, decreaseApproval
+
+## 48 Matic Token (MATIC)
+Status: relaxed template (pausable)
+Extra: increaseAllowance, decreaseAllowance
+
+## 49 StatusNetwork (SNT)
+Status: not compatible
+
+## 51 Cryptoindex 100 (CIX100)
+Status: relaxed template
+Extra: burn 
+Non-common extra: batchMint, batchTransfer
+
+## 52 Banker Token (BNK)
+Status: not compatible. External function calls.
+
+## 53 Golem (GNT)
+Status: incomplete ERC20
+
+## 54 Decentraland (MANA)
+Status: relaxed template (pausable)
+Extra: burn, mint
+
+## 55 ELF (ELF)
+Status: relaxed template
+Extra: increaseApproval, decreaseApproval
+    - mintTokens - custom functionality
+    - burnTokens - standard burn
+    - multiple custom functions
+
+## 56 AION (AION)
+Status: not compatible. Transfer functionality forwarded to other contracts.
+
+## 57 Republic (REN)
+Status: relaxed template (pausable)
+Extra: burn, increaseApproval, decreaseApproval
+
+# Summary for top 53 (02/03/2020)
+- Compatible:                   16 
+- Relaxed template:             21
+- Not compatible:                6
+- Proxy pattern:                 4
+- Source code not available:     4
+- Incomplete ERC20:              2
+
+# Common extra functionality
+Total contracts that fit our template: 37
+
+- mint:                                10
+- burn:                                17
+- burnFrom:                             3
+- increaseApproval/decreaseApproval:   12
+- approveAndCall:                       6
+
+
+# Variance in mint/burn functionality
+Events triggered:
+    - Some mint/burn calls trigger only Mint or Burn event, some trigger Transfer, some trigger both.
+    - burnFrom is sometimes implemented as burn() with 3 arguments.
+
+Other common functionality in many contracts:
+    - Pausable, Ownable.
+    - Pausable usually has 2 functions: pause() - pauses transfers. unpause() - resumes transfers.
+    - Ownable allows transfer of ownership to another account.
+    - Certain operations, like mint/burn are only allowed by the owner.
