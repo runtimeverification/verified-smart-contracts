@@ -53,8 +53,7 @@ Extra functionality:
 Status: proxy pattern
 
 ## 8 Crypto.com Coin (CRO)
-Status: relaxed template
-- Has extra checks, otherwise standard.
+Status: relaxed template (lock flag, whitelist)
 
 Extra functionality:
     - mint() functionality with extra checks. Fits relaxed principle.
@@ -74,11 +73,11 @@ Extra:
     - createTokens() - Accepts ether and creates new BAT tokens. Totally custom.
     - finalize() - custom: Ends the funding period and sends the ETH home
     - refund() - custom: Allows contributors to recover their ether in the case of a failed funding campaign.
-    
+
 Summary: an ERC20 token with a crowdsale initial period in ether, that allows refunds.
 
 ## 11 Insight Chain (INB)
-Status: relaxed template
+Status: relaxed template (Pausable)
 
 Extra:
     - increaseApproval/decreaseApproval. Standard.
@@ -87,7 +86,7 @@ Extra:
 Status: proxy pattern
 
 ## 13 HEDG
-Status: relaxed template
+Status: relaxed template (Pausable, but with different names)
 
 Extra:
     - mint, burn. Standard. 2 events fired for a function call.
@@ -107,7 +106,7 @@ Status: proxy pattern
 - nr 15 as of 29/10.
 
 ## 17 HoloToken (HOT)
-Status: relaxed template
+Status: relaxed template (lock flag)
 - standard data structures
 
 Extra: 
@@ -115,7 +114,7 @@ Extra:
     - mint/burn with some security checks. Only minter/destroyer can mint/burn and they are set by the owner. 
 
 ## 18 OmiseGO (OMG)
-Status: relaxed template
+Status: relaxed template (Pausable)
 - operations allowed when paused == false
 - I saw this #11 Insight, possibly same code.
 
@@ -159,15 +158,14 @@ Status: source code not available
 - They submitted some code, but it has nothing to do with either ERC20 implementation or proxy pattern.
 
 ## 26 Theta Token (THETA)
-Status: relaxed template
+Status: relaxed template (lock flag)
 - Extra checks access block.number This probably needs extra preconditions.
 
 Extra:
     - mint
 
 ## 27 Swipe (SXP)
-Status: relaxed template
-    - uses blacklist-based security
+Status: relaxed template (blacklist, lock flag)
 
 Extra:
     - approveAndCall
@@ -175,7 +173,7 @@ Extra:
     - burnForAllowance - totally custom
 
 ## 28 Dai Stablecoin v1.0 (DAI)
-Status: relaxed template
+Status: relaxed template (lock flag)
 - transfer() calls transferFrom()
 
 Extra:
@@ -183,7 +181,7 @@ Extra:
     - burn/mint from another account. Should be burnFrom/mintFrom.
 
 ## 29 ICON (ICX)
-Status: relaxed template
+Status: relaxed template (whitelist)
 
 Extra:
     - burnTokens. Same as Burn in others. logs TokenBurned event.
@@ -217,7 +215,7 @@ Extra:
     - mint
 
 ## 35 MCO (MCO)
-Status: relaxed template
+Status: relaxed template (whitelist)
 - A unique check for short address attack. Probably requires unique lemma/check.
 - It is worth studying whether it is necessary to protect from this attack and craft a spec for it.
 
@@ -226,7 +224,7 @@ Extra:
     - mint
 
 ## 36 Aeternity (AE)
-Status: relaxed template
+Status: relaxed template (time-based lock)
 
 Extra:
     - approveAndCall
@@ -246,13 +244,13 @@ Extra:
     - increaseApproval, decreaseApproval
 
 ## 40 Clipper Coin Capital (CCCX)
-Status: relaxed template
+Status: relaxed template (blacklist)
 
 Extra:
     - burn, burnFrom, approveAndCall
 
 ## 41 RLC (RLC)
-Status: relaxed template
+Status: relaxed template (lock flag)
 - Required to have 40 in total. #32 is missing.
 
 Extra:
@@ -273,11 +271,11 @@ Status: compatible
 Extra: increaseApproval, decreaseApproval
 
 ## 45 KyberNetwork (KNC)
-Status: relaxed template
+Status: relaxed template (time-based lock)
 Extra: burn, burnFrom
 
 ## 46 BitMax token (BTMX)
-Status: relaxed template
+Status: relaxed template (pausable)
 Extra: burn, increaseApproval, decreaseApproval
 
 ## 47 DxChain Token (DX)
@@ -292,7 +290,7 @@ Extra: increaseAllowance, decreaseAllowance
 Status: not compatible
 
 ## 51 Cryptoindex 100 (CIX100)
-Status: relaxed template
+Status: relaxed template (lock flag)
 Extra: burn 
 Non-common extra: batchMint, batchTransfer
 
@@ -307,7 +305,7 @@ Status: relaxed template (pausable)
 Extra: burn, mint
 
 ## 55 ELF (ELF)
-Status: relaxed template
+Status: relaxed template (lock flag)
 Extra: increaseApproval, decreaseApproval
     - mintTokens - custom functionality
     - burnTokens - standard burn
@@ -337,6 +335,12 @@ Total contracts that fit our template: 37
 - increaseApproval/decreaseApproval:   12
 - approveAndCall:                       6
 
+# Causes for relaxed template
+- lock flag only (Pausable):       14
+- time-based lock:                  2
+- whitelist/blacklist:              3
+- whitelist/blacklist + lock flag:  2 
+Total: 21
 
 # Variance in mint/burn functionality
 Events triggered:
