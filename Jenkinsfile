@@ -9,6 +9,7 @@ pipeline {
     VSC_USE_KSERVER           = false
 
     VSC_MINIMAL_ENABLED       = true
+    VSC_MAINNET_TEST_ENABLED  = true
     VSC_KTEST_ENABLED         = true
     VSC_ERC20_ENABLED         = true
     VSC_DEPOSIT_ENABLED       = true
@@ -80,6 +81,14 @@ pipeline {
       }
       steps { ansiColor('xterm') {
           sh ' make jenkins MODE=MINIMAL NPROCS="$NPROCS" '
+      } }
+    }
+    stage('Mainnet Test') {
+      when {
+        environment name: 'VSC_MAINNET_TEST_ENABLED', value: 'true'
+      }
+      steps { ansiColor('xterm') {
+          sh ' make -C erc20/all/mainnet-test test NPROCS="$NPROCS" TIMEOUT=30m '
       } }
     }
     stage('KTest') {

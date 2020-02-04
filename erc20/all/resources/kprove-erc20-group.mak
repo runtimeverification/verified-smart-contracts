@@ -10,10 +10,14 @@ FRAGMENT_INI_DIR?=$(abspath $(THIS_FILE_DIR)/../fragments)
 #
 # Settings
 
+# java or haskell
+K_BACKEND?=java
+
+IGNORE_ERRORS_OPT:=--ignore-errors
 LOCAL_RESOURCES_DIR:=$(THIS_FILE_DIR)
 ROOT:=$(abspath $(THIS_FILE_DIR)/../../..)
 RELATIVE_CURDIR:=$(strip $(patsubst $(ROOT)/%, %, $(filter $(ROOT)/%, $(CURDIR))))
-SPECS_DIR:=$(ROOT)/specs
+SPECS_DIR:=$(ROOT)/specs/$(K_BACKEND)
 FRAGMENT_INI_FILES:=$(sort $(wildcard $(FRAGMENT_INI_DIR)/*.ini))
 MAIN_INI_FILES:=$(sort $(wildcard *.ini))
 SPEC_INI_FILES:=$(patsubst %.ini, $(SPECS_DIR)/$(RELATIVE_CURDIR)/%/erc20-spec.ini, $(MAIN_INI_FILES))
@@ -49,7 +53,7 @@ $(SPECS_DIR)/%/erc20-spec.ini.split-proof-tests: $(SPECS_DIR)/%/erc20-spec.ini
 	$(MAKE) -f $(LOCAL_RESOURCES_DIR)/kprove-erc20.mak all  SPEC_GROUP=$* SPEC_INI=$(basename $@)
 
 $(SPECS_DIR)/%/erc20-spec.ini.test: $(SPECS_DIR)/%/erc20-spec.ini.split-proof-tests
-	$(MAKE) -f $(LOCAL_RESOURCES_DIR)/kprove-erc20.mak test SPEC_GROUP=$* SPEC_INI=$(basename $@) TIMEOUT=$(TIMEOUT) -i -j$(NPROCS)
+	$(MAKE) -f $(LOCAL_RESOURCES_DIR)/kprove-erc20.mak test SPEC_GROUP=$* SPEC_INI=$(basename $@) TIMEOUT=$(TIMEOUT) $(IGNORE_ERRORS_OPT) -j$(NPROCS)
 
 # Command to run just one spec. Argument: <absolute path to k>.test
 # patsubst below needed because $(dir ...) leaves a trailing slash.
