@@ -100,6 +100,7 @@ pipeline {
       }
       steps { ansiColor('xterm') {
           sh ' make -C erc20/all/mainnet-test test NPROCS="$NPROCS" TIMEOUT=30m '
+          sh ' make -C erc20/all/mainnet-solar-test test NPROCS="$NPROCS" TIMEOUT=30m '
       } }
     }
     stage('KTest') {
