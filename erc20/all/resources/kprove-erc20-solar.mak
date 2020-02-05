@@ -1,7 +1,7 @@
 THIS_FILE_DIR:=$(dir $(realpath $(lastword $(MAKEFILE_LIST))))
 SOLAR_DIR=$(ROOT_DIR)/erc20/solar
 
-KEVM_VERSION_FILE=$(SOLAR_DIR)/.build/.kevm.rev
+KEVM_VERSION_FILE=$(ROOT_DIR)/erc20/.build/.kevm.rev
 KOMPILE_COMMAND=make build-specs K_BIN=$(K_BIN)
 override KEVM_BUILD_DIR=$(KEVM_REPO_DIR)/.build/defn/specs
 
