@@ -352,3 +352,7 @@ Other common functionality in many contracts:
     - Pausable usually has 2 functions: pause() - pauses transfers. unpause() - resumes transfers.
     - Ownable allows transfer of ownership to another account.
     - Certain operations, like mint/burn are only allowed by the owner.
+
+# Pure contracts, that only contain ERC20 and common extension functions
+Order numbers: 04, 05, 09, 14, 21, 23, 31, 33, 34, 44
+Total: 10/37 (from all compatible and relaxed template)
