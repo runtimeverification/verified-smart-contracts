@@ -1,4 +1,4 @@
-KEVM_VERSION_FILE:=.build/.kevm.rev
+KEVM_VERSION_FILE:=../.build/.kevm.rev
 KOMPILE_COMMAND=make build-specs K_BIN=$(K_BIN)
 override KEVM_BUILD_DIR=$(KEVM_REPO_DIR)/.build/defn/specs
 
