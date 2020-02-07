@@ -1,7 +1,7 @@
-requires "specs.k"
+requires "evm-imp-specs.k"
 
 module SOLAR-ABSTRACT-SEMANTICS
-  imports EVM-SPECS
+  imports EVM-IMP-SPECS
 
   rule #assume R:Bool => .
     ensures R

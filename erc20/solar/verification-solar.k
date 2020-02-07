@@ -1,9 +1,9 @@
 requires "verification.k"
-requires "specs.k"
+requires "evm-imp-specs.k"
 
 module VERIFICATION-SOLAR
     imports VERIFICATION
-    imports EVM-SPECS
+    imports EVM-IMP-SPECS
 
     rule #sizeWordStack(#padToWidth(N1, _), N2) => N1 +Int N2
 
