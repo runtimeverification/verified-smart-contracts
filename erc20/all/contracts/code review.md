@@ -99,7 +99,7 @@ Extra: none
 
 ## 15 VeChain (VEN)
 Status: not compatible
-- Non-standard data model.
+- Transfer operation has side effects: bonus transfer.
 
 ## 15.2 TrueUSD (TUSD)
 Status: proxy pattern
@@ -138,7 +138,7 @@ Status: compatible
 Extra:
     - approveAndCall
 
-## Kucoin Shares (KCS)
+## 22 Kucoin Shares (KCS)
 Status: incomplete ERC20
 - only transfer() present, standard implementation.
 
