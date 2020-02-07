@@ -12,7 +12,7 @@ LOCAL_LEMMAS:=verification-solar.k \
 			  ../verification.k \
 			  ../../resources/abstract-semantics-segmented-gas.k \
 			  ../../resources/evm-symbolic.k \
-			  ../../resources/evm-data-map-symbolic.k \
+			  ../evm-data-map-symbolic.k \
 			  solar-abstract-semantics.k
 TMPLS:=module-tmpl.k spec-tmpl.k
 

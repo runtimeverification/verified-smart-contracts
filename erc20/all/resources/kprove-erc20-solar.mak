@@ -10,7 +10,7 @@ override LOCAL_LEMMAS=$(SOLAR_DIR)/verification-solar.k \
 					  $(ROOT_DIR)/erc20/verification.k \
 					  $(RESOURCES_DIR)/abstract-semantics-segmented-gas.k \
 					  $(RESOURCES_DIR)/evm-symbolic.k \
-					  $(RESOURCES_DIR)/evm-data-map-symbolic.k \
+					  $(ROOT_DIR)/erc20/evm-data-map-symbolic.k \
 					  $(SOLAR_DIR)/solar-abstract-semantics.k
 override TMPLS=$(SOLAR_DIR)/module-tmpl.k $(SOLAR_DIR)/spec-tmpl.k
 
