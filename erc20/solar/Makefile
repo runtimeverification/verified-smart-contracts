@@ -1,6 +1,6 @@
 KEVM_VERSION_FILE:=../.build/.kevm.rev
 KOMPILE_COMMAND=make build-specs K_BIN=$(K_BIN)
-override KEVM_BUILD_DIR=$(KEVM_REPO_DIR)/.build/defn/specs
+override KEVM_BUILD_LAST_DIR=specs
 
 # Required to have different lemmas dir from non-#buf ERC20 specs.
 SPEC_GROUP:=erc20/buf/solar
@@ -12,7 +12,7 @@ LOCAL_LEMMAS:=verification-solar.k \
 			  ../verification.k \
 			  ../../resources/abstract-semantics-segmented-gas.k \
 			  ../../resources/evm-symbolic.k \
-			  ../../resources/evm-data-map-symbolic.k \
+			  ../evm-data-map-symbolic.k \
 			  solar-abstract-semantics.k
 TMPLS:=module-tmpl.k spec-tmpl.k
 
