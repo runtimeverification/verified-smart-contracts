@@ -3,7 +3,7 @@ SOLAR_DIR=$(ROOT_DIR)/erc20/solar
 
 KEVM_VERSION_FILE=$(ROOT_DIR)/erc20/.build/.kevm.rev
 KOMPILE_COMMAND=make build-specs K_BIN=$(K_BIN)
-override KEVM_BUILD_DIR=$(KEVM_REPO_DIR)/.build/defn/specs
+override KEVM_BUILD_LAST_DIR=specs
 
 DEFINITION_MODULE:=VERIFICATION-SOLAR
 override LOCAL_LEMMAS=$(SOLAR_DIR)/verification-solar.k \
