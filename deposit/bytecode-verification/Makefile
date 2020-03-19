@@ -12,10 +12,8 @@ KPROVE_OPTS:=--smt-prelude $(abspath $(dir $(abspath $(lastword $(MAKEFILE_LIST)
              --branching-allowed 0 \
              --z3-cnstr-timeout 100
 
-SPEC_NAMES:=init-init \
-            init-loop0 \
-            init-loop-enter \
-            init-loop-exit \
+SPEC_NAMES:=init-success \
+            init-revert \
             to_little_endian_64 \
             get_deposit_root-init \
             get_deposit_root-loop0-then \
@@ -23,7 +21,8 @@ SPEC_NAMES:=init-init \
             get_deposit_root-loop-body-then \
             get_deposit_root-loop-body-else \
             get_deposit_root-loop-exit \
-            get_deposit_count \
+            get_deposit_count-success \
+            get_deposit_count-revert \
             deposit-init \
             deposit-subcall_1 \
             deposit-subcall_2 \
@@ -47,22 +46,17 @@ SPEC_NAMES:=init-init \
             revert-invalid_function_identifier-lt_4 \
             revert-invalid_function_identifier-ge_4-lt_32 \
             revert-invalid_function_identifier-ge_4-ge_32 \
-            revert-init \
-            revert-get_deposit_root \
-            revert-get_deposit_count
+            revert-get_deposit_root
 
 include ../../resources/kprove.mak
 
 # non-standard spec generation
 
-$(SPECS_DIR)/$(SPEC_GROUP)/get_deposit_root-loop-exit-spec.k: $(TMPLS) $(SPEC_INI)
+$(SPECS_DIR)/$(SPEC_GROUP)/get_deposit_root-loop-exit-spec.k: $(TMPLS) $(SPEC_INI) $(LEMMAS)
 	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) get_deposit_root-loop-exit to_little_endian_64-trusted get_deposit_root-loop-exit > $@
 
-$(SPECS_DIR)/$(SPEC_GROUP)/get_deposit_count-spec.k: $(TMPLS) $(SPEC_INI)
-	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) get_deposit_count            to_little_endian_64-trusted get_deposit_count            > $@
-
-$(SPECS_DIR)/$(SPEC_GROUP)/deposit-subcall_1-spec.k: $(TMPLS) $(SPEC_INI)
+$(SPECS_DIR)/$(SPEC_GROUP)/deposit-subcall_1-spec.k: $(TMPLS) $(SPEC_INI) $(LEMMAS)
 	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) deposit-subcall_1            to_little_endian_64-trusted deposit-subcall_1            > $@
 
-$(SPECS_DIR)/$(SPEC_GROUP)/deposit-subcall_2-spec.k: $(TMPLS) $(SPEC_INI)
+$(SPECS_DIR)/$(SPEC_GROUP)/deposit-subcall_2-spec.k: $(TMPLS) $(SPEC_INI) $(LEMMAS)
 	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) deposit-subcall_2            to_little_endian_64-trusted deposit-subcall_2            > $@
