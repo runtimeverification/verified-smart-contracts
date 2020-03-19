@@ -12,10 +12,8 @@ KPROVE_OPTS:=--smt-prelude $(abspath $(dir $(abspath $(lastword $(MAKEFILE_LIST)
              --branching-allowed 0 \
              --z3-cnstr-timeout 100
 
-SPEC_NAMES:=init-init \
-            init-loop0 \
-            init-loop-enter \
-            init-loop-exit \
+SPEC_NAMES:=init-success \
+            init-revert \
             to_little_endian_64 \
             get_deposit_root-init \
             get_deposit_root-loop0-then \
@@ -47,7 +45,6 @@ SPEC_NAMES:=init-init \
             revert-invalid_function_identifier-lt_4 \
             revert-invalid_function_identifier-ge_4-lt_32 \
             revert-invalid_function_identifier-ge_4-ge_32 \
-            revert-init \
             revert-get_deposit_root \
             revert-get_deposit_count
 
