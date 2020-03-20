@@ -27,24 +27,24 @@ SPEC_NAMES += get_deposit_root-revert
 SPEC_NAMES += get_deposit_count-success
 SPEC_NAMES += get_deposit_count-revert
 
-SPEC_NAMES += deposit-data
+SPEC_NAMES += deposit-success-data
+SPEC_NAMES += deposit-success-insert-init-then
+SPEC_NAMES += deposit-success-insert-init-else
+SPEC_NAMES += deposit-success-insert-loop-enter-then
+SPEC_NAMES += deposit-success-insert-loop-enter-else
+SPEC_NAMES += deposit-success-insert-loop-exit
+
 SPEC_NAMES += deposit-revert-1
 SPEC_NAMES += deposit-revert-2
 SPEC_NAMES += deposit-revert-3
 
-SPEC_NAMES += deposit-add-init-then
-SPEC_NAMES += deposit-add-init-else
-SPEC_NAMES += deposit-add-loop-enter-then
-SPEC_NAMES += deposit-add-loop-enter-else
-SPEC_NAMES += deposit-add-loop-exit
-
-SPEC_NAMES += deposit-init-calldata
-SPEC_NAMES += deposit-init-calldata-revert-1
-SPEC_NAMES += deposit-init-calldata-revert-2
-SPEC_NAMES += deposit-init-calldata-revert-3
-SPEC_NAMES += deposit-init-calldata-revert-4
-SPEC_NAMES += deposit-init-calldata-revert-5
-SPEC_NAMES += deposit-init-calldata-revert-6
+SPEC_NAMES += deposit-calldata-decoding-success
+SPEC_NAMES += deposit-calldata-decoding-revert-1
+SPEC_NAMES += deposit-calldata-decoding-revert-2
+SPEC_NAMES += deposit-calldata-decoding-revert-3
+SPEC_NAMES += deposit-calldata-decoding-revert-4
+SPEC_NAMES += deposit-calldata-decoding-revert-5
+SPEC_NAMES += deposit-calldata-decoding-revert-6
 
 SPEC_NAMES += revert-invalid_function_identifier-lt_4
 SPEC_NAMES += revert-invalid_function_identifier-ge_4-lt_32
