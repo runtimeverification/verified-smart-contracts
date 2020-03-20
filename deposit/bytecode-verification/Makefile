@@ -12,47 +12,44 @@ KPROVE_OPTS:=--smt-prelude $(abspath $(dir $(abspath $(lastword $(MAKEFILE_LIST)
              --branching-allowed 0 \
              --z3-cnstr-timeout 100
 
-SPEC_NAMES:=init-success \
-            init-revert \
-            to_little_endian_64 \
-            get_deposit_root-success-loop1-then \
-            get_deposit_root-success-loop1-else \
-            get_deposit_root-success-loop-body-then \
-            get_deposit_root-success-loop-body-else \
-            get_deposit_root-success-loop-exit \
-            get_deposit_root-revert \
-            get_deposit_count-success \
-            get_deposit_count-revert \
-            deposit-init \
-            deposit-subcall_1 \
-            deposit-subcall_2 \
-            deposit-log \
-            deposit-data \
-            deposit-add-init-then \
-            deposit-add-init-else \
-            deposit-add-loop-enter-then \
-            deposit-add-loop-enter-else \
-            deposit-add-loop-exit \
-            deposit-init-calldata \
-            deposit-init-calldata-revert-1 \
-            deposit-init-calldata-revert-2 \
-            deposit-init-calldata-revert-3 \
-            deposit-init-calldata-revert-4 \
-            deposit-init-calldata-revert-5 \
-            deposit-init-calldata-revert-6 \
-            deposit-init-revert-1 \
-            deposit-init-revert-2 \
-            deposit-data-revert \
-            revert-invalid_function_identifier-lt_4 \
-            revert-invalid_function_identifier-ge_4-lt_32 \
-            revert-invalid_function_identifier-ge_4-ge_32
+SPEC_NAMES:=
+
+SPEC_NAMES += init-success
+SPEC_NAMES += init-revert
+
+SPEC_NAMES += get_deposit_root-success-loop1-then
+SPEC_NAMES += get_deposit_root-success-loop1-else
+SPEC_NAMES += get_deposit_root-success-loop-body-then
+SPEC_NAMES += get_deposit_root-success-loop-body-else
+SPEC_NAMES += get_deposit_root-success-loop-exit
+SPEC_NAMES += get_deposit_root-revert
+
+SPEC_NAMES += get_deposit_count-success
+SPEC_NAMES += get_deposit_count-revert
+
+SPEC_NAMES += deposit-data
+SPEC_NAMES += deposit-revert-1
+SPEC_NAMES += deposit-revert-2
+SPEC_NAMES += deposit-revert-3
+
+SPEC_NAMES += deposit-add-init-then
+SPEC_NAMES += deposit-add-init-else
+SPEC_NAMES += deposit-add-loop-enter-then
+SPEC_NAMES += deposit-add-loop-enter-else
+SPEC_NAMES += deposit-add-loop-exit
+
+SPEC_NAMES += deposit-init-calldata
+SPEC_NAMES += deposit-init-calldata-revert-1
+SPEC_NAMES += deposit-init-calldata-revert-2
+SPEC_NAMES += deposit-init-calldata-revert-3
+SPEC_NAMES += deposit-init-calldata-revert-4
+SPEC_NAMES += deposit-init-calldata-revert-5
+SPEC_NAMES += deposit-init-calldata-revert-6
+
+SPEC_NAMES += revert-invalid_function_identifier-lt_4
+SPEC_NAMES += revert-invalid_function_identifier-ge_4-lt_32
+SPEC_NAMES += revert-invalid_function_identifier-ge_4-ge_32
+
+export K_OPTS=-Xmx16g
 
 include ../../resources/kprove.mak
-
-# non-standard spec generation
-
-$(SPECS_DIR)/$(SPEC_GROUP)/deposit-subcall_1-spec.k: $(TMPLS) $(SPEC_INI) $(LEMMAS)
-	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) deposit-subcall_1            to_little_endian_64-trusted deposit-subcall_1            > $@
-
-$(SPECS_DIR)/$(SPEC_GROUP)/deposit-subcall_2-spec.k: $(TMPLS) $(SPEC_INI) $(LEMMAS)
-	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) deposit-subcall_2            to_little_endian_64-trusted deposit-subcall_2            > $@
