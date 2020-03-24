@@ -15,12 +15,12 @@ KPROVE_OPTS:=--smt-prelude $(abspath $(dir $(abspath $(lastword $(MAKEFILE_LIST)
 SPEC_NAMES:=init-success \
             init-revert \
             to_little_endian_64 \
-            get_deposit_root-init \
-            get_deposit_root-loop0-then \
-            get_deposit_root-loop0-else \
-            get_deposit_root-loop-body-then \
-            get_deposit_root-loop-body-else \
-            get_deposit_root-loop-exit \
+            get_deposit_root-success-loop1-then \
+            get_deposit_root-success-loop1-else \
+            get_deposit_root-success-loop-body-then \
+            get_deposit_root-success-loop-body-else \
+            get_deposit_root-success-loop-exit \
+            get_deposit_root-revert \
             get_deposit_count-success \
             get_deposit_count-revert \
             deposit-init \
@@ -45,15 +45,11 @@ SPEC_NAMES:=init-success \
             deposit-data-revert \
             revert-invalid_function_identifier-lt_4 \
             revert-invalid_function_identifier-ge_4-lt_32 \
-            revert-invalid_function_identifier-ge_4-ge_32 \
-            revert-get_deposit_root
+            revert-invalid_function_identifier-ge_4-ge_32
 
 include ../../resources/kprove.mak
 
 # non-standard spec generation
-
-$(SPECS_DIR)/$(SPEC_GROUP)/get_deposit_root-loop-exit-spec.k: $(TMPLS) $(SPEC_INI) $(LEMMAS)
-	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) get_deposit_root-loop-exit to_little_endian_64-trusted get_deposit_root-loop-exit > $@
 
 $(SPECS_DIR)/$(SPEC_GROUP)/deposit-subcall_1-spec.k: $(TMPLS) $(SPEC_INI) $(LEMMAS)
 	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) deposit-subcall_1            to_little_endian_64-trusted deposit-subcall_1            > $@
