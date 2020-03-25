@@ -2,15 +2,12 @@
 rule
 <kevm>
   <k> {K} </k>
-  <exit-code> 1 </exit-code>
   <mode> NORMAL </mode>
   <schedule> {SCHEDULE} </schedule>
   <ethereum>
     <evm>
       <output> {OUTPUT} </output>
       <statusCode> {STATUS_CODE} </statusCode>
-      <callStack> {CALL_STACK} </callStack>
-      <interimStates> _ </interimStates>
       <touchedAccounts> _ => _ </touchedAccounts>
       <callState>
         <program> #parseByteStack({CODE}) </program>
@@ -29,31 +26,11 @@ rule
         <callDepth> {CALL_DEPTH} </callDepth>
       </callState>
       <substate>
-        <selfDestruct> _ </selfDestruct>
         <log> {LOG} </log>
         <refund> {REFUND} </refund>
+        ...
       </substate>
-      <gasPrice> _ </gasPrice>
-      <origin> ORIGIN_ID </origin> // tx.origin
-      <blockhashes> BLOCK_HASHES </blockhashes> // block.blockhash
-      <block>
-        <previousHash> _ </previousHash>
-        <ommersHash> _ </ommersHash>
-        <coinbase> {COINBASE} </coinbase> // block.coinbase
-        <stateRoot> _ </stateRoot>
-        <transactionsRoot> _ </transactionsRoot>
-        <receiptsRoot> _ </receiptsRoot>
-        <logsBloom> _ </logsBloom>
-        <difficulty> _ </difficulty>
-        <number> BLOCK_NUM </number> // block.number
-        <gasLimit> _ </gasLimit>
-        <gasUsed> _ </gasUsed>
-        <timestamp> NOW </timestamp> // now = block.timestamp
-        <extraData> _ </extraData>
-        <mixHash> _ </mixHash>
-        <blockNonce> _ </blockNonce>
-        <ommerBlockHeaders> _ </ommerBlockHeaders>
-      </block>
+      ...
     </evm>
     <network>
       <activeAccounts> {ACTIVE_ACCOUNTS} SetItem({THIS}) SetItem(2) SetItem(4) _:Set </activeAccounts>
@@ -87,16 +64,12 @@ rule
         {ACCOUNTS}
         ...
       </accounts>
-      <txOrder> _ </txOrder>
-      <txPending> _ </txPending>
-      <messages> _ </messages>
+      ...
     </network>
   </ethereum>
+  ...
 </kevm>
-  requires #rangeAddress(ORIGIN_ID)
-   // builtins
-   andBool #rangeUInt(256, NOW)
-   andBool #rangeUInt(128, BLOCK_NUM) // Solidity
+  requires true
    {REQUIRES}
   ensures true
    {ENSURES}

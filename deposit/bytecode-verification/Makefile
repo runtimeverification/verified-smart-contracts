@@ -17,10 +17,10 @@ SPEC_NAMES:=
 SPEC_NAMES += init-success
 SPEC_NAMES += init-revert
 
-SPEC_NAMES += get_deposit_root-success-loop1-then
-SPEC_NAMES += get_deposit_root-success-loop1-else
-SPEC_NAMES += get_deposit_root-success-loop-body-then
-SPEC_NAMES += get_deposit_root-success-loop-body-else
+SPEC_NAMES += get_deposit_root-success-init-then
+SPEC_NAMES += get_deposit_root-success-init-else
+SPEC_NAMES += get_deposit_root-success-loop-enter-then
+SPEC_NAMES += get_deposit_root-success-loop-enter-else
 SPEC_NAMES += get_deposit_root-success-loop-exit
 SPEC_NAMES += get_deposit_root-revert
 
