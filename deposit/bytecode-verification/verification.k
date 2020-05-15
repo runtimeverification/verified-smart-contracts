@@ -10,6 +10,72 @@ module VERIFICATION
 rule #asWord(B1 : B2 : B3 : B4 : WS) >>Int 224 => #asWord(B1 : B2 : B3 : B4 : .WordStack)
 requires #sizeWordStack(WS) ==Int 28
 
+// for to_little_endian_64()
+
+// masking first 8 bits
+rule 115339776388732929035197660848497720713218148788040405586178452820382218977280 &Int
+     chop(X <<Int 248)
+  => chop(X <<Int 248)
+requires X >=Int 0
+
+// masking first 64 bits
+rule 115792089237316195417293883273301227089434195242432897623355228563449095127040 &Int
+     #asWord(V0 : V1 : V2 : V3 : V4 : V5 : V6 : V7 : WS)
+  => #asWord(V0 : V1 : V2 : V3 : V4 : V5 : V6 : V7 : WS)
+requires WS ==K #buf(24, 0)
+ andBool #rangeUInt(8, V0)
+ andBool #rangeUInt(8, V1)
+ andBool #rangeUInt(8, V2)
+ andBool #rangeUInt(8, V3)
+ andBool #rangeUInt(8, V4)
+ andBool #rangeUInt(8, V5)
+ andBool #rangeUInt(8, V6)
+ andBool #rangeUInt(8, V7)
+
+rule (chop(X <<Int 248) >>Int 248) modInt 256 => X
+requires #rangeUInt(8, X)
+
+rule (chop(X <<Int 192) >>Int 192) modInt 256 =>  X           modInt 256 requires X >=Int 0
+rule (chop(X <<Int 192) >>Int 200) modInt 256 => (X >>Int  8) modInt 256 requires X >=Int 0
+rule (chop(X <<Int 192) >>Int 208) modInt 256 => (X >>Int 16) modInt 256 requires X >=Int 0
+rule (chop(X <<Int 192) >>Int 216) modInt 256 => (X >>Int 24) modInt 256 requires X >=Int 0
+rule (chop(X <<Int 192) >>Int 224) modInt 256 => (X >>Int 32) modInt 256 requires X >=Int 0
+rule (chop(X <<Int 192) >>Int 232) modInt 256 => (X >>Int 40) modInt 256 requires X >=Int 0
+rule (chop(X <<Int 192) >>Int 240) modInt 256 => (X >>Int 48) modInt 256 requires X >=Int 0
+rule (chop(X <<Int 192) >>Int 248) modInt 256 => (X >>Int 56) modInt 256 requires X >=Int 0
+
+rule
+selectRange(
+    store(store(store(store(store(store(store(store(M,
+        X0, V0),
+        X1, V1),
+        X2, V2),
+        X3, V3),
+        X4, V4),
+        X5, V5),
+        X6, V6),
+        X7, V7),
+    START, WIDTH)
+=>
+V0 : V1 : V2 : V3 : V4 : V5 : V6 : V7 : selectRange(M, START +Int 8, WIDTH -Int 8)
+requires WIDTH >=Int 8
+ andBool X0 ==Int START
+ andBool X1 ==Int START +Int 1
+ andBool X2 ==Int START +Int 2
+ andBool X3 ==Int START +Int 3
+ andBool X4 ==Int START +Int 4
+ andBool X5 ==Int START +Int 5
+ andBool X6 ==Int START +Int 6
+ andBool X7 ==Int START +Int 7
+ andBool #rangeUInt(8, V0)
+ andBool #rangeUInt(8, V1)
+ andBool #rangeUInt(8, V2)
+ andBool #rangeUInt(8, V3)
+ andBool #rangeUInt(8, V4)
+ andBool #rangeUInt(8, V5)
+ andBool #rangeUInt(8, V6)
+ andBool #rangeUInt(8, V7)
+
     // for [revert-invalid_function_identifier-0_4]
 
     rule #bufSeg(#buf(N, 0), 0, M) => #buf(M, 0) requires 0 <Int M andBool M <Int N
