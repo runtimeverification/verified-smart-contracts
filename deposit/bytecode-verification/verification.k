@@ -6,6 +6,10 @@ module VERIFICATION
     imports EDSL
     imports LEMMAS
 
+// function signature extraction
+rule #asWord(B1 : B2 : B3 : B4 : WS) >>Int 224 => #asWord(B1 : B2 : B3 : B4 : .WordStack)
+requires #sizeWordStack(WS) ==Int 28
+
     // for [revert-invalid_function_identifier-0_4]
 
     rule #bufSeg(#buf(N, 0), 0, M) => #buf(M, 0) requires 0 <Int M andBool M <Int N
