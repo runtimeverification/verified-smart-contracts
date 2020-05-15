@@ -375,6 +375,7 @@ module LEMMAS
     // included: [START0..[START..END]..END0]
     rule selectRange(storeRange(M, START0, WIDTH0, WS), START, WIDTH) => WS [ START -Int START0 .. WIDTH ]
       requires START0 <=Int START andBool START +Int WIDTH <=Int START0 +Int WIDTH0
+       andBool notBool(START0 ==Int START andBool WIDTH0 ==Int WIDTH)
 
     // no overlap: [START..END]..[START0..END0]  or  [START0..END0]..[START..END]
     rule selectRange(storeRange(M, START0, WIDTH0, WS), START, WIDTH) => selectRange(M, START, WIDTH)
