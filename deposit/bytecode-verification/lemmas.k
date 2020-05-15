@@ -46,6 +46,8 @@ module LEMMAS
 
     rule #hashedLocation("Array", BASE, OFFSET OFFSETS) => #hashedLocation("Array", keccakIntList(BASE) +Word OFFSET, OFFSETS)
 
+    rule #hashedLocation("StaticArray", BASE, OFFSET OFFSETS) => #hashedLocation("StaticArray", BASE +Word OFFSET, OFFSETS)
+
     //////////////////////////
     // Range Predicates
     //////////////////////////
