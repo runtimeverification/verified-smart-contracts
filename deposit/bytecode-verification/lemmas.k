@@ -487,7 +487,7 @@ module LEMMAS
 
     rule #sha256(DATA) => #asWord(#parseHexBytes(Sha256(#unparseByteStack(DATA)))) [concrete]
 
-
+/*
     //////////////////////////
     // Gas Abstraction
     //////////////////////////
@@ -497,10 +497,9 @@ module LEMMAS
     syntax Int ::= #symGas(Int, Int, Int, List, Int) [function]
     syntax Int ::= #symMem(Int, Set) [function]
 
-    /* Definition
-    rule #symGas(INIT, LB, UB, S, MU) => INIT - [LB, UB] - sum(S) - MU
-    rule #symMem(N, S) => maxInt(N, maxIntSet(S)) up/Int 32
-    */
+ // Definition
+ // rule #symGas(INIT, LB, UB, S, MU) => INIT - [LB, UB] - sum(S) - MU
+ // rule #symMem(N, S) => maxInt(N, maxIntSet(S)) up/Int 32
 
     syntax Int ::= Int "-Gas" Int [function]
     syntax Int ::= Int "+Gas" Int [function]
@@ -569,5 +568,6 @@ module LEMMAS
         requires #isConcrete(SCHED)
          andBool notBool ( #isConcrete(NEW) andBool #isConcrete(CURR) )
          andBool notBool Ghasdirtysstore << SCHED >>
+*/
 
 endmodule

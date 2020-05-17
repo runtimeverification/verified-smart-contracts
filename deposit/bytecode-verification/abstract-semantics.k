@@ -15,6 +15,15 @@ module ABSTRACT-SEMANTICS
     requires notBool #isConcrete(DATA)
     [trusted]
 
+// ignore gas
+
+rule <k> #gas [ _ , _ ] => . ... </k> [trusted]
+rule <k> #refund _      => . ... </k> [trusted]
+
+rule <k> GAS   => ?G ~> #push ... </k> ensures #rangeUInt(256, ?G) [trusted]
+rule <k> MSIZE => ?M ~> #push ... </k> ensures #rangeUInt(256, ?M) [trusted]
+
+/*
   // gas abstraction
 
   // see also verification.k
@@ -38,6 +47,7 @@ module ABSTRACT-SEMANTICS
   rule <k> #refund G:Int => . ... </k>
        <gas> GAVAIL => GAVAIL +Gas G </gas>
       [trusted]
+*/
 
 /* NOTE:
    These abstractions are over-approximation, except that out-of-gas exceptions are ignored.

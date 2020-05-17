@@ -76,6 +76,10 @@ requires WIDTH >=Int 8
  andBool #rangeUInt(8, V6)
  andBool #rangeUInt(8, V7)
 
+// for get_deposit_root
+
+rule (X +Int I) -Int X => I requires notBool #isConcrete(X) andBool #isConcrete(I)
+
     // for [revert-invalid_function_identifier-0_4]
 
     rule #bufSeg(#buf(N, 0), 0, M) => #buf(M, 0) requires 0 <Int M andBool M <Int N
