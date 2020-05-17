@@ -20,6 +20,8 @@ SPEC_NAMES += init-revert
 SPEC_NAMES += get_deposit_root-success-test
 
 SPEC_NAMES += get_deposit_root-success-init
+SPEC_NAMES += get_deposit_root-success-init_loop
+SPEC_NAMES += get_deposit_root-success-loop-enter
 SPEC_NAMES += get_deposit_root-success-loop-enter-then
 SPEC_NAMES += get_deposit_root-success-loop-enter-else
 SPEC_NAMES += get_deposit_root-success-loop-exit
@@ -54,3 +56,8 @@ SPEC_NAMES += revert-invalid_function_identifier-ge_4-ge_32
 export K_OPTS=-Xmx16g
 
 include ../../resources/kprove.mak
+
+# non-standard spec generation
+
+$(SPECS_DIR)/$(SPEC_GROUP)/get_deposit_root-success-init_loop-spec.k: $(TMPLS) $(SPEC_INI)
+	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) get_deposit_root-success-init_loop get_deposit_root-success-loop-enter-trusted get_deposit_root-success-init_loop > $@

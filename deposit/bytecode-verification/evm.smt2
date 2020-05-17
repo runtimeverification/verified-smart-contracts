@@ -1,5 +1,5 @@
-; (set-option :auto-config false)
-; (set-option :smt.mbqi false)
+(set-option :auto-config false)
+(set-option :smt.mbqi false)
 ; (set-option :smt.array.extensional false)
 
 ; int extra

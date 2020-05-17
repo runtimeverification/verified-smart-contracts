@@ -91,8 +91,8 @@ module LEMMAS
     rule 0 <=Int keccakIntList(_)             => true
     rule         keccakIntList(_) <Int pow256 => true
 
-    rule 0 <=Int  #sha256(_)             => true
-    rule          #sha256(_) <Int pow256 => true
+    rule 0 <=Int  #sha256(_)             => true [smt-lemma]
+    rule          #sha256(_) <Int pow256 => true [smt-lemma]
 
     syntax Bool ::= isStorage(Map) [function]
     rule 0 <=Int select(M, _)             => true requires isStorage(M)
