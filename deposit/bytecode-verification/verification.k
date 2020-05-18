@@ -99,6 +99,27 @@ requires #sizeWordStack(WS) ==Int 24
  andBool #rangeUInt(8, V6)
  andBool #rangeUInt(8, V7)
 
+syntax Int ::= #node(Int, Int, Map) [function, smtlib(nodeD)]
+rule #node(0, _, _) => 0
+rule #node(I +Int 1, N, M) => #if 1 &Int #size(I, N) ==Int 1
+                              #then #sha256(#buf(32, select(M, I)) ++ #buf(32, #node(I, N, M)))
+                              #else #sha256(#buf(32, #node(I, N, M)) ++ #buf(32, select(M, 33 +Int I)))
+                              #fi
+requires 0 <=Int I andBool I <Int 32
+
+rule 0 <=Int #node(_, _, _)             => true
+rule         #node(_, _, _) <Int pow256 => true
+
+syntax Int ::= #size(Int, Int) [function, smtlib(sizeD)]
+rule #size(0, N) => N
+rule #size(I +Int 1, N) => #size(I, N) /Int 2
+requires 0 <=Int I andBool I <Int 32
+
+rule 0 <=Int #size(_, _)             => true
+rule         #size(_, _) <Int pow256 => true
+
+
+
     // for [revert-invalid_function_identifier-0_4]
 
     rule #bufSeg(#buf(N, 0), 0, M) => #buf(M, 0) requires 0 <Int M andBool M <Int N
