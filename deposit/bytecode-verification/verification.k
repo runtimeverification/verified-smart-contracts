@@ -80,6 +80,25 @@ requires WIDTH >=Int 8
 
 rule (X +Int I) -Int X => I requires notBool #isConcrete(X) andBool #isConcrete(I)
 
+rule (X +Int I1) -Int (X +Int I2) => I1 -Int I2 requires notBool #isConcrete(X) andBool #isConcrete(I1) andBool #isConcrete(I2)
+
+rule X |Int Y => Y requires X ==Int 0
+
+rule #bufSeg(V0 : V1 : V2 : V3 : V4 : V5 : V6 : V7 : _, 0, 8) => V0 : V1 : V2 : V3 : V4 : V5 : V6 : V7 : .WordStack
+
+// masking first 64 bits
+rule #asWord(V0 : V1 : V2 : V3 : V4 : V5 : V6 : V7 : WS) &Int 115792089237316195417293883273301227089434195242432897623355228563449095127040
+  => #asWord(V0 : V1 : V2 : V3 : V4 : V5 : V6 : V7 : #buf(24, 0))
+requires #sizeWordStack(WS) ==Int 24
+ andBool #rangeUInt(8, V0)
+ andBool #rangeUInt(8, V1)
+ andBool #rangeUInt(8, V2)
+ andBool #rangeUInt(8, V3)
+ andBool #rangeUInt(8, V4)
+ andBool #rangeUInt(8, V5)
+ andBool #rangeUInt(8, V6)
+ andBool #rangeUInt(8, V7)
+
     // for [revert-invalid_function_identifier-0_4]
 
     rule #bufSeg(#buf(N, 0), 0, M) => #buf(M, 0) requires 0 <Int M andBool M <Int N
