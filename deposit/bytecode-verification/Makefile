@@ -19,6 +19,8 @@ SPEC_NAMES += init-revert
 
 SPEC_NAMES += get_deposit_root-success-test
 
+SPEC_NAMES += get_deposit_root-success-full
+
 SPEC_NAMES += get_deposit_root-success-init
 SPEC_NAMES += get_deposit_root-success-init_loop
 SPEC_NAMES += get_deposit_root-success-loop-enter
@@ -61,3 +63,6 @@ include ../../resources/kprove.mak
 
 $(SPECS_DIR)/$(SPEC_GROUP)/get_deposit_root-success-init_loop-spec.k: $(TMPLS) $(SPEC_INI)
 	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) get_deposit_root-success-init_loop get_deposit_root-success-loop-enter-trusted get_deposit_root-success-init_loop > $@
+
+$(SPECS_DIR)/$(SPEC_GROUP)/get_deposit_root-success-full-spec.k: $(TMPLS) $(SPEC_INI)
+	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) get_deposit_root-success-full get_deposit_root-success-loop-enter-trusted get_deposit_root-success-full > $@
