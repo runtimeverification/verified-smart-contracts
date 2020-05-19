@@ -138,6 +138,21 @@ requires 0 <=Int I andBool I <Int 32
 rule 0 <=Int #size(_, _)             => true
 rule         #size(_, _) <Int pow256 => true
 
+// to_little_endian_64
+
+syntax Map ::= ".IMap" [function, smtlib(emptyIMap), smt-prelude]
+rule select(.IMap, _) => 0
+rule selectRange(.IMap, _, W) => #buf(W, 0) requires W >=Int 0
+
+// deposit
+
+// masking last 24 bytes
+rule #bufSeg(#buf(32, #asWord(V0 : V1 : V2 : V3 : V4 : V5 : V6 : V7 : WS) |Int (X &Int 6277101735386680763835789423207666416102355444464034512895)), 0, 8)
+  => V0 : V1 : V2 : V3 : V4 : V5 : V6 : V7 : .WordStack
+requires WS ==K #buf(24, 0) // relaxed: #sizeWordStack(WS) ==Int 24
+ andBool #rangeUInt(256, X)
+
+
 
 
     // for [revert-invalid_function_identifier-0_4]
