@@ -24,6 +24,8 @@ SPEC_NAMES += get_deposit_root-revert
 SPEC_NAMES += get_deposit_count-success
 SPEC_NAMES += get_deposit_count-revert
 
+SPEC_NAMES += deposit-success-test
+
 SPEC_NAMES += deposit-success-data
 SPEC_NAMES += deposit-success-insert-init-then
 SPEC_NAMES += deposit-success-insert-init-else
