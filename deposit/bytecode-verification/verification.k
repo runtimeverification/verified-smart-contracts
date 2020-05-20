@@ -154,6 +154,9 @@ requires WS ==K #buf(24, 0) // relaxed: #sizeWordStack(WS) ==Int 24
 
 rule 1 &Int X => X modInt 2 [concrete, smt-lemma]
 
+rule isStorage(store(M, _, _)) => true
+requires isStorage(M)
+
 
 
     // for [revert-invalid_function_identifier-0_4]
