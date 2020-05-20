@@ -94,9 +94,9 @@ module LEMMAS
     rule 0 <=Int  #sha256(_)             => true [smt-lemma]
     rule          #sha256(_) <Int pow256 => true [smt-lemma]
 
-    syntax Bool ::= isStorage(Map) [function]
-    rule 0 <=Int select(M, _)             => true requires isStorage(M)
-    rule         select(M, _) <Int pow256 => true requires isStorage(M)
+    syntax Bool ::= isStorage(Map) [function, smtlib(isStorage)]
+    rule 0 <=Int select(M, _)             => true requires isStorage(M) [smt-lemma]
+    rule         select(M, _) <Int pow256 => true requires isStorage(M) [smt-lemma]
 
 
     //////////////////////////

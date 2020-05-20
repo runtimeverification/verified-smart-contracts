@@ -1,3 +1,4 @@
+K_VERSION_FILE:=.build/.k.rev
 KEVM_VERSION_FILE:=.build/.kevm.rev
 
 LOCAL_LEMMAS:=verification.k \
