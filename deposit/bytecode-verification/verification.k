@@ -152,6 +152,7 @@ rule #bufSeg(#buf(32, #asWord(V0 : V1 : V2 : V3 : V4 : V5 : V6 : V7 : WS) |Int (
 requires WS ==K #buf(24, 0) // relaxed: #sizeWordStack(WS) ==Int 24
  andBool #rangeUInt(256, X)
 
+rule 1 &Int X => X modInt 2 [concrete, smt-lemma]
 
 
 
