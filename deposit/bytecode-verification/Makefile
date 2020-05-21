@@ -25,17 +25,8 @@ SPEC_NAMES += get_deposit_root-revert
 SPEC_NAMES += get_deposit_count-success
 SPEC_NAMES += get_deposit_count-revert
 
-SPEC_NAMES += deposit-success-test
-SPEC_NAMES += deposit-success-loop
+SPEC_NAMES += deposit-success
 SPEC_NAMES += deposit_success_loop
-SPEC_NAMES += deposit-success-full
-
-SPEC_NAMES += deposit-success-data
-SPEC_NAMES += deposit-success-insert-init-then
-SPEC_NAMES += deposit-success-insert-init-else
-SPEC_NAMES += deposit-success-insert-loop-enter-then
-SPEC_NAMES += deposit-success-insert-loop-enter-else
-SPEC_NAMES += deposit-success-insert-loop-exit
 
 SPEC_NAMES += deposit-revert-1
 SPEC_NAMES += deposit-revert-2
@@ -62,8 +53,5 @@ include ../../resources/kprove.mak
 $(SPECS_DIR)/$(SPEC_GROUP)/get_deposit_root-success-spec.k: $(TMPLS) $(SPEC_INI)
 	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) get_deposit_root-success get_deposit_root-success-loop-trusted get_deposit_root-success > $@
 
-$(SPECS_DIR)/$(SPEC_GROUP)/deposit-success-test-spec.k: $(TMPLS) $(SPEC_INI)
-	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) deposit-success-test deposit_success_loop-trusted deposit-success-test > $@
-
-$(SPECS_DIR)/$(SPEC_GROUP)/deposit-success-full-spec.k: $(TMPLS) $(SPEC_INI)
-	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) deposit-success-full deposit_success_loop-trusted deposit-success-full > $@
+$(SPECS_DIR)/$(SPEC_GROUP)/deposit-success-spec.k: $(TMPLS) $(SPEC_INI)
+	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) deposit-success deposit_success_loop-trusted deposit-success > $@
