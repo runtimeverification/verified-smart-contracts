@@ -433,7 +433,7 @@ module LEMMAS
     rule M1 ==IMap M2 except _ => true
       requires M1 ==K M2  // structural equality
 
-    syntax Set ::= keys(Map) [function]
+  //syntax Set ::= keys(Map) [function]
 
     rule K1 in keys(store(M, K2, _)) => true          requires K1  ==Int K2
     rule K1 in keys(store(M, K2, _)) => K1 in keys(M) requires K1 =/=Int K2
