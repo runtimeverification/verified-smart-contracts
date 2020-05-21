@@ -8,7 +8,7 @@ rule
     <evm>
       <output> {OUTPUT} </output>
       <statusCode> {STATUS_CODE} </statusCode>
-      <touchedAccounts> _ => _ </touchedAccounts>
+      <touchedAccounts> _ => ?_ </touchedAccounts>
       <callState>
         <program> #parseByteStack({CODE}) </program>
         <jumpDests> #computeValidJumpDests(#parseByteStack({CODE})) </jumpDests>
@@ -21,7 +21,7 @@ rule
         <pc> {PC} </pc>
         <gas> {GAS} </gas>
         <memoryUsed> {MEMORY_USED} </memoryUsed>
-        <callGas> _ => _ </callGas>
+        <callGas> _ => ?_ </callGas>
         <static> false </static> // NOTE: non-static call
         <callDepth> {CALL_DEPTH} </callDepth>
       </callState>
