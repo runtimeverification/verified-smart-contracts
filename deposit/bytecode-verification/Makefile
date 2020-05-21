@@ -19,14 +19,14 @@ SPEC_NAMES += init-success
 SPEC_NAMES += init-revert
 
 SPEC_NAMES += get_deposit_root-success
-SPEC_NAMES += get_deposit_root-success-loop
+SPEC_NAMES += loop-get_deposit_root
 SPEC_NAMES += get_deposit_root-revert
 
 SPEC_NAMES += get_deposit_count-success
 SPEC_NAMES += get_deposit_count-revert
 
 SPEC_NAMES += deposit-success
-SPEC_NAMES += deposit_success_loop
+SPEC_NAMES += loop-deposit
 
 SPEC_NAMES += deposit-revert-1
 SPEC_NAMES += deposit-revert-2
@@ -51,7 +51,7 @@ include ../../resources/kprove.mak
 # non-standard spec generation
 
 $(SPECS_DIR)/$(SPEC_GROUP)/get_deposit_root-success-spec.k: $(TMPLS) $(SPEC_INI)
-	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) get_deposit_root-success get_deposit_root-success-loop-trusted get_deposit_root-success > $@
+	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) get_deposit_root-success loop-get_deposit_root-trusted get_deposit_root-success > $@
 
 $(SPECS_DIR)/$(SPEC_GROUP)/deposit-success-spec.k: $(TMPLS) $(SPEC_INI)
-	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) deposit-success deposit_success_loop-trusted deposit-success > $@
+	python3 $(RESOURCES)/gen-spec.py $(TMPLS) $(SPEC_INI) deposit-success loop-deposit-trusted deposit-success > $@
