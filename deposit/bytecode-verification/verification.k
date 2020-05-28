@@ -159,9 +159,18 @@ requires isStorage(M)
 
 // for revert-invalid_function_identifier-ge_4
 
-rule #asWord(#takeAux(32, #buf(SIZE, DATA), .WordStack)) >>Int 224
-  => #asWord(#bufSeg(#buf(SIZE, DATA), 0, 4))
-requires SIZE >=Int 4
+//rule #asWord(#takeAux(32, #buf(SIZE, DATA), .WordStack)) >>Int 224
+//  => #asWord(#bufSeg(#buf(SIZE, DATA), 0, 4))
+//requires SIZE >=Int 4
+
+rule #take(4, #takeAux(32, WS, .WordStack))
+  => #take(4, WS)
+
+// for deposit-calldata-decoding
+
+rule #asWord(WS) >>Int 224
+  => #asWord(#take(4, WS))
+requires #sizeWordStack(WS) ==Int 32
 
 
 

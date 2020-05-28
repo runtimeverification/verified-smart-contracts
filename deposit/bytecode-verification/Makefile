@@ -35,6 +35,8 @@ SPEC_NAMES += deposit-revert-4
 SPEC_NAMES += deposit-revert-5
 
 SPEC_NAMES += deposit-calldata-decoding-success
+SPEC_NAMES += deposit-calldata-decoding-revert
+
 SPEC_NAMES += deposit-calldata-decoding-revert-1
 SPEC_NAMES += deposit-calldata-decoding-revert-2
 SPEC_NAMES += deposit-calldata-decoding-revert-3
