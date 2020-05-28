@@ -27,12 +27,7 @@ SPEC_NAMES += get_deposit_count-revert
 
 SPEC_NAMES += deposit-success
 SPEC_NAMES += loop-deposit
-
-SPEC_NAMES += deposit-revert-1
-SPEC_NAMES += deposit-revert-2
-SPEC_NAMES += deposit-revert-3
-SPEC_NAMES += deposit-revert-4
-SPEC_NAMES += deposit-revert-5
+SPEC_NAMES += deposit-revert
 
 SPEC_NAMES += deposit-calldata-decoding-success
 SPEC_NAMES += deposit-calldata-decoding-revert
