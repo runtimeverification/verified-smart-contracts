@@ -43,8 +43,7 @@ SPEC_NAMES += deposit-calldata-decoding-revert-5
 SPEC_NAMES += deposit-calldata-decoding-revert-6
 
 SPEC_NAMES += revert-invalid_function_identifier-lt_4
-SPEC_NAMES += revert-invalid_function_identifier-ge_4-lt_32
-SPEC_NAMES += revert-invalid_function_identifier-ge_4-ge_32
+SPEC_NAMES += revert-invalid_function_identifier-ge_4
 
 export K_OPTS=-Xmx16g
 

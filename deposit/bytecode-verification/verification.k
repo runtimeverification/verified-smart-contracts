@@ -157,6 +157,13 @@ rule 1 &Int X => X modInt 2 [concrete, smt-lemma]
 rule isStorage(store(M, _, _)) => true
 requires isStorage(M)
 
+// for revert-invalid_function_identifier-ge_4
+
+rule #asWord(#takeAux(32, #buf(SIZE, DATA), .WordStack)) >>Int 224
+  => #asWord(#bufSeg(#buf(SIZE, DATA), 0, 4))
+requires SIZE >=Int 4
+
+
 
 
     // for [revert-invalid_function_identifier-0_4]

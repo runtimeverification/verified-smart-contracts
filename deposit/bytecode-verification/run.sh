@@ -98,4 +98,7 @@
   kprove $OPTS -m VERIFICATION    --branching-allowed 0  --boundary-cells k    ~/deposit2/verified-smart-contracts/specs/java/deposit/deposit-revert-4-spec.k
   kprove $OPTS -m VERIFICATION    --branching-allowed 0  --boundary-cells k    ~/deposit2/verified-smart-contracts/specs/java/deposit/deposit-revert-5-spec.k
 
+  kprove $OPTS -m VERIFICATION    --branching-allowed 0  --boundary-cells k    ~/deposit2/verified-smart-contracts/specs/java/deposit/revert-invalid_function_identifier-lt_4-spec.k
+  kprove $OPTS -m VERIFICATION    --branching-allowed 0  --boundary-cells k    ~/deposit2/verified-smart-contracts/specs/java/deposit/revert-invalid_function_identifier-ge_4-spec.k
+
   date
