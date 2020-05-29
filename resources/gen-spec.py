@@ -30,8 +30,11 @@ def inherit_get(config, section):
     if not section:
         return safe_get(config, 'root')
     else:
-        parent = inherit_get(config, '-'.join(section.split('-')[:-1]))
         current = safe_get(config, section)
+        if '_inherit_' in current:
+            parent = inherit_get(config, current['_inherit_'])
+        else:
+            parent = inherit_get(config, '-'.join(section.split('-')[:-1]))
         merged = merge_two_dicts(parent, current) # TODO: for Python 3.5 or higher: {**parent, **current}
         for key in list(merged.keys()):
             if key.startswith('+'):
