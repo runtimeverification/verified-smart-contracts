@@ -79,24 +79,24 @@
   export OPTS+=" --smt-prelude evm.smt2"
   export OPTS+=" --concrete-rules $CONCRETE_RULES"
 
-# kprove $OPTS -m VERIFICATION    --branching-allowed 0  --boundary-cells k    ~/deposit2/verified-smart-contracts/specs/java/deposit/init-success-spec.k
-# kprove $OPTS -m VERIFICATION    --branching-allowed 0  --boundary-cells k    ~/deposit2/verified-smart-contracts/specs/java/deposit/init-revert-spec.k
+  kprove $OPTS -m VERIFICATION    --branching-allowed 0  --boundary-cells k    ~/deposit2/verified-smart-contracts/specs/java/deposit/init-success-spec.k
+  kprove $OPTS -m VERIFICATION    --branching-allowed 0  --boundary-cells k    ~/deposit2/verified-smart-contracts/specs/java/deposit/init-revert-spec.k
 
-# kprove $OPTS -m VERIFICATION    --branching-allowed 0  --boundary-cells k    ~/deposit2/verified-smart-contracts/specs/java/deposit/get_deposit_root-success-spec.k
-# kprove $OPTS -m VERIFICATION-L1 --branching-allowed 1  --boundary-cells k,pc ~/deposit2/verified-smart-contracts/specs/java/deposit/get_deposit_root-success-loop-spec.k
-# kprove $OPTS -m VERIFICATION    --branching-allowed 0  --boundary-cells k    ~/deposit2/verified-smart-contracts/specs/java/deposit/get_deposit_root-revert-spec.k
+  kprove $OPTS -m VERIFICATION    --branching-allowed 0  --boundary-cells k    ~/deposit2/verified-smart-contracts/specs/java/deposit/get_deposit_root-success-spec.k
+  kprove $OPTS -m VERIFICATION-L1 --branching-allowed 1  --boundary-cells k,pc ~/deposit2/verified-smart-contracts/specs/java/deposit/get_deposit_root-success-loop-spec.k
+  kprove $OPTS -m VERIFICATION    --branching-allowed 0  --boundary-cells k    ~/deposit2/verified-smart-contracts/specs/java/deposit/get_deposit_root-revert-spec.k
 
-# kprove $OPTS -m VERIFICATION    --branching-allowed 0  --boundary-cells k    ~/deposit2/verified-smart-contracts/specs/java/deposit/get_deposit_count-success-spec.k
-# kprove $OPTS -m VERIFICATION    --branching-allowed 0  --boundary-cells k    ~/deposit2/verified-smart-contracts/specs/java/deposit/get_deposit_count-revert-spec.k
+  kprove $OPTS -m VERIFICATION    --branching-allowed 0  --boundary-cells k    ~/deposit2/verified-smart-contracts/specs/java/deposit/get_deposit_count-success-spec.k
+  kprove $OPTS -m VERIFICATION    --branching-allowed 0  --boundary-cells k    ~/deposit2/verified-smart-contracts/specs/java/deposit/get_deposit_count-revert-spec.k
 
-# kprove $OPTS -m VERIFICATION    --branching-allowed 31 --boundary-cells k    ~/deposit2/verified-smart-contracts/specs/java/deposit/deposit-success-spec.k
-# kprove $OPTS -m VERIFICATION    --branching-allowed 0  --boundary-cells k,pc ~/deposit2/verified-smart-contracts/specs/java/deposit/deposit-success-loop-spec.k
-# kprove $OPTS -m VERIFICATION    --branching-allowed 4  --boundary-cells k    ~/deposit2/verified-smart-contracts/specs/java/deposit/deposit-revert-spec.k
+  kprove $OPTS -m VERIFICATION    --branching-allowed 31 --boundary-cells k    ~/deposit2/verified-smart-contracts/specs/java/deposit/deposit-success-spec.k
+  kprove $OPTS -m VERIFICATION    --branching-allowed 0  --boundary-cells k,pc ~/deposit2/verified-smart-contracts/specs/java/deposit/deposit-success-loop-spec.k
+  kprove $OPTS -m VERIFICATION    --branching-allowed 4  --boundary-cells k    ~/deposit2/verified-smart-contracts/specs/java/deposit/deposit-revert-spec.k
 
   kprove $OPTS -m VERIFICATION    --branching-allowed 0  --boundary-cells k,pc ~/deposit2/verified-smart-contracts/specs/java/deposit/deposit-calldata-decoding-success-spec.k
   kprove $OPTS -m VERIFICATION    --branching-allowed 9  --boundary-cells k    ~/deposit2/verified-smart-contracts/specs/java/deposit/deposit-calldata-decoding-revert-spec.k
 
-# kprove $OPTS -m VERIFICATION    --branching-allowed 0  --boundary-cells k    ~/deposit2/verified-smart-contracts/specs/java/deposit/revert-invalid_function_identifier-lt_4-spec.k
-# kprove $OPTS -m VERIFICATION    --branching-allowed 0  --boundary-cells k    ~/deposit2/verified-smart-contracts/specs/java/deposit/revert-invalid_function_identifier-ge_4-spec.k
+  kprove $OPTS -m VERIFICATION    --branching-allowed 0  --boundary-cells k    ~/deposit2/verified-smart-contracts/specs/java/deposit/revert-invalid_function_identifier-lt_4-spec.k
+  kprove $OPTS -m VERIFICATION    --branching-allowed 0  --boundary-cells k    ~/deposit2/verified-smart-contracts/specs/java/deposit/revert-invalid_function_identifier-ge_4-spec.k
 
   date
