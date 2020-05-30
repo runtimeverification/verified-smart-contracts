@@ -487,13 +487,95 @@ module LEMMAS
 
     rule #sha256(DATA) => #asWord(#parseHexBytes(Sha256(#unparseByteStack(DATA)))) [concrete]
 
-/*
     //////////////////////////
     // Gas Abstraction
     //////////////////////////
 
     // see also abstract-semantics.k
 
+
+syntax Int ::= Int "-Gas" Int [function]
+syntax Int ::= Int "+Gas" Int [function]
+
+syntax Int ::= #symGas(Schedule, Int, Int, Int) [function]
+// rule #symGas(SCHED, GINIT, GUSED, MU) => GINIT -Int GUSED -Int Cmem(SCHED, MU)
+
+syntax Int ::= #symMem(Int) [function]
+// rule #symMem(MU) => MU up/Int 32
+
+rule #symGas(SCHED, I, G, MU) -Gas G' => #symGas(SCHED, I, G +Int G', MU)
+requires #isConcrete(G') orBool #isItv(G')
+
+rule #symGas(SCHED, I, G, MU) -Gas (Cgascap(SCHED, GCAP, GAVAIL, GEXTRA) +Int GEXTRA)
+  => #symGas(SCHED, I, G +Int GEXTRA +Int Cgascap(SCHED, GCAP, GAVAIL, GEXTRA), MU)
+requires #isConcrete(GEXTRA) orBool #isItv(GEXTRA)
+
+rule #symGas(SCHED, I, G, MU) -Gas (Cmem(SCHED, MU') -Int Cmem(SCHED, MU))
+  => #symGas(SCHED, I, G, MU')
+
+rule #symGas(SCHED, I, G +Int CAP, MU) +Gas #symGas(SCHED, CAP, USED, #symMem(MU'))
+  => #symGas(SCHED, I, G +Int USED +Int Cmem(SCHED, MU' up/Int 32), MU)
+
+
+rule (A +Int I2) +Int I3 => A +Int (I2 +Int I3)
+requires notBool #isConcrete(A)
+ andBool ( #isConcrete(I2) orBool #isItv(I2) )
+ andBool ( #isConcrete(I3) orBool #isItv(I3) )
+
+
+// interval abstraction -- both bounds must be concrete
+syntax Int ::= #itv(Int, Int) [function]
+
+syntax Bool ::= #isItv(Int) [function]
+rule #isItv(#itv(_, _)) => true
+
+rule #itv(I1, I2) +Int J            => #itv(I1 +Int J,  I2 +Int J ) requires #isConcrete(J)
+rule #itv(I1, I2) +Int #itv(J1, J2) => #itv(I1 +Int J1, I2 +Int J2)
+rule I            +Int #itv(J1, J2) => #itv(I  +Int J1, I  +Int J2) requires #isConcrete(I)
+
+
+rule #memoryUsageUpdate(#symMem(MU), START, WIDTH) => #symMem(maxInt(MU, START +Int WIDTH))
+requires WIDTH >Int 0
+
+rule #memoryUsageUpdate(MU, START, WIDTH) => #symMem(maxInt(MU *Int 32, START +Int WIDTH))
+requires WIDTH >Int 0
+ andBool #isConcrete(MU)
+ andBool notBool (#isConcrete(START) andBool #isConcrete(WIDTH))
+
+rule maxInt(I1, I2) => I1 requires I1 >=Int I2
+rule maxInt(I1, I2) => I2 requires I1  <Int I2
+
+
+syntax Bool ::= #isInf(Int) [function]
+
+rule #isInf(#symGas(_, I, _, _)) => true requires #isInf(I)
+rule #isInf(Cgascap(_, GCAP, GAVAIL, GEXTRA)) => true requires #isInf(GCAP) andBool #isInf(GAVAIL) andBool notBool #isInf(GEXTRA)
+rule #isInf(Cmem(_, _)) => false
+
+rule #isInf(I1 -Int I2) => true requires #isInf(I1) andBool notBool #isInf(I2)
+rule #isInf(I1 -Int I2) => false requires notBool #isInf(I1) andBool notBool #isInf(I2)
+
+rule #isInf(I1 +Int I2) => true requires #isInf(I1) orBool #isInf(I2)
+
+rule #isInf(I) => false requires I <Int 2 ^Int 64 // practical maximum gas cost
+
+rule G1 <=Int G2 => true requires notBool #isInf(G1) andBool #isInf(G2)
+
+
+
+rule Csstore(SCHED, NEW, CURR, ORIG) => #itv(Gsstorereset < SCHED >, Gsstoreset < SCHED >)
+    requires #isConcrete(SCHED)
+     andBool notBool ( #isConcrete(NEW) andBool #isConcrete(CURR) )
+     andBool notBool Ghasdirtysstore << SCHED >>
+
+//rule Cgascap(_, GCAP, GAVAIL, GEXTRA) => GCAP requires notBool #isInf(GCAP) andBool #isInf(GAVAIL) andBool notBool #isInf(GEXTRA)
+
+
+
+
+
+
+/*
     syntax Int ::= #symGas(Int, Int, Int, List, Int) [function]
     syntax Int ::= #symMem(Int, Set) [function]
 

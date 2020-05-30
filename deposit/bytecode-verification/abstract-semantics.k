@@ -15,19 +15,29 @@ module ABSTRACT-SEMANTICS
     requires notBool #isConcrete(DATA)
     [trusted]
 
-// ignore gas
-
-rule <k> #gas [ _ , _ ] => . ... </k> [trusted]
-rule <k> #refund _      => . ... </k> [trusted]
-
-rule <k> GAS   => ?G ~> #push ... </k> ensures #rangeUInt(256, ?G) [trusted]
-rule <k> MSIZE => ?M ~> #push ... </k> ensures #rangeUInt(256, ?M) [trusted]
-
-/*
   // gas abstraction
 
   // see also verification.k
 
+rule <k> G':Int ~> #deductGas => . ... </k>
+     <gas> G => G -Gas G' </gas>
+    [trusted]
+
+//rule <k> MU':Int ~> #deductMemory => . ... </k>
+//     <gas> #symGas(_, _, MU => MU') </gas>
+//     <memoryUsed> MU => MU' </memoryUsed>
+//    [trusted, matching(#symGas)]
+
+rule <k> GCALL:Int ~> #allocateCallGas => . ... </k>
+     <callGas> _ => #symGas(SCHED, GCALL, 0, #symMem(0)) </callGas>
+     <schedule> SCHED </schedule>
+    [trusted]
+
+rule <k> #refund G:Int => . ... </k>
+     <gas> GAVAIL => GAVAIL +Gas G </gas>
+    [trusted]
+
+/*
   rule <k> G':Int ~> #deductGas => . ... </k>
        <gas> G => G -Gas G' </gas>
        requires notBool (#isConcrete(G) andBool #isConcrete(G'))
