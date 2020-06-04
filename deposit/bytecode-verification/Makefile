@@ -32,6 +32,9 @@ SPEC_NAMES += deposit-revert
 SPEC_NAMES += deposit-calldata-decoding-success
 SPEC_NAMES += deposit-calldata-decoding-revert
 
+SPEC_NAMES += supportsInterface-success
+SPEC_NAMES += supportsInterface-revert
+
 SPEC_NAMES += revert-invalid_function_identifier-lt_4
 SPEC_NAMES += revert-invalid_function_identifier-ge_4
 

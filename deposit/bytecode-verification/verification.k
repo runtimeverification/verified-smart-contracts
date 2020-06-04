@@ -172,7 +172,42 @@ rule #asWord(WS) >>Int 224
   => #asWord(#take(4, WS))
 requires #sizeWordStack(WS) ==Int 32
 
+// for supportsInterface
 
+syntax TypedArg ::= #bytes4 ( Int )
+
+rule #typeName(   #bytes4( _ )) => "bytes4"
+rule #lenOfHead(  #bytes4( _ )) => 32
+rule #isStaticType(  #bytes4( _ )) => true
+rule #enc(#bytes4( DATA )) => #buf(4, #getValue(#bytes4( DATA ))) ++ #buf(28, 0)
+rule #getValue(#bytes4( DATA )) => DATA requires #rangeUInt(32, DATA)
+
+syntax Int ::= "minUInt32"
+             | "maxUInt32"
+
+rule minUInt32 => 0          [macro]
+rule maxUInt32 => 4294967295 [macro]
+
+rule #rangeUInt(32, X) => #range(minUInt32 <= X <= maxUInt32) [macro]
+
+// masking first 32 bits
+rule 115792089210356248756420345214020892766250353992003419616917011526809519390720 &Int #asWord(WS)
+  => #asWord(WS [ 0 .. 4 ] ++ #buf(28, 0))
+requires #sizeWordStack(WS) ==Int 32
+
+rule #asWord(WS) &Int 115792089210356248756420345214020892766250353992003419616917011526809519390720
+  => #asWord(WS [ 0 .. 4 ] ++ #buf(28, 0))
+requires #sizeWordStack(WS) ==Int 32
+
+rule bool2Word(B) => #if B #then 1 #else 0 #fi
+
+rule N ==K #asWord(WS ++ ZP)
+  => N /Int (2 ^Int (#sizeWordStack(ZP) *Int 8)) ==K #asWord(WS)
+requires N %Int (2 ^Int (#sizeWordStack(ZP) *Int 8)) ==Int 0
+ andBool ZP ==K #buf(#sizeWordStack(ZP), 0)
+ andBool #sizeWordStack(WS ++ ZP) ==Int 32
+ andBool #rangeUInt(256, N)
+ andBool #isConcrete(N)
 
 
     // for [revert-invalid_function_identifier-0_4]
