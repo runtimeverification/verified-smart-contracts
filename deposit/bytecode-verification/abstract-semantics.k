@@ -26,6 +26,7 @@ rule <k> #assert(true) => . ... </k>
 rule <k> G':Int ~> #deductGas => . ... </k>
      <gas> G => G -Gas G' </gas>
      requires #getKLabelString(G) ==String "#symGas"
+      andBool #isInf(G)
     [trusted]
 
 //rule <k> MU':Int ~> #deductMemory => . ... </k>
