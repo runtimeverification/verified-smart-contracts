@@ -25,6 +25,7 @@ rule <k> #assert(true) => . ... </k>
 //rule <k> G':Int ~> #deductGas => #assert(G >=Int G') ... </k>
 rule <k> G':Int ~> #deductGas => . ... </k>
      <gas> G => G -Gas G' </gas>
+     requires #getKLabelString(G) ==String "#symGas"
     [trusted]
 
 //rule <k> MU':Int ~> #deductMemory => . ... </k>
@@ -33,7 +34,7 @@ rule <k> G':Int ~> #deductGas => . ... </k>
 //    [trusted, matching(#symGas)]
 
 rule <k> GCALL:Int ~> #allocateCallGas => . ... </k>
-     <callGas> _ => #symGas(SCHED, GCALL, 0, #symMem(0)) </callGas>
+     <callGas> _ => #symGas(SCHED, GCALL, 0, 0, 0, #symMem(0)) </callGas>
      <schedule> SCHED </schedule>
     [trusted]
 

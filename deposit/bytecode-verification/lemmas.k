@@ -497,24 +497,27 @@ module LEMMAS
 syntax Int ::= Int "-Gas" Int [function]
 syntax Int ::= Int "+Gas" Int [function]
 
-syntax Int ::= #symGas(Schedule, Int, Int, Int) [function]
-// rule #symGas(SCHED, GINIT, GUSED, MU) => GINIT -Int GUSED -Int Cmem(SCHED, MU)
+//syntax Int ::= #evalGasCost(Int) [function]
+//rule #evalGasCost(#symGas(SCHED, _, GBASE, GUSED, 0, #symMem(MU))) => GBASE +Int GUSED +Int Cmem(SCHED, MU up/Int 32)
+
+syntax Int ::= #symGas(Schedule, Int, Int, Int, Int, Int) [function]
+// rule #symGas(SCHED, GINIT, GBASE, GUSED, GCALL, MU) => GINIT -Int GBASE -Int GUSED -Int GCALL -Int Cmem(SCHED, MU)
 
 syntax Int ::= #symMem(Int) [function]
 // rule #symMem(MU) => MU up/Int 32
 
-rule #symGas(SCHED, I, G, MU) -Gas G' => #symGas(SCHED, I, G +Int G', MU)
+rule #symGas(SCHED, I, B, G, 0, MU) -Gas G' => #symGas(SCHED, I, B, G +Int G', 0, MU)
 requires #isConcrete(G') orBool #isItv(G')
 
-rule #symGas(SCHED, I, G, MU) -Gas (Cgascap(SCHED, GCAP, GAVAIL, GEXTRA) +Int GEXTRA)
-  => #symGas(SCHED, I, G +Int GEXTRA +Int Cgascap(SCHED, GCAP, GAVAIL, GEXTRA), MU)
+rule #symGas(SCHED, I, B, G, 0, MU) -Gas (Cgascap(SCHED, GCAP, GAVAIL, GEXTRA) +Int GEXTRA)
+  => #symGas(SCHED, I, B, G +Int GEXTRA, Cgascap(SCHED, GCAP, GAVAIL, GEXTRA), MU)
 requires #isConcrete(GEXTRA) orBool #isItv(GEXTRA)
 
-rule #symGas(SCHED, I, G, MU) -Gas (Cmem(SCHED, MU') -Int Cmem(SCHED, MU))
-  => #symGas(SCHED, I, G, MU')
+rule #symGas(SCHED, I, B, G, 0, MU) -Gas (Cmem(SCHED, MU') -Int Cmem(SCHED, MU))
+  => #symGas(SCHED, I, B, G, 0, MU')
 
-rule #symGas(SCHED, I, G +Int CAP, MU) +Gas #symGas(SCHED, CAP, USED, #symMem(MU'))
-  => #symGas(SCHED, I, G +Int USED +Int Cmem(SCHED, MU' up/Int 32), MU)
+rule #symGas(SCHED, I, B, G, CAP, MU) +Gas #symGas(SCHED, CAP, 0, USED, 0, #symMem(MU'))
+  => #symGas(SCHED, I, B, G +Int USED +Int Cmem(SCHED, MU' up/Int 32), 0, MU)
 
 
 rule (A +Int I2) +Int I3 => A +Int (I2 +Int I3)
@@ -548,7 +551,7 @@ rule maxInt(I1, I2) => I2 requires I1  <Int I2
 
 syntax Bool ::= #isInf(Int) [function]
 
-rule #isInf(#symGas(_, I, _, _)) => true requires #isInf(I)
+rule #isInf(#symGas(_, I, _, _, _, _)) => true requires #isInf(I)
 rule #isInf(Cgascap(_, GCAP, GAVAIL, GEXTRA)) => true requires #isInf(GCAP) andBool #isInf(GAVAIL) andBool notBool #isInf(GEXTRA)
 rule #isInf(Cmem(_, _)) => false
 
