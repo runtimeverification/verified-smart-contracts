@@ -19,6 +19,10 @@ module ABSTRACT-SEMANTICS
 
   // see also verification.k
 
+rule <k> #assert(true) => . ... </k>
+    [trusted]
+
+//rule <k> G':Int ~> #deductGas => #assert(G >=Int G') ... </k>
 rule <k> G':Int ~> #deductGas => . ... </k>
      <gas> G => G -Gas G' </gas>
     [trusted]

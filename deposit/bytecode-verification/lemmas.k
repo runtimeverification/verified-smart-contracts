@@ -559,7 +559,7 @@ rule #isInf(I1 +Int I2) => true requires #isInf(I1) orBool #isInf(I2)
 
 rule #isInf(I) => false requires I <Int 2 ^Int 64 // practical maximum gas cost
 
-rule G1 <=Int G2 => true requires notBool #isInf(G1) andBool #isInf(G2)
+//rule G1 <=Int G2 => true requires notBool #isInf(G1) andBool #isInf(G2)
 
 
 
@@ -570,6 +570,8 @@ rule Csstore(SCHED, NEW, CURR, ORIG) => #itv(Gsstorereset < SCHED >, Gsstoreset 
 
 //rule Cgascap(_, GCAP, GAVAIL, GEXTRA) => GCAP requires notBool #isInf(GCAP) andBool #isInf(GAVAIL) andBool notBool #isInf(GEXTRA)
 
+
+syntax KItem ::= #assert(Bool)
 
 
 
