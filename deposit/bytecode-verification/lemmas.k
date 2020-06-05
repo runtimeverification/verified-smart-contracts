@@ -565,7 +565,21 @@ rule #isInf(I) => false requires I <Int 2 ^Int 64 // practical maximum gas cost
 //rule G1 <=Int G2 => true requires notBool #isInf(G1) andBool #isInf(G2)
 
 
+rule G_CALL_STIPEND <Int #symGas(SCHED, I, _, _, _, _) => true
+requires G_CALL_STIPEND ==Int Gcallstipend < SCHED >
+ andBool #isInf(I)
 
+rule #symGas(SCHED, I, _, _, _, _) <=Int G_CALL_STIPEND => false
+requires G_CALL_STIPEND ==Int Gcallstipend < SCHED >
+ andBool #isInf(I)
+
+// [Csstore.new]:
+rule Csstore(SCHED, NEW, CURR, ORIG) => #itv(Gsload < SCHED >, Gsstoreset < SCHED >)
+    requires #isConcrete(SCHED)
+     andBool notBool ( #isConcrete(NEW) andBool #isConcrete(CURR) andBool #isConcrete(ORIG) )
+     andBool Ghasdirtysstore << SCHED >>
+
+// [Csstore.old]:
 rule Csstore(SCHED, NEW, CURR, ORIG) => #itv(Gsstorereset < SCHED >, Gsstoreset < SCHED >)
     requires #isConcrete(SCHED)
      andBool notBool ( #isConcrete(NEW) andBool #isConcrete(CURR) )
