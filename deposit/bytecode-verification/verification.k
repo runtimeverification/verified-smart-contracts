@@ -199,7 +199,7 @@ rule #asWord(WS) &Int 1157920892103562487564203452140208927662503539920034196169
   => #asWord(WS [ 0 .. 4 ] ++ #buf(28, 0))
 requires #sizeWordStack(WS) ==Int 32
 
-rule bool2Word(B) => #if B #then 1 #else 0 #fi
+rule bool2Word(B) => #if B #then 1 #else 0 #fi // [concrete, smt-lemma]
 
 rule N ==K #asWord(WS ++ ZP)
   => N /Int (2 ^Int (#sizeWordStack(ZP) *Int 8)) ==K #asWord(WS)
@@ -208,6 +208,21 @@ requires N %Int (2 ^Int (#sizeWordStack(ZP) *Int 8)) ==Int 0
  andBool #sizeWordStack(WS ++ ZP) ==Int 32
  andBool #rangeUInt(256, N)
  andBool #isConcrete(N)
+
+rule #if A #then 1 #else 0 #fi |Int #if B #then 1 #else 0 #fi => #if A  orBool B #then 1 #else 0 #fi
+rule #if A #then 1 #else 0 #fi &Int #if B #then 1 #else 0 #fi => #if A andBool B #then 1 #else 0 #fi
+
+rule 1 |Int #if B #then 1 #else 0 #fi => 1
+rule 1 &Int #if B #then 1 #else 0 #fi => #if B #then 1 #else 0 #fi
+
+rule #if B #then 1 #else 0 #fi |Int 1 => 1
+rule #if B #then 1 #else 0 #fi &Int 1 => #if B #then 1 #else 0 #fi
+
+rule #if A #then 1 #else 0 #fi  ==K 0 => notBool(A)
+rule #if A #then 1 #else 0 #fi  ==K 1 => A
+rule #if A #then 1 #else 0 #fi =/=K 0 => A
+rule #if A #then 1 #else 0 #fi =/=K 1 => notBool(A)
+
 
 
     // for [revert-invalid_function_identifier-0_4]
