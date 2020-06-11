@@ -1,3 +1,5 @@
+_**[DEPRECATED: The result in this directory is outdated. The deposit contract has been reimplemented in Solidity and reverified. The latest result can be found at https://github.com/runtimeverification/deposit-contract-verification.]**_
+
 # Formalization and Correctness Proof of Incremental Merkle Tree Algorithm of Deposit Contract
 
 This directory presents our formalization of the [incremental Merkle tree algorithm], especially the one employed in the [deposit contract], and prove its correctness w.r.t. the [original full-construction Merkle tree algorithm].
