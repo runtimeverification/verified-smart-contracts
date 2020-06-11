@@ -1,3 +1,5 @@
+_**[DEPRECATED: The result in this directory is outdated. The deposit contract has been reimplemented in Solidity and reverified. The latest result can be found at https://github.com/runtimeverification/deposit-contract-verification.]**_
+
 *2020-01-21*
 
 # End-to-End Formal Verification of Ethereum 2.0 Deposit Contract
