@@ -2,7 +2,7 @@ _**[DEPRECATED: The result in this directory is outdated. The deposit contract h
 
 *2020-01-21*
 
-# End-to-End Formal Verification of Ethereum 2.0 Deposit Contract (Vyper Implementation)
+# End-to-End Formal Verification of Ethereum 2.0 Deposit Contract _(Vyper Implementation)_
 
 This directory provides the result of our end-to-end formal verification of the Ethereum 2.0 [deposit contract].
 
