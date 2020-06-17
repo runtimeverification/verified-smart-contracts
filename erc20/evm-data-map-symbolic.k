@@ -13,6 +13,9 @@ module EVM-DATA-MAP-SYMBOLIC [symbolic]
 
     rule WS ++ .ByteArray => WS
 
+    syntax Bool ::= #isBuf ( ByteArray ) [function]
+    rule #isBuf(#buf(_,_)) => true
+
     rule #sizeByteArray(W : WS)        => 1 +Int #sizeByteArray(WS)
     rule #sizeByteArray(#buf(N, _)  )  => N
     rule #sizeByteArray(BUF1 ++ BUF2)  => #sizeByteArray(BUF1) +Int #sizeByteArray(BUF2)
