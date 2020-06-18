@@ -1,8 +1,11 @@
 requires "edsl.k"
+requires "evm-symbolic.k"
 
 module ECREC-SYMBOLIC     [symbolic]
+    imports K-REFLECTION
     imports EVM
     imports EDSL
+    imports EVM-SYMBOLIC
 
   // ########################
   // ECRECOVER
