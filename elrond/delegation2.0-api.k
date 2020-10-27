@@ -4,7 +4,7 @@ module DELEGATION_2_0_API
 //Based on : https://docs.google.com/spreadsheets/d/12l9mbl0_NsymEJukWHIvIHzJ4YwHHK7HS_9FlrF_qh4
 //todo: return value for eahfunction, who can call, other annotations
 syntax KItem ::=
-    init ( totalDelegationCap:Int, serviceFee:Int )
+    init ( totalDelegationCap:Int, serviceFee:Decimal )
   | updateRewards ( rewardsForEpoch:Int )
   | changeServiceFee ( serviceFee:Decimal )
   | getServiceFee ( )
