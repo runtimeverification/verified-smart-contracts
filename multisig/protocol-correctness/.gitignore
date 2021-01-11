@@ -1,0 +1,4 @@
+*.timestamp
+*-kompiled
+*.cmp
+.krun-*
