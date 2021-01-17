@@ -2,3 +2,4 @@
 *-kompiled
 *.cmp
 .krun-*
+kore-*.tar.gz
