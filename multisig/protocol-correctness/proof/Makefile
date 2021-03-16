@@ -14,12 +14,17 @@ include map/map.mak
 INVARIANT_DIR := invariant
 include invariant/invariant.mak
 
-.PHONY: all invariant map clean
+PROPERTIES_DIR := properties
+include properties/properties.mak
 
-all: invariant map
+.PHONY: all invariant map properties clean
+
+all: invariant map properties
 
 invariant: $(INVARIANT_OUT_PREFIX)proof.timestamp
 
 map: $(MAP_OUT_PREFIX)proof.timestamp
 
-clean: invariant.clean map.clean
+properties: $(PROPERTIES_OUT_PREFIX)proof.timestamp
+
+clean: invariant.clean map.clean properties.clean
