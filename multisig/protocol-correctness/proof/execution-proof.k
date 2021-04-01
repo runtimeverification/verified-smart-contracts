@@ -284,7 +284,13 @@ module EXECUTION-PROOF-HELPERS
         andBool notBool u(LastIndex +Int 1) in_keys(M)
         andBool unusedIdsInMapKeys(LastIndex +Int 2, M, expanded)
       )
+    [simplification]
 
+  rule unusedIdsInMapKeys(LastIndex:Int +Int 1, keysMap(M):Map, usesExpanded)
+    => true
+    requires true
+        andBool notBool u(LastIndex +Int 1) in_keys(M)
+        andBool unusedIdsInMapKeys(LastIndex +Int 2, keysMap(M), expanded)
     [simplification]
 
   /*
@@ -372,6 +378,9 @@ module EXECUTION-PROOF-HELPERS
 
   rule countMapValues(X, Y) >Int 0 => true requires notBool countMapValues(X, Y) ==Int 0 [simplification]
 
+  rule countMapValues(_, _) +Int X:Int <=Int 0 => false
+    requires X >Int 0
+    [simplification]
   // TODO: Replace these with generic int rules.
   rule 0 <=Int countMapValues(A, B) +Int X:Int => countMapValues(A, B) +Int X >=Int 0
     [simplification]
@@ -418,8 +427,27 @@ module EXECUTION-PROOF-HELPERS
   rule countCanSignFunction([_:Expression, Es:ExpressionCSV], M)
       => countCanSignFunction([Es], M)
     [owise]
+  rule countCanSignFunction([#pushList(Es:ExpressionCSV, UserId:Usize)], UserId |-> Role:UserRole M:Map)
+      => 1 +Int countCanSignFunction([Es], M)  // Remove UserId from the map since each user is counted at most once.
+    requires canSignFunction(Role)
+    [simplification]
+  rule countCanSignFunction([#pushList(Es:ExpressionCSV, UserId:Usize)], UserId |-> Role:UserRole M:Map)
+      => countCanSignFunction([Es], M)  // Remove UserId from the map since each user is counted at most once.
+    requires notBool canSignFunction(Role)
+    [simplification]
+  rule countCanSignFunction(Es:ExpressionList, UserId |-> _:UserRole M:Map)
+      => countCanSignFunction(Es, M)
+    requires notBool #listContains(Es, UserId)
+    [simplification]
+  rule countCanSignFunction(Es:ExpressionList, concat(UserId, _:UserRole, M:Map))
+      => countCanSignFunction(Es, M)
+    requires notBool #listContains(Es, UserId)
+    [simplification]
 
   rule countCanSignFunction([UserId:Usize, Es:ExpressionCSV], concat(UserId1:KItem, Role:UserRole, M:Map))
+    => #countCanSignFunction(UserId, [Es], concat(UserId1, Role, M), concat(UserId1, Role, M)[UserId] orDefault None)
+    [simplification]
+  rule countCanSignFunction([#pushList(Es:ExpressionCSV, UserId:Usize)], concat(UserId1:KItem, Role:UserRole, M:Map))
     => #countCanSignFunction(UserId, [Es], concat(UserId1, Role, M), concat(UserId1, Role, M)[UserId] orDefault None)
     [simplification]
   rule #countCanSignFunction(UserId:Usize, Es:ExpressionList, M:Map, Value:UserRole)

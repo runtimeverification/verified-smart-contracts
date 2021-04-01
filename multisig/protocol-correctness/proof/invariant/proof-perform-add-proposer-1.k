@@ -10,7 +10,6 @@ module TRUSTED-PERFORM-ADD-PROPOSER-1
             UserIdToAddress:Map,
             (
                 ProposerAddress |-> ProposerId:Usize
-                CallerAddress |-> _:Usize
                 _:Map
             ) #as AddressToUserId:Map,
             NumBoardMembers:Usize,
@@ -47,7 +46,6 @@ module TRUSTED-PERFORM-ADD-PROPOSER-1
             NumProposers,
             UserIdToRole,
             Quorum)
-        andBool notBool (ProposerAddress ==K CallerAddress)
         andBool Quorum ==K NumBoardMembers
     [trusted]
 
@@ -65,7 +63,6 @@ module PROOF-PERFORM-ADD-PROPOSER-1
             UserIdToAddress:Map,
             (
                 ProposerAddress |-> ProposerId:Usize
-                CallerAddress |-> _:Usize
                 _:Map
             ) #as AddressToUserId:Map,
             NumBoardMembers:Usize,
@@ -102,7 +99,6 @@ module PROOF-PERFORM-ADD-PROPOSER-1
             NumProposers,
             UserIdToRole,
             Quorum)
-        andBool notBool (ProposerAddress ==K CallerAddress)
         andBool Quorum ==K NumBoardMembers
 
 endmodule

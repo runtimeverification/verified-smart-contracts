@@ -34,7 +34,7 @@ module TRUSTED-PERFORM-REMOVE-USER-9
             Stack:List,
             CallerAddress)
       </T>
-    requires performRequires(
+    requires performRequiresHandling(
             Action,
             NumUsers,
             UserIdToAddress,
@@ -42,18 +42,20 @@ module TRUSTED-PERFORM-REMOVE-USER-9
             NumBoardMembers,
             NumProposers,
             UserIdToRole,
-            Quorum)
+            Quorum,
+            usesExpanded)
         andBool notBool (UserId in_keys(UserIdToRole))
         andBool UserAddress in_keys(AddressToUserId)
         andBool AddressToUserId ==K (UserAddress |-> UserId:KItem _AddressToUserId:Map)
-    ensures performEnsures(
+    ensures performEnsuresHandling(
             u(?NumUsersFinal),
             ?UserIdToAddressFinal,
             ?AddressToUserIdFinal,
             u(?NumBoardMembersFinal),
             u(?NumProposersFinal),
             ?UserIdToRoleFinal,
-            Quorum)
+            Quorum,
+            usesExpanded)
     [trusted]
 endmodule
 

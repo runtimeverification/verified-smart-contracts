@@ -14,6 +14,17 @@ module PERFORM-PARTS
       userIdToRole:Map,
       quorum:Usize)
     [function, functional]
+  syntax Bool ::= performRequiresHandling(
+      action:Action,
+      numUsers:Usize,
+      userIdToAddress:Map,
+      addressToUserId:Map,
+      numBoardMembers:Usize,
+      numProposers:Usize,
+      userIdToRole:Map,
+      quorum:Usize,
+      handling:PropertyHandling)
+    [function, functional]
   syntax Bool ::= performEnsures(
       numUsers:Usize,
       userIdToAddress:Map,
@@ -22,6 +33,16 @@ module PERFORM-PARTS
       numProposers:Usize,
       userIdToRole:Map,
       quorum:Usize)
+    [function, functional]
+  syntax Bool ::= performEnsuresHandling(
+      numUsers:Usize,
+      userIdToAddress:Map,
+      addressToUserId:Map,
+      numBoardMembers:Usize,
+      numProposers:Usize,
+      userIdToRole:Map,
+      quorum:Usize,
+      handling:PropertyHandling)
     [function, functional]
   syntax Bool ::= performInvariant(
       numUsers:Usize,
@@ -72,9 +93,19 @@ module PERFORM-PARTS
           u(NumProposers:Int),
           UserIdToRole:Map,
           u(Quorum:Int))
-    => true
-      andBool isKResult(Action)
-      andBool performInvariant(
+    => performRequiresHandling(
+          Action,
+          UNumUsers,
+          UserIdToAddress,
+          AddressToUserId,
+          u(NumBoardMembers),
+          u(NumProposers),
+          UserIdToRole,
+          u(Quorum),
+          expand(expanded))
+
+  rule performRequiresHandling(
+          Action:Action,
           UNumUsers:Usize,
           UserIdToAddress:Map,
           AddressToUserId:Map,
@@ -82,7 +113,18 @@ module PERFORM-PARTS
           u(NumProposers:Int),
           UserIdToRole:Map,
           u(Quorum:Int),
-          expand(expanded))
+          Handling:PropertyHandling)
+    => true
+      andBool isKResult(Action)
+      andBool performInvariant(
+          UNumUsers,
+          UserIdToAddress,
+          AddressToUserId,
+          u(NumBoardMembers),
+          u(NumProposers),
+          UserIdToRole,
+          u(Quorum),
+          Handling)
 
   rule performEnsures(
           UNumUsers:Usize,
@@ -92,8 +134,17 @@ module PERFORM-PARTS
           u(NumProposers:Int),
           UserIdToRole:Map,
           u(Quorum:Int))
-    => true
-      andBool performInvariant(
+    => performEnsuresHandling(
+          UNumUsers,
+          UserIdToAddress,
+          AddressToUserId,
+          u(NumBoardMembers),
+          u(NumProposers),
+          UserIdToRole,
+          u(Quorum),
+          usesExpanded)
+
+  rule performEnsuresHandling(
           UNumUsers:Usize,
           UserIdToAddress:Map,
           AddressToUserId:Map,
@@ -101,7 +152,17 @@ module PERFORM-PARTS
           u(NumProposers:Int),
           UserIdToRole:Map,
           u(Quorum:Int),
-          usesExpanded)
+          Handling:PropertyHandling)
+    => true
+      andBool performInvariant(
+          UNumUsers,
+          UserIdToAddress,
+          AddressToUserId,
+          u(NumBoardMembers),
+          u(NumProposers),
+          UserIdToRole,
+          u(Quorum),
+          Handling)
 
   // TODO: Use the main invariant.
   rule performInvariant(

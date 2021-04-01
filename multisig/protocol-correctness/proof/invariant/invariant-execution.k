@@ -106,48 +106,43 @@ module INVARIANT-INSTRUMENTATION
           _Arguments:ExpressionList))
       => .K
 
-  syntax KItem ::= "splitting-delete-caller"
-  rule  <k> (
-              splitting-action
-              =>  splitEquality(A1, A2)  // TODO: remove
-                  ~> splitBoolean(A1 in_keys(AddressToUserId))
-                  ~> splitting-delete-caller
-            )
-            ~> call(performAction(RemoveUser(A1:Address)))
+  syntax KItem ::= splittingDeleteCaller(Address)
+  syntax KItem ::= splittingDeleteCaller1(Address)
+  syntax KItem ::= splittingDeleteCaller2(Usize)
+  rule  (splitting-action => splittingDeleteCaller(A))
+        ~> call(performAction(RemoveUser(A:Address)))
+    [priority(10)]
+
+  rule  <k> splittingDeleteCaller(A:Address)
+            =>    splitBoolean(A in_keys(AddressToUserId))
+              ~>  branchK(
+                    A in_keys(AddressToUserId),
+                    splittingDeleteCaller1(A),
+                    .K
+                  )
         ...</k>
         <address-to-user-id>AddressToUserId:Map</address-to-user-id>
-        <caller-address>A2:KItem</caller-address>
-    [priority(10)]
-  rule  <k> (splitting-delete-caller => .K) ...</k>
-    [priority(20)]
-
-  syntax KItem ::= "splitting-delete-address-to-user-id"
   rule  <k> (
-              splitting-delete-caller
+              splittingDeleteCaller1(A:Address)
               => splitMap(
                   A, AddressToUserId,
                   ?_UserId:KItem, ?_AddressToUserIdRemainder:Map)
                 ~> cast(AddressToUserId[A], rUsize)
                 ~> removeValue
-                ~> splitting-delete-address-to-user-id
+                ~> splitBoolean(AddressToUserId[A] in_keys(UserIdToRole))
+                ~> branchK(
+                      AddressToUserId[A] in_keys(UserIdToRole),
+                      splittingDeleteCaller2({AddressToUserId[A]}:>Usize),
+                      .K
+                )
             )
-            ~> call(performAction(RemoveUser(A:Address)))
         ...</k>
         <address-to-user-id>AddressToUserId:Map</address-to-user-id>
+        <user-roles>UserIdToRole:Map</user-roles>
     requires A in_keys(AddressToUserId)
-    [priority(10)]
-  rule  <k> (splitting-delete-caller => .K)
-            ~> call(performAction(RemoveUser(A:Address)))
-        ...</k>
-        <address-to-user-id>AddressToUserId:Map</address-to-user-id>
-    requires notBool (A in_keys(AddressToUserId))
-    [priority(10)]
-  rule  <k> (splitting-delete-address-to-user-id => .K) ...</k>
-    [priority(20)]
 
-  syntax KItem ::= "splitting-user-id-to-role"
   rule  <k> (
-              splitting-delete-address-to-user-id
+              splittingDeleteCaller2(UserId:Usize)
               => splitMap(
                   UserId, UserIdToRole,
                   ?_UserRole:KItem, ?_UserIdToRoleRemainder:Map)
@@ -155,29 +150,19 @@ module INVARIANT-INSTRUMENTATION
                 ~> removeValue
                 ~> lazyConcretizeKeys(UserIdToRole)
                 ~> splitBoolean(UserIdToRole[UserId] ==K BoardMember)
-                ~> splitBoolean(Quorum <=Int NumBoardMembers -Int 1)
-                ~> splitBoolean(Quorum <=Int NumBoardMembers)
+                ~> branchK(
+                      UserIdToRole[UserId] ==K BoardMember,
+                      splitBoolean(Quorum <=Int NumBoardMembers -Int 1),
+                      splitBoolean(Quorum <=Int NumBoardMembers)
+                  )
                 ~> splitBoolean(NumBoardMembers -Int 1 +Int NumProposers >Int 0)
-                ~> splitting-user-id-to-role
             )
-            ~> call(performAction(RemoveUser(A:Address)))
         ...</k>
-        <address-to-user-id> A |-> UserId:KItem _AddressToUserId:Map</address-to-user-id>
         <user-roles>UserIdToRole:Map</user-roles>
         <num-board-members>u(NumBoardMembers:Int)</num-board-members>
         <num-proposers>u(NumProposers:Int)</num-proposers>
         <quorum>u(Quorum:Int)</quorum>
     requires UserId in_keys(UserIdToRole)
-    [priority(10)]
-  rule  <k> (splitting-delete-address-to-user-id => .K)
-            ~> call(performAction(RemoveUser(A:Address)))
-        ...</k>
-        <address-to-user-id> A |-> UserId:KItem _AddressToUserId:Map</address-to-user-id>
-        <user-roles>UserIdToRole:Map</user-roles>
-    requires notBool (UserId in_keys(UserIdToRole))
-    [priority(10)]
-  rule  <k> (splitting-user-id-to-role => .K) ...</k>
-    [priority(20)]
 
   syntax KItem ::= concretizeValue(KItem)
   rule concretizeValue([CSV:ExpressionCSV]) => concretizeValue(CSV)
@@ -212,8 +197,7 @@ module INVARIANT-INSTRUMENTATION
   syntax KItem ::= "splitting-add-proposer-in-keys-atuid"
   rule  <k> (
               splitting-action
-              =>   splitEquality(A1, A2)
-                ~> splitBoolean(A1 in_keys(AddressToUserId))
+              =>   splitBoolean(A1 in_keys(AddressToUserId))
                 ~> branchK(
                     A1 in_keys(AddressToUserId),
                     lazySplitMap(
@@ -238,7 +222,6 @@ module INVARIANT-INSTRUMENTATION
         ...</k>
         <address-to-user-id>AddressToUserId:Map</address-to-user-id>
         <user-roles> UserIdToRole:Map </user-roles>
-        <caller-address>A2:KItem</caller-address>
     [priority(10)]
   rule  splitting-add-proposer-in-keys-atuid => .K
     [priority(20)]

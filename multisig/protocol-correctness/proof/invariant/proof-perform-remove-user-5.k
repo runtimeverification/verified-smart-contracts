@@ -10,7 +10,6 @@ module TRUSTED-PERFORM-REMOVE-USER-5
             UserIdToAddress:Map,
             (
                 UserAddress |-> UserId:Usize
-                CallerAddress |-> _:Usize
                 _AddressToUserId:Map
             ) #as AddressToUserId:Map,
             u(NumBoardMembers:Int),
@@ -38,7 +37,7 @@ module TRUSTED-PERFORM-REMOVE-USER-5
             Stack:List,
             CallerAddress)
       </T>
-    requires performRequires(
+    requires performRequiresHandling(
             Action,
             NumUsers,
             UserIdToAddress,
@@ -46,19 +45,20 @@ module TRUSTED-PERFORM-REMOVE-USER-5
             u(NumBoardMembers),
             u(NumProposers),
             UserIdToRole,
-            u(Quorum))
-        andBool notBool (UserAddress ==K CallerAddress)
+            u(Quorum),
+            usesExpanded)
         andBool notBool (UserRole ==K BoardMember)
         andBool Quorum <=Int NumBoardMembers
         andBool (NumBoardMembers +Int (NumProposers -Int 1) >Int 0)
-    ensures performEnsures(
+    ensures performEnsuresHandling(
             u(?NumUsersFinal),
             ?UserIdToAddressFinal,
             ?AddressToUserIdFinal,
             u(?NumBoardMembersFinal),
             u(?NumProposersFinal),
             UserIdToRoleFinal,
-            u(Quorum))
+            u(Quorum),
+            expanded)
     [trusted]
 
 endmodule
