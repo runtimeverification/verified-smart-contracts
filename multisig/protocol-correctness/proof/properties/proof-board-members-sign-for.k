@@ -53,6 +53,7 @@ module TRUSTED-BOARD-MEMBERS-SIGN-FOR
         andBool mapsAreReverse(AddressToUserId, UserIdToAddress)
         andBool mapIncluded(PartialUserRoles, UserRoles)
         andBool valuesAreNotEmpty(ActionData, rAction)
+
         andBool noMapKeyInList(PartialUserRoles, Signatures)
 
     ensures invariant(

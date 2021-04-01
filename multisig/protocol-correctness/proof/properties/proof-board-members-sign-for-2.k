@@ -1,5 +1,7 @@
 require "../map/proof-map-semantics.k"
 
+require "proof-board-members-sign-for.k"
+
 module TRUSTED-BOARD-MEMBERS-SIGN-FOR-2
   imports PROPERTIES-EXECUTE
   imports PSEUDOCODE
@@ -53,6 +55,7 @@ module TRUSTED-BOARD-MEMBERS-SIGN-FOR-2
         andBool mapsAreReverse(AddressToUserId, UserIdToAddress)
         andBool mapIncluded(PartialUserRoles, UserRoles)
         andBool valuesAreNotEmpty(ActionData, rAction)
+
         andBool notBool ActionIndex in_keys(ActionSigners)
         andBool countMapValues(PartialUserRoles, BoardMember) >Int 0
 
@@ -80,6 +83,8 @@ module PROOF-BOARD-MEMBERS-SIGN-FOR-2
   imports PSEUDOCODE
 
   imports TRUSTED-MAP-SEMANTICS
+
+  imports TRUSTED-BOARD-MEMBERS-SIGN-FOR
 
   claim <T><TT>
           <k> boardMembersSignFor(ActionIndex:Usize, PartialUserRoles:Map)
