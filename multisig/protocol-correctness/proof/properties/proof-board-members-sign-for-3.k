@@ -33,7 +33,7 @@ module TRUSTED-BOARD-MEMBERS-SIGN-FOR-3
               Quorum,
               ActionLastIndex,
               ActionData,
-              (ActionIndex |-> ?Signatures) ActionSigners):StateCell
+              ActionSigners):StateCell
         </TT></T>
     requires invariant(
             NumUsers,
@@ -58,21 +58,7 @@ module TRUSTED-BOARD-MEMBERS-SIGN-FOR-3
         andBool countMapValues(PartialUserRoles, BoardMember) <=Int 0
         andBool notBool (PartialUserRoles ==K .Map)
 
-    ensures invariant(
-            NumUsers,
-            UserIdToAddress,
-            AddressToUserId,
-            NumBoardMembers,
-            NumProposers,
-            UserRoles,
-            Quorum,
-            ActionLastIndex,
-            ActionData,
-            (ActionIndex |-> ?Signatures) ActionSigners,
-            usesExpanded)
-
-        andBool countCanSignFunction(?Signatures, opaque(UserRoles))
-                ==Int countMapValues(PartialUserRoles, BoardMember)
+    ensures 0 ==Int countMapValues(PartialUserRoles, BoardMember)
     [trusted]
 endmodule
 
