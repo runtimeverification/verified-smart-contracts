@@ -492,7 +492,7 @@ module PSEUDOCODE-FUNCTIONS
 
   syntax KResult
 
-  syntax KItem ::= "pushContext" | "popContext" | "evaluateReturnValue"
+  syntax KItem ::= "pushContext" | "popContext" | "evaluateReturnValue" | "preCall"
   syntax KItem ::= stuck(KItem)
   syntax KItem ::= call(Expression)
   syntax KItem ::= Expression
@@ -504,11 +504,11 @@ module PSEUDOCODE-FUNCTIONS
       ))
 
   rule  <k> evaluate(_:FunctionTag(Args:ArgumentCSV) #as FunctionCall)
-            => (pushContext ~> call(FunctionCall) ~> popContext ~> evaluateReturnValue)
+            => (pushContext ~> preCall ~> call(FunctionCall) ~> popContext ~> evaluateReturnValue)
         ...</k>
     requires isKResult(Args)
   rule  <k> evaluate(_:FunctionTag() #as FunctionCall)
-            => (pushContext ~> call(FunctionCall) ~> popContext ~> evaluateReturnValue)
+            => (pushContext ~> preCall ~> call(FunctionCall) ~> popContext ~> evaluateReturnValue)
         ...</k>
 
   rule  <k> pushContext => .K ... </k>
@@ -519,7 +519,6 @@ module PSEUDOCODE-FUNCTIONS
             <stack> (.List => ListItem(stackEntry(S, V))) ... </stack>
           </pseudocode-state>
           _:ExternalCallEnvCell
-          _:ProofStateCell
         </state>
 
   rule  <k> (evaluate(E:Expression) => E) ~> popContext ... </k>
@@ -541,7 +540,6 @@ module PSEUDOCODE-FUNCTIONS
             <stack> (ListItem(stackEntry(S:MultisigStateCell, V:Map)) => .List) ... </stack>
           </pseudocode-state>
           _:ExternalCallEnvCell
-          _:ProofStateCell
         </state>
 
   rule <k> error ~> (evaluateReturnValue => .K) ... </k>
@@ -1243,10 +1241,6 @@ module PSEUDOCODE-CONFIGURATION
           <external-call-env>
             <caller-address>uninitialized</caller-address>
           </external-call-env>
-
-          <proof-state>
-            <last-instrumented> .K </last-instrumented>
-          </proof-state>
         </state>
     </TT>
   </T>
@@ -1281,8 +1275,5 @@ module PSEUDOCODE-CONFIGURATION
         <external-call-env>
           <caller-address>uninitialized</caller-address>
         </external-call-env>
-        <proof-state>
-          <last-instrumented> .K </last-instrumented>
-        </proof-state>
       </state>
 endmodule
