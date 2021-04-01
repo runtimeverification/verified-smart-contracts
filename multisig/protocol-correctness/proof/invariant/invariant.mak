@@ -2,7 +2,7 @@ INVARIANT_OUT_PREFIX=out/invariant.
 
 INVARIANT_ALL := $(wildcard $(INVARIANT_DIR)/*.k)
 INVARIANT_PROOFS := $(wildcard $(INVARIANT_DIR)/proof-*.k)
-INVARIANT_EXECUTION := $(filter-out $(INVARIANT_PROOFS), $(INVARIANT_ALL)) $(PROOF_EXECUTION)
+INVARIANT_EXECUTION := $(filter-out $(INVARIANT_PROOFS), $(INVARIANT_ALL)) $(PROOF_EXECUTION) $(FUNCTIONS_EXECUTION)
 
 INVARIANT_PROOF_TIMESTAMPS := $(addprefix $(INVARIANT_OUT_PREFIX),$(notdir ${INVARIANT_PROOFS:.k=.timestamp}))
 INVARIANT_PROOF_DEBUGGERS := $(addprefix $(INVARIANT_OUT_PREFIX),${INVARIANT_PROOFS:.k=.debugger})
@@ -39,3 +39,4 @@ invariant.clean:
 	-rm -r .kprove-*
 	-rm kore-*.tar.gz
 	-rm $(INVARIANT_OUT_PREFIX)*
+	-rm *.log
