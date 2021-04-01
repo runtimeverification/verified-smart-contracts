@@ -1,3 +1,10 @@
+require "../functions/functions-execute.k"
+
+require "../functions/proof-change-user-role-New.k"
+require "../functions/proof-change-user-role-None.k"
+require "../functions/proof-change-user-role-BoardMember.k"
+require "../functions/proof-change-user-role-Proposer.k"
+
 module TRUSTED-PERFORM-ADD-PROPOSER-5
   imports INVARIANT-EXECUTION
 
@@ -61,6 +68,11 @@ endmodule
 
 module PROOF-PERFORM-ADD-PROPOSER-5
   imports INVARIANT-EXECUTION
+
+  imports TRUSTED-CHANGE-USER-ROLE-NEW
+  imports TRUSTED-CHANGE-USER-ROLE-NONE
+  imports TRUSTED-CHANGE-USER-ROLE-BOARDMEMBER
+  imports TRUSTED-CHANGE-USER-ROLE-PROPOSER
 
   claim
       <T>

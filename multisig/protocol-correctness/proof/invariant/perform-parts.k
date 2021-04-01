@@ -189,6 +189,8 @@ module PERFORM-PARTS
       andBool unusedIdsInMapValues(NumUsers +Int 1, AddressToUserId, Handling)
       andBool noReusedIndexValue(NumUsers +Int 1, AddressToUserId, Handling)
 
+      andBool unusedIdsInMapKeys(NumUsers +Int 1, keysMap(UserIdToAddress), Handling)
+
       andBool userIdToRoleInvariant(UserIdToRole)
       // andBool valuesAreOfType(UserIdToRole, rUserRole)
       // andBool valuesAreKResult(UserIdToRole)
@@ -244,9 +246,6 @@ module PERFORM-PARTS
             <external-call-env>
               <caller-address>CallerAddress</caller-address>
             </external-call-env>
-            <proof-state>
-              <last-instrumented> .K </last-instrumented>
-            </proof-state>
           </state>
         </TT>
 
@@ -291,9 +290,6 @@ module PERFORM-PARTS
             <external-call-env>
               <caller-address>CallerAddress</caller-address>
             </external-call-env>
-            <proof-state>
-              <last-instrumented> .K </last-instrumented>
-            </proof-state>
           </state>
         </TT>
 

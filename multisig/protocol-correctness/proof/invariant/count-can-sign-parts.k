@@ -50,9 +50,6 @@ module COUNT-CAN-SIGN-PARTS
               <stack>Stack</stack>
             </pseudocode-state>
             ExternalCallEnv
-            <proof-state>
-              <last-instrumented> .K </last-instrumented>
-            </proof-state>
           </state>
         </TT>
 
@@ -102,9 +99,6 @@ module COUNT-CAN-SIGN-PARTS
               <stack>Stack</stack>
             </pseudocode-state>
             ExternalCallEnv
-            <proof-state>
-              <last-instrumented> .K </last-instrumented>
-            </proof-state>
           </state>
         </TT>
 

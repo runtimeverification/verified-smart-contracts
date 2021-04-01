@@ -39,6 +39,7 @@ module INVARIANT-HELPERS
     => true
       andBool valueOfType(V, rAction) // valuesAreOfType(ActionData, rAction)
       andBool isKResult(V)  // valuesAreKResult(ActionData)
+      andBool valueIsNotEmpty(V, rAction)  // valuesAreNotEmpty(ActionData, rAction)
 
       andBool actionDataInvariant(ActionData)
     [simplification]
@@ -99,6 +100,21 @@ module INVARIANT
       callerAddress:KItem,
       stack:List)  [function, functional]
 
+  syntax StateCell ::= invariantStateFull(
+      numUsers:Usize,
+      userIdToAddress:Map,
+      addressToUserId:Map,
+      numBoardMembers:Usize,
+      numProposers:Usize,
+      userIdToRole:Map,
+      quorum:Usize,
+      actionLastIndex:Usize,
+      actionData:Map,
+      actionSigners:Map,
+      callerAddress:KItem,
+      stack:List,
+      variables:Map)  [function, functional]
+
   rule invariantState(
       NumUsers:Usize,
       UserIdToAddress:Map,
@@ -138,6 +154,35 @@ module INVARIANT
       ActionSigners:Map,
       CallerAddress:KItem,
       Stack:List)
+    => invariantStateFull(
+          NumUsers,
+          UserIdToAddress,
+          AddressToUserId,
+          NumBoardMembers,
+          NumProposers,
+          UserIdToRole,
+          Quorum,
+          ActionLastIndex,
+          ActionData,
+          ActionSigners,
+          CallerAddress,
+          Stack,
+          .Map)
+
+  rule invariantStateFull(
+      NumUsers:Usize,
+      UserIdToAddress:Map,
+      AddressToUserId:Map,
+      NumBoardMembers:Usize,
+      NumProposers:Usize,
+      UserIdToRole:Map,
+      Quorum:Usize,
+      ActionLastIndex:Usize,
+      ActionData:Map,
+      ActionSigners:Map,
+      CallerAddress:KItem,
+      Stack:List,
+      Variables:Map)
     =>
       <state>
         invariantMultisigState(
@@ -152,15 +197,12 @@ module INVARIANT
             ActionData,
             ActionSigners):MultisigStateCell
         <pseudocode-state>
-          <variables>.Map</variables>
+          <variables>Variables</variables>
           <stack> Stack </stack>
         </pseudocode-state>
         <external-call-env>
           <caller-address>CallerAddress</caller-address>
         </external-call-env>
-        <proof-state>
-          <last-instrumented> .K </last-instrumented>
-        </proof-state>
       </state>
 
   rule invariantMultisigState(
@@ -237,6 +279,8 @@ module INVARIANT
       andBool unusedIdsInMapValues(NumUsers +Int 1, AddressToUserId, Handling)
       andBool noReusedIndexValue(NumUsers +Int 1, AddressToUserId, Handling)
 
+      andBool unusedIdsInMapKeys(NumUsers +Int 1, keysMap(UserIdToAddress), Handling)
+
       andBool userIdToRoleInvariant(UserIdToRole)
       // andBool valuesAreOfType(UserIdToRole, rUserRole)
       // andBool valuesAreKResult(UserIdToRole)
@@ -265,6 +309,32 @@ module INVARIANT
 
       andBool NumBoardMembers ==Int countMapValues(UserIdToRole, BoardMember)
       andBool NumProposers ==Int countMapValues(UserIdToRole, Proposer)
+
+  // TODO: Maybe move somewhere else.
+  rule valuesAreOfType(M:Map, rUsize) => true
+    requires addressToUserIdInvariant(M)
+  rule valuesAreOfType(M:Map, rUserRole) => true
+    requires userIdToRoleInvariant(M)
+  rule valuesAreOfType(M:Map, rAction) => true
+    requires actionDataInvariant(M)
+  rule valuesAreKResult(M:Map) => true
+    requires false
+      orBool addressToUserIdInvariant(M)
+      orBool userIdToRoleInvariant(M)
+      orBool actionSignersInvariant(M)
+      orBool actionDataInvariant(M)
+  rule valuesAreNotEmpty(M:Map, rUsize) => true
+    requires false
+      orBool addressToUserIdInvariant(M)
+  rule valuesAreNotEmpty(M:Map, rUserRole) => true
+    requires false
+      orBool userIdToRoleInvariant(M)
+  rule valuesAreExpressionListOfUsize(M:Map) => true
+    requires false
+      orBool actionSignersInvariant(M)
+  rule valuesAreDistinct(M:Map) => true
+    requires false
+      orBool addressToUserIdInvariant(M)
 
   // TODO: Delete.
   syntax Bool ::= invariantDebug(

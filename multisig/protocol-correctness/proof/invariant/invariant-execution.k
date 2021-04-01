@@ -1,4 +1,5 @@
 require "../execution-proof.k"
+require "../functions/functions-execute.k"
 
 require "count-can-sign-parts.k"
 require "init-loop-parts.k"
@@ -23,17 +24,6 @@ module INVARIANT-INSTRUMENTATION
   imports PROOF-INSTRUMENTATION
   imports PSEUDOCODE
 
-  syntax Singleton ::= "singleton"
-
-  syntax IntVarList ::= vars(Int, IntVarList)
-                    |   ".IntVarList"
-
-  syntax Bool ::= isLazyConcretize(KItem)  [function, functional]
-  rule isLazyConcretize(lazyConcretizeKeysFreezer) => true
-  rule isLazyConcretize(lazyConcretizeKeys(_:Map)) => true
-  rule isLazyConcretize(lazyConcretizeValues(_:Map)) => true
-  rule isLazyConcretize(_:KItem) => false  [owise]
-
   rule  nullableMapLookup(_:KItem, M:Map, _:ReflectionType)
         ~> (.K => lazyConcretizeKeys(M))
         ~> K:KItem
@@ -50,35 +40,23 @@ module INVARIANT-INSTRUMENTATION
   rule (M:Map ~> lazyConcretizeKeysFreezer) => (lazyConcretizeKeys(M) ~> M)
     [priority(20)]
 
-  syntax Singleton ::= concretizeKeys(Map, IntVarList)  [function, functional]
-  rule concretizeKeys((K:Usize |-> _:KItem M:Map) #as _:Map, vars(U:Int, Vars:IntVarList))
-      => concretizeKeys(M, Vars)
-    ensures K ==K u(U:Int)
-      // => concretizeKeys(M, Vars) #And #Ceil(K #And u(U:Int))
-    [simplification(40)]
-  rule concretizeKeys(_:Map, _:IntVarList) => singleton
-    [simplification(50)]
+  // TODO: Move in execution-proof.k
+  syntax KItem ::= makeConcreteValue(key:KItem, valueType:ReflectionType, Map)
+  rule makeConcreteValue(Key:KItem, ValueType:ReflectionType, M:Map)
+    => lazySplitMap(Key, M, ?_Value:KItem, ?_Remainder:Map)
+      ~>  cast(M[Key], ValueType)
+      ~>  removeValue
+      ~> concretizeValue(M[Key])
+    requires Key in_keys(M)
 
-  syntax Singleton ::= concretizeValues(Map, IntVarList)  [function, functional]
-  rule concretizeValues((_:KItem |-> V:Usize M:Map) #as _:Map, vars(U:Int, Vars:IntVarList))
-      => concretizeValues(M, Vars)
-    ensures V ==K u(U:Int)
-      // => concretizeKeys(M, Vars) #And #Ceil(K #And u(U:Int))
-    [simplification(40)]
-  rule concretizeValues(_:Map, _:IntVarList) => singleton
-    [simplification(50)]
+  syntax KItem ::= lazySplitMap(k:KItem, m:Map, value:KItem, remainder:Map)
+  rule lazySplitMap(K:KItem, M:Map, Value:KItem, Remainder:Map)
+      => splitMap(K, M, Value, Remainder)
+endmodule
 
-  syntax KItem ::= concretized(Singleton)
-  rule concretized(singleton) => .K
-
-  syntax KItem ::= "lazyConcretizeKeysFreezer"
-
-  syntax KItem ::= lazyConcretizeKeys(Map)
-  rule lazyConcretizeKeys(M:Map) => concretized(concretizeKeys(M, vars(?_, vars(?_, .IntVarList))))
-
-  syntax KItem ::= lazyConcretizeValues(Map)
-  rule lazyConcretizeValues(M:Map) => concretized(concretizeValues(M, vars(?_, vars(?_, .IntVarList))))
-
+module PERFORM-SPLIT-ACTION-INSTRUMENTATION
+  imports PSEUDOCODE
+ 
   syntax KItem ::= "splitting-action"
   rule  <k> pushContext ~> (.K => splitAction(A) ~> splitting-action) ~> call(performAction(A:Action))
         ...</k>
@@ -105,6 +83,12 @@ module INVARIANT-INSTRUMENTATION
           _Function:BoxedBytes,
           _Arguments:ExpressionList))
       => .K
+endmodule
+
+module PERFORM-ACTION-REMOVE-USER-INSTRUMENTATION
+  imports INVARIANT-INSTRUMENTATION
+  imports PERFORM-SPLIT-ACTION-INSTRUMENTATION
+  imports PSEUDOCODE
 
   syntax KItem ::= splittingDeleteCaller(Address)
   syntax KItem ::= splittingDeleteCaller1(Address)
@@ -114,22 +98,16 @@ module INVARIANT-INSTRUMENTATION
     [priority(10)]
 
   rule  <k> splittingDeleteCaller(A:Address)
-            =>    splitBoolean(A in_keys(AddressToUserId))
-              ~>  branchK(
-                    A in_keys(AddressToUserId),
-                    splittingDeleteCaller1(A),
-                    .K
-                  )
+            =>  branchK(
+                  A in_keys(AddressToUserId),
+                  splittingDeleteCaller1(A),
+                  .K
+                )
         ...</k>
         <address-to-user-id>AddressToUserId:Map</address-to-user-id>
   rule  <k> (
               splittingDeleteCaller1(A:Address)
-              => splitMap(
-                  A, AddressToUserId,
-                  ?_UserId:KItem, ?_AddressToUserIdRemainder:Map)
-                ~> cast(AddressToUserId[A], rUsize)
-                ~> removeValue
-                ~> splitBoolean(AddressToUserId[A] in_keys(UserIdToRole))
+              => makeConcreteValue(A, rUsize, AddressToUserId)
                 ~> branchK(
                       AddressToUserId[A] in_keys(UserIdToRole),
                       splittingDeleteCaller2({AddressToUserId[A]}:>Usize),
@@ -143,13 +121,8 @@ module INVARIANT-INSTRUMENTATION
 
   rule  <k> (
               splittingDeleteCaller2(UserId:Usize)
-              => splitMap(
-                  UserId, UserIdToRole,
-                  ?_UserRole:KItem, ?_UserIdToRoleRemainder:Map)
-                ~> cast(UserIdToRole[UserId], rUserRole)
-                ~> removeValue
-                ~> lazyConcretizeKeys(UserIdToRole)
-                ~> splitBoolean(UserIdToRole[UserId] ==K BoardMember)
+              => makeConcreteValue(UserId, rUserRole, UserIdToRole)
+                ~> lazyConcretizeKeys(UserIdToRole)  // TODO: Likely not needed.
                 ~> branchK(
                       UserIdToRole[UserId] ==K BoardMember,
                       splitBoolean(Quorum <=Int NumBoardMembers -Int 1),
@@ -163,23 +136,14 @@ module INVARIANT-INSTRUMENTATION
         <num-proposers>u(NumProposers:Int)</num-proposers>
         <quorum>u(Quorum:Int)</quorum>
     requires UserId in_keys(UserIdToRole)
+endmodule
 
-  syntax KItem ::= concretizeValue(KItem)
-  rule concretizeValue([CSV:ExpressionCSV]) => concretizeValue(CSV)
-  rule concretizeValue(u(V:Int)) => concretizeValue(V)
-  rule concretizeValue(address(V:Int)) => concretizeValue(V)
-  rule concretizeValue(BoardMember) => .K
-  rule concretizeValue(Proposer) => .K
-  rule concretizeValue(None) => .K
-
-  rule concretizeValue(_) => .K [priority(200)]
+module PERFORM-ACTION-SC-DEPLOY-INSTRUMENTATION
+  imports PERFORM-SPLIT-ACTION-INSTRUMENTATION
+  imports INVARIANT-INSTRUMENTATION
 
   syntax KItem ::= "concretize-sc-deploy"
-  rule  <k> (
-              splitting-action
-              =>  concretizeValue(Arguments)
-                  ~> concretize-sc-deploy
-            )
+  rule  <k> (splitting-action => concretizeValue(Arguments))
             ~> call(performAction(SCDeploy(
                         _Amount:BigUint,
                         _Code:BoxedBytes,
@@ -187,51 +151,222 @@ module INVARIANT-INSTRUMENTATION
                         Arguments:ExpressionList)))
         ...</k>
     [priority(10)]
-  rule  concretize-sc-deploy => .K
-    [priority(20)]
+endmodule
 
-  syntax KItem ::= lazySplitMap(k:KItem, m:Map, value:KItem, remainder:Map)
-  rule lazySplitMap(K:KItem, M:Map, Value:KItem, Remainder:Map)
-      => splitMap(K, M, Value, Remainder)
+module PERFORM-ACTION-ADD-PROPOSER-INSTRUMENTATION
+  imports INVARIANT-INSTRUMENTATION
+  imports PERFORM-SPLIT-ACTION-INSTRUMENTATION
+  imports PSEUDOCODE
+ 
+  syntax KItem ::= splittingActionProposer1(Address)
+  syntax KItem ::= splittingActionProposer2(Address)
 
-  syntax KItem ::= "splitting-add-proposer-in-keys-atuid"
   rule  <k> (
               splitting-action
-              =>   splitBoolean(A1 in_keys(AddressToUserId))
-                ~> branchK(
+              =>  branchK(
                     A1 in_keys(AddressToUserId),
-                    lazySplitMap(
-                        A1, AddressToUserId,
-                        ?_UserId:KItem, ?_AddressToUserIdRemainder:Map)
-                      ~> cast(AddressToUserId[A1], rUsize)
-                      ~> removeValue
-                      ~> concretizeValue(AddressToUserId[A1])
-                      ~> concretizeValue(A1)
-                      ~> lazySplitMap(
-                          AddressToUserId[A1], UserIdToRole,
-                          ?_UserRole:KItem, ?_UserIdToRoleRemainder:Map)
-                      ~> cast(UserIdToRole[AddressToUserId[A1]], rUserRole)
-                      ~> removeValue
-                      ~> concretizeValue(UserIdToRole[AddressToUserId[A1]])
-                      ~> .K,
+                    splittingActionProposer1(A1),
                     .K
                   )
-                ~> splitting-add-proposer-in-keys-atuid
             )
             ~> call(performAction(AddProposer(A1:Address)))
         ...</k>
         <address-to-user-id>AddressToUserId:Map</address-to-user-id>
-        <user-roles> UserIdToRole:Map </user-roles>
     [priority(10)]
-  rule  splitting-add-proposer-in-keys-atuid => .K
-    [priority(20)]
+
+  rule  <k> splittingActionProposer1(A1:Address)
+            =>   makeConcreteValue(A1, rUsize, AddressToUserId)
+              ~> splittingActionProposer2(A1)
+        ...</k>
+        <address-to-user-id>AddressToUserId:Map</address-to-user-id>
+    requires A1 in_keys(AddressToUserId)
+      // TODO: Do I need AddressToUserId[A1] in_keys(UserIdToRole)?
+
+  // TODO: Merge this rule with the previous one.
+  rule  <k> splittingActionProposer2(A1:Address)
+            =>   makeConcreteValue(AddressToUserId[A1], rUserRole, UserIdToRole)
+        ...</k>
+        <address-to-user-id>AddressToUserId:Map</address-to-user-id>
+        <user-roles> UserIdToRole:Map </user-roles>
+    requires true
+      andBool A1 in_keys(AddressToUserId)
+      andBool AddressToUserId[A1] in_keys(UserIdToRole)
 
 endmodule
 
+module PROPOSE-ACTION-INSTRUMENTATION
+  imports INVARIANT-INSTRUMENTATION
+  imports PSEUDOCODE
+
+  syntax KItem ::= "split-propose-action"
+  syntax KItem ::= "split-propose-action1"
+  syntax KItem ::= "split-propose-action2"
+
+  rule preCall ~> (.K => split-propose-action) ~> call(proposeAction(_Action:Action))
+  [priority(20)]
+
+  rule  <k> split-propose-action
+            =>  branchK(
+                  Caller in_keys(AddressToUserId),
+                  lazySplitMap(
+                      Caller, AddressToUserId,
+                      ?_UserId:KItem, ?_AddressToUserIdRemainder:Map)
+                    ~>  split-propose-action1,
+                  .K
+                )
+        ... </k>
+        <address-to-user-id>AddressToUserId:Map</address-to-user-id>
+        <caller-address>Caller:KItem</caller-address>
+
+  rule  <k> split-propose-action1
+            =>  branchK(
+                  AddressToUserId[Caller] in_keys(UserIdToRole),
+                  lazySplitMap(
+                      AddressToUserId[Caller], UserIdToRole,
+                      ?_UserRole:KItem, ?_UserIdToRoleRemainder:Map)
+                    ~> split-propose-action2,
+                  .K
+                )
+        ... </k>
+        <address-to-user-id>AddressToUserId:Map</address-to-user-id>
+        <user-roles> UserIdToRole:Map </user-roles>
+        <caller-address>Caller:KItem</caller-address>
+
+  rule  <k> split-propose-action2
+            =>   cast(UserIdToRole[AddressToUserId[Caller]], rUserRole)
+              ~> removeValue
+              ~> concretizeValue(UserIdToRole[AddressToUserId[Caller]])
+        ... </k>
+
+        <address-to-user-id>AddressToUserId:Map</address-to-user-id>
+        <user-roles> UserIdToRole:Map </user-roles>
+        <caller-address>Caller:KItem</caller-address>
+endmodule
+
+module CHANGE-USER-ROLE-INSTRUMENTATION
+  imports INVARIANT-INSTRUMENTATION
+  imports PSEUDOCODE
+
+  syntax KItem ::= splitChangeUserRole(Address)
+  syntax KItem ::= splitChangeUserRole2(Address)
+  syntax KItem ::= splitChangeUserRole3(Usize)
+
+  rule  preCall 
+        ~> (.K => splitChangeUserRole(UserAddress))
+        ~> call(changeUserRole(UserAddress:Address, _NewRole:UserRole))
+  [priority(20)]
+
+  rule  <k> splitChangeUserRole(Address:Address)
+            =>  branchK(
+                  Address in_keys(AddressToUserId),
+                  splitChangeUserRole2(Address),
+                  .K
+                )
+        ... </k>
+        <address-to-user-id> AddressToUserId:Map </address-to-user-id>
+
+  rule  <k> splitChangeUserRole2(Address:Address)
+            =>    lazySplitMap(
+                        Address, AddressToUserId,
+                        ?_UserId:KItem, ?_AddressToUserIdRemainder:Map)
+              ~>  cast(AddressToUserId[Address], rUsize)
+              ~>  removeValue
+              ~>  concretizeValue(AddressToUserId[Address])
+              ~>  branchK(
+                    AddressToUserId[Address] in_keys(UserIdToRole),
+                    splitChangeUserRole3({AddressToUserId[Address]}:>Usize),
+                    .K
+                  )
+        ... </k>
+        <address-to-user-id> AddressToUserId:Map </address-to-user-id>
+        <user-roles>UserIdToRole:Map</user-roles>
+    requires Address in_keys(AddressToUserId)
+
+  rule  <k> splitChangeUserRole3(UserId:Usize)
+            =>    lazySplitMap(
+                        UserId, UserIdToRole,
+                        ?_UserRole:KItem, ?_UserIdToRoleRemainder:Map)
+              ~>  cast(UserIdToRole[UserId], rUserRole)
+              ~>  removeValue
+              ~>  concretizeValue(UserIdToRole[UserId])
+        ... </k>
+        <user-roles>UserIdToRole:Map</user-roles>
+    requires UserId in_keys(UserIdToRole)
+endmodule
+
+module SIGN-INSTRUMENTATION
+  imports PSEUDOCODE
+  imports INVARIANT-INSTRUMENTATION
+
+  syntax KItem ::= splitSign(Usize)
+  syntax KItem ::= splitSign2(Usize)
+  syntax KItem ::= splitSign3(Usize)
+
+  rule  preCall 
+        ~> (.K => splitSign(ActionId))
+        ~> call(sign(ActionId:Usize))
+  [priority(20)]
+
+  rule  <k> splitSign(ActionId:Usize)
+            =>  branchK(
+                    ActionId in_keys(ActionData),
+                    branchK(
+                      CallerAddress in_keys(AddressToUserId),
+                      splitSign2(ActionId),
+                      .K
+                    ),
+                    .K
+                  )
+        ... </k>
+        <address-to-user-id> AddressToUserId:Map </address-to-user-id>
+        <caller-address>CallerAddress:KItem</caller-address>
+        <action-data>ActionData:Map</action-data>
+
+  rule  <k> splitSign2(ActionId:Usize)
+            =>    makeConcreteValue(CallerAddress, rUsize, AddressToUserId)
+              ~>  branchK(
+                    AddressToUserId[CallerAddress] in_keys(UserIdToRole),
+                    splitSign3(ActionId),
+                    .K
+                  )
+        ... </k>
+        <address-to-user-id> AddressToUserId:Map </address-to-user-id>
+        <user-roles>UserIdToRole:Map</user-roles>
+        <caller-address>CallerAddress:KItem</caller-address>
+    requires CallerAddress in_keys(AddressToUserId)
+
+  rule  <k> splitSign3(ActionId:Usize)
+            =>    makeConcreteValue(AddressToUserId[CallerAddress], rUserRole, UserIdToRole)
+              ~>  branchK(
+                    UserIdToRole[AddressToUserId[CallerAddress]] ==K BoardMember,
+                    branchK(
+                      ActionId in_keys(ActionSigners),
+                      makeConcreteValue(ActionId, rExpressionList, ActionSigners),
+                      .K
+                    ),
+                    .K
+                  )
+        ... </k>
+        <address-to-user-id> AddressToUserId:Map </address-to-user-id>
+        <user-roles>UserIdToRole:Map</user-roles>
+        <caller-address>CallerAddress:KItem</caller-address>
+        <action-signers>ActionSigners:Map</action-signers>
+    requires CallerAddress in_keys(AddressToUserId)
+      andBool AddressToUserId[CallerAddress] in_keys(UserIdToRole)
+ endmodule
+
 module INVARIANT-EXECUTION
   imports EXECUTION-PROOF
+  imports FUNCTIONS-EXECUTE
 
   imports INVARIANT-INSTRUMENTATION
+  imports SIGN-INSTRUMENTATION
+  imports CHANGE-USER-ROLE-INSTRUMENTATION
+  imports PROPOSE-ACTION-INSTRUMENTATION
+  imports PERFORM-ACTION-ADD-PROPOSER-INSTRUMENTATION
+  imports PERFORM-ACTION-SC-DEPLOY-INSTRUMENTATION
+  imports PERFORM-ACTION-REMOVE-USER-INSTRUMENTATION
+  imports PERFORM-SPLIT-ACTION-INSTRUMENTATION
 
   imports COUNT-CAN-SIGN-PARTS
   imports INIT-LOOP-PARTS

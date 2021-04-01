@@ -461,10 +461,69 @@ module EXECUTION-PROOF-HELPERS
 
 endmodule
 
+module CONCRETIZE-INSTRUMENTATION
+  imports MAP
+
+  imports PSEUDOCODE
+
+  syntax KItem ::= concretizeValue(KItem)
+  rule concretizeValue([CSV:ExpressionCSV]) => concretizeValue(CSV)
+  rule concretizeValue(u(V:Int)) => concretizeValue(V)
+  rule concretizeValue(address(V:Int)) => concretizeValue(V)
+  rule concretizeValue(BoardMember) => .K
+  rule concretizeValue(Proposer) => .K
+  rule concretizeValue(None) => .K
+
+  rule concretizeValue(_) => .K [priority(200)]
+
+  syntax Singleton ::= "singleton"
+
+  syntax IntVarList ::= vars(Int, IntVarList)
+                    |   ".IntVarList"
+
+  syntax Bool ::= isLazyConcretize(KItem)  [function, functional]
+  rule isLazyConcretize(lazyConcretizeKeysFreezer) => true
+  rule isLazyConcretize(lazyConcretizeKeys(_:Map)) => true
+  rule isLazyConcretize(lazyConcretizeValues(_:Map)) => true
+  rule isLazyConcretize(_:KItem) => false  [owise]
+
+  syntax Singleton ::= concretizeKeys(Map, IntVarList)  [function, functional]
+  rule concretizeKeys((K:Usize |-> _:KItem M:Map) #as _:Map, vars(U:Int, Vars:IntVarList))
+      => concretizeKeys(M, Vars)
+    ensures K ==K u(U:Int)
+      // => concretizeKeys(M, Vars) #And #Ceil(K #And u(U:Int))
+    [simplification(40)]
+  rule concretizeKeys(_:Map, _:IntVarList) => singleton
+    [simplification(50)]
+
+  syntax Singleton ::= concretizeValues(Map, IntVarList)  [function, functional]
+  rule concretizeValues((_:KItem |-> V:Usize M:Map) #as _:Map, vars(U:Int, Vars:IntVarList))
+      => concretizeValues(M, Vars)
+    ensures V ==K u(U:Int)
+      // => concretizeKeys(M, Vars) #And #Ceil(K #And u(U:Int))
+    [simplification(40)]
+  rule concretizeValues(_:Map, _:IntVarList) => singleton
+    [simplification(50)]
+
+  syntax KItem ::= concretized(Singleton)
+  rule concretized(singleton) => .K
+
+  syntax KItem ::= "lazyConcretizeKeysFreezer"
+
+  syntax KItem ::= lazyConcretizeKeys(Map)
+  rule lazyConcretizeKeys(M:Map) => concretized(concretizeKeys(M, vars(?_, vars(?_, .IntVarList))))
+
+  syntax KItem ::= lazyConcretizeValues(Map)
+  rule lazyConcretizeValues(M:Map) => concretized(concretizeValues(M, vars(?_, vars(?_, .IntVarList))))
+
+endmodule
+
 module PROOF-INSTRUMENTATION
   imports MAP
 
   imports PSEUDOCODE
+
+  imports CONCRETIZE-INSTRUMENTATION
 
   syntax KItem ::= splitEquality(KItem, KItem)
   rule splitEquality(A:KItem, B:KItem) => .K

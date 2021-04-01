@@ -70,9 +70,6 @@ module INIT-LOOP-PARTS
               <stack> Stack </stack>
             </pseudocode-state>
             ExternalCallEnv
-            <proof-state>
-              <last-instrumented> .K </last-instrumented>
-            </proof-state>
 
           </state>
         </TT>
@@ -134,9 +131,6 @@ module INIT-LOOP-PARTS
               <stack> Stack </stack>
             </pseudocode-state>
             ExternalCallEnv
-            <proof-state>
-              <last-instrumented> .K </last-instrumented>
-            </proof-state>
           </state>
         </TT>
 

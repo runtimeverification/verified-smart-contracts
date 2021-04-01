@@ -1,6 +1,16 @@
+require "../functions/functions-execute.k"
+
+require "../functions/proof-propose-action-BoardMember.k"
+require "../functions/proof-propose-action-Proposer.k"
+require "../functions/proof-propose-action-error.k"
+
 module PROOF-PROPOSE-ADD-PROPOSER
   imports INVARIANT-EXECUTION
   imports PSEUDOCODE
+
+  imports TRUSTED-PROPOSE-ACTION-ERROR
+  imports TRUSTED-PROPOSE-ACTION-BOARDMEMBER
+  imports TRUSTED-PROPOSE-ACTION-PROPOSER
 
   claim <T><TT>
           <k> runExternalCalls(
