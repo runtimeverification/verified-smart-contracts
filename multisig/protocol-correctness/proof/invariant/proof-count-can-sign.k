@@ -12,7 +12,8 @@ module TRUSTED-COUNT-CAN-SIGN
                 ActionState:ActionStateCell,
                 Variables:Map,
                 Stack:List,
-                ExternalCallEnv:ExternalCallEnvCell)
+                ExternalCallEnv:ExternalCallEnvCell,
+                PerformedActions:List)
         </T>
       => <T> countCanSignRhs(
                 u(countCanSignFunction(SignerIds, opaque(UserIdToRole))),
@@ -25,7 +26,8 @@ module TRUSTED-COUNT-CAN-SIGN
                 ActionState,
                 ?Variables:Map,
                 Stack,
-                ExternalCallEnv)
+                ExternalCallEnv,
+                PerformedActions:List)
         </T>
     requires
         countCanSignRequires(

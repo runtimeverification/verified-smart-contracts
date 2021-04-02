@@ -70,6 +70,9 @@ module INIT-LOOP-PARTS
               <stack> Stack </stack>
             </pseudocode-state>
             ExternalCallEnv
+            <log>
+              <performed-actions>.List</performed-actions>
+            </log>
           </state>
         </TT>
 
@@ -130,6 +133,9 @@ module INIT-LOOP-PARTS
               <stack> Stack </stack>
             </pseudocode-state>
             ExternalCallEnv
+            <log>
+              <performed-actions>.List</performed-actions>
+            </log>
           </state>
         </TT>
 

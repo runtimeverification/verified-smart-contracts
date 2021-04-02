@@ -14,7 +14,8 @@ module COUNT-CAN-SIGN-PARTS
             ActionStateCell,
             variables:Map,
             stack:List,
-            ExternalCallEnvCell)
+            ExternalCallEnvCell,
+            performedActions:List)
       [function, functional]
 
   rule countCanSignLhs(
@@ -28,7 +29,8 @@ module COUNT-CAN-SIGN-PARTS
             ActionState:ActionStateCell,
             Variables:Map,
             Stack:List,
-            ExternalCallEnv:ExternalCallEnvCell)
+            ExternalCallEnv:ExternalCallEnvCell,
+            PerformedActions:List)
       => <TT>
           <k>
             call(countCanSign(SignerIds))
@@ -50,6 +52,9 @@ module COUNT-CAN-SIGN-PARTS
               <stack>Stack</stack>
             </pseudocode-state>
             ExternalCallEnv
+            <log>
+              <performed-actions>PerformedActions</performed-actions>
+            </log>
           </state>
         </TT>
 
@@ -64,7 +69,8 @@ module COUNT-CAN-SIGN-PARTS
             ActionStateCell,
             variables:Map,
             stack:List,
-            ExternalCallEnvCell)
+            ExternalCallEnvCell,
+            performedActions:List)
       [function, functional]
 
   rule countCanSignRhs(
@@ -78,7 +84,8 @@ module COUNT-CAN-SIGN-PARTS
             ActionState:ActionStateCell,
             Variables:Map,
             Stack:List,
-            ExternalCallEnv:ExternalCallEnvCell)
+            ExternalCallEnv:ExternalCallEnvCell,
+            PerformedActions:List)
       => <TT>
           <k>
             evaluate(Count) ~> K
@@ -99,6 +106,9 @@ module COUNT-CAN-SIGN-PARTS
               <stack>Stack</stack>
             </pseudocode-state>
             ExternalCallEnv
+            <log>
+              <performed-actions>PerformedActions</performed-actions>
+            </log>
           </state>
         </TT>
 

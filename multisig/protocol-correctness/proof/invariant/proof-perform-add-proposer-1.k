@@ -18,7 +18,8 @@ module TRUSTED-PERFORM-ADD-PROPOSER-1
             Quorum:Usize,
             ActionState:ActionStateCell,
             Stack:List,
-            CallerAddress:Address)
+            CallerAddress:Address,
+            _PerformedActions:List)
       </T>
       =>
       <T>
@@ -35,7 +36,8 @@ module TRUSTED-PERFORM-ADD-PROPOSER-1
             ActionState,
             ?_Variables:Map,
             Stack,
-            CallerAddress)
+            CallerAddress,
+            ?_PerformedActions:List)
       </T>
     requires performRequires(
             Action,
@@ -71,7 +73,8 @@ module PROOF-PERFORM-ADD-PROPOSER-1
             Quorum:Usize,
             ActionState:ActionStateCell,
             .List, // TODO: Stack:List,
-            CallerAddress:Address)
+            CallerAddress:Address,
+            _PerformedActions:List)
       </T>
       =>
       <T>
@@ -88,7 +91,8 @@ module PROOF-PERFORM-ADD-PROPOSER-1
             ActionState,
             ?_Variables:Map,
             .List, // TODO: Stack:List,
-            CallerAddress)
+            CallerAddress,
+            ?_PerformedActions:List)
       </T>
     requires performRequires(
             Action,

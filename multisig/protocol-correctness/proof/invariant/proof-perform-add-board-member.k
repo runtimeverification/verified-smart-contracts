@@ -22,7 +22,8 @@ module TRUSTED-PERFORM-ADD-BOARD-MEMBER
             Quorum:Usize,
             ActionState:ActionStateCell,
             Stack:List,
-            CallerAddress:Address)
+            CallerAddress:Address,
+            PerformedActions:List)
       </T>
       =>
       <T>
@@ -39,7 +40,8 @@ module TRUSTED-PERFORM-ADD-BOARD-MEMBER
             ActionState,
             ?_Variables:Map,
             Stack:List,
-            CallerAddress)
+            CallerAddress,
+            ListItem(Action) PerformedActions:List)
       </T>
     requires performRequires(
             Action,
@@ -83,7 +85,8 @@ module PROOF-PERFORM-ADD-BOARD-MEMBER
             Quorum:Usize,
             ActionState:ActionStateCell,
             .List, // TODO: Stack:List,
-            CallerAddress:Address)
+            CallerAddress:Address,
+            PerformedActions:List)
       </T>
       =>
       <T>
@@ -100,7 +103,8 @@ module PROOF-PERFORM-ADD-BOARD-MEMBER
             ActionState,
             ?_Variables:Map,
             .List, // TODO: Stack:List,
-            CallerAddress)
+            CallerAddress,
+            ListItem(Action) PerformedActions:List)
       </T>
     requires performRequires(
             Action,

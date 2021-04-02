@@ -34,7 +34,8 @@ module PROOF-INIT
               ?Quorum:Usize,
               ?ActionLastIndex:Usize,
               ?ActionData:Map,
-              ?ActionSigners:Map)
+              ?ActionSigners:Map,
+              ?PerformedActions:List)
         </TT></T>
     requires    listElementsAreAddresses(Addresses)
         //andBool noCommonItem(u(1), .Map, Addresses)
@@ -65,6 +66,7 @@ module PROOF-INIT
                 ?Quorum:Usize,
                 ?ActionLastIndex:Usize,
                 ?ActionData:Map,
-                ?ActionSigners:Map)
+                ?ActionSigners:Map,
+                ?PerformedActions:List)
               ==K initialState
 endmodule

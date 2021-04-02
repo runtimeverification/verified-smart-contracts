@@ -43,7 +43,8 @@ module PROOF-CAN-PROPOSE-AND-EXECUTE
               Quorum:Usize,
               ActionLastIndex:Usize,
               ActionData:Map,
-              ActionSigners:Map)
+              ActionSigners:Map,
+              _PerformedActions:List)
         </TT></T>
       =>
         <T><TT>
@@ -58,7 +59,8 @@ module PROOF-CAN-PROPOSE-AND-EXECUTE
               u(0),
               add(ActionLastIndex, u(1)),
               ActionData:Map,
-              ActionSigners:Map):StateCell
+              ActionSigners:Map,
+              ?_PerformedActions:List):StateCell
         </TT></T>
     requires invariant(
           NumUsers:Usize,

@@ -25,7 +25,8 @@ module PROOF-PERFORM-ACTION-ENDPOINT
               Quorum:Usize,
               ActionLastIndex0:Usize,
               ActionData0:Map,
-              ActionSigners0:Map)
+              ActionSigners0:Map,
+              _PerformedActions:List)
         </TT></T>
       =>
         <T><TT>
@@ -40,7 +41,8 @@ module PROOF-PERFORM-ACTION-ENDPOINT
               ?Quorum1:Usize,
               ?ActionLastIndex1:Usize,
               ?ActionData1:Map,
-              ?ActionSigners1:Map):StateCell
+              ?ActionSigners1:Map,
+              ?_PerformedActions:List):StateCell
         </TT></T>
     requires invariant(
         NumUsers:Usize,
@@ -80,7 +82,8 @@ module PROOF-PERFORM-ACTION-ENDPOINT
               Quorum:Usize,
               ActionLastIndex:Usize,
               ActionData:Map,
-              ActionSigners:Map):StateCell
+              ActionSigners:Map,
+              _PerformedActions:List):StateCell
         </TT></T>
       =>
         <T><TT>
@@ -95,7 +98,8 @@ module PROOF-PERFORM-ACTION-ENDPOINT
               Quorum:Usize,
               ActionLastIndex:Usize,
               ActionData:Map,
-              ActionSigners:Map):StateCell
+              ActionSigners:Map,
+              ?_PerformedActions:List):StateCell
         </TT></T>
 
 endmodule

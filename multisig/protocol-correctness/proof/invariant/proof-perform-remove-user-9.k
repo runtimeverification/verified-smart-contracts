@@ -22,7 +22,8 @@ module TRUSTED-PERFORM-REMOVE-USER-9
             Quorum:Usize,
             ActionState:ActionStateCell,
             Stack:List,
-            CallerAddress:Address)
+            CallerAddress:Address,
+            PerformedActions:List)
       </T>
       =>
       <T>
@@ -39,7 +40,8 @@ module TRUSTED-PERFORM-REMOVE-USER-9
             ActionState,
             ?_Variables:Map,
             Stack:List,
-            CallerAddress)
+            CallerAddress,
+            ListItem(Action) PerformedActions:List)
       </T>
     requires performRequiresHandling(
             Action,
@@ -88,7 +90,8 @@ module PROOF-PERFORM-REMOVE-USER-9
             Quorum:Usize,
             ActionState:ActionStateCell,
             .List, // TODO: Stack:List,
-            CallerAddress:Address)
+            CallerAddress:Address,
+            PerformedActions:List)
       </T>
       =>
       <T>
@@ -105,7 +108,8 @@ module PROOF-PERFORM-REMOVE-USER-9
             ActionState,
             ?_Variables:Map,
             .List, // TODO: Stack:List,
-            CallerAddress)
+            CallerAddress,
+            ListItem(Action) PerformedActions:List)
       </T>
     requires performRequires(
             Action,

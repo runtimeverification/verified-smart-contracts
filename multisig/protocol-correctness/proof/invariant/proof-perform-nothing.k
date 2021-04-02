@@ -15,7 +15,8 @@ module TRUSTED-PERFORM-NOTHING
             Quorum:Usize,
             ActionState:ActionStateCell,
             Stack:List,
-            CallerAddress:Address)
+            CallerAddress:Address,
+            PerformedActions:List)
       </T>
       =>
       <T>
@@ -32,7 +33,8 @@ module TRUSTED-PERFORM-NOTHING
             ActionState,
             ?_Variables:Map,
             Stack,
-            CallerAddress)
+            CallerAddress,
+            ListItem(Action) PerformedActions:List)
       </T>
     requires performRequires(
             Action,
@@ -71,7 +73,8 @@ module PROOF-PERFORM-NOTHING
             Quorum:Usize,
             ActionState:ActionStateCell,
             Stack:List,
-            CallerAddress:Address)
+            CallerAddress:Address,
+            PerformedActions:List)
       </T>
       =>
       <T>
@@ -88,7 +91,8 @@ module PROOF-PERFORM-NOTHING
             ActionState,
             ?_Variables:Map,
             Stack,
-            CallerAddress)
+            CallerAddress,
+            ListItem(Action) PerformedActions:List)
       </T>
     requires performRequires(
             Action,

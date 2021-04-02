@@ -26,7 +26,8 @@ module TRUSTED-BOARD-MEMBERS-SIGN-FOR
               Quorum:Usize,
               ActionLastIndex:Usize,
               (ActionIndex |-> _Action:KItem _ActionData:Map) #as ActionData:Map,
-              ActionIndex |-> Signatures:ExpressionList ActionSigners:Map)
+              ActionIndex |-> Signatures:ExpressionList ActionSigners:Map,
+              PerformedActions:List)
         </TT></T>
       =>
         <T><TT>
@@ -41,7 +42,8 @@ module TRUSTED-BOARD-MEMBERS-SIGN-FOR
               Quorum,
               ActionLastIndex,
               ActionData,
-              ActionIndex |-> ?Signatures ActionSigners):StateCell
+              ActionIndex |-> ?Signatures ActionSigners,
+              PerformedActions:List):StateCell
         </TT></T>
     requires invariant(
             NumUsers,
@@ -112,7 +114,8 @@ module PROOF-BOARD-MEMBERS-SIGN-FOR
               Quorum:Usize,
               ActionLastIndex:Usize,
               (ActionIndex |-> _Action:KItem _ActionData:Map) #as ActionData:Map,
-              ActionIndex |-> Signatures:ExpressionList ActionSigners:Map)
+              ActionIndex |-> Signatures:ExpressionList ActionSigners:Map,
+              PerformedActions:List)
         </TT></T>
       =>
         <T><TT>
@@ -127,7 +130,8 @@ module PROOF-BOARD-MEMBERS-SIGN-FOR
               Quorum,
               ActionLastIndex,
               ActionData,
-              ActionIndex |-> ?Signatures ActionSigners):StateCell
+              ActionIndex |-> ?Signatures ActionSigners,
+              PerformedActions:List):StateCell
         </TT></T>
     requires invariant(
             NumUsers,

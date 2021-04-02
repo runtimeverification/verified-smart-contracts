@@ -130,7 +130,8 @@ module PSEUDOCODE-SYNTAX
                       |   "pushList"                  // ([list], Usize)
                       |   "isEmptyActionData"         // (action_id)
                       |   "canSign"                   // (user_id)
-                      |   "performAction"             // (action_id)
+                      |   "performAction"             // (action)
+                      |   "performActionNoLogging"    // (action)
                       |   "performActionFromId"       // (action_id)
                       |   "quorumReached"             // (action_id)
                       |   "clearAction"               // (action_id)
@@ -497,7 +498,7 @@ module PSEUDOCODE-FUNCTIONS
   syntax KItem ::= call(Expression)
   syntax KItem ::= Expression
 
-  syntax Stack ::= stackEntry(MultisigStateCell, Map)
+  syntax Stack ::= stackEntry(MultisigStateCell, variables:Map, performedActions:List)
 
   context evaluate(_:FunctionTag(
           {HOLE => evaluateAc(HOLE)}:>ArgumentCSV
@@ -518,9 +519,12 @@ module PSEUDOCODE-FUNCTIONS
           S:MultisigStateCell
           <pseudocode-state>
             <variables> V:Map => .Map </variables>
-            <stack> (.List => ListItem(stackEntry(S, V))) ... </stack>
+            <stack> (.List => ListItem(stackEntry(S, V, Log))) ... </stack>
           </pseudocode-state>
           _:ExternalCallEnvCell
+          <log>
+            <performed-actions>Log:List</performed-actions>
+          </log>
         </state>
 
   rule  <k> (evaluate(E:Expression) => E) ~> popContext ... </k>
@@ -528,7 +532,7 @@ module PSEUDOCODE-FUNCTIONS
 
   rule  <k> E:Expression ~> (popContext => .K) ... </k>
         <variables> _ => V </variables>
-        <stack> (ListItem(stackEntry(_, V:Map)) => .List) ... </stack>
+        <stack> (ListItem(stackEntry(_, V:Map, _)) => .List) ... </stack>
     requires isKResult(E)
 
   rule  <k> (E:Expression ~> evaluateReturnValue) => evaluate(E) ... </k>
@@ -539,9 +543,12 @@ module PSEUDOCODE-FUNCTIONS
           (_ => S)
           <pseudocode-state>
             <variables> _ => V </variables>
-            <stack> (ListItem(stackEntry(S:MultisigStateCell, V:Map)) => .List) ... </stack>
+            <stack> (ListItem(stackEntry(S:MultisigStateCell, V:Map, Log:List)) => .List) ... </stack>
           </pseudocode-state>
           _:ExternalCallEnvCell
+          <log>
+            <performed-actions>_:List => Log</performed-actions>
+          </log>
         </state>
 
   rule <k> error ~> (evaluateReturnValue => .K) ... </k>
@@ -890,21 +897,26 @@ module PSEUDOCODE-FUNCTIONS
 
         )
 
-  rule call(performAction(Nothing)) => evaluate(void)
+  rule  <k> call(performAction(Action:Action))
+            => call(performActionNoLogging(Action))
+        ...</k>
+        <performed-actions> Log:List => ListItem(Action) Log </performed-actions>
 
-  rule call(performAction(AddBoardMember(BoardMemberAddress:Address)))
+  rule call(performActionNoLogging(Nothing)) => evaluate(void)
+
+  rule call(performActionNoLogging(AddBoardMember(BoardMemberAddress:Address)))
         => runPseudoCode(
               changeUserRole(BoardMemberAddress, BoardMember);
         )
 
-  rule call(performAction(AddProposer(ProposerAddress:Address)))
+  rule call(performActionNoLogging(AddProposer(ProposerAddress:Address)))
         => runPseudoCode(
               changeUserRole(ProposerAddress, Proposer);
               new_board_members = getNumBoardMembers();
               require(getQuorum() <= new_board_members);
         )
 
-  rule call(performAction(RemoveUser(UserAddress:Address)))
+  rule call(performActionNoLogging(RemoveUser(UserAddress:Address)))
         => runPseudoCode(
               changeUserRole(UserAddress, None);
               num_board_members = getNumBoardMembers();
@@ -913,18 +925,18 @@ module PSEUDOCODE-FUNCTIONS
               require(getQuorum() <= num_board_members);
         )
 
-  rule call(performAction(ChangeQuorum(NewQuorum)))
+  rule call(performActionNoLogging(ChangeQuorum(NewQuorum)))
         => runPseudoCode(
               require(NewQuorum <= getNumBoardMembers());
               setQuorum(NewQuorum);
         )
 
-  rule call(performAction(SendEgld(To:Address, Amount:BigUint, Data:BoxedBytes)))
+  rule call(performActionNoLogging(SendEgld(To:Address, Amount:BigUint, Data:BoxedBytes)))
         => runPseudoCode(
               sendTx(To, Amount, Data);
         )
 
-  rule call(performAction(SCDeploy(
+  rule call(performActionNoLogging(SCDeploy(
             Amount:BigUint,
             Code:BoxedBytes,
             CodeMetadata:CodeMetadata,
@@ -936,7 +948,7 @@ module PSEUDOCODE-FUNCTIONS
               void;
         )
 
-  rule call(performAction(SCCall(To:Address, Amount:BigUint, Function:BoxedBytes, [Arguments:ExpressionCSV])))
+  rule call(performActionNoLogging(SCCall(To:Address, Amount:BigUint, Function:BoxedBytes, [Arguments:ExpressionCSV])))
         => runPseudoCode(
               asyncCall(To, Amount, [Function , Arguments]);
         )
@@ -1256,6 +1268,9 @@ module PSEUDOCODE-CONFIGURATION
           <external-call-env>
             <caller-address>uninitialized</caller-address>
           </external-call-env>
+          <log>
+            <performed-actions>.List</performed-actions>
+          </log>
         </state>
     </TT>
   </T>
@@ -1290,5 +1305,8 @@ module PSEUDOCODE-CONFIGURATION
         <external-call-env>
           <caller-address>uninitialized</caller-address>
         </external-call-env>
+        <log>
+          <performed-actions>.List</performed-actions>
+        </log>
       </state>
 endmodule

@@ -15,7 +15,8 @@ module TRUSTED-PERFORM-CHANGE-QUORUM
             OldQuorum:Usize,
             ActionState:ActionStateCell,
             Stack:List,
-            CallerAddress:Address)
+            CallerAddress:Address,
+            PerformedActions:List)
       </T>
       =>
       <T>
@@ -32,7 +33,8 @@ module TRUSTED-PERFORM-CHANGE-QUORUM
             ActionState,
             ?_Variables:Map,
             Stack:List,
-            CallerAddress)
+            CallerAddress,
+            ListItem(Action) PerformedActions:List)
       </T>
     requires performRequires(
             Action,
@@ -68,7 +70,8 @@ module TRUSTED-PERFORM-CHANGE-QUORUM
             OldQuorum:Usize,
             ActionState:ActionStateCell,
             Stack:List,
-            CallerAddress:Address)
+            CallerAddress:Address,
+            _PerformedActions:List)
       </T>
       =>
       <T>
@@ -85,7 +88,8 @@ module TRUSTED-PERFORM-CHANGE-QUORUM
             ActionState,
             ?_Variables:Map,
             Stack:List,
-            CallerAddress)
+            CallerAddress,
+            ?_PerformedActions:List)
       </T>
     requires performRequires(
             Action,
@@ -125,7 +129,8 @@ module PROOF-PERFORM-CHANGE-QUORUM
             OldQuorum:Usize,
             ActionState:ActionStateCell,
             .List, // TODO: Stack:List,
-            CallerAddress:Address)
+            CallerAddress:Address,
+            PerformedActions:List)
       </T>
       =>
       <T>
@@ -142,7 +147,8 @@ module PROOF-PERFORM-CHANGE-QUORUM
             ActionState,
             ?_Variables:Map,
             .List, // TODO: Stack:List,
-            CallerAddress)
+            CallerAddress,
+            ListItem(Action) PerformedActions:List)
       </T>
     requires performRequires(
             Action,
@@ -177,7 +183,8 @@ module PROOF-PERFORM-CHANGE-QUORUM
             OldQuorum:Usize,
             ActionState:ActionStateCell,
             .List, // TODO: Stack:List,
-            CallerAddress:Address)
+            CallerAddress:Address,
+            _PerformedActions:List)
       </T>
       =>
       <T>
@@ -194,7 +201,8 @@ module PROOF-PERFORM-CHANGE-QUORUM
             ActionState,
             ?_Variables:Map,
             .List, // TODO: Stack:List,
-            CallerAddress)
+            CallerAddress,
+            ?_PerformedActions:List)
       </T>
     requires performRequires(
             Action,

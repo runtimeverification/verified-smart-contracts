@@ -47,6 +47,7 @@ endmodule
 
 module PERFORM-SPLIT-ACTION-INSTRUMENTATION
   imports PSEUDOCODE
+  imports CONCRETIZE-INSTRUMENTATION
 
   syntax KItem ::= "splitting-action"
   rule  <k> pushContext ~> (.K => splitAction(A) ~> splitting-action) ~> call(performAction(A:Action))
@@ -57,23 +58,30 @@ module PERFORM-SPLIT-ACTION-INSTRUMENTATION
 
   syntax KItem ::= splitAction(Action)
   rule splitAction(Nothing) => .K
-  rule splitAction(AddBoardMember(_:Address)) => .K
-  rule splitAction(AddProposer(_:Address)) => .K
-  rule splitAction(RemoveUser(address(_:Int))) => .K
-  rule splitAction(ChangeQuorum(_:Usize)) => .K
-  rule splitAction(SendEgld(_To:Address, _Amount:BigUint, _Data:BoxedBytes)) => .K
+  rule splitAction(AddBoardMember(A:Address)) => concretizeValue(A)
+  rule splitAction(AddProposer(A:Address)) => concretizeValue(A)
+  rule splitAction(RemoveUser(A:Address)) => concretizeValue(A)
+  rule splitAction(ChangeQuorum(Q:Usize)) => concretizeValue(Q)
+  rule splitAction(SendEgld(To:Address, Amount:BigUint, Data:BoxedBytes)) =>
+      concretizeValue(To) ~> concretizeValue(Amount) ~> concretizeValue(Data)
   rule splitAction(SCDeploy(
-          _Amount:BigUint,
-          _Code:BoxedBytes,
-          _CodeMetadata:CodeMetadata,
-          _Arguments:ExpressionList))
-      => .K
+          Amount:BigUint,
+          Code:BoxedBytes,
+          CodeMetadata:CodeMetadata,
+          Arguments:ExpressionList))
+      =>   concretizeValue(Amount)
+        ~> concretizeValue(Code)
+        ~> concretizeValue(CodeMetadata)
+        ~> concretizeValue(Arguments)
   rule splitAction(SCCall(
-          _To:Address,
-          _Amount:BigUint,
-          _Function:BoxedBytes,
-          _Arguments:ExpressionList))
-      => .K
+          To:Address,
+          Amount:BigUint,
+          Function:BoxedBytes,
+          Arguments:ExpressionList))
+      =>   concretizeValue(To)
+        ~> concretizeValue(Amount)
+        ~> concretizeValue(Function)
+        ~> concretizeValue(Arguments)
 
 endmodule
 

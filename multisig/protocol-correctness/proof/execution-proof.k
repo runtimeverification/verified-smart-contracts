@@ -12,9 +12,19 @@ module CONCRETIZE-INSTRUMENTATION
   imports PSEUDOCODE
 
   syntax KItem ::= concretizeValue(KItem)
+
   rule concretizeValue([CSV:ExpressionCSV]) => concretizeValue(CSV)
+
   rule concretizeValue(u(V:Int)) => concretizeValue(V)
+
   rule concretizeValue(address(V:Int)) => concretizeValue(V)
+
+  rule concretizeValue(big(V:Int)) => concretizeValue(V)
+
+  rule concretizeValue(meta(V:Int)) => concretizeValue(V)
+
+  rule concretizeValue(bytes(V:String)) => concretizeValue(V)
+
   rule concretizeValue(BoardMember) => .K
   rule concretizeValue(Proposer) => .K
   rule concretizeValue(None) => .K

@@ -75,7 +75,8 @@ module INVARIANT
       quorum:Usize,
       actionLastIndex:Usize,
       actionData:Map,
-      actionSigners:Map)  [function, functional]
+      actionSigners:Map,
+      performedActions:List)  [function, functional]
 
   syntax MultisigStateCell ::= invariantMultisigState(
       numUsers:Usize,
@@ -101,7 +102,8 @@ module INVARIANT
       actionData:Map,
       actionSigners:Map,
       callerAddress:KItem,
-      stack:List)  [function, functional]
+      stack:List,
+      performedActions:List)  [function, functional]
 
   syntax StateCell ::= invariantStateFull(
       numUsers:Usize,
@@ -116,7 +118,8 @@ module INVARIANT
       actionSigners:Map,
       callerAddress:KItem,
       stack:List,
-      variables:Map)  [function, functional]
+      variables:Map,
+      performedActions:List)  [function, functional]
 
   rule invariantState(
       NumUsers:Usize,
@@ -128,7 +131,8 @@ module INVARIANT
       Quorum:Usize,
       ActionLastIndex:Usize,
       ActionData:Map,
-      ActionSigners:Map)
+      ActionSigners:Map,
+      PerformedActions:List)
     =>
       invariantStateStack(
           NumUsers,
@@ -142,7 +146,8 @@ module INVARIANT
           ActionData,
           ActionSigners,
           uninitialized,
-          .List)
+          .List,
+          PerformedActions)
 
   rule invariantStateStack(
       NumUsers:Usize,
@@ -156,7 +161,8 @@ module INVARIANT
       ActionData:Map,
       ActionSigners:Map,
       CallerAddress:KItem,
-      Stack:List)
+      Stack:List,
+      PerformedActions:List)
     => invariantStateFull(
           NumUsers,
           UserIdToAddress,
@@ -170,7 +176,8 @@ module INVARIANT
           ActionSigners,
           CallerAddress,
           Stack,
-          .Map)
+          .Map,
+          PerformedActions)
 
   rule invariantStateFull(
       NumUsers:Usize,
@@ -185,7 +192,8 @@ module INVARIANT
       ActionSigners:Map,
       CallerAddress:KItem,
       Stack:List,
-      Variables:Map)
+      Variables:Map,
+      PerformedActions:List)
     =>
       <state>
         invariantMultisigState(
@@ -206,6 +214,9 @@ module INVARIANT
         <external-call-env>
           <caller-address>CallerAddress</caller-address>
         </external-call-env>
+        <log>
+          <performed-actions>PerformedActions</performed-actions>
+        </log>
       </state>
 
   rule invariantMultisigState(

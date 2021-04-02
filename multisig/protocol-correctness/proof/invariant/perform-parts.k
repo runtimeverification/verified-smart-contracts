@@ -66,7 +66,8 @@ module PERFORM-PARTS
       quorum:Usize,
       ActionStateCell,
       stack:List,
-      callerAddress:Address)
+      callerAddress:Address,
+      performedActions:List)
     [function, functional]
   syntax TTCell ::= performRhs(
           result:KItem,
@@ -81,7 +82,8 @@ module PERFORM-PARTS
           ActionStateCell,
           variables:Map,
           stack:List,
-          callerAddress:Address)
+          callerAddress:Address,
+          performedActions:List)
       [function, functional]
 
   rule performRequires(
@@ -218,7 +220,8 @@ module PERFORM-PARTS
           Quorum:Usize,
           ActionState:ActionStateCell,
           Stack:List,
-          CallerAddress:Address)
+          CallerAddress:Address,
+          PerformedActions:List)
         =>
         <TT>
           <k> call(performAction(Action)) ~> K </k>
@@ -246,6 +249,9 @@ module PERFORM-PARTS
             <external-call-env>
               <caller-address>CallerAddress</caller-address>
             </external-call-env>
+            <log>
+              <performed-actions>PerformedActions</performed-actions>
+            </log>
           </state>
         </TT>
 
@@ -262,7 +268,8 @@ module PERFORM-PARTS
           ActionState:ActionStateCell,
           Variables:Map,
           Stack:List,
-          CallerAddress:Address)
+          CallerAddress:Address,
+          PerformedActions:List)
         =>
         <TT>
           <k> Result ~> K </k>
@@ -290,6 +297,9 @@ module PERFORM-PARTS
             <external-call-env>
               <caller-address>CallerAddress</caller-address>
             </external-call-env>
+            <log>
+              <performed-actions>PerformedActions</performed-actions>
+            </log>
           </state>
         </TT>
 
