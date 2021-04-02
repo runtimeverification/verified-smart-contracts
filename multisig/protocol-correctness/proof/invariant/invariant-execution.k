@@ -56,7 +56,7 @@ endmodule
 
 module PERFORM-SPLIT-ACTION-INSTRUMENTATION
   imports PSEUDOCODE
- 
+
   syntax KItem ::= "splitting-action"
   rule  <k> pushContext ~> (.K => splitAction(A) ~> splitting-action) ~> call(performAction(A:Action))
         ...</k>
@@ -83,6 +83,7 @@ module PERFORM-SPLIT-ACTION-INSTRUMENTATION
           _Function:BoxedBytes,
           _Arguments:ExpressionList))
       => .K
+
 endmodule
 
 module PERFORM-ACTION-REMOVE-USER-INSTRUMENTATION
@@ -151,13 +152,14 @@ module PERFORM-ACTION-SC-DEPLOY-INSTRUMENTATION
                         Arguments:ExpressionList)))
         ...</k>
     [priority(10)]
+
 endmodule
 
 module PERFORM-ACTION-ADD-PROPOSER-INSTRUMENTATION
   imports INVARIANT-INSTRUMENTATION
   imports PERFORM-SPLIT-ACTION-INSTRUMENTATION
   imports PSEUDOCODE
- 
+
   syntax KItem ::= splittingActionProposer1(Address)
   syntax KItem ::= splittingActionProposer2(Address)
 
@@ -251,7 +253,7 @@ module CHANGE-USER-ROLE-INSTRUMENTATION
   syntax KItem ::= splitChangeUserRole2(Address)
   syntax KItem ::= splitChangeUserRole3(Usize)
 
-  rule  preCall 
+  rule  preCall
         ~> (.K => splitChangeUserRole(UserAddress))
         ~> call(changeUserRole(UserAddress:Address, _NewRole:UserRole))
   [priority(20)]
@@ -302,7 +304,7 @@ module SIGN-INSTRUMENTATION
   syntax KItem ::= splitSign2(Usize)
   syntax KItem ::= splitSign3(Usize)
 
-  rule  preCall 
+  rule  preCall
         ~> (.K => splitSign(ActionId))
         ~> call(sign(ActionId:Usize))
   [priority(20)]
@@ -353,7 +355,7 @@ module SIGN-INSTRUMENTATION
         <action-signers>ActionSigners:Map</action-signers>
     requires CallerAddress in_keys(AddressToUserId)
       andBool AddressToUserId[CallerAddress] in_keys(UserIdToRole)
- endmodule
+endmodule
 
 module INVARIANT-EXECUTION
   imports EXECUTION-PROOF

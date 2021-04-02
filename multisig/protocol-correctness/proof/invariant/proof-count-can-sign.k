@@ -41,7 +41,7 @@ module TRUSTED-COUNT-CAN-SIGN
             ExternalCallEnv)
     ensures
         countCanSignEnsures(
-            ?Count,
+            u(countCanSignFunction(SignerIds, opaque(UserIdToRole))),
             Users,
             NumBoardMembers,
             NumProposers,

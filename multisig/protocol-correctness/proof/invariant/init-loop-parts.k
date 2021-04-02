@@ -70,7 +70,6 @@ module INIT-LOOP-PARTS
               <stack> Stack </stack>
             </pseudocode-state>
             ExternalCallEnv
-
           </state>
         </TT>
 
@@ -215,6 +214,8 @@ module INIT-LOOP-PARTS
       // andBool valuesAreDistinct(AddressToUserId)
       andBool noReusedIndexValue(NumUsers +Int 1, AddressToUserId, Handling)
       andBool unusedIdsInMapValues(NumUsers +Int 1, AddressToUserId, Handling)
+
+      andBool unusedIdsInMapKeys(NumUsers +Int 1, keysMap(UserIdToAddress), Handling)
 
       andBool userIdToRoleInvariant(UserIdToRole)
       // andBool valuesAreOfType(UserIdToRole, rUserRole)

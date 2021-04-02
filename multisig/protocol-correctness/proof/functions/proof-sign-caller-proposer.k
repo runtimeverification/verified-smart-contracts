@@ -43,7 +43,7 @@ module TRUSTED-SIGN-CALLER-PROPOSER
       andBool notBool u(0) in_keys(UserIdToRole)
       andBool actionDataInvariant(ActionData)
       andBool userIdToRoleInvariant(UserIdToRole)
-      
+   
       andBool ActionId in_keys(ActionData)
       // andBool notBool ActionId in_keys(ActionSigners)
     ensures true

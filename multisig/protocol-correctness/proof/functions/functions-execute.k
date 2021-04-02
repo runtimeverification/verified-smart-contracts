@@ -7,7 +7,7 @@ endmodule
 module FUNCTIONS-INSTRUMENTATION
   imports PROOF-INSTRUMENTATION
 
-  rule  preCall 
+  rule  preCall
       ~> (.K => concretizeValue(Role))
       ~> call(canSign(Role:UserRole))
   [priority(20)]

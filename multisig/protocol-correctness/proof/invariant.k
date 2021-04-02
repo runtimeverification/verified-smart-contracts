@@ -237,7 +237,7 @@ module INVARIANT
             </actions>
           </action-state>
         </multisig-state>
-      
+   
   syntax Bool ::= invariant(
       numUsers:Usize,
       userIdToAddress:Map,

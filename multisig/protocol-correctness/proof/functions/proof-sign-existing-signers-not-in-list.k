@@ -43,7 +43,7 @@ module TRUSTED-SIGN-EXISTING-SIGNERS-NOT-IN-LIST
       andBool notBool u(0) in_keys(UserIdToRole)
       andBool actionDataInvariant(ActionData)
       andBool userIdToRoleInvariant(UserIdToRole)
-      
+   
       andBool ActionId in_keys(ActionData)
       andBool isKResult(Signers)
       andBool notBool #listContains([Signers], UserId)

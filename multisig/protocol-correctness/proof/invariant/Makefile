@@ -42,7 +42,7 @@ $(INVARIANT_OUT_PREFIX)proofperform.timestamp: ${INVARIANT_PERFORM_TIMESTAMPS} $
 	@touch $(INVARIANT_OUT_PREFIX)proofperform.timestamp
 
 $(INVARIANT_OUT_PREFIX)proofpropose.timestamp: ${INVARIANT_PROPOSE_TIMESTAMPS} $(INVARIANT_OUT_PREFIX)execution.timestamp
-       $(DIR_GUARD)
-       @touch $(INVARIANT_OUT_PREFIX)proofpropose.timestamp
+	$(DIR_GUARD)
+	@touch $(INVARIANT_OUT_PREFIX)proofpropose.timestamp
 
 clean: invariant.clean

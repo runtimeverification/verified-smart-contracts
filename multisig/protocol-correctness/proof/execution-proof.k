@@ -538,6 +538,7 @@ module PROOF-INSTRUMENTATION
   syntax KItem ::= branchK(Bool, K, K)
   rule branchK(true, K:K, _:K) => K
   rule branchK(false, _:K, K:K) => K
+
 endmodule
 
 module EXECUTION-PROOF-BOOL
