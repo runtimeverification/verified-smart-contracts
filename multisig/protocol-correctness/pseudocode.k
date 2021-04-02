@@ -511,6 +511,8 @@ module PSEUDOCODE-FUNCTIONS
             => (pushContext ~> preCall ~> call(FunctionCall) ~> popContext ~> evaluateReturnValue)
         ...</k>
 
+  rule preCall => .K
+
   rule  <k> pushContext => .K ... </k>
         <state>
           S:MultisigStateCell
