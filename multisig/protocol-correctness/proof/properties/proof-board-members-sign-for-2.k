@@ -1,5 +1,13 @@
 require "../map/proof-map-semantics.k"
 
+require "../functions/proof-sign-empty-action.k"
+require "../functions/proof-sign-caller-not-user.k"
+require "../functions/proof-sign-caller-none.k"
+require "../functions/proof-sign-caller-proposer.k"
+require "../functions/proof-sign-no-signers.k"
+require "../functions/proof-sign-existing-signers-in-list.k"
+require "../functions/proof-sign-existing-signers-not-in-list.k"
+
 require "proof-board-members-sign-for.k"
 
 module TRUSTED-BOARD-MEMBERS-SIGN-FOR-2
@@ -85,6 +93,14 @@ module PROOF-BOARD-MEMBERS-SIGN-FOR-2
   imports TRUSTED-MAP-SEMANTICS
 
   imports TRUSTED-BOARD-MEMBERS-SIGN-FOR
+
+  imports TRUSTED-SIGN-EMPTY-ACTION
+  imports TRUSTED-SIGN-CALLER-NOT-USER
+  imports TRUSTED-SIGN-CALLER-NONE
+  imports TRUSTED-SIGN-CALLER-PROPOSER
+  imports TRUSTED-SIGN-NO-SIGNERS
+  imports TRUSTED-SIGN-EXISTING-SIGNERS-IN-LIST
+  imports TRUSTED-SIGN-EXISTING-SIGNERS-NOT-IN-LIST
 
   claim <T><TT>
           <k> boardMembersSignFor(ActionIndex:Usize, PartialUserRoles:Map)

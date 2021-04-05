@@ -56,22 +56,21 @@ module PROPERTIES-EXECUTE
             UserId:KItem,
             V:KItem,
             UserIdToRole:Map)
-        =>  (  cast(V, rUserRole)
-            ~> removeValue
-            ~> splitBoolean(V ==K BoardMember)
+        =>  (   cast(V, rUserRole)
+            ~>  removeValue
+            ~>  concretizeValue(V)
             ~>  branchK(
                   V ==K BoardMember,
                   cast(UserId, rUsize)
                     ~> removeValue
                     ~> signFor(ActionId, UserId)
                     ~> boardMembersSignFor(ActionId, UserIdToRole),
-                    boardMembersSignFor(ActionId, UserIdToRole)
+                  boardMembersSignFor(ActionId, UserIdToRole)
                 )
             )
 
   rule  <k> signFor(ActionId:Usize, UserId:KItem)
-            =>  (  splitMap(UserId, UserIdToAddress, ?_Address:KItem, ?_UserIdToAddressRemainder:Map)
-                ~> lazyCastMapValue(UserId, UserIdToAddress, rAddress)
+            =>  (  makeConcreteValue(UserId, rAddress, UserIdToAddress)
                 ~> #signFor(ActionId, UserId)
                 )
         ...</k>
@@ -121,7 +120,7 @@ module PROPERTIES-EXECUTE
   rule  (  Address:Address
         ~> withPickedUserCall(Call:EndpointCall)
         )
-      => runExternalCall(from Address run Call;)
+      => concretizeValue(Address) ~> runExternalCall(from Address run Call;)
 
   ////////////////////////////////////////
 

@@ -4,16 +4,25 @@ require "proof-board-members-sign-for.k"
 require "proof-board-members-sign-for-2.k"
 require "proof-board-members-sign-for-3.k"
 
+require "../functions/proof-propose-action-BoardMember.k"
+require "../functions/proof-propose-action-Proposer.k"
+require "../functions/proof-propose-action-error.k"
+
 module PROOF-CAN-PROPOSE-AND-EXECUTE
   imports MAP-EXECUTE
   imports PROPERTIES-EXECUTE
   imports PSEUDOCODE
+
   imports TRUSTED-BOARD-MEMBERS-SIGN-FOR
   imports TRUSTED-BOARD-MEMBERS-SIGN-FOR-2
   imports TRUSTED-BOARD-MEMBERS-SIGN-FOR-3
 
   imports TRUSTED-COUNT-CAN-SIGN
   imports TRUSTED-MAP-SEMANTICS
+
+  imports TRUSTED-PROPOSE-ACTION-ERROR
+  imports TRUSTED-PROPOSE-ACTION-BOARDMEMBER
+  imports TRUSTED-PROPOSE-ACTION-PROPOSER
 
   claim <T><TT>
           <k> pickBoardMemberOrProposer(UserIdToRole)
