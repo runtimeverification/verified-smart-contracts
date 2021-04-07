@@ -1,4 +1,4 @@
-INVARIANT_OUT_PREFIX=out/invariant.
+INVARIANT_OUT_PREFIX=.out/invariant.
 
 INVARIANT_ALL := $(wildcard $(INVARIANT_DIR)/*.k)
 INVARIANT_PROOFS := $(wildcard $(INVARIANT_DIR)/proof-*.k)

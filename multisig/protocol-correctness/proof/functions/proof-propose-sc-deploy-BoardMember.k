@@ -1,12 +1,31 @@
 //@ proof
-module PROOF-PROPOSE-ACTION-PROPOSER
+require "trusted-propose-action-BoardMember.k"
+require "trusted-propose-sc-deploy-fragment.k"
 //@ trusted
-// module TRUSTED-PROPOSE-ACTION-PROPOSER
+//@ end
+
+//@ proof
+module PROOF-PROPOSE-SC-DEPLOY-BOARDMEMBER
+//@ trusted
+// module TRUSTED-PROPOSE-SC-DEPLOY-BOARDMEMBER
 //@ end
   imports FUNCTIONS-EXECUTE
 
+  //@ proof
+  imports TRUSTED-PROPOSE-ACTION-BOARDMEMBER
+  imports TRUSTED-PROPOSE-SC-DEPLOY-FRAGMENT
+  //@ trusted
+  //@ end
+
   claim <T><TT>
-          <k> call(proposeAction(Action:Action)) ~> K:K
+          <k> call(proposeSCDeploy(
+                    Amount:BigUint,
+                    Code:BoxedBytes,
+                    Upgradeable:Bool,
+                    Payable:Bool,
+                    Readable:Bool,
+                    Args:ExpressionList))
+              ~> K:K
           </k>
           invariantStateFull(
               NumUsers:Usize,
@@ -30,7 +49,7 @@ module PROOF-PROPOSE-ACTION-PROPOSER
         </TT></T>
       =>
         <T><TT>
-          <k> u(ActionLastIndex +Int 1) ~> K </k>
+          <k> evaluate(u(ActionLastIndex +Int 1)) ~> K </k>
           invariantStateFull(
               NumUsers,
               UserIdToAddress,
@@ -40,8 +59,14 @@ module PROOF-PROPOSE-ACTION-PROPOSER
               UserIdToRole,
               Quorum,
               u(ActionLastIndex +Int 1),
-              u(ActionLastIndex +Int 1) |-> Action ActionData,
-              ActionSigners,
+              u(ActionLastIndex +Int 1)
+                      |-> SCDeploy(
+                            Amount,
+                            Code,
+                            codeMetadataFunction(Upgradeable, Payable, Readable),
+                            Args)
+                  ActionData,
+              (u(ActionLastIndex +Int 1) |-> [{AddressToUserId[CallerAddress]}:>Usize, .]) ActionSigners,
               CallerAddress,
               //@ proof
               .List,  // TODO: Stack:List,
@@ -52,8 +77,7 @@ module PROOF-PROPOSE-ACTION-PROPOSER
               ):StateCell
         </TT></T>
     requires true
-      andBool isKResult(Action)
-      andBool valueIsNotEmpty(Action, rAction)
+      andBool isKResult(Args)
 
       andBool valuesAreKResult(AddressToUserId)
       andBool valuesAreOfType(AddressToUserId, rUsize)
@@ -67,10 +91,12 @@ module PROOF-PROPOSE-ACTION-PROPOSER
 
       andBool CallerAddress in_keys(AddressToUserId)
       andBool AddressToUserId[CallerAddress] in_keys(UserIdToRole)
-      andBool UserIdToRole[AddressToUserId[CallerAddress]] ==K Proposer
+      andBool UserIdToRole[AddressToUserId[CallerAddress]] ==K BoardMember
     ensures true
     //@ proof
     //@ trusted
     // [trusted]
     //@ end
 endmodule
+
+

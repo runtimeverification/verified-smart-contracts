@@ -40,18 +40,9 @@ module INVARIANT-INSTRUMENTATION
   rule (M:Map ~> lazyConcretizeKeysFreezer) => (lazyConcretizeKeys(M) ~> M)
     [priority(20)]
 
-  // TODO: Move in execution-proof.k
-  syntax KItem ::= makeConcreteValue(key:KItem, valueType:ReflectionType, Map)
-  rule makeConcreteValue(Key:KItem, ValueType:ReflectionType, M:Map)
-    => lazySplitMap(Key, M, ?_Value:KItem, ?_Remainder:Map)
-      ~>  cast(M[Key], ValueType)
-      ~>  removeValue
-      ~> concretizeValue(M[Key])
-    requires Key in_keys(M)
-
-  syntax KItem ::= lazySplitMap(k:KItem, m:Map, value:KItem, remainder:Map)
-  rule lazySplitMap(K:KItem, M:Map, Value:KItem, Remainder:Map)
-      => splitMap(K, M, Value, Remainder)
+  // syntax KItem ::= lazySplitMap(k:KItem, m:Map, value:KItem, remainder:Map)
+  // rule lazySplitMap(K:KItem, M:Map, Value:KItem, Remainder:Map)
+  //     => splitMap(K, M, Value, Remainder)
 endmodule
 
 module PERFORM-SPLIT-ACTION-INSTRUMENTATION
@@ -143,7 +134,6 @@ module PERFORM-ACTION-SC-DEPLOY-INSTRUMENTATION
   imports PERFORM-SPLIT-ACTION-INSTRUMENTATION
   imports INVARIANT-INSTRUMENTATION
 
-  syntax KItem ::= "concretize-sc-deploy"
   rule  <k> (splitting-action => concretizeValue(Arguments))
             ~> call(performAction(SCDeploy(
                         _Amount:BigUint,
@@ -155,19 +145,53 @@ module PERFORM-ACTION-SC-DEPLOY-INSTRUMENTATION
 
 endmodule
 
+module PROPOSE-SC-DEPLOY-INSTRUMENTATION
+  imports PROOF-INSTRUMENTATION
+  imports PSEUDOCODE
+
+  syntax KItem ::= "split-sc-deploy"
+  syntax KItem ::= "split-sc-deploy1"
+
+  rule  preCall
+        ~> (.K => split-sc-deploy)
+        ~> call(proposeSCDeploy(_:BigUint, _:BoxedBytes, _:Bool, _:Bool, _:Bool, _:ExpressionList))
+  [priority(20)]
+
+  rule  <k> split-sc-deploy
+            =>  branchK(
+                  Caller in_keys(AddressToUserId),
+                  makeConcreteValue(Caller, rUsize, AddressToUserId)
+                    ~>  split-sc-deploy1,
+                  .K
+                )
+        ... </k>
+        <address-to-user-id>AddressToUserId:Map</address-to-user-id>
+        <caller-address>Caller:KItem</caller-address>
+
+  rule  <k> split-sc-deploy1
+            =>  branchK(
+                  AddressToUserId[Caller] in_keys(UserIdToRole),
+                  makeConcreteValue(AddressToUserId[Caller], rUserRole, UserIdToRole),
+                  .K
+                )
+        ... </k>
+        <address-to-user-id>AddressToUserId:Map</address-to-user-id>
+        <user-roles> UserIdToRole:Map </user-roles>
+        <caller-address>Caller:KItem</caller-address>
+endmodule
+
 module PERFORM-ACTION-ADD-PROPOSER-INSTRUMENTATION
   imports INVARIANT-INSTRUMENTATION
   imports PERFORM-SPLIT-ACTION-INSTRUMENTATION
   imports PSEUDOCODE
 
-  syntax KItem ::= splittingActionProposer1(Address)
-  syntax KItem ::= splittingActionProposer2(Address)
+  syntax KItem ::= splittingActionProposer(Address)
 
   rule  <k> (
               splitting-action
               =>  branchK(
                     A1 in_keys(AddressToUserId),
-                    splittingActionProposer1(A1),
+                    splittingActionProposer(A1),
                     .K
                   )
             )
@@ -176,73 +200,18 @@ module PERFORM-ACTION-ADD-PROPOSER-INSTRUMENTATION
         <address-to-user-id>AddressToUserId:Map</address-to-user-id>
     [priority(10)]
 
-  rule  <k> splittingActionProposer1(A1:Address)
-            =>   makeConcreteValue(A1, rUsize, AddressToUserId)
-              ~> splittingActionProposer2(A1)
+  rule  <k> splittingActionProposer(A1:Address)
+            =>    makeConcreteValue(A1, rUsize, AddressToUserId)
+              ~>  branchK(
+                    AddressToUserId[A1] in_keys(UserIdToRole),
+                    makeConcreteValue(AddressToUserId[A1], rUserRole, UserIdToRole),
+                    .K
+                  )
         ...</k>
         <address-to-user-id>AddressToUserId:Map</address-to-user-id>
+        <user-roles> UserIdToRole:Map </user-roles>
     requires A1 in_keys(AddressToUserId)
       // TODO: Do I need AddressToUserId[A1] in_keys(UserIdToRole)?
-
-  // TODO: Merge this rule with the previous one.
-  rule  <k> splittingActionProposer2(A1:Address)
-            =>   makeConcreteValue(AddressToUserId[A1], rUserRole, UserIdToRole)
-        ...</k>
-        <address-to-user-id>AddressToUserId:Map</address-to-user-id>
-        <user-roles> UserIdToRole:Map </user-roles>
-    requires true
-      andBool A1 in_keys(AddressToUserId)
-      andBool AddressToUserId[A1] in_keys(UserIdToRole)
-
-endmodule
-
-module PROPOSE-ACTION-INSTRUMENTATION
-  imports INVARIANT-INSTRUMENTATION
-  imports PSEUDOCODE
-
-  syntax KItem ::= "split-propose-action"
-  syntax KItem ::= "split-propose-action1"
-  syntax KItem ::= "split-propose-action2"
-
-  rule preCall ~> (.K => split-propose-action) ~> call(proposeAction(_Action:Action))
-  [priority(20)]
-
-  rule  <k> split-propose-action
-            =>  branchK(
-                  Caller in_keys(AddressToUserId),
-                  lazySplitMap(
-                      Caller, AddressToUserId,
-                      ?_UserId:KItem, ?_AddressToUserIdRemainder:Map)
-                    ~>  split-propose-action1,
-                  .K
-                )
-        ... </k>
-        <address-to-user-id>AddressToUserId:Map</address-to-user-id>
-        <caller-address>Caller:KItem</caller-address>
-
-  rule  <k> split-propose-action1
-            =>  branchK(
-                  AddressToUserId[Caller] in_keys(UserIdToRole),
-                  lazySplitMap(
-                      AddressToUserId[Caller], UserIdToRole,
-                      ?_UserRole:KItem, ?_UserIdToRoleRemainder:Map)
-                    ~> split-propose-action2,
-                  .K
-                )
-        ... </k>
-        <address-to-user-id>AddressToUserId:Map</address-to-user-id>
-        <user-roles> UserIdToRole:Map </user-roles>
-        <caller-address>Caller:KItem</caller-address>
-
-  rule  <k> split-propose-action2
-            =>   cast(UserIdToRole[AddressToUserId[Caller]], rUserRole)
-              ~> removeValue
-              ~> concretizeValue(UserIdToRole[AddressToUserId[Caller]])
-        ... </k>
-
-        <address-to-user-id>AddressToUserId:Map</address-to-user-id>
-        <user-roles> UserIdToRole:Map </user-roles>
-        <caller-address>Caller:KItem</caller-address>
 endmodule
 
 module CHANGE-USER-ROLE-INSTRUMENTATION
@@ -268,32 +237,16 @@ module CHANGE-USER-ROLE-INSTRUMENTATION
         <address-to-user-id> AddressToUserId:Map </address-to-user-id>
 
   rule  <k> splitChangeUserRole2(Address:Address)
-            =>    lazySplitMap(
-                        Address, AddressToUserId,
-                        ?_UserId:KItem, ?_AddressToUserIdRemainder:Map)
-              ~>  cast(AddressToUserId[Address], rUsize)
-              ~>  removeValue
-              ~>  concretizeValue(AddressToUserId[Address])
+            =>    makeConcreteValue(Address, rUsize, AddressToUserId)
               ~>  branchK(
                     AddressToUserId[Address] in_keys(UserIdToRole),
-                    splitChangeUserRole3({AddressToUserId[Address]}:>Usize),
+                    makeConcreteValue(AddressToUserId[Address], rUserRole, UserIdToRole),
                     .K
                   )
         ... </k>
         <address-to-user-id> AddressToUserId:Map </address-to-user-id>
         <user-roles>UserIdToRole:Map</user-roles>
     requires Address in_keys(AddressToUserId)
-
-  rule  <k> splitChangeUserRole3(UserId:Usize)
-            =>    lazySplitMap(
-                        UserId, UserIdToRole,
-                        ?_UserRole:KItem, ?_UserIdToRoleRemainder:Map)
-              ~>  cast(UserIdToRole[UserId], rUserRole)
-              ~>  removeValue
-              ~>  concretizeValue(UserIdToRole[UserId])
-        ... </k>
-        <user-roles>UserIdToRole:Map</user-roles>
-    requires UserId in_keys(UserIdToRole)
 endmodule
 
 module SIGN-INSTRUMENTATION
@@ -369,6 +322,7 @@ module INVARIANT-EXECUTION
   imports PERFORM-ACTION-SC-DEPLOY-INSTRUMENTATION
   imports PERFORM-ACTION-REMOVE-USER-INSTRUMENTATION
   imports PERFORM-SPLIT-ACTION-INSTRUMENTATION
+  imports PROPOSE-SC-DEPLOY-INSTRUMENTATION
 
   imports COUNT-CAN-SIGN-PARTS
   imports INIT-LOOP-PARTS

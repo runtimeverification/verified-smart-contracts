@@ -1,16 +1,18 @@
 require "../functions/functions-execute.k"
 
-require "../functions/proof-propose-action-BoardMember.k"
-require "../functions/proof-propose-action-Proposer.k"
-require "../functions/proof-propose-action-error.k"
+require "../functions/trusted-propose-sc-deploy-BoardMember.k"
+require "../functions/trusted-propose-sc-deploy-Proposer.k"
+require "../functions/trusted-propose-sc-deploy-error-no-user.k"
+require "../functions/trusted-propose-sc-deploy-error-no-role.k"
 
 module PROOF-PROPOSE-SC-DEPLOY
   imports INVARIANT-EXECUTION
   imports PSEUDOCODE
 
-  imports TRUSTED-PROPOSE-ACTION-ERROR
-  imports TRUSTED-PROPOSE-ACTION-BOARDMEMBER
-  imports TRUSTED-PROPOSE-ACTION-PROPOSER
+  imports TRUSTED-PROPOSE-SC-DEPLOY-ERROR-NO-USER
+  imports TRUSTED-PROPOSE-SC-DEPLOY-ERROR-NO-ROLE
+  imports TRUSTED-PROPOSE-SC-DEPLOY-BOARDMEMBER
+  imports TRUSTED-PROPOSE-SC-DEPLOY-PROPOSER
 
   claim <T><TT>
           <k> runExternalCalls(

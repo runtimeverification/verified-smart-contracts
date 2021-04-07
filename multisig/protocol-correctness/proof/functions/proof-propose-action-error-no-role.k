@@ -1,12 +1,12 @@
 //@ proof
-module PROOF-SIGN-NO-SIGNERS
+module PROOF-PROPOSE-ACTION-ERROR-NO-ROLE
 //@ trusted
-// module TRUSTED-SIGN-NO-SIGNERS
+// module TRUSTED-PROPOSE-ACTION-ERROR-NO-ROLE
 //@ end
   imports FUNCTIONS-EXECUTE
 
   claim <T><TT>
-          <k> call(sign(ActionId:Usize)) ~> K:K
+          <k> call(proposeAction(_Action:Action)) ~> K:K
           </k>
           invariantStateFull(
               NumUsers:Usize,
@@ -14,9 +14,9 @@ module PROOF-SIGN-NO-SIGNERS
               (CallerAddress |-> UserId:Usize _AddressToUserId:Map) #as AddressToUserId:Map,
               NumBoardMembers:Usize,
               NumProposers:Usize,
-              (UserId |-> BoardMember _UserIdToRole:Map) #as UserIdToRole:Map,
+              UserIdToRole:Map,
               Quorum:Usize,
-              u(ActionLastIndex:Int),
+              ActionLastIndex:Usize,
               ActionData:Map,
               ActionSigners:Map,
               CallerAddress:Address,
@@ -30,7 +30,7 @@ module PROOF-SIGN-NO-SIGNERS
         </TT></T>
       =>
         <T><TT>
-          <k> void ~> K </k>
+          <k> error ~> K </k>
           invariantStateFull(
               NumUsers,
               UserIdToAddress,
@@ -39,28 +39,30 @@ module PROOF-SIGN-NO-SIGNERS
               NumProposers,
               UserIdToRole,
               Quorum,
-              u(ActionLastIndex),
+              ActionLastIndex,
               ActionData,
-              ActionId |-> [UserId, .] ActionSigners,
+              ActionSigners,
               CallerAddress,
               //@ proof
               .List,  // TODO: Stack:List,
               //@ trusted
               // Stack:List,
               //@ end
-              ?_Variables
+              ?_Variables:Map
               ):StateCell
         </TT></T>
     requires true
       andBool notBool u(0) in_keys(UserIdToRole)
-      andBool actionDataInvariant(ActionData)
-      andBool userIdToRoleInvariant(UserIdToRole)
-      andBool unusedIdsInMapKeys(ActionLastIndex +Int 1, keysMap(ActionData), Handling)
 
-      andBool ActionId in_keys(ActionData)
-      andBool notBool ActionId in_keys(ActionSigners)
+      andBool valuesAreKResult(AddressToUserId)
+      andBool valuesAreOfType(AddressToUserId, rUsize)
+      andBool valuesAreNotEmpty(AddressToUserId, rUsize)
+
+      andBool valuesAreOfType(UserIdToRole, rUserRole)
+      andBool valuesAreKResult(UserIdToRole)
+
+      andBool notBool UserId in_keys(UserIdToRole)
     ensures true
-      andBool usizeToInt(ActionId) <Int ActionLastIndex +Int 1
     //@ proof
     //@ trusted
     // [trusted]

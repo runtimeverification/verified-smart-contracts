@@ -1,4 +1,4 @@
-PROPERTIES_OUT_PREFIX=out/properties.
+PROPERTIES_OUT_PREFIX=.out/properties.
 
 PROPERTIES_ALL := $(wildcard $(PROPERTIES_DIR)/*.k)
 PROPERTIES_PROOFS := $(wildcard $(PROPERTIES_DIR)/proof-*.k)

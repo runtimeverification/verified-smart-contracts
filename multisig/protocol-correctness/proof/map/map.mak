@@ -1,4 +1,4 @@
-MAP_OUT_PREFIX=out/map.
+MAP_OUT_PREFIX=.out/map.
 
 MAP_ALL := $(wildcard $(MAP_DIR)/*.k)
 MAP_PROOFS := $(wildcard $(MAP_DIR)/proof-*.k)

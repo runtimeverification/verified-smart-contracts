@@ -1,51 +1,8 @@
-module TRUSTED-SIGN-EMPTY-ACTION
-  imports FUNCTIONS-EXECUTE
-
-  claim <T><TT>
-          <k> call(sign(ActionId:Usize)) ~> K:K
-          </k>
-          invariantStateFull(
-              NumUsers:Usize,
-              UserIdToAddress:Map,
-              AddressToUserId:Map,
-              NumBoardMembers:Usize,
-              NumProposers:Usize,
-              UserIdToRole:Map,
-              Quorum:Usize,
-              ActionLastIndex:Usize,
-              ActionData:Map,
-              ActionSigners:Map,
-              CallerAddress:Address,
-              Stack:List,
-              .Map
-              )
-        </TT></T>
-      =>
-        <T><TT>
-          <k> error ~> K </k>
-          invariantStateFull(
-              NumUsers,
-              UserIdToAddress,
-              AddressToUserId,
-              NumBoardMembers,
-              NumProposers,
-              UserIdToRole,
-              Quorum,
-              ActionLastIndex,
-              ActionData,
-              ActionSigners,
-              CallerAddress,
-              Stack:List,
-              ?_Variables
-              ):StateCell
-        </TT></T>
-    requires true
-      andBool notBool ActionId in_keys(ActionData)
-    ensures true
-    [trusted]
-endmodule
-
+//@ proof
 module PROOF-SIGN-EMPTY-ACTION
+//@ trusted
+// module TRUSTED-SIGN-EMPTY-ACTION
+//@ end
   imports FUNCTIONS-EXECUTE
 
   claim <T><TT>
@@ -63,7 +20,11 @@ module PROOF-SIGN-EMPTY-ACTION
               ActionData:Map,
               ActionSigners:Map,
               CallerAddress:Address,
+              //@ proof
               .List,  // TODO: Stack:List,
+              //@ trusted
+              // Stack:List,
+              //@ end
               .Map
               )
         </TT></T>
@@ -82,11 +43,19 @@ module PROOF-SIGN-EMPTY-ACTION
               ActionData,
               ActionSigners,
               CallerAddress,
+              //@ proof
               .List,  // TODO: Stack:List,
+              //@ trusted
+              // Stack:List,
+              //@ end
               ?_Variables
               ):StateCell
         </TT></T>
     requires true
       andBool notBool ActionId in_keys(ActionData)
     ensures true
+    //@ proof
+    //@ trusted
+    // [trusted]
+    //@ end
 endmodule

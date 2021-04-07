@@ -10,8 +10,8 @@ include map.mak
 
 .PHONY: all clean execution
 
-all: out/map.proof.timestamp
+all: .out/map.proof.timestamp
 
-execution: out/map.execution.timestamp
+execution: .out/map.execution.timestamp
 
 clean: map.clean

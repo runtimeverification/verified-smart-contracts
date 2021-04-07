@@ -4,9 +4,10 @@ require "proof-board-members-sign-for.k"
 require "proof-board-members-sign-for-2.k"
 require "proof-board-members-sign-for-3.k"
 
-require "../functions/proof-propose-action-BoardMember.k"
-require "../functions/proof-propose-action-Proposer.k"
-require "../functions/proof-propose-action-error.k"
+require "../functions/trusted-propose-action-BoardMember.k"
+require "../functions/trusted-propose-action-Proposer.k"
+require "../functions/trusted-propose-action-error-no-user.k"
+require "../functions/trusted-propose-action-error-no-role.k"
 
 module PROOF-CAN-PROPOSE-AND-EXECUTE
   imports MAP-EXECUTE
@@ -20,7 +21,8 @@ module PROOF-CAN-PROPOSE-AND-EXECUTE
   imports TRUSTED-COUNT-CAN-SIGN
   imports TRUSTED-MAP-SEMANTICS
 
-  imports TRUSTED-PROPOSE-ACTION-ERROR
+  imports TRUSTED-PROPOSE-ACTION-ERROR-NO-ROLE
+  imports TRUSTED-PROPOSE-ACTION-ERROR-NO-USER
   imports TRUSTED-PROPOSE-ACTION-BOARDMEMBER
   imports TRUSTED-PROPOSE-ACTION-PROPOSER
 

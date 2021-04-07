@@ -1,14 +1,16 @@
 require "../functions/functions-execute.k"
 
-require "../functions/proof-propose-action-BoardMember.k"
-require "../functions/proof-propose-action-Proposer.k"
-require "../functions/proof-propose-action-error.k"
+require "../functions/trusted-propose-action-BoardMember.k"
+require "../functions/trusted-propose-action-Proposer.k"
+require "../functions/trusted-propose-action-error-no-user.k"
+require "../functions/trusted-propose-action-error-no-role.k"
 
 module PROOF-PROPOSE-SC-CALL
   imports INVARIANT-EXECUTION
   imports PSEUDOCODE
 
-  imports TRUSTED-PROPOSE-ACTION-ERROR
+  imports TRUSTED-PROPOSE-ACTION-ERROR-NO-ROLE
+  imports TRUSTED-PROPOSE-ACTION-ERROR-NO-USER
   imports TRUSTED-PROPOSE-ACTION-BOARDMEMBER
   imports TRUSTED-PROPOSE-ACTION-PROPOSER
 

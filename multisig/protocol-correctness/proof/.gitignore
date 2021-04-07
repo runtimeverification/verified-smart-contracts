@@ -5,3 +5,5 @@ kore-repl*
 *.json
 *.eventlog
 out
+.out
+.deps

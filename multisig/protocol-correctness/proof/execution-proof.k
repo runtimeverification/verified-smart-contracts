@@ -516,6 +516,13 @@ module CONCRETIZE-INSTRUMENTATION
   syntax KItem ::= lazyConcretizeValues(Map)
   rule lazyConcretizeValues(M:Map) => concretized(concretizeValues(M, vars(?_, vars(?_, .IntVarList))))
 
+  syntax KItem ::= makeConcreteValue(key:KItem, valueType:ReflectionType, Map)
+  rule makeConcreteValue(Key:KItem, ValueType:ReflectionType, M:Map)
+    =>    splitMap(Key, M, ?_Value:KItem, ?_Remainder:Map)
+      ~>  cast(M[Key], ValueType)
+      ~>  removeValue
+      ~> concretizeValue(M[Key])
+    requires Key in_keys(M)
 endmodule
 
 module PROOF-INSTRUMENTATION

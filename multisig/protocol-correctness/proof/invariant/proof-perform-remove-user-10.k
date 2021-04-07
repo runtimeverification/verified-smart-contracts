@@ -1,9 +1,9 @@
 require "../functions/functions-execute.k"
 
-require "../functions/proof-change-user-role-New.k"
-require "../functions/proof-change-user-role-None.k"
-require "../functions/proof-change-user-role-BoardMember.k"
-require "../functions/proof-change-user-role-Proposer.k"
+require "../functions/trusted-change-user-role-New.k"
+require "../functions/trusted-change-user-role-None.k"
+require "../functions/trusted-change-user-role-BoardMember.k"
+require "../functions/trusted-change-user-role-Proposer.k"
 
 module TRUSTED-PERFORM-REMOVE-USER-10
   imports INVARIANT-EXECUTION
