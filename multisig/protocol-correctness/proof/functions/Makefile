@@ -15,6 +15,6 @@ include functions.mak
 
 all: $(FUNCTIONS_OUT_PREFIX)proof.timestamp
 
-execution: $(FUNCTIONS_OUT_PREFIX)execution.timestamp
+execution: $(FUNCTIONS_OUT_PREFIX)execution.timestamp $(FUNCTIONS_OUT_PREFIX)trusted.timestamp
 
 clean: functions.clean

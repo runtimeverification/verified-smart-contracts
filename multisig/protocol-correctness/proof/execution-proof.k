@@ -418,7 +418,7 @@ module EXECUTION-PROOF-HELPERS
   syntax Bool ::= canSignFunction(UserRole)  [function, functional]
   rule canSignFunction(Role:UserRole) => Role ==K BoardMember
 
-  syntax Int ::= countCanSignFunction(signerIDs:ExpressionList, userIdToRole:Map)  [function, functional]
+  syntax Int ::= countCanSignFunction(signerIDs:ExpressionList, userIdToRole:Map)  [function, functional, smtlib(countCanSignFunction)]
   syntax Int ::= #countCanSignFunction(userID:Usize, signerIDs:ExpressionList, userIdToRole:Map, value:KItem)  [function, functional]
   rule countCanSignFunction([.], _:Map) => 0
   rule countCanSignFunction([UserId:Usize, Es:ExpressionCSV], UserId |-> Role:UserRole M:Map)
@@ -458,6 +458,8 @@ module EXECUTION-PROOF-HELPERS
       => countCanSignFunction(Es, M)
     requires notBool canSignFunction(Value)
     [simplification]
+
+  rule 0 <=Int countCanSignFunction(_, _) => true  [simplification, smt-lemma]
 
 endmodule
 

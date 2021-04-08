@@ -310,6 +310,85 @@ module SIGN-INSTRUMENTATION
       andBool AddressToUserId[CallerAddress] in_keys(UserIdToRole)
 endmodule
 
+module DISCARD-ACTION-INSTRUMENTATION
+  imports INVARIANT-INSTRUMENTATION
+  imports PROOF-INSTRUMENTATION
+  imports EXECUTION-PROOF
+  imports PSEUDOCODE
+
+  syntax KItem ::= splitDiscardAction(actionId:Usize)
+  syntax KItem ::= splitDiscardAction1(actionId:Usize)
+  syntax KItem ::= splitDiscardAction2(actionId:Usize)
+  syntax KItem ::= splitDiscardAction3(actionId:Usize)
+  syntax KItem ::= splitDiscardAction4(actionId:Usize)
+
+  rule  preCall
+        ~> (.K => splitDiscardAction(ActionId))
+        ~> call(discardAction(ActionId:Usize))
+    [priority(20)]
+
+  rule  <k> splitDiscardAction(ActionId:Usize)
+            =>  branchK(
+                  Caller in_keys(AddressToUserId),
+                  splitDiscardAction1(ActionId),
+                  .K
+                )
+        ...</k>
+        <address-to-user-id>AddressToUserId:Map</address-to-user-id>
+        <caller-address>Caller:KItem</caller-address>
+
+  rule  <k> splitDiscardAction1(ActionId:Usize)
+            =>    makeConcreteValue(Caller, rUsize, AddressToUserId)
+              ~>  branchK(
+                    AddressToUserId[Caller] in_keys(UserIdToRole),
+                    splitDiscardAction2(ActionId),
+                    .K
+                  )
+        ...</k>
+        <address-to-user-id>AddressToUserId:Map</address-to-user-id>
+        <user-roles> UserIdToRole:Map </user-roles>
+        <caller-address>Caller:KItem</caller-address>
+    requires Caller in_keys(AddressToUserId)
+
+  rule  <k> splitDiscardAction2(ActionId:Usize)
+            =>    makeConcreteValue(AddressToUserId[Caller], rUserRole, UserIdToRole)
+              ~>  branchK(
+                    ActionId in_keys(ActionSigners),
+                    splitDiscardAction3(ActionId),
+                    splitDiscardAction4(ActionId)
+                  )
+        ...</k>
+        <address-to-user-id>AddressToUserId:Map</address-to-user-id>
+        <user-roles> UserIdToRole:Map </user-roles>
+        <caller-address>Caller:KItem</caller-address>
+        <action-signers>ActionSigners:Map</action-signers>
+    requires Caller in_keys(AddressToUserId)
+
+  rule  <k> splitDiscardAction3(ActionId:Usize)
+            =>    makeConcreteValue(ActionId, rExpressionList, ActionSigners)
+              ~>  branchK(
+                    ActionId in_keys(ActionData),
+                    makeConcreteValue(ActionId, rAction, ActionData),
+                    splitDiscardAction4(ActionId)
+                  )
+        ...</k>
+        <action-data>ActionData</action-data>
+        <action-signers>ActionSigners</action-signers>
+    requires ActionId in_keys(ActionSigners)
+  rule  <k> splitDiscardAction4(ActionId:Usize)
+            =>    branchK(
+                    countCanSignFunction({ActionSigners[ActionId]}:>ExpressionList, opaque(UserIdToRole)) >Int 0,
+                    .K,
+                    .K
+                  )
+        ...</k>
+        <action-signers>ActionSigners</action-signers>
+        <user-roles> UserIdToRole:Map </user-roles>
+    requires ActionId in_keys(ActionSigners)
+      andBool isExpressionList(ActionSigners[ActionId])
+
+endmodule
+
 module INVARIANT-EXECUTION
   imports EXECUTION-PROOF
   imports FUNCTIONS-EXECUTE
@@ -323,6 +402,7 @@ module INVARIANT-EXECUTION
   imports PERFORM-ACTION-REMOVE-USER-INSTRUMENTATION
   imports PERFORM-SPLIT-ACTION-INSTRUMENTATION
   imports PROPOSE-SC-DEPLOY-INSTRUMENTATION
+  imports DISCARD-ACTION-INSTRUMENTATION
 
   imports COUNT-CAN-SIGN-PARTS
   imports INIT-LOOP-PARTS

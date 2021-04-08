@@ -52,6 +52,7 @@ module INVARIANT-HELPERS
     => true
       andBool isExpressionList(V) andBool listElementsAreUsize(V) // valuesAreExpressionListOfUsize(ActionSigners)
       andBool isKResult(V)  // valuesAreKResult(ActionSigners)
+      andBool valueIsNotEmpty(V, rExpressionList)  // valuesAreNotEmpty(ActionSigners, rExpressionList)
 
       andBool actionSignersInvariant(ActionSigners)
     [simplification]
