@@ -1,31 +1,25 @@
 //@ proof
-require "trusted-count-can-sign.k"  //@ Bazel remove
-//@ trusted
-//@ end
-
-//@ proof
-module PROOF-DISCARD-ACTION-HAS-SIGNERS
+module PROOF-UNSIGN-NO-USER
   imports FUNCTIONS-EXECUTE
-  imports TRUSTED-COUNT-CAN-SIGN
 //@ trusted
-// module TRUSTED-DISCARD-ACTION-HAS-SIGNERS
+// module TRUSTED-UNSIGN-NO-USER
   // imports EXECUTION-PROOF
 //@ end
 
   claim <T><TT>
-          <k> call(discardAction(ActionId:Usize)) ~> K:K
+          <k> call(unsign(ActionId:Usize)) ~> K:K
           </k>
           invariantStateFull(
               NumUsers:Usize,
               UserIdToAddress:Map,
-              (CallerAddress |-> UserId:Usize _AddressToUserId:Map) #as AddressToUserId:Map,
+              AddressToUserId:Map,
               NumBoardMembers:Usize,
               NumProposers:Usize,
-              (UserId |-> Role:UserRole _UserIdToRole:Map) #as UserIdToRole:Map,
+              UserIdToRole:Map,
               Quorum:Usize,
-              ActionLastIndex:Usize,
-              ActionData:Map,
-              (ActionId |-> SignerIds _ActionSigners:Map) #as ActionSigners:Map,
+              u(ActionLastIndex:Int),
+              (ActionId |-> Action:Action _ActionData:Map) #as ActionData:Map,
+              ActionSigners:Map,
               CallerAddress:Address,
               //@ proof
               .List,  // TODO: Stack:List,
@@ -46,7 +40,7 @@ module PROOF-DISCARD-ACTION-HAS-SIGNERS
               NumProposers,
               UserIdToRole,
               Quorum,
-              ActionLastIndex:Usize,
+              u(ActionLastIndex),
               ActionData,
               ActionSigners,
               CallerAddress,
@@ -59,15 +53,11 @@ module PROOF-DISCARD-ACTION-HAS-SIGNERS
               ):StateCell
         </TT></T>
     requires true
+      andBool isKResult(Action)
+      andBool valueIsNotEmpty(Action, rAction)
       andBool notBool u(0) in_keys(UserIdToRole)
 
-      andBool isKResult(SignerIds)
-      andBool listElementsAreUsize(SignerIds)
-      andBool userIdToRoleInvariant(UserIdToRole)
-
-
-      andBool (Role ==K BoardMember orBool Role ==K Proposer)
-      andBool countCanSignFunction(SignerIds, opaque(UserIdToRole)) >Int 0
+      andBool notBool CallerAddress in_keys(AddressToUserId)
     ensures true
     //@ proof
     //@ trusted

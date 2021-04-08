@@ -1,3 +1,5 @@
+require "protocol-correctness/proof/execution-proof-helpers.k"
+
 module INVARIANT-HELPERS
   imports EXECUTION-PROOF-HELPERS
 

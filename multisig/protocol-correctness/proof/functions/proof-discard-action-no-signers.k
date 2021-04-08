@@ -1,5 +1,5 @@
 //@ proof
-require "trusted-count-can-sign.k"
+require "trusted-count-can-sign.k"  //@ Bazel remove
 //@ trusted
 //@ end
 
@@ -61,8 +61,6 @@ module PROOF-DISCARD-ACTION-NO-SIGNERS
     requires true
       andBool notBool u(0) in_keys(UserIdToRole)
 
-      andBool isKResult(SignerIds)
-      andBool listElementsAreUsize(SignerIds)
       andBool userIdToRoleInvariant(UserIdToRole)
 
 

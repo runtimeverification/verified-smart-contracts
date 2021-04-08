@@ -1,19 +1,13 @@
 //@ proof
-require "trusted-count-can-sign.k"  //@ Bazel remove
-//@ trusted
-//@ end
-
-//@ proof
-module PROOF-DISCARD-ACTION-HAS-SIGNERS
+module PROOF-UNSIGN-OTHER-SIGNERS-FIRST
   imports FUNCTIONS-EXECUTE
-  imports TRUSTED-COUNT-CAN-SIGN
 //@ trusted
-// module TRUSTED-DISCARD-ACTION-HAS-SIGNERS
+// module TRUSTED-UNSIGN-OTHER-SIGNERS-FIRST
   // imports EXECUTION-PROOF
 //@ end
 
   claim <T><TT>
-          <k> call(discardAction(ActionId:Usize)) ~> K:K
+          <k> call(unsign(ActionId:Usize)) ~> K:K
           </k>
           invariantStateFull(
               NumUsers:Usize,
@@ -21,11 +15,11 @@ module PROOF-DISCARD-ACTION-HAS-SIGNERS
               (CallerAddress |-> UserId:Usize _AddressToUserId:Map) #as AddressToUserId:Map,
               NumBoardMembers:Usize,
               NumProposers:Usize,
-              (UserId |-> Role:UserRole _UserIdToRole:Map) #as UserIdToRole:Map,
+              (UserId |-> BoardMember _UserIdToRole:Map) #as UserIdToRole:Map,
               Quorum:Usize,
-              ActionLastIndex:Usize,
-              ActionData:Map,
-              (ActionId |-> SignerIds _ActionSigners:Map) #as ActionSigners:Map,
+              u(ActionLastIndex:Int),
+              (ActionId |-> Action:Action _ActionData:Map) #as ActionData:Map,
+              ActionId |-> [(UserId, _:Usize, _Signers:ExpressionCSV) #as Signers:ExpressionCSV] ActionSigners:Map,
               CallerAddress:Address,
               //@ proof
               .List,  // TODO: Stack:List,
@@ -37,7 +31,7 @@ module PROOF-DISCARD-ACTION-HAS-SIGNERS
         </TT></T>
       =>
         <T><TT>
-          <k> error ~> K </k>
+          <k> void ~> K </k>
           invariantStateFull(
               NumUsers,
               UserIdToAddress,
@@ -46,9 +40,9 @@ module PROOF-DISCARD-ACTION-HAS-SIGNERS
               NumProposers,
               UserIdToRole,
               Quorum,
-              ActionLastIndex:Usize,
+              u(ActionLastIndex),
               ActionData,
-              ActionSigners,
+              ActionId |-> [#listSwapRemove(Signers, #listFind([Signers], UserId))] ActionSigners,
               CallerAddress,
               //@ proof
               .List,  // TODO: Stack:List,
@@ -59,15 +53,12 @@ module PROOF-DISCARD-ACTION-HAS-SIGNERS
               ):StateCell
         </TT></T>
     requires true
-      andBool notBool u(0) in_keys(UserIdToRole)
+      andBool isKResult(Action)
+      andBool valueIsNotEmpty(Action, rAction)
+      andBool isKResult(Signers)
 
-      andBool isKResult(SignerIds)
-      andBool listElementsAreUsize(SignerIds)
-      andBool userIdToRoleInvariant(UserIdToRole)
-
-
-      andBool (Role ==K BoardMember orBool Role ==K Proposer)
-      andBool countCanSignFunction(SignerIds, opaque(UserIdToRole)) >Int 0
+      andBool #listFind([Signers], UserId) >=Int 0
+      // andBool pListLen([Signers]) >=Int 2
     ensures true
     //@ proof
     //@ trusted

@@ -4,11 +4,11 @@ require "trusted-count-can-sign.k"  //@ Bazel remove
 //@ end
 
 //@ proof
-module PROOF-DISCARD-ACTION-HAS-SIGNERS
+module PROOF-DISCARD-ACTION-NO-SIGNERS-NO-ACTION
   imports FUNCTIONS-EXECUTE
   imports TRUSTED-COUNT-CAN-SIGN
 //@ trusted
-// module TRUSTED-DISCARD-ACTION-HAS-SIGNERS
+// module TRUSTED-DISCARD-ACTION-NO-SIGNERS-NO-ACTION
   // imports EXECUTION-PROOF
 //@ end
 
@@ -25,7 +25,7 @@ module PROOF-DISCARD-ACTION-HAS-SIGNERS
               Quorum:Usize,
               ActionLastIndex:Usize,
               ActionData:Map,
-              (ActionId |-> SignerIds _ActionSigners:Map) #as ActionSigners:Map,
+              ActionSigners:Map,
               CallerAddress:Address,
               //@ proof
               .List,  // TODO: Stack:List,
@@ -37,7 +37,7 @@ module PROOF-DISCARD-ACTION-HAS-SIGNERS
         </TT></T>
       =>
         <T><TT>
-          <k> error ~> K </k>
+          <k> void ~> K </k>
           invariantStateFull(
               NumUsers,
               UserIdToAddress,
@@ -61,13 +61,12 @@ module PROOF-DISCARD-ACTION-HAS-SIGNERS
     requires true
       andBool notBool u(0) in_keys(UserIdToRole)
 
-      andBool isKResult(SignerIds)
-      andBool listElementsAreUsize(SignerIds)
       andBool userIdToRoleInvariant(UserIdToRole)
 
 
       andBool (Role ==K BoardMember orBool Role ==K Proposer)
-      andBool countCanSignFunction(SignerIds, opaque(UserIdToRole)) >Int 0
+      andBool notBool ActionId in_keys(ActionSigners)
+      andBool notBool ActionId in_keys(ActionData)
     ensures true
     //@ proof
     //@ trusted

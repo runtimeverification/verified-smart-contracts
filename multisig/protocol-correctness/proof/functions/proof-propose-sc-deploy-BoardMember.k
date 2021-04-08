@@ -1,6 +1,6 @@
 //@ proof
-require "trusted-propose-action-BoardMember.k"
-require "trusted-propose-sc-deploy-fragment.k"
+require "trusted-propose-action-BoardMember.k"  //@ Bazel remove
+require "trusted-propose-sc-deploy-fragment.k"  //@ Bazel remove
 //@ trusted
 //@ end
 

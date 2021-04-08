@@ -1,5 +1,12 @@
 #!/usr/bin/env bash
 
-# Workaround a Bazel bug, kompile should be available in runfiles.
-KOMPILE=`find . -name kompile | head -n 1`
-$KOMPILE "$@"
+set -e
+
+PARENT_DIR=`dirname $0`
+
+OUTPUT_DIR=`dirname $1`
+OUTPUT_DIR=`dirname $OUTPUT_DIR`
+shift
+
+KOMPILE=$PARENT_DIR/kompile_tool.runfiles/__main__/kompile_tool/k/bin/kompile
+$KOMPILE --backend haskell -I `pwd` --directory $OUTPUT_DIR "$@"

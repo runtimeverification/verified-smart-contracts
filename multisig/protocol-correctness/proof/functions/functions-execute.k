@@ -1,4 +1,4 @@
-require "../execution-proof.k"
+require "protocol-correctness/proof/execution-proof.k"
 
 module FUNCTIONS-EXECUTE-SYNTAX
   imports EXECUTION-PROOF-SYNTAX

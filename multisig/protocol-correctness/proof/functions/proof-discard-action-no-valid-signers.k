@@ -1,5 +1,5 @@
 //@ proof
-require "trusted-count-can-sign.k"
+require "trusted-count-can-sign.k"  //@ Bazel remove
 //@ trusted
 //@ end
 

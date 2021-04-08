@@ -31,7 +31,7 @@ $(MAP_OUT_PREFIX)proof-%.debugger: ${MAP_DIR}/proof-%.k $(MAP_OUT_PREFIX)executi
 $(MAP_OUT_PREFIX)execution.timestamp: $(MAP_DIR)/map-execute.k $(MAP_EXECUTION)
 	$(DIR_GUARD)
 	@echo "Compiling execution..."
-	@kompile $< --backend haskell --directory $(MAP_DIR)
+	@kompile $(KOMPILE_FLAGS) $< --backend haskell --directory $(MAP_DIR)
 	@touch $(MAP_OUT_PREFIX)execution.timestamp
 
 map.clean:

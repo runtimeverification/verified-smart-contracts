@@ -1,8 +1,10 @@
 require "../functions/trusted-discard-action-has-signers.k"
 require "../functions/trusted-discard-action-no-role.k"
 require "../functions/trusted-discard-action-no-signers.k"
+require "../functions/trusted-discard-action-no-signers-no-action.k"
 require "../functions/trusted-discard-action-no-user.k"
 require "../functions/trusted-discard-action-no-valid-signers.k"
+require "../functions/trusted-discard-action-no-valid-signers-no-action.k"
 
 module PROOF-DISCARD-ACTION
   imports INVARIANT-EXECUTION
@@ -11,8 +13,10 @@ module PROOF-DISCARD-ACTION
   imports TRUSTED-DISCARD-ACTION-HAS-SIGNERS
   imports TRUSTED-DISCARD-ACTION-NO-ROLE
   imports TRUSTED-DISCARD-ACTION-NO-SIGNERS
+  imports TRUSTED-DISCARD-ACTION-NO-SIGNERS-NO-ACTION
   imports TRUSTED-DISCARD-ACTION-NO-USER
   imports TRUSTED-DISCARD-ACTION-NO-VALID-SIGNERS
+  imports TRUSTED-DISCARD-ACTION-NO-VALID-SIGNERS-NO-ACTION
 
   claim <T><TT>
           <k> runExternalCalls(

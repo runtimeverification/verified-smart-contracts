@@ -53,7 +53,7 @@ $(FUNCTIONS_OUT_PREFIX)proof-%.debugger: ${FUNCTIONS_DIR}/proof-%.k $(FUNCTIONS_
 $(FUNCTIONS_OUT_PREFIX)execution.timestamp: $(FUNCTIONS_DIR)/functions-execute.k $(FUNCTIONS_EXECUTION)
 	$(DIR_GUARD)
 	@echo "Compiling execution..."
-	@kompile $< --backend haskell --directory $(FUNCTIONS_DIR)
+	@kompile $(KOMPILE_FLAGS) $< --backend haskell --directory $(FUNCTIONS_DIR)
 	@touch $(FUNCTIONS_OUT_PREFIX)kompile.timestamp
 
 functions.clean:

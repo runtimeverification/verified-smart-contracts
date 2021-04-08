@@ -814,43 +814,33 @@ module PSEUDOCODE-FUNCTIONS
   rule  #listContains([_:Expression, Es:ExpressionCSV], X:KItem)
           => #listContains([Es], X)  [owise]
 
-  rule call(listFind(Es:ExpressionList, E:Expression)) => #listFind(Es, E)
+  rule call(listFind(Es:ExpressionList, E:Expression)) => u(#listFind(Es, E))
 
-  syntax Usize ::= #listFind(ExpressionList, Expression)  [function, functional]
+  syntax Int ::= #listFind(ExpressionList, Expression)  [function, functional]
 
-  rule  #listFind([.], _) => u(-1)
-  rule  #listFind([X:Usize, _:ExpressionCSV], X) => u(0)
-  rule  #listFind([_:Usize, Es:ExpressionCSV], X:Usize) => add(#listFind([Es], X), u(1))  [owise]
+  rule  #listFind([.], _:Expression) => -1
+  rule  #listFind([X:Usize, _:ExpressionCSV], X) => 0
+  rule  #listFind([_:Usize, Es:ExpressionCSV], X:Usize) => addOneIfNotNegative(#listFind([Es], X))
+    [owise]
+  
+  syntax Int ::= addOneIfNotNegative(Int)  [function, functional]
+  rule addOneIfNotNegative(X:Int) => X +Int 1
+    requires X >=Int 0
+  rule addOneIfNotNegative(X) => X
+    requires X <Int 0
 
-  /*
-  rule  call(listSwapRemove([_:Expression , L:ExpressionCSV], u(0))) => lastToStart(., L)
-  rule  call(listSwapRemove([E:Expression , L:ExpressionCSV], u(Index:Int)))
-        => call(listSwapRemove([L], u(Index -Int 1))) ~> pushListFreezer(E)
-    requires Index >Int 0
-
-  syntax KItem ::= pushListFreezer(Expression)
-  rule  [L:ExpressionCSV] ~> pushListFreezer(E:Expression) => [E , L]
-
-  syntax KItem ::= lastToStart(ExpressionCSV, ExpressionCSV)
-  syntax KItem ::= reverseExpressionCsv(ExpressionCSV, ExpressionCSV)
-
-  rule lastToStart(., .) => [.]
-  rule lastToStart(L1:ExpressionCSV, (E:Expression , L2:ExpressionCSV))
-        => lastToStart((E , L1), L2)
-  rule lastToStart(L1:ExpressionCSV, (E:Expression, .))
-        => reverseExpressionCsv(L1, .) ~> pushListFreezer(E)
-
-  rule reverseExpressionCsv(., L2:ExpressionCSV) => L2
-  rule reverseExpressionCsv((E:Expression , Es:ExpressionCSV), L2:ExpressionCSV) => reverseExpressionCsv(Es, (E , L2))
-  */
+  syntax Int ::= pListLen(ExpressionList)  [function, functional, smtlib(pListLen)]
+  rule pListLen([.]) => 0
+  rule pListLen([_:Expression, Es:ExpressionCSV]) => 1 +Int pListLen([Es])
 
   rule  call(listSwapRemove([L:ExpressionCSV], u(I:Int)))
         => [#listSwapRemove(L, I)]
-        // TODO: require I >= 0
+    // TODO: Do things work with this requires?
+    requires I >=Int 0
 
   syntax ExpressionCSV ::= #listSwapRemove(ExpressionCSV, Int)  [function, functional]
   rule  #listSwapRemove(_:Expression , Es:ExpressionCSV, 0)
-        => lastToStart(., Es)
+        => lastToStart(Es)
   rule  #listSwapRemove(E:Expression , Es:ExpressionCSV, I:Int)
         => E , #listSwapRemove(Es, I -Int 1)
     requires I >Int 0
@@ -858,12 +848,35 @@ module PSEUDOCODE-FUNCTIONS
         => Es
     requires I <Int 0
 
-  syntax ExpressionCSV ::= lastToStart(ExpressionCSV, ExpressionCSV)  [function, functional]
-  rule lastToStart(., .) => .:ExpressionCSV
-  rule lastToStart(L1:ExpressionCSV, (E:Expression, .))
-        => E , reverseExpressionCsv(L1, .)
-  rule lastToStart(L1:ExpressionCSV, (E:Expression , L2:ExpressionCSV))
-        => lastToStart((E , L1), L2)
+  syntax ExpressionCSV ::= lastToStart(ExpressionCSV)  [function, functional]
+  rule lastToStart(.) => .:ExpressionCSV
+  rule lastToStart(Es:ExpressionCSV) => last(Es), removeLast(Es)
+    requires pListLen([Es]) >Int 0
+
+  syntax Expression ::= last(ExpressionCSV)  [function]
+  rule last(E:Expression, .) => E
+  rule last(_:Expression, Es:ExpressionCSV) => last(Es)
+    requires pListLen([Es]) >Int 0
+
+  rule #Ceil(last(@Es:ExpressionCSV))
+      =>  {pListLen([@Es]) >Int 0 #Equals true}
+          #And #Ceil(@Es)
+    [anywhere, simplification]
+
+  syntax ExpressionCSV ::= removeLast(ExpressionCSV)  [function]
+  rule removeLast(_:Expression, .) => .:ExpressionCSV
+  rule removeLast(E:Expression, Es:ExpressionCSV) => E, removeLast(Es)
+    requires pListLen([Es]) >Int 0
+
+  rule #Ceil(removeLast(@Es:ExpressionCSV))
+      =>  {pListLen([@Es]) >Int 0 #Equals true}
+          #And #Ceil(@Es)
+    [anywhere, simplification]
+
+  // rule lastToStart(L1:ExpressionCSV, (E:Expression, .))
+  //       => E , reverseExpressionCsv(L1, .)
+  // rule lastToStart(L1:ExpressionCSV, (E:Expression , L2:ExpressionCSV))
+  //       => lastToStart((E , L1), L2)
 
   syntax ExpressionCSV ::= reverseExpressionCsv(ExpressionCSV, ExpressionCSV)  [function, functional]
   rule reverseExpressionCsv(., L2:ExpressionCSV) => L2

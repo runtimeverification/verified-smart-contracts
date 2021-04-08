@@ -31,7 +31,7 @@ $(INVARIANT_OUT_PREFIX)proof-%.debugger: $(INVARIANT_OUT_PREFIX)proof-%.k $(INVA
 $(INVARIANT_OUT_PREFIX)execution.timestamp: $(INVARIANT_DIR)/invariant-execution.k ${INVARIANT_EXECUTION}
 	$(DIR_GUARD)
 	@echo "Compiling execution..."
-	@kompile $< --backend haskell --directory $(INVARIANT_DIR)
+	@kompile $(KOMPILE_FLAGS) $< --backend haskell --directory $(INVARIANT_DIR)
 	@touch $(INVARIANT_OUT_PREFIX)execution.timestamp
 
 invariant.clean:

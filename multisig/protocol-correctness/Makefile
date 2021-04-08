@@ -8,7 +8,7 @@ CHECK_RESULT_RUN = if [ $$? -eq 0 ] ; then echo "passed $<"; mv $@.tmp $@; else 
 
 execution.timestamp: execution.k *.k
 	@echo "Compiling $<"
-	@kompile $< --backend haskell
+	@kompile $(KOMPILE_FLAGS) $< --backend haskell
 	@touch execution.timestamp
 
 test: ${TEST_COMPARISON}

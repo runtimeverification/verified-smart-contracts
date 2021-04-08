@@ -6,6 +6,34 @@ sh_binary(
   visibility = ["//visibility:public"],
 )
 
+sh_binary(
+  name = "kompile_e_tool",
+  srcs = ["kompile-e.sh"],
+  deps = [":k_release"],
+  data = [":k_release"],
+  visibility = ["//visibility:public"],
+)
+
+sh_binary(
+  name = "kprove_tool",
+  srcs = ["kprove.sh"],
+  deps = [":k_release"],
+  data = [":k_release"],
+  visibility = ["//visibility:public"],
+)
+
+sh_binary(
+  name = "ktrusted_tool",
+  srcs = ["make-trusted.py"],
+  visibility = ["//visibility:public"],
+)
+
+sh_binary(
+  name = "kmerge_tool",
+  srcs = ["kmerge.sh"],
+  visibility = ["//visibility:public"],
+)
+
 sh_library(
   name = "k_release",
   data = glob(["k/**"]),

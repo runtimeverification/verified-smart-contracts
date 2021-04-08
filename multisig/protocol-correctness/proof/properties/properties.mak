@@ -31,7 +31,7 @@ $(PROPERTIES_OUT_PREFIX)proof-%.debugger: ${PROPERTIES_DIR}/proof-%.k $(PROPERTI
 $(PROPERTIES_OUT_PREFIX)execution.timestamp: $(PROPERTIES_DIR)/properties-execute.k $(PROPERTIES_EXECUTION)
 	$(DIR_GUARD)
 	@echo "Compiling execution..."
-	@kompile $< --backend haskell --directory $(PROPERTIES_DIR)
+	@kompile $(KOMPILE_FLAGS) $< --backend haskell --directory $(PROPERTIES_DIR)
 	@touch $(PROPERTIES_OUT_PREFIX)execution.timestamp
 
 properties.clean:
