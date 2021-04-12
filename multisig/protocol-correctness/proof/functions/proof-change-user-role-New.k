@@ -56,7 +56,7 @@ module PROOF-CHANGE-USER-ROLE-NEW
     requires true
       andBool NumUsers >=Int 0
       // TODO: Perhaps replace with unusedIdsInMapValues(AddressToUserId) +
-      // someting to map values to keys.
+      // something to map values to keys.
       andBool unusedIdsInMapKeys(NumUsers +Int 1, keysMap(UserIdToAddress), expand(expanded))
       andBool unusedIdsInMapKeys(NumUsers +Int 1, keysMap(UserIdToRole), expand(expanded))
 

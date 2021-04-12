@@ -1,4 +1,4 @@
-load("//:proof.bzl", "kompile", "kprove", "ktrusted")
+load("//:proof.bzl", "kompile", "kprove", "ktrusted", "kdebug", "kprove_test")
 
 kompile(
   name = "functions-execute",
@@ -7,6 +7,154 @@ kompile(
       "//protocol-correctness/proof:execution-proof-files",
       "//protocol-correctness:pseudocode-files",
   ],
+)
+
+kprove_test(
+  name = "proof-perform-action-remove-user-BoardMember",
+  srcs = ["proof-perform-action-remove-user-BoardMember.k"],
+  trusted = [":trusted-change-user-role-BoardMember"],
+  semantics = ":functions-execute",
+)
+
+kprove(
+  name = "proof-perform-action-remove-user-BoardMember-too-few",
+  srcs = ["proof-perform-action-remove-user-BoardMember-too-few.k"],
+  trusted = [":trusted-change-user-role-BoardMember"],
+  semantics = ":functions-execute",
+)
+
+kprove(
+  name = "proof-perform-action-remove-user-Proposer-nobody-left",
+  srcs = ["proof-perform-action-remove-user-Proposer-nobody-left.k"],
+  trusted = [":trusted-change-user-role-Proposer"],
+  semantics = ":functions-execute",
+)
+
+kprove(
+  name = "proof-perform-action-remove-user-Proposer",
+  srcs = ["proof-perform-action-remove-user-Proposer.k"],
+  trusted = [":trusted-change-user-role-Proposer"],
+  semantics = ":functions-execute",
+)
+
+kprove(
+  name = "proof-perform-action-remove-user-None",
+  srcs = ["proof-perform-action-remove-user-None.k"],
+  trusted = [":trusted-change-user-role-None"],
+  semantics = ":functions-execute",
+)
+
+kprove(
+  name = "proof-perform-action-remove-user-New",
+  srcs = ["proof-perform-action-remove-user-New.k"],
+  trusted = [":trusted-change-user-role-New"],
+  semantics = ":functions-execute",
+)
+
+kprove(
+  name = "proof-perform-action-change-quorum",
+  srcs = ["proof-perform-action-change-quorum.k"],
+  semantics = ":functions-execute",
+)
+
+kprove(
+  name = "proof-perform-action-change-quorum-no-quorum",
+  srcs = ["proof-perform-action-change-quorum-no-quorum.k"],
+  semantics = ":functions-execute",
+)
+
+kprove(
+  name = "proof-perform-action-add-proposer-BoardMember-no-quorum",
+  srcs = ["proof-perform-action-add-proposer-BoardMember-no-quorum.k"],
+  trusted = [":trusted-change-user-role-BoardMember"],
+  semantics = ":functions-execute",
+)
+
+kprove(
+  name = "proof-perform-action-add-proposer-BoardMember",
+  srcs = ["proof-perform-action-add-proposer-BoardMember.k"],
+  trusted = [":trusted-change-user-role-BoardMember"],
+  semantics = ":functions-execute",
+)
+
+kprove(
+  name = "proof-perform-action-add-proposer-Proposer",
+  srcs = ["proof-perform-action-add-proposer-Proposer.k"],
+  trusted = [":trusted-change-user-role-Proposer"],
+  semantics = ":functions-execute",
+)
+
+kprove(
+  name = "proof-perform-action-add-proposer-New",
+  srcs = ["proof-perform-action-add-proposer-New.k"],
+  trusted = [":trusted-change-user-role-New"],
+  semantics = ":functions-execute",
+)
+
+kprove(
+  name = "proof-perform-action-add-proposer-None",
+  srcs = ["proof-perform-action-add-proposer-None.k"],
+  trusted = [":trusted-change-user-role-None"],
+  semantics = ":functions-execute",
+)
+
+kdebug(
+  name = "proof-perform-action-add-board-member-None-debug",
+  srcs = ["proof-perform-action-add-board-member-None.k"],
+  trusted = [":trusted-change-user-role-None"],
+  semantics = ":functions-execute",
+)
+
+kprove(
+  name = "proof-perform-action-add-board-member-New",
+  srcs = ["proof-perform-action-add-board-member-New.k"],
+  trusted = [":trusted-change-user-role-New"],
+  semantics = ":functions-execute",
+)
+
+kprove(
+  name = "proof-perform-action-add-board-member-BoardMember",
+  srcs = ["proof-perform-action-add-board-member-BoardMember.k"],
+  trusted = [":trusted-change-user-role-BoardMember"],
+  semantics = ":functions-execute",
+)
+
+kprove(
+  name = "proof-perform-action-add-board-member-Proposer",
+  srcs = ["proof-perform-action-add-board-member-Proposer.k"],
+  trusted = [":trusted-change-user-role-Proposer"],
+  semantics = ":functions-execute",
+)
+
+kprove(
+  name = "proof-perform-action-add-board-member-None",
+  srcs = ["proof-perform-action-add-board-member-None.k"],
+  trusted = [":trusted-change-user-role-None"],
+  semantics = ":functions-execute",
+)
+
+kprove(
+  name = "proof-perform-action-send-egld",
+  srcs = ["proof-perform-action-send-egld.k"],
+  semantics = ":functions-execute",
+)
+
+kprove(
+  name = "proof-perform-action-sc-call",
+  srcs = ["proof-perform-action-sc-call.k"],
+  semantics = ":functions-execute",
+)
+
+kprove(
+  name = "proof-perform-action-sc-deploy",
+  srcs = ["proof-perform-action-sc-deploy.k"],
+  semantics = ":functions-execute",
+)
+
+kprove(
+  name = "proof-perform-action-nothing",
+  srcs = ["proof-perform-action-nothing.k"],
+  semantics = ":functions-execute",
 )
 
 kprove(
@@ -281,3 +429,24 @@ ktrusted(
   name = "trusted-propose-sc-deploy-fragment",
   srcs = ["proof-propose-sc-deploy-fragment.k"],
 )
+
+ktrusted(
+  name = "trusted-change-user-role-BoardMember",
+  srcs = ["proof-change-user-role-BoardMember.k"],
+)
+
+ktrusted(
+  name = "trusted-change-user-role-New",
+  srcs = ["proof-change-user-role-New.k"],
+)
+
+ktrusted(
+  name = "trusted-change-user-role-None",
+  srcs = ["proof-change-user-role-None.k"],
+)
+
+ktrusted(
+  name = "trusted-change-user-role-Proposer",
+  srcs = ["proof-change-user-role-Proposer.k"],
+)
+
