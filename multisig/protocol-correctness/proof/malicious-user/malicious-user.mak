@@ -1,4 +1,4 @@
-MALICIOUS_USER_OUT_PREFIX=out/malicious_user.
+MALICIOUS_USER_OUT_PREFIX=out/malicious-user.
 
 MALICIOUS_USER_ALL := $(wildcard $(MALICIOUS_USER_DIR)/*.k)
 MALICIOUS_USER_PROOFS := $(wildcard $(MALICIOUS_USER_DIR)/proof-*.k)
@@ -7,7 +7,7 @@ MALICIOUS_USER_EXECUTION := $(filter-out $(MALICIOUS_USER_PROOFS), $(MALICIOUS_U
 MALICIOUS_USER_PROOF_TIMESTAMPS := $(addprefix $(MALICIOUS_USER_OUT_PREFIX),$(notdir ${MALICIOUS_USER_PROOFS:.k=.timestamp}))
 MALICIOUS_USER_PROOF_DEBUGGERS := $(addprefix $(MALICIOUS_USER_OUT_PREFIX),$(notdir ${MALICIOUS_USER_PROOFS:.k=.debugger}))
 
-.PHONY: malicious_user.clean ${MALICIOUS_USER_PROOF_DEBUGGERS}
+.PHONY: malicious-user.clean ${MALICIOUS_USER_PROOF_DEBUGGERS}
 
 $(MALICIOUS_USER_OUT_PREFIX)proof.timestamp: ${MALICIOUS_USER_PROOF_TIMESTAMPS}
 	$(DIR_GUARD)
@@ -28,13 +28,13 @@ $(MALICIOUS_USER_OUT_PREFIX)proof-%.debugger: ${MALICIOUS_USER_DIR}/proof-%.k $(
 	@echo "Debugging $*..."
 	@kprove $< --directory $(MALICIOUS_USER_DIR) --haskell-backend-command $(DEBUG_COMMAND)
 
-$(MALICIOUS_USER_OUT_PREFIX)execution.timestamp: $(MALICIOUS_USER_DIR)/malicious_user-execute.k $(MALICIOUS_USER_EXECUTION)
+$(MALICIOUS_USER_OUT_PREFIX)execution.timestamp: $(MALICIOUS_USER_DIR)/malicious-user-execute.k $(MALICIOUS_USER_EXECUTION)
 	$(DIR_GUARD)
 	@echo "Compiling execution..."
 	@kompile $< --backend haskell --directory $(MALICIOUS_USER_DIR)
 	@touch $(MALICIOUS_USER_OUT_PREFIX)execution.timestamp
 
-malicious_user.clean:
+malicious-user.clean:
 	-rm -r $(MALICIOUS_USER_DIR)/*-kompiled
 	-rm -r .kprove-*
 	-rm kore-*.tar.gz

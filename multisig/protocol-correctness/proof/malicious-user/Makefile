@@ -15,12 +15,12 @@ INVARIANT_DIR := ../invariant
 include $(INVARIANT_DIR)/invariant.mak
 
 MALICIOUS_USER_DIR := .
-include malicious_user.mak
+include malicious-user.mak
 
 .PHONY: all clean execution
 
-all: out/malicious_user.proof.timestamp
+all: out/malicious-user.proof.timestamp
 
-execution: out/malicious_user.execution.timestamp
+execution: out/malicious-user.execution.timestamp
 
-clean: malicious_user.clean
+clean: malicious-user.clean

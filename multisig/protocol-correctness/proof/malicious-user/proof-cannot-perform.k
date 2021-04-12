@@ -1,9 +1,9 @@
 module PROOF-CANNOT-PERFORM
-  imports MALICIOUS-USER-EXECUTION
+  imports MALICIOUS-USER-EXECUTE
   imports PSEUDOCODE
 
   claim <T><TT>
-          <k> runExternalCallsFromUser(MaliciousAddress:Address) ~> K:K </k>
+          <k> runExternalCallsFromUser(MaliciousAddress:Address, _Count:Int) ~> K:K </k>
           invariantState(
               NumUsers:Usize,
               UserIdToAddress:Map,
@@ -13,9 +13,8 @@ module PROOF-CANNOT-PERFORM
               UserRoles:Map,
               Quorum:Usize,
               ActionLastIndex0:Usize,
-              ActionId:Usize -> Action:Action,
-              .Map,
-              .List,
+              ActionId:Usize |-> Action:Action,
+              .Map,  // ActionSigners
               PerformedActions:List)
         </TT></T>
       =>
@@ -32,7 +31,6 @@ module PROOF-CANNOT-PERFORM
               ?ActionLastIndex1:Usize,
               ?ActionData1:Map,
               ?ActionSigners1:Map,
-              .List,
               PerformedActions:List):StateCell
         </TT></T>
     requires true
