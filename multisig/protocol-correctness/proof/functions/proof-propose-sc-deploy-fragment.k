@@ -38,7 +38,8 @@ module PROOF-PROPOSE-SC-DEPLOY-FRAGMENT
               //@ trusted
               // Stack:List,
               //@ end
-              .Map
+              .Map,
+              PerformedActions:List
               )
         </TT></T>
       =>
@@ -65,7 +66,8 @@ module PROOF-PROPOSE-SC-DEPLOY-FRAGMENT
               //@ trusted
               // Stack:List,
               //@ end
-              code_metadata |-> codeMetadataFunction(Upgradeable, Payable, Readable)
+              code_metadata |-> codeMetadataFunction(Upgradeable, Payable, Readable),
+              PerformedActions:List
               )
         </TT></T>
     requires true

@@ -44,7 +44,8 @@ module PROOF-PROPOSE-SC-DEPLOY-ERROR-NO-ROLE
               //@ trusted
               // Stack:List,
               //@ end
-              .Map
+              .Map,
+              PerformedActions:List
               )
         </TT></T>
       =>
@@ -67,7 +68,8 @@ module PROOF-PROPOSE-SC-DEPLOY-ERROR-NO-ROLE
               //@ trusted
               // Stack:List,
               //@ end
-              ?_Variables:Map
+              ?_Variables:Map,
+              PerformedActions:List
               ):StateCell
         </TT></T>
     requires true

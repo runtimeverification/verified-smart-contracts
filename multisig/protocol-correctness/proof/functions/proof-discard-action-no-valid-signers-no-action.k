@@ -34,7 +34,8 @@ module PROOF-DISCARD-ACTION-NO-VALID-SIGNERS-NO-ACTION
               //@ trusted
               // Stack:List,
               //@ end
-              .Map
+              .Map,
+              PerformedActions:List
               )
         </TT></T>
       =>
@@ -57,7 +58,8 @@ module PROOF-DISCARD-ACTION-NO-VALID-SIGNERS-NO-ACTION
               //@ trusted
               // Stack:List,
               //@ end
-              ?_Variables
+              ?_Variables,
+              PerformedActions:List
               ):StateCell
         </TT></T>
     requires true

@@ -23,7 +23,8 @@ module PROOF-COUNT-CAN-SIGN
               ActionSigners:Map,
               CallerAddress:Address,
               Stack:List,
-              .Map
+              .Map,
+              PerformedActions:List
               )
         </TT> </T>
       => <T> <TT>
@@ -43,7 +44,8 @@ module PROOF-COUNT-CAN-SIGN
               ActionSigners,
               CallerAddress,
               Stack,
-              ?_Variables)
+              ?_Variables,
+              PerformedActions:List)
         </TT> </T>
     requires true
         andBool isKResult(SignerIds)
