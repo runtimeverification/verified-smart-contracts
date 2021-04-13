@@ -17,7 +17,7 @@ module TRUSTED-PERFORM-ADD-PROPOSER-1
             (ProposerId |-> BoardMember _:Map) #as UserIdToRole:Map,
             Quorum:Usize,
             ActionState:ActionStateCell,
-            Stack:List,
+            Stack:Stack,
             CallerAddress:Address,
             _PerformedActions:List)
       </T>
@@ -72,7 +72,7 @@ module PROOF-PERFORM-ADD-PROPOSER-1
             (ProposerId |-> BoardMember _:Map) #as UserIdToRole:Map,
             Quorum:Usize,
             ActionState:ActionStateCell,
-            .List, // TODO: Stack:List,
+            Stack:Stack,
             CallerAddress:Address,
             _PerformedActions:List)
       </T>
@@ -90,7 +90,7 @@ module PROOF-PERFORM-ADD-PROPOSER-1
             Quorum,
             ActionState,
             ?_Variables:Map,
-            .List, // TODO: Stack:List,
+            Stack:Stack,
             CallerAddress,
             ?_PerformedActions:List)
       </T>

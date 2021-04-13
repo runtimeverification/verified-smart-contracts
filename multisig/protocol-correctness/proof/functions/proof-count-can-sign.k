@@ -22,7 +22,7 @@ module PROOF-COUNT-CAN-SIGN
               ActionData:Map,
               ActionSigners:Map,
               CallerAddress:Address,
-              Stack:List,
+              Stack:Stack,
               .Map,
               PerformedActions:List
               )

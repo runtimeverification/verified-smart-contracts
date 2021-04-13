@@ -11,7 +11,7 @@ module TRUSTED-COUNT-CAN-SIGN
                 Quorum:Usize,
                 ActionState:ActionStateCell,
                 Variables:Map,
-                Stack:List,
+                Stack:Stack,
                 ExternalCallEnv:ExternalCallEnvCell,
                 PerformedActions:List)
         </T>
@@ -70,7 +70,7 @@ module PROOF-COUNT-CAN-SIGN
                 Quorum:Usize,
                 ActionState:ActionStateCell,
                 Variables:Map,
-                Stack:List,
+                Stack:Stack,
                 ExternalCallEnv:ExternalCallEnvCell)
         </T>
       => <T> countCanSignRhs(

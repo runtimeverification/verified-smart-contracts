@@ -17,7 +17,7 @@ module TRUSTED-PERFORM-REMOVE-USER-7
             (UserId |-> UserRole:KItem _UserIdToRole:Map) #as UserIdToRole:Map,
             u(Quorum:Int),
             ActionState:ActionStateCell,
-            Stack:List,
+            Stack:Stack,
             CallerAddress:Address,
             _PerformedActions:List)
       </T>
@@ -35,7 +35,7 @@ module TRUSTED-PERFORM-REMOVE-USER-7
             u(Quorum:Int),
             ActionState,
             ?_Variables:Map,
-            Stack:List,
+            Stack:Stack,
             CallerAddress,
             ?_PerformedActions:List)
       </T>
@@ -75,7 +75,7 @@ module PROOF-PERFORM-REMOVE-USER-7
             (UserId |-> UserRole:KItem _UserIdToRole:Map) #as UserIdToRole:Map,
             u(Quorum:Int),
             ActionState:ActionStateCell,
-            .List, // TODO: Stack:List,
+            Stack:Stack,
             CallerAddress:Address,
             _PerformedActions:List)
       </T>
@@ -93,7 +93,7 @@ module PROOF-PERFORM-REMOVE-USER-7
             u(Quorum:Int),
             ActionState,
             ?_Variables:Map,
-            .List, // TODO: Stack:List,
+            Stack:Stack,
             CallerAddress,
             ?_PerformedActions:List)
       </T>

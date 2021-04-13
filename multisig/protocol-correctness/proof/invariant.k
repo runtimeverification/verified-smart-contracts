@@ -102,7 +102,7 @@ module INVARIANT
       actionData:Map,
       actionSigners:Map,
       callerAddress:KItem,
-      stack:List,
+      stack:Stack,
       performedActions:List)  [function, functional]
 
   syntax StateCell ::= invariantStateFull(
@@ -117,7 +117,7 @@ module INVARIANT
       actionData:Map,
       actionSigners:Map,
       callerAddress:KItem,
-      stack:List,
+      stack:Stack,
       variables:Map,
       performedActions:List)  [function, functional]
 
@@ -146,7 +146,7 @@ module INVARIANT
           ActionData,
           ActionSigners,
           uninitialized,
-          .List,
+          .stack,
           PerformedActions)
 
   rule invariantStateStack(
@@ -161,7 +161,7 @@ module INVARIANT
       ActionData:Map,
       ActionSigners:Map,
       CallerAddress:KItem,
-      Stack:List,
+      Stack:Stack,
       PerformedActions:List)
     => invariantStateFull(
           NumUsers,
@@ -191,7 +191,7 @@ module INVARIANT
       ActionData:Map,
       ActionSigners:Map,
       CallerAddress:KItem,
-      Stack:List,
+      Stack:Stack,
       Variables:Map,
       PerformedActions:List)
     =>

@@ -27,11 +27,7 @@ module PROOF-DISCARD-ACTION-HAS-SIGNERS
               ActionData:Map,
               (ActionId |-> SignerIds _ActionSigners:Map) #as ActionSigners:Map,
               CallerAddress:Address,
-              //@ proof
-              .List,  // TODO: Stack:List,
-              //@ trusted
-              // Stack:List,
-              //@ end
+              Stack:Stack,
               .Map,
               PerformedActions:List
               )
@@ -51,11 +47,7 @@ module PROOF-DISCARD-ACTION-HAS-SIGNERS
               ActionData,
               ActionSigners,
               CallerAddress,
-              //@ proof
-              .List,  // TODO: Stack:List,
-              //@ trusted
-              // Stack:List,
-              //@ end
+              Stack:Stack,
               ?_Variables,
               PerformedActions:List
               ):StateCell

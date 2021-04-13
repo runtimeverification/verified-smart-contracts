@@ -152,6 +152,12 @@ def _kprove_test_impl(ctx):
   script_lines = [
       "#!/usr/bin/env bash",
       "",
+      # "read line",
+      # 'echo "aaa: $line"',
+      # "",
+      "echo 'To debug:'",
+      'echo "cd $(pwd)"',
+      "echo kompile_tool/kprove_tool %s %s %s --debug" % (ctx.attr.semantics[KompileInfo].files[0].short_path, ctx.files.srcs[0].path, merged_file.short_path),
       "kompile_tool/kprove_tool %s %s %s %s" % (ctx.attr.semantics[KompileInfo].files[0].short_path, ctx.files.srcs[0].path, merged_file.short_path, '"$@"'),
   ]
   ctx.actions.write(output_file, "\n".join(script_lines), is_executable = True)

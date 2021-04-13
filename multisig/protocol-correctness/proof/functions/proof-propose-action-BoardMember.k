@@ -20,11 +20,7 @@ module PROOF-PROPOSE-ACTION-BOARDMEMBER
               ActionData:Map,
               ActionSigners:Map,
               CallerAddress:Address,
-              //@ proof
-              .List,  // TODO: Stack:List,
-              //@ trusted
-              // Stack:List,
-              //@ end
+              Stack:Stack,
               .Map,
               PerformedActions:List
               )
@@ -44,11 +40,7 @@ module PROOF-PROPOSE-ACTION-BOARDMEMBER
               u(ActionLastIndex +Int 1) |-> Action ActionData,
               (u(ActionLastIndex +Int 1) |-> [{AddressToUserId[CallerAddress]}:>Usize, .]) ActionSigners,
               CallerAddress,
-              //@ proof
-              .List,  // TODO: Stack:List,
-              //@ trusted
-              // Stack:List,
-              //@ end
+              Stack:Stack,
               ?_Variables,
               PerformedActions:List
               ):StateCell

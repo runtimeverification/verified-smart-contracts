@@ -14,7 +14,7 @@ module TRUSTED-PERFORM-CHANGE-QUORUM
             UserIdToRole:Map,
             OldQuorum:Usize,
             ActionState:ActionStateCell,
-            Stack:List,
+            Stack:Stack,
             CallerAddress:Address,
             PerformedActions:List)
       </T>
@@ -32,7 +32,7 @@ module TRUSTED-PERFORM-CHANGE-QUORUM
             u(NewQuorum),
             ActionState,
             ?_Variables:Map,
-            Stack:List,
+            Stack:Stack,
             CallerAddress,
             ListItem(Action) PerformedActions:List)
       </T>
@@ -69,7 +69,7 @@ module TRUSTED-PERFORM-CHANGE-QUORUM
             UserIdToRole:Map,
             OldQuorum:Usize,
             ActionState:ActionStateCell,
-            Stack:List,
+            Stack:Stack,
             CallerAddress:Address,
             _PerformedActions:List)
       </T>
@@ -87,7 +87,7 @@ module TRUSTED-PERFORM-CHANGE-QUORUM
             OldQuorum,
             ActionState,
             ?_Variables:Map,
-            Stack:List,
+            Stack:Stack,
             CallerAddress,
             ?_PerformedActions:List)
       </T>
@@ -128,7 +128,7 @@ module PROOF-PERFORM-CHANGE-QUORUM
             UserIdToRole:Map,
             OldQuorum:Usize,
             ActionState:ActionStateCell,
-            .List, // TODO: Stack:List,
+            Stack:Stack,
             CallerAddress:Address,
             PerformedActions:List)
       </T>
@@ -146,7 +146,7 @@ module PROOF-PERFORM-CHANGE-QUORUM
             u(NewQuorum),
             ActionState,
             ?_Variables:Map,
-            .List, // TODO: Stack:List,
+            Stack:Stack,
             CallerAddress,
             ListItem(Action) PerformedActions:List)
       </T>
@@ -182,7 +182,7 @@ module PROOF-PERFORM-CHANGE-QUORUM
             UserIdToRole:Map,
             OldQuorum:Usize,
             ActionState:ActionStateCell,
-            .List, // TODO: Stack:List,
+            Stack:Stack,
             CallerAddress:Address,
             _PerformedActions:List)
       </T>
@@ -200,7 +200,7 @@ module PROOF-PERFORM-CHANGE-QUORUM
             OldQuorum,
             ActionState,
             ?_Variables:Map,
-            .List, // TODO: Stack:List,
+            Stack:Stack,
             CallerAddress,
             ?_PerformedActions:List)
       </T>

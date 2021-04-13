@@ -13,12 +13,12 @@ module COUNT-CAN-SIGN-PARTS
             quorum:Usize,
             ActionStateCell,
             variables:Map,
-            stack:List,
+            stack:Stack,
             ExternalCallEnvCell,
             performedActions:List)
       [function, functional]
 
-  rule countCanSignLhs(
+  rule Stack(
             SignerIds:ExpressionList,
             K:K,
             Users:UsersCell,
@@ -28,7 +28,7 @@ module COUNT-CAN-SIGN-PARTS
             Quorum:Usize,
             ActionState:ActionStateCell,
             Variables:Map,
-            Stack:List,
+            Stack:Stack,
             ExternalCallEnv:ExternalCallEnvCell,
             PerformedActions:List)
       => <TT>
@@ -68,7 +68,7 @@ module COUNT-CAN-SIGN-PARTS
             quorum:Usize,
             ActionStateCell,
             variables:Map,
-            stack:List,
+            stack:Stack,
             ExternalCallEnvCell,
             performedActions:List)
       [function, functional]
@@ -83,7 +83,7 @@ module COUNT-CAN-SIGN-PARTS
             Quorum:Usize,
             ActionState:ActionStateCell,
             Variables:Map,
-            Stack:List,
+            Stack:Stack,
             ExternalCallEnv:ExternalCallEnvCell,
             PerformedActions:List)
       => <TT>
@@ -121,7 +121,7 @@ module COUNT-CAN-SIGN-PARTS
             quorum:KItem,
             ActionStateCell,
             variables:Map,
-            stack:List,
+            stack:Stack,
             ExternalCallEnvCell)
       [function, functional]
 
@@ -134,7 +134,7 @@ module COUNT-CAN-SIGN-PARTS
             _Quorum:KItem,
             _ActionState:ActionStateCell,
             Variables:Map,
-            _Stack:List,
+            _Stack:Stack,
             _ExternalCallEnv:ExternalCallEnvCell)
       =>
         isKResult(SignerIds)
@@ -152,7 +152,7 @@ module COUNT-CAN-SIGN-PARTS
             quorum:KItem,
             ActionStateCell,
             variables:Map,
-            stack:List,
+            Stack:Stack,
             ExternalCallEnvCell)
       [function, functional]
 
@@ -165,7 +165,7 @@ module COUNT-CAN-SIGN-PARTS
             _Quorum:KItem,
             _ActionState:ActionStateCell,
             _Variables:Map,
-            _Stack:List,
+            _Stack:Stack,
             _ExternalCallEnv:ExternalCallEnvCell)
       => true
 

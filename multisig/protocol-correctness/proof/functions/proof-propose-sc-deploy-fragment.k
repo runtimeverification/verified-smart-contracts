@@ -33,11 +33,7 @@ module PROOF-PROPOSE-SC-DEPLOY-FRAGMENT
               ActionData:Map,
               ActionSigners:Map,
               CallerAddress:Address,
-              //@ proof
-              .List,  // TODO: Stack:List,
-              //@ trusted
-              // Stack:List,
-              //@ end
+              Stack:Stack,
               .Map,
               PerformedActions:List
               )
@@ -61,11 +57,7 @@ module PROOF-PROPOSE-SC-DEPLOY-FRAGMENT
               ActionData:Map,
               ActionSigners:Map,
               CallerAddress:Address,
-              //@ proof
-              .List,  // TODO: Stack:List,
-              //@ trusted
-              // Stack:List,
-              //@ end
+              Stack:Stack,
               code_metadata |-> codeMetadataFunction(Upgradeable, Payable, Readable),
               PerformedActions:List
               )

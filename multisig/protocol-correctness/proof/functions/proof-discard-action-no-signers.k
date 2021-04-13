@@ -27,11 +27,7 @@ module PROOF-DISCARD-ACTION-NO-SIGNERS
               ActionId |-> _:Action ActionData:Map,
               ActionSigners:Map,
               CallerAddress:Address,
-              //@ proof
-              .List,  // TODO: Stack:List,
-              //@ trusted
-              // Stack:List,
-              //@ end
+              Stack:Stack,
               .Map,
               PerformedActions:List
               )
@@ -51,11 +47,7 @@ module PROOF-DISCARD-ACTION-NO-SIGNERS
               ActionData,
               ActionSigners,
               CallerAddress,
-              //@ proof
-              .List,  // TODO: Stack:List,
-              //@ trusted
-              // Stack:List,
-              //@ end
+              Stack:Stack,
               ?_Variables,
               PerformedActions:List
               ):StateCell

@@ -39,11 +39,7 @@ module PROOF-PROPOSE-SC-DEPLOY-ERROR-NO-USER
               ActionData:Map,
               ActionSigners:Map,
               CallerAddress:Address,
-              //@ proof
-              .List,  // TODO: Stack:List,
-              //@ trusted
-              // Stack:List,
-              //@ end
+              Stack:Stack,
               .Map,
               PerformedActions:List
               )
@@ -63,11 +59,7 @@ module PROOF-PROPOSE-SC-DEPLOY-ERROR-NO-USER
               ActionData,
               ActionSigners,
               CallerAddress,
-              //@ proof
-              .List,  // TODO: Stack:List,
-              //@ trusted
-              // Stack:List,
-              //@ end
+              Stack:Stack,
               ?_Variables:Map,
               PerformedActions:List
               ):StateCell

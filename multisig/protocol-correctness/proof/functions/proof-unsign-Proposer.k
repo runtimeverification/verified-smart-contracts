@@ -21,11 +21,7 @@ module PROOF-UNSIGN-PROPOSER
               (ActionId |-> Action:Action _ActionData:Map) #as ActionData:Map,
               ActionSigners:Map,
               CallerAddress:Address,
-              //@ proof
-              .List,  // TODO: Stack:List,
-              //@ trusted
-              // Stack:List,
-              //@ end
+              Stack:Stack,
               .Map,
               PerformedActions:List
               )
@@ -45,11 +41,7 @@ module PROOF-UNSIGN-PROPOSER
               ActionData,
               ActionSigners,
               CallerAddress,
-              //@ proof
-              .List,  // TODO: Stack:List,
-              //@ trusted
-              // Stack:List,
-              //@ end
+              Stack:Stack,
               ?_Variables,
               PerformedActions:List
               ):StateCell

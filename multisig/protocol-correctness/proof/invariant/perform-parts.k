@@ -65,7 +65,7 @@ module PERFORM-PARTS
       userIdToRole:Map,
       quorum:Usize,
       ActionStateCell,
-      stack:List,
+      Stack:Stack,
       callerAddress:Address,
       performedActions:List)
     [function, functional]
@@ -81,7 +81,7 @@ module PERFORM-PARTS
           quorum:Usize,
           ActionStateCell,
           variables:Map,
-          stack:List,
+          Stack:Stack,
           callerAddress:Address,
           performedActions:List)
       [function, functional]
@@ -219,7 +219,7 @@ module PERFORM-PARTS
           UserIdToRole:Map,
           Quorum:Usize,
           ActionState:ActionStateCell,
-          Stack:List,
+          Stack:Stack,
           CallerAddress:Address,
           PerformedActions:List)
         =>
@@ -267,7 +267,7 @@ module PERFORM-PARTS
           Quorum:Usize,
           ActionState:ActionStateCell,
           Variables:Map,
-          Stack:List,
+          Stack:Stack,
           CallerAddress:Address,
           PerformedActions:List)
         =>

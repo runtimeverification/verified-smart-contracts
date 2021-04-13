@@ -29,11 +29,14 @@ module PROOF-PERFORM-ACTION-CHANGE-QUORUM
             </multisig-state>
             <pseudocode-state>
               <variables>.Map</variables>
-              <stack>Stack:List</stack>
+              <stack>Stack:Stack</stack>
             </pseudocode-state>
             <external-call-env>
               <caller-address>CallerAddress:Address</caller-address>
             </external-call-env>
+            <log>
+              <performed-actions>PerformedActions:List</performed-actions>
+            </log>
           </state>
       </TT> </T>
       =>
@@ -61,6 +64,9 @@ module PROOF-PERFORM-ACTION-CHANGE-QUORUM
             <external-call-env>
               <caller-address>CallerAddress</caller-address>
             </external-call-env>
+            <log>
+              <performed-actions>ListItem(Action) PerformedActions</performed-actions>
+            </log>
           </state>
       </TT> </T>
     requires true

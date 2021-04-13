@@ -13,7 +13,7 @@ module TRUSTED-INIT-LOOP
               Quorum:Usize,
               ActionState:ActionStateCell,
               .Map,  // TODO: Variables:Map,
-              Stack:List,
+              Stack:Stack,
               ExternalCallEnv:ExternalCallEnvCell,
               _Address0:Expression,
               _UserId0:Usize)
@@ -62,7 +62,7 @@ module TRUSTED-INIT-LOOP
               Quorum:Usize,
               ActionState:ActionStateCell,
               .Map,  // TODO: Variables:Map,
-              Stack:List,
+              Stack:Stack,
               ExternalCallEnv:ExternalCallEnvCell,
               _Address0:Expression,
               _UserId0:Usize)
@@ -107,7 +107,7 @@ module PROOF-INIT-LOOP
               Quorum:Usize,
               ActionState:ActionStateCell,
               .Map,  // TODO: Variables:Map,
-              Stack:List,
+              Stack:Stack,
               ExternalCallEnv:ExternalCallEnvCell,
               _Address0:Expression,
               _UserId0:Usize)
@@ -155,7 +155,7 @@ module PROOF-INIT-LOOP
               Quorum:Usize,
               ActionState:ActionStateCell,
               .Map,  // TODO: Variables:Map,
-              Stack:List,
+              Stack:Stack,
               ExternalCallEnv:ExternalCallEnvCell,
               _Address0:Expression,
               _UserId0:Usize)

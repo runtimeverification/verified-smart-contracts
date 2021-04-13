@@ -32,16 +32,19 @@ module PROOF-PERFORM-ACTION-REMOVE-USER-PROPOSER
             </multisig-state>
             <pseudocode-state>
               <variables>.Map</variables>
-              <stack>Stack:List</stack>
+              <stack>Stack:Stack</stack>
             </pseudocode-state>
             <external-call-env>
               <caller-address>CallerAddress:Address</caller-address>
             </external-call-env>
+            <log>
+              <performed-actions>PerformedActions:List</performed-actions>
+            </log>
           </state>
       </TT> </T>
       =>
       <T> <TT>
-          <k> evaluate(void) ~> K </k>
+          <k>evaluate(void) ~> K</k>
           <state>
             <multisig-state>
               <users>
@@ -64,6 +67,9 @@ module PROOF-PERFORM-ACTION-REMOVE-USER-PROPOSER
             <external-call-env>
               <caller-address>CallerAddress</caller-address>
             </external-call-env>
+            <log>
+              <performed-actions>ListItem(Action) PerformedActions</performed-actions>
+            </log>
           </state>
       </TT> </T>
     requires true

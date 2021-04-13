@@ -266,11 +266,8 @@ module PSEUDOCODE-INSTRUCTIONS
       => runInstruction(I) ~> runPseudoCode(Is)
 
   rule  <k> error ~> (runPseudoCode(_) => .K) ...</k>
-  //       <stack> ListItem(_) ... </stack>
-  // rule  <k> error ~> (runPseudoCode(_) => .K) ...</k>
-  //       <stack> .List </stack>
   rule  <k> error => .K </k>
-        <stack> .List </stack>
+        <stack> .stack </stack>
 
   rule runInstruction(E:Expression;) => evaluate(E)
   rule (evaluate(E:Expression) => .K) ~> runInstruction(_)
@@ -410,6 +407,7 @@ module PSEUDOCODE-EXPRESSION
 endmodule
 
 module PSEUDOCODE-COMMON
+  imports MAP
   imports PSEUDOCODE-SYNTAX
 
   syntax KResult ::= Value
@@ -427,6 +425,9 @@ module PSEUDOCODE-COMMON
   syntax KItem ::= "removeValue"
   rule (E:Expression ~> removeValue) => .K
     requires isKResult(E)
+
+  syntax Stack ::= ".stack"
+  syntax Stack ::= stack(MultisigStateCell, variables:Map, performedActions:List, next:Stack)
 endmodule
 
 module PSEUDOCODE-DETAILS
@@ -498,8 +499,6 @@ module PSEUDOCODE-FUNCTIONS
   syntax KItem ::= call(Expression)
   syntax KItem ::= Expression
 
-  syntax Stack ::= stackEntry(MultisigStateCell, variables:Map, performedActions:List)
-
   context evaluate(_:FunctionTag(
           {HOLE => evaluateAc(HOLE)}:>ArgumentCSV
       ))
@@ -519,7 +518,7 @@ module PSEUDOCODE-FUNCTIONS
           S:MultisigStateCell
           <pseudocode-state>
             <variables> V:Map => .Map </variables>
-            <stack> (.List => ListItem(stackEntry(S, V, Log))) ... </stack>
+            <stack> Stack:Stack => stack(S, V, Log, Stack) </stack>
           </pseudocode-state>
           _:ExternalCallEnvCell
           <log>
@@ -532,8 +531,9 @@ module PSEUDOCODE-FUNCTIONS
 
   rule  <k> E:Expression ~> (popContext => .K) ... </k>
         <variables> _ => V </variables>
-        <stack> (ListItem(stackEntry(_, V:Map, _)) => .List) ... </stack>
+        <stack> stack(_, V:Map, _, Stack:Stack) => Stack </stack>
     requires isKResult(E)
+    [label(xyzzy)]
 
   rule  <k> (E:Expression ~> evaluateReturnValue) => evaluate(E) ... </k>
     requires isKResult(E)
@@ -543,7 +543,7 @@ module PSEUDOCODE-FUNCTIONS
           (_ => S)
           <pseudocode-state>
             <variables> _ => V </variables>
-            <stack> (ListItem(stackEntry(S:MultisigStateCell, V:Map, Log:List)) => .List) ... </stack>
+            <stack> stack(S:MultisigStateCell, V:Map, Log:List, Stack:Stack) => Stack </stack>
           </pseudocode-state>
           _:ExternalCallEnvCell
           <log>
@@ -1232,6 +1232,7 @@ module PSEUDOCODE-CONFIGURATION
   imports MAP
 
   imports PSEUDOCODE-SYNTAX
+  imports PSEUDOCODE-COMMON
 
   syntax KItem ::= "uninitialized"
 
@@ -1263,7 +1264,7 @@ module PSEUDOCODE-CONFIGURATION
           </multisig-state>
           <pseudocode-state>
             <variables>.Map</variables>
-            <stack> .List </stack>
+            <stack> .stack </stack>
           </pseudocode-state>
           <external-call-env>
             <caller-address>uninitialized</caller-address>
@@ -1300,7 +1301,7 @@ module PSEUDOCODE-CONFIGURATION
         </multisig-state>
         <pseudocode-state>
           <variables>.Map</variables>
-          <stack> .List </stack>
+          <stack> .stack </stack>
         </pseudocode-state>
         <external-call-env>
           <caller-address>uninitialized</caller-address>

@@ -8,7 +8,7 @@ module PROOF-PERFORM-ACTION-NOTHING
 
   claim
       <T> <TT>
-          <k> call(performAction(Nothing:Action)) ~> K:K </k>
+          <k> call(performAction(Nothing #as Action:Action)) ~> K:K </k>
           <state>
             <multisig-state>
               <users>
@@ -26,11 +26,14 @@ module PROOF-PERFORM-ACTION-NOTHING
             </multisig-state>
             <pseudocode-state>
               <variables>.Map</variables>
-              <stack>Stack:List</stack>
+              <stack>Stack:Stack</stack>
             </pseudocode-state>
             <external-call-env>
               <caller-address>CallerAddress:Address</caller-address>
             </external-call-env>
+            <log>
+              <performed-actions>PerformedActions:List</performed-actions>
+            </log>
           </state>
       </TT> </T>
       =>
@@ -58,6 +61,9 @@ module PROOF-PERFORM-ACTION-NOTHING
             <external-call-env>
               <caller-address>CallerAddress</caller-address>
             </external-call-env>
+            <log>
+              <performed-actions>ListItem(Action) PerformedActions</performed-actions>
+            </log>
           </state>
       </TT> </T>
     requires true

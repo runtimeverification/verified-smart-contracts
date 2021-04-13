@@ -21,11 +21,7 @@ module PROOF-UNSIGN-NO-SIGNERS
               (ActionId |-> Action:Action _ActionData:Map) #as ActionData:Map,
               ActionSigners:Map,
               CallerAddress:Address,
-              //@ proof
-              .List,  // TODO: Stack:List,
-              //@ trusted
-              // Stack:List,
-              //@ end
+              Stack:Stack,
               .Map,
               PerformedActions:List
               )
@@ -45,11 +41,7 @@ module PROOF-UNSIGN-NO-SIGNERS
               ActionData,
               ActionSigners,
               CallerAddress,
-              //@ proof
-              .List,  // TODO: Stack:List,
-              //@ trusted
-              // Stack:List,
-              //@ end
+              Stack:Stack,
               ?_Variables,
               PerformedActions:List
               ):StateCell

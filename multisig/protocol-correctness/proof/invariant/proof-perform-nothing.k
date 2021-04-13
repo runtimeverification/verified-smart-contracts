@@ -14,7 +14,7 @@ module TRUSTED-PERFORM-NOTHING
             UserIdToRole:Map,
             Quorum:Usize,
             ActionState:ActionStateCell,
-            Stack:List,
+            Stack:Stack,
             CallerAddress:Address,
             PerformedActions:List)
       </T>
@@ -72,7 +72,7 @@ module PROOF-PERFORM-NOTHING
             UserIdToRole:Map,
             Quorum:Usize,
             ActionState:ActionStateCell,
-            Stack:List,
+            Stack:Stack,
             CallerAddress:Address,
             PerformedActions:List)
       </T>

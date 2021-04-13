@@ -24,7 +24,7 @@ module TRUSTED-PERFORM-ADD-PROPOSER-8
             UserIdToRole:Map,
             Quorum:Usize,
             ActionState:ActionStateCell,
-            Stack:List,
+            Stack:Stack,
             CallerAddress:Address,
             PerformedActions:List)
       </T>
@@ -42,7 +42,7 @@ module TRUSTED-PERFORM-ADD-PROPOSER-8
             Quorum,
             ActionState,
             ?_Variables:Map,
-            Stack:List,
+            Stack:Stack,
             CallerAddress,
             ListItem(Action) PerformedActions:List)
       </T>
@@ -91,7 +91,7 @@ module PROOF-PERFORM-ADD-PROPOSER-8
             UserIdToRole:Map,
             Quorum:Usize,
             ActionState:ActionStateCell,
-            .List, // TODO: Stack:List,
+            Stack:Stack,
             CallerAddress:Address,
             PerformedActions:List)
       </T>
@@ -109,7 +109,7 @@ module PROOF-PERFORM-ADD-PROPOSER-8
             Quorum,
             ActionState,
             ?_Variables:Map,
-            .List, // TODO: Stack:List,
+            Stack:Stack,
             CallerAddress,
             ListItem(Action) PerformedActions:List)
       </T>

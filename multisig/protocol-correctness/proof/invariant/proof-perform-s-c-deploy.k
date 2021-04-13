@@ -18,7 +18,7 @@ module TRUSTED-PERFORM-S-C-DEPLOY
             UserIdToRole:Map,
             Quorum:Usize,
             ActionState:ActionStateCell,
-            Stack:List,
+            Stack:Stack,
             CallerAddress:Address,
             PerformedActions:List)
       </T>
@@ -36,7 +36,7 @@ module TRUSTED-PERFORM-S-C-DEPLOY
             Quorum,
             ActionState,
             ?_Variables:Map,
-            Stack:List,
+            Stack:Stack,
             CallerAddress,
             ListItem(Action) PerformedActions:List)
       </T>
@@ -72,7 +72,7 @@ module PROOF-PERFORM-S-C-DEPLOY
             UserIdToRole:Map,
             Quorum:Usize,
             ActionState:ActionStateCell,
-            .List, // TODO: Stack:List,
+            Stack:Stack,
             CallerAddress:Address,
             PerformedActions:List)
       </T>
@@ -90,7 +90,7 @@ module PROOF-PERFORM-S-C-DEPLOY
             Quorum,
             ActionState,
             ?_Variables:Map,
-            .List, // TODO: Stack:List,
+            Stack:Stack,
             CallerAddress,
             ListItem(Action) PerformedActions:List)
       </T>
