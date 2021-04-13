@@ -132,7 +132,7 @@ def _merge_trusted(input_file, trusted_attr, kmerge, actions, merged_file):
   actions.run(
       inputs=depset([input_file] + all_trusted),
       outputs=[merged_file],
-      arguments=[merged_file.path] + [s.path for s in all_trusted] + [input_file.path],
+      arguments=[merged_file.path, input_file.path] + [s.path for s in all_trusted],
       progress_message="Preparing %s" % input_file.path,
       executable=kmerge)
 

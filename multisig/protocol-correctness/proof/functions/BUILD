@@ -10,6 +10,52 @@ kompile(
 )
 
 kprove_test(
+  name = "proof-perform-action-endpoint-fragment-New",
+  srcs = ["proof-perform-action-endpoint-fragment-New.k"],
+  semantics = ":functions-execute",
+  timeout = "long",
+)
+
+kprove_test(
+  name = "proof-perform-action-endpoint-fragment-None",
+  srcs = ["proof-perform-action-endpoint-fragment-None.k"],
+  semantics = ":functions-execute",
+  timeout = "long",
+)
+
+kprove_test(
+  name = "proof-perform-action-endpoint-fragment-no-quorum-no-signers",
+  srcs = ["proof-perform-action-endpoint-fragment-no-quorum-no-signers.k"],
+  trusted = ["trusted-count-can-sign"],
+  semantics = ":functions-execute",
+  timeout = "long",
+)
+
+kprove_test(
+  name = "proof-perform-action-endpoint-fragment-no-quorum-has-signers",
+  srcs = ["proof-perform-action-endpoint-fragment-no-quorum-has-signers.k"],
+  trusted = ["trusted-count-can-sign"],
+  semantics = ":functions-execute",
+  timeout = "long",
+)
+
+kprove_test(
+  name = "proof-perform-action-endpoint-fragment-performs-no-signers",
+  srcs = ["proof-perform-action-endpoint-fragment-performs-no-signers.k"],
+  trusted = ["trusted-count-can-sign"],
+  semantics = ":functions-execute",
+  timeout = "long",
+)
+
+kprove_test(
+  name = "proof-perform-action-endpoint-fragment-performs-has-signers",
+  srcs = ["proof-perform-action-endpoint-fragment-performs-has-signers.k"],
+  trusted = ["trusted-count-can-sign"],
+  semantics = ":functions-execute",
+  timeout = "long",
+)
+
+kprove_test(
   name = "proof-perform-action-id-remove-user-BoardMember",
   srcs = ["proof-perform-action-id-remove-user-BoardMember.k"],
   trusted = [":trusted-perform-action-remove-user-BoardMember"],
