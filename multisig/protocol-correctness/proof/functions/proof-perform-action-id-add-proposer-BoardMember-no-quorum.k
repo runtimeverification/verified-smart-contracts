@@ -1,12 +1,13 @@
 //@ proof
-require "trusted-change-user-role-BoardMember.k"  //@ Bazel remove
+require "trusted-perform-action-add-proposer-boardmember-no-quorum.k"  //@ Bazel remove
 
 module PROOF-PERFORM-ACTION-ID-ADD-PROPOSER-BOARDMEMBER-NO-QUORUM
-  imports TRUSTED-CHANGE-USER-ROLE-BOARDMEMBER
+  imports TRUSTED-PERFORM-ACTION-ADD-PROPOSER-BOARDMEMBER-NO-QUORUM
 //@ trusted
 // module TRUSTED-PERFORM-ACTION-ID-ADD-PROPOSER-BOARDMEMBER-NO-QUORUM
 //@ end
 
+  imports INVARIANT-HELPERS
   imports PSEUDOCODE
 
   claim
@@ -22,7 +23,7 @@ module PROOF-PERFORM-ACTION-ID-ADD-PROPOSER-BOARDMEMBER-NO-QUORUM
               <board-state>
                 <num-board-members>u(NumBoardMembers:Int)</num-board-members>
                 <num-proposers>u(NumProposers:Int)</num-proposers>
-                <user-roles>UserId |-> BoardMember UserIdToRole:Map</user-roles>
+                <user-roles>(UserId |-> BoardMember _UserIdToRole:Map) #as UserIdToRole:Map</user-roles>
                 <quorum>u(Quorum:Int)</quorum>
               </board-state>
               <action-state>
@@ -46,9 +47,6 @@ module PROOF-PERFORM-ACTION-ID-ADD-PROPOSER-BOARDMEMBER-NO-QUORUM
             <log>
               <performed-actions>PerformedActions:List</performed-actions>
             </log>
-            <log>
-              <performed-actions>PerformedActions:List</performed-actions>
-            </log>
           </state>
       </TT> </T>
       =>
@@ -62,9 +60,9 @@ module PROOF-PERFORM-ACTION-ID-ADD-PROPOSER-BOARDMEMBER-NO-QUORUM
                 <address-to-user-id>AddressToUserId</address-to-user-id>
               </users>
               <board-state>
-                <num-board-members>u(NumBoardMembers -Int 1)</num-board-members>
-                <num-proposers>u(NumProposers +Int 1)</num-proposers>
-                <user-roles>UserId |-> Proposer UserIdToRole:Map</user-roles>
+                <num-board-members>u(NumBoardMembers)</num-board-members>
+                <num-proposers>u(NumProposers)</num-proposers>
+                <user-roles>UserIdToRole:Map</user-roles>
                 <quorum>u(Quorum)</quorum>
               </board-state>
               <action-state>
@@ -82,6 +80,9 @@ module PROOF-PERFORM-ACTION-ID-ADD-PROPOSER-BOARDMEMBER-NO-QUORUM
             <external-call-env>
               <caller-address>CallerAddress</caller-address>
             </external-call-env>
+            <log>
+              <performed-actions>PerformedActions</performed-actions>
+            </log>
           </state>
       </TT> </T>
     requires true

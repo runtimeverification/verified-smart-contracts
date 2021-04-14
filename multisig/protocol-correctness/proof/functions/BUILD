@@ -36,7 +36,7 @@ kprove_test(
   srcs = ["proof-perform-action-endpoint-fragment-no-quorum-has-signers.k"],
   trusted = ["trusted-count-can-sign"],
   semantics = ":functions-execute",
-  timeout = "long",
+  timeout = "eternal",
 )
 
 kprove_test(
@@ -52,7 +52,7 @@ kprove_test(
   srcs = ["proof-perform-action-endpoint-fragment-performs-has-signers.k"],
   trusted = ["trusted-count-can-sign"],
   semantics = ":functions-execute",
-  timeout = "long",
+  timeout = "eternal",
 )
 
 kprove_test(
@@ -106,6 +106,7 @@ kprove_test(
 kprove_test(
   name = "proof-perform-action-id-change-quorum",
   srcs = ["proof-perform-action-id-change-quorum.k"],
+  trusted = [":trusted-perform-action-change-quorum"],
   semantics = ":functions-execute",
   timeout = "long",
 )
@@ -113,6 +114,7 @@ kprove_test(
 kprove_test(
   name = "proof-perform-action-id-change-quorum-no-quorum",
   srcs = ["proof-perform-action-id-change-quorum-no-quorum.k"],
+  trusted = [":trusted-perform-action-change-quorum-no-quorum"],
   semantics = ":functions-execute",
   timeout = "long",
 )
@@ -469,7 +471,7 @@ kprove_test(
   srcs = ["proof-discard-action-no-valid-signers.k"],
   trusted = [":trusted-count-can-sign"],
   semantics = ":functions-execute",
-  timeout = "long",
+  timeout = "eternal",
 )
 
 kprove_test(
@@ -519,7 +521,7 @@ kprove_test(
       ":trusted-propose-sc-deploy-fragment",
   ],
   semantics = ":functions-execute",
-  timeout = "long",
+  timeout = "eternal",
 )
 
 kprove_test(

@@ -1,5 +1,8 @@
 //@ proof
+require "trusted-perform-action-change-quorum.k"  //@ Bazel remove
+
 module PROOF-PERFORM-ACTION-ID-CHANGE-QUORUM
+  imports TRUSTED-PERFORM-ACTION-CHANGE-QUORUM
 //@ trusted
 // module TRUSTED-PERFORM-ACTION-ID-CHANGE-QUORUM
 //@ end
@@ -40,9 +43,6 @@ module PROOF-PERFORM-ACTION-ID-CHANGE-QUORUM
             <external-call-env>
               <caller-address>CallerAddress:Address</caller-address>
             </external-call-env>
-            <log>
-              <performed-actions>PerformedActions:List</performed-actions>
-            </log>
             <log>
               <performed-actions>PerformedActions:List</performed-actions>
             </log>

@@ -3,6 +3,8 @@ module PROOF-PROPOSE-ACTION-PROPOSER
 //@ trusted
 // module TRUSTED-PROPOSE-ACTION-PROPOSER
 //@ end
+
+  imports EXECUTION-PROOF-HELPERS
   imports FUNCTIONS-EXECUTE
 
   claim <T><TT>

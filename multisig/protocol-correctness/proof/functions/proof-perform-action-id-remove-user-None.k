@@ -1,12 +1,13 @@
 //@ proof
-require "trusted-change-user-role-None.k"  //@ Bazel remove
+require "trusted-perform-action-remove-user-none.k"  //@ Bazel remove
 
 module PROOF-PERFORM-ACTION-ID-REMOVE-USER-NONE
-  imports TRUSTED-CHANGE-USER-ROLE-NONE
+  imports TRUSTED-PERFORM-ACTION-REMOVE-USER-NONE
 //@ trusted
 // module TRUSTED-PERFORM-ACTION-ID-REMOVE-USER-NONE
 //@ end
 
+  imports INVARIANT-HELPERS
   imports PSEUDOCODE
 
   claim
@@ -43,9 +44,6 @@ module PROOF-PERFORM-ACTION-ID-REMOVE-USER-NONE
             <external-call-env>
               <caller-address>CallerAddress:Address</caller-address>
             </external-call-env>
-            <log>
-              <performed-actions>PerformedActions:List</performed-actions>
-            </log>
             <log>
               <performed-actions>PerformedActions:List</performed-actions>
             </log>

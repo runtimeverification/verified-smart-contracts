@@ -1,7 +1,7 @@
 //@ proof
 module PROOF-PERFORM-ACTION-NOTHING
 //@ trusted
-// module TRUSTED-PERFORM-NOTHING
+// module TRUSTED-PERFORM-ACTION-NOTHING
 //@ end
 
   imports PSEUDOCODE

@@ -1,5 +1,8 @@
 //@ proof
+require "trusted-perform-action-send-egld.k"  //@ Bazel remove
+
 module PROOF-PERFORM-ACTION-ID-SEND-EGLD
+  imports TRUSTED-PERFORM-ACTION-SEND-EGLD
 //@ trusted
 // module TRUSTED-PERFORM-ACTION-ID-SEND-EGLD
 //@ end
@@ -43,9 +46,6 @@ module PROOF-PERFORM-ACTION-ID-SEND-EGLD
             <external-call-env>
               <caller-address>CallerAddress:Address</caller-address>
             </external-call-env>
-            <log>
-              <performed-actions>PerformedActions:List</performed-actions>
-            </log>
             <log>
               <performed-actions>PerformedActions:List</performed-actions>
             </log>

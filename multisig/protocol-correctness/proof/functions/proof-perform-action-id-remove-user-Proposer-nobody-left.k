@@ -1,12 +1,13 @@
 //@ proof
-require "trusted-change-user-role-Proposer.k"  //@ Bazel remove
+require "trusted-perform-action-remove-user-Proposer-nobody-left.k"  //@ Bazel remove
 
 module PROOF-PERFORM-ACTION-ID-REMOVE-USER-PROPOSER-NOBODY-LEFT
-  imports TRUSTED-CHANGE-USER-ROLE-PROPOSER
+  imports TRUSTED-PERFORM-ACTION-REMOVE-USER-PROPOSER-NOBODY-LEFT
 //@ trusted
 // module TRUSTED-PERFORM-ACTION-ID-REMOVE-USER-PROPOSER-NOBODY-LEFT
 //@ end
 
+  imports INVARIANT-HELPERS
   imports PSEUDOCODE
 
   claim
@@ -22,7 +23,7 @@ module PROOF-PERFORM-ACTION-ID-REMOVE-USER-PROPOSER-NOBODY-LEFT
               <board-state>
                 <num-board-members>u(NumBoardMembers:Int)</num-board-members>
                 <num-proposers>u(NumProposers:Int)</num-proposers>
-                <user-roles>u(UserId:Int) |-> Proposer UserIdToRole:Map</user-roles>
+                <user-roles>(u(UserId:Int) |-> Proposer _UserIdToRole:Map) #as UserIdToRole:Map</user-roles>
                 <quorum>u(Quorum:Int)</quorum>
               </board-state>
               <action-state>
@@ -46,9 +47,6 @@ module PROOF-PERFORM-ACTION-ID-REMOVE-USER-PROPOSER-NOBODY-LEFT
             <log>
               <performed-actions>PerformedActions:List</performed-actions>
             </log>
-            <log>
-              <performed-actions>PerformedActions:List</performed-actions>
-            </log>
           </state>
       </TT> </T>
       =>
@@ -63,7 +61,7 @@ module PROOF-PERFORM-ACTION-ID-REMOVE-USER-PROPOSER-NOBODY-LEFT
               </users>
               <board-state>
                 <num-board-members>u(NumBoardMembers)</num-board-members>
-                <num-proposers>u(NumProposers -Int 1)</num-proposers>
+                <num-proposers>u(NumProposers)</num-proposers>
                 <user-roles>UserIdToRole</user-roles>
                 <quorum>u(Quorum)</quorum>
               </board-state>
@@ -82,6 +80,9 @@ module PROOF-PERFORM-ACTION-ID-REMOVE-USER-PROPOSER-NOBODY-LEFT
             <external-call-env>
               <caller-address>CallerAddress</caller-address>
             </external-call-env>
+            <log>
+              <performed-actions>PerformedActions</performed-actions>
+            </log>
           </state>
       </TT> </T>
     requires true

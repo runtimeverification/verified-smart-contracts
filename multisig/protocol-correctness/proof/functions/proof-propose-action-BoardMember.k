@@ -3,6 +3,8 @@ module PROOF-PROPOSE-ACTION-BOARDMEMBER
 //@ trusted
 // module TRUSTED-PROPOSE-ACTION-BOARDMEMBER
 //@ end
+
+  imports EXECUTION-PROOF-HELPERS
   imports FUNCTIONS-EXECUTE
 
   claim <T><TT>

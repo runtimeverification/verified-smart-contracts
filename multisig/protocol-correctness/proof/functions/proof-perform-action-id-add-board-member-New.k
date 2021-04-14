@@ -1,12 +1,13 @@
 //@ proof
-require "trusted-change-user-role-New.k"  //@ Bazel remove
+require "trusted-perform-action-add-board-member-new.k"  //@ Bazel remove
 
 module PROOF-PERFORM-ACTION-ID-ADD-BOARD-MEMBER-NEW
-  imports TRUSTED-CHANGE-USER-ROLE-NEW
+  imports TRUSTED-PERFORM-ACTION-ADD-BOARD-MEMBER-NEW
 //@ trusted
 // module TRUSTED-PERFORM-ACTION-ID-ADD-BOARD-MEMBER-NEW
 //@ end
 
+  imports INVARIANT-HELPERS
   imports PSEUDOCODE
 
   claim

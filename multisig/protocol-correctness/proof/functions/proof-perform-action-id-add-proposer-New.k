@@ -1,12 +1,13 @@
 //@ proof
-require "trusted-change-user-role-New.k"  //@ Bazel remove
+require "trusted-perform-action-add-proposer-new.k"  //@ Bazel remove
 
 module PROOF-PERFORM-ACTION-ID-ADD-PROPOSER-NEW
-  imports TRUSTED-CHANGE-USER-ROLE-NEW
+  imports TRUSTED-PERFORM-ACTION-ADD-PROPOSER-NEW
 //@ trusted
 // module TRUSTED-PERFORM-ACTION-ID-ADD-PROPOSER-NEW
 //@ end
 
+  imports EXECUTION-PROOF-HELPERS
   imports PSEUDOCODE
 
   claim
@@ -43,9 +44,6 @@ module PROOF-PERFORM-ACTION-ID-ADD-PROPOSER-NEW
             <external-call-env>
               <caller-address>CallerAddress:Address</caller-address>
             </external-call-env>
-            <log>
-              <performed-actions>PerformedActions:List</performed-actions>
-            </log>
             <log>
               <performed-actions>PerformedActions:List</performed-actions>
             </log>

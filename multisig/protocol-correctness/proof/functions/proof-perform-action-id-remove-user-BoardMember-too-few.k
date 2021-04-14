@@ -1,12 +1,13 @@
 //@ proof
-require "trusted-change-user-role-BoardMember.k"  //@ Bazel remove
+require "trusted-perform-action-remove-user-boardmember-too-few.k"  //@ Bazel remove
 
 module PROOF-PERFORM-ACTION-ID-REMOVE-USER-BOARDMEMBER-TOO-FEW
-  imports TRUSTED-CHANGE-USER-ROLE-BOARDMEMBER
+  imports TRUSTED-PERFORM-ACTION-REMOVE-USER-BOARDMEMBER-TOO-FEW
 //@ trusted
 // module TRUSTED-PERFORM-ACTION-ID-REMOVE-USER-BOARDMEMBER-TOO-FEW
 //@ end
 
+  imports INVARIANT-HELPERS
   imports PSEUDOCODE
 
   claim
@@ -22,7 +23,7 @@ module PROOF-PERFORM-ACTION-ID-REMOVE-USER-BOARDMEMBER-TOO-FEW
               <board-state>
                 <num-board-members>u(NumBoardMembers:Int)</num-board-members>
                 <num-proposers>u(NumProposers:Int)</num-proposers>
-                <user-roles>u(UserId:Int) |-> BoardMember UserIdToRole:Map</user-roles>
+                <user-roles>(u(UserId:Int) |-> BoardMember _UserIdToRole:Map) #as UserIdToRole:Map</user-roles>
                 <quorum>u(Quorum:Int)</quorum>
               </board-state>
               <action-state>
@@ -46,9 +47,6 @@ module PROOF-PERFORM-ACTION-ID-REMOVE-USER-BOARDMEMBER-TOO-FEW
             <log>
               <performed-actions>PerformedActions:List</performed-actions>
             </log>
-            <log>
-              <performed-actions>PerformedActions:List</performed-actions>
-            </log>
           </state>
       </TT> </T>
       =>
@@ -62,7 +60,7 @@ module PROOF-PERFORM-ACTION-ID-REMOVE-USER-BOARDMEMBER-TOO-FEW
                 <address-to-user-id>AddressToUserId</address-to-user-id>
               </users>
               <board-state>
-                <num-board-members>u(NumBoardMembers -Int 1)</num-board-members>
+                <num-board-members>u(NumBoardMembers)</num-board-members>
                 <num-proposers>u(NumProposers)</num-proposers>
                 <user-roles>UserIdToRole</user-roles>
                 <quorum>u(Quorum)</quorum>
@@ -82,6 +80,9 @@ module PROOF-PERFORM-ACTION-ID-REMOVE-USER-BOARDMEMBER-TOO-FEW
             <external-call-env>
               <caller-address>CallerAddress</caller-address>
             </external-call-env>
+            <log>
+              <performed-actions>PerformedActions</performed-actions>
+            </log>
           </state>
       </TT> </T>
     requires true

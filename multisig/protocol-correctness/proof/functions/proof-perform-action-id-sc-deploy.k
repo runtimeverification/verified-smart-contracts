@@ -1,5 +1,8 @@
 //@ proof
+require "trusted-perform-action-sc-deploy.k"  //@ Bazel remove
+
 module PROOF-PERFORM-ACTION-ID-SC-DEPLOY
+  imports TRUSTED-PERFORM-ACTION-SC-DEPLOY
 //@ trusted
 // module TRUSTED-PERFORM-ACTION-ID-SC-DEPLOY
 //@ end
@@ -44,9 +47,6 @@ module PROOF-PERFORM-ACTION-ID-SC-DEPLOY
             <external-call-env>
               <caller-address>CallerAddress:Address</caller-address>
             </external-call-env>
-            <log>
-              <performed-actions>PerformedActions:List</performed-actions>
-            </log>
             <log>
               <performed-actions>PerformedActions:List</performed-actions>
             </log>

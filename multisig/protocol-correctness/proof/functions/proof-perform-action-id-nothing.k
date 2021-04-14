@@ -1,5 +1,8 @@
 //@ proof
+require "trusted-perform-action-nothing.k"  //@ Bazel remove
+
 module PROOF-PERFORM-ACTION-ID-NOTHING
+  imports TRUSTED-PERFORM-ACTION-NOTHING
 //@ trusted
 // module TRUSTED-PERFORM-NOTHING
 //@ end
@@ -8,7 +11,7 @@ module PROOF-PERFORM-ACTION-ID-NOTHING
 
   claim
       <T> <TT>
-          <k> call(performAction(Nothing:Action)) ~> K:K </k>
+          <k> call(performAction(Nothing #as Action:Action)) ~> K:K </k>
           <state>
             <multisig-state>
               <users>
@@ -40,9 +43,6 @@ module PROOF-PERFORM-ACTION-ID-NOTHING
             <log>
               <performed-actions>PerformedActions:List</performed-actions>
             </log>
-            <log>
-              <performed-actions>PerformedActions:List</performed-actions>
-            </log>
           </state>
       </TT> </T>
       =>
@@ -65,7 +65,7 @@ module PROOF-PERFORM-ACTION-ID-NOTHING
                 <action-last-index>ActionLastIndex</action-last-index>
                 <actions>
                   <action-data>ActionData</action-data>
-                  <action-signers>ActionSigners[ActionId <- undef]</action-signers>
+                  <action-signers>ActionSigners</action-signers>
                 </actions>
               </action-state>
             </multisig-state>
