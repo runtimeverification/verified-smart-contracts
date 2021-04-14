@@ -533,7 +533,6 @@ module PSEUDOCODE-FUNCTIONS
         <variables> _ => V </variables>
         <stack> stack(_, V:Map, _, Stack:Stack) => Stack </stack>
     requires isKResult(E)
-    [label(xyzzy)]
 
   rule  <k> (E:Expression ~> evaluateReturnValue) => evaluate(E) ... </k>
     requires isKResult(E)
@@ -693,6 +692,7 @@ module PSEUDOCODE-FUNCTIONS
             require(quorumReached(ActionId));
             performActionFromId(ActionId);
       )
+    [label(xyzzy)]
 
   rule call(discardAction(ActionId:Usize))
         => runPseudoCode(
@@ -1206,6 +1206,13 @@ module MAP-UTILS
 
   rule X:KItem in_keys((Y:KItem |-> _:KItem M:Map) #as _:Map)
         => X ==K Y orBool X in_keys(M)
+    [simplification]
+
+  rule M:Map[Key:KItem] orDefault _:KItem => M[Key]
+    requires Key in_keys(M)
+    [simplification]
+  rule M:Map[Key:KItem] orDefault D:KItem => D
+    requires notBool Key in_keys(M)
     [simplification]
 endmodule
 

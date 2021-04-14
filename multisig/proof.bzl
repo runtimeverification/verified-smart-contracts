@@ -149,6 +149,14 @@ def _kprove_test_impl(ctx):
       merged_file)
 
   output_file = ctx.actions.declare_file(ctx.label.name + '-runner.sh')
+  command_parts = [
+      "pushd $(pwd)",
+      "kompile_tool/kprove_tool %s %s %s --debug" % (
+          ctx.attr.semantics[KompileInfo].files[0].short_path,
+          ctx.files.srcs[0].path,
+          merged_file.short_path),
+      "popd",
+  ]
   script_lines = [
       "#!/usr/bin/env bash",
       "",
@@ -156,8 +164,7 @@ def _kprove_test_impl(ctx):
       # 'echo "aaa: $line"',
       # "",
       "echo 'To debug:'",
-      'echo "cd $(pwd)"',
-      "echo kompile_tool/kprove_tool %s %s %s --debug" % (ctx.attr.semantics[KompileInfo].files[0].short_path, ctx.files.srcs[0].path, merged_file.short_path),
+      'echo "%s"' % ("; ".join(command_parts)),
       "kompile_tool/kprove_tool %s %s %s %s" % (ctx.attr.semantics[KompileInfo].files[0].short_path, ctx.files.srcs[0].path, merged_file.short_path, '"$@"'),
   ]
   ctx.actions.write(output_file, "\n".join(script_lines), is_executable = True)

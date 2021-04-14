@@ -10,6 +10,269 @@ kompile(
 )
 
 kprove_test(
+  name = "proof-perform-action-endpoint-New",
+  srcs = ["proof-perform-action-endpoint-New.k"],
+  trusted = [":trusted-perform-action-endpoint-fragment-New"],
+  semantics = ":functions-execute",
+  timeout = "long",
+)
+
+kprove_test(
+  name = "proof-perform-action-endpoint-None",
+  srcs = ["proof-perform-action-endpoint-None.k"],
+  trusted = [":trusted-perform-action-endpoint-fragment-None"],
+  semantics = ":functions-execute",
+  timeout = "long",
+)
+
+kprove_test(
+  name = "proof-perform-action-endpoint-no-quorum-no-signers",
+  srcs = ["proof-perform-action-endpoint-no-quorum-no-signers.k"],
+  trusted = [":trusted-perform-action-endpoint-fragment-no-quorum-no-signers"],
+  semantics = ":functions-execute",
+  timeout = "long",
+)
+
+kprove_test(
+  name = "proof-perform-action-endpoint-no-quorum-has-signers",
+  srcs = ["proof-perform-action-endpoint-no-quorum-has-signers.k"],
+  trusted = [":trusted-perform-action-endpoint-fragment-no-quorum-has-signers"],
+  semantics = ":functions-execute",
+  timeout = "long",
+)
+
+# kprove_test(
+#   name = "proof-perform-action-endpoint-remove-user-BoardMember",
+#   srcs = ["proof-perform-action-endpoint-remove-user-BoardMember.k"],
+#   trusted = [
+#       ":trusted-perform-action-endpoint-fragment-performs",
+#       ":trusted-perform-action-id-remove-user-BoardMember",
+#   ],
+#   semantics = ":functions-execute",
+#   timeout = "long",
+# )
+
+# kprove_test(
+#   name = "proof-perform-action-endpoint-remove-user-BoardMember-too-few",
+#   srcs = ["proof-perform-action-endpoint-remove-user-BoardMember-too-few.k"],
+#   trusted = [
+#       ":trusted-perform-action-endpoint-fragment-performs",
+#       ":trusted-perform-action-id-remove-user-BoardMember-too-few",
+#   ],
+#   semantics = ":functions-execute",
+#   timeout = "long",
+# )
+
+# kprove_test(
+#   name = "proof-perform-action-endpoint-remove-user-Proposer-nobody-left",
+#   srcs = ["proof-perform-action-endpoint-remove-user-Proposer-nobody-left.k"],
+#   trusted = [
+#       ":trusted-perform-action-endpoint-fragment-performs",
+#       ":trusted-perform-action-id-remove-user-Proposer-nobody-left",
+#   ],
+#   semantics = ":functions-execute",
+#   timeout = "long",
+# )
+
+# kprove_test(
+#   name = "proof-perform-action-endpoint-remove-user-Proposer",
+#   srcs = ["proof-perform-action-endpoint-remove-user-Proposer.k"],
+#   trusted = [
+#       ":trusted-perform-action-endpoint-fragment-performs",
+#       ":trusted-perform-action-id-remove-user-Proposer",
+#   ],
+#   semantics = ":functions-execute",
+#   timeout = "long",
+# )
+
+# kprove_test(
+#   name = "proof-perform-action-endpoint-remove-user-None",
+#   srcs = ["proof-perform-action-endpoint-remove-user-None.k"],
+#   trusted = [
+#       ":trusted-perform-action-endpoint-fragment-performs",
+#       ":trusted-perform-action-id-remove-user-None",
+#   ],
+#   semantics = ":functions-execute",
+#   timeout = "long",
+# )
+
+# kprove_test(
+#   name = "proof-perform-action-endpoint-remove-user-New",
+#   srcs = ["proof-perform-action-endpoint-remove-user-New.k"],
+#   trusted = [
+#       ":trusted-perform-action-endpoint-fragment-performs",
+#       ":trusted-perform-action-id-remove-user-New",
+#   ],
+#   semantics = ":functions-execute",
+#   timeout = "long",
+# )
+
+# kprove_test(
+#   name = "proof-perform-action-endpoint-change-quorum",
+#   srcs = ["proof-perform-action-endpoint-change-quorum.k"],
+#   trusted = [
+#       ":trusted-perform-action-endpoint-fragment-performs",
+#       ":trusted-perform-action-id-change-quorum",
+#   ],
+#   semantics = ":functions-execute",
+#   timeout = "long",
+# )
+
+# kprove_test(
+#   name = "proof-perform-action-endpoint-change-quorum-no-quorum",
+#   srcs = ["proof-perform-action-endpoint-change-quorum-no-quorum.k"],
+#   trusted = [
+#       ":trusted-perform-action-endpoint-fragment-performs",
+#       ":trusted-perform-action-id-change-quorum-no-quorum",
+#   ],
+#   semantics = ":functions-execute",
+#   timeout = "long",
+# )
+
+kprove_test(
+  name = "proof-perform-action-endpoint-add-proposer-BoardMember-no-quorum",
+  srcs = ["proof-perform-action-endpoint-add-proposer-BoardMember-no-quorum.k"],
+  trusted = [
+      ":trusted-perform-action-endpoint-fragment-performs",
+      ":trusted-perform-action-id-add-proposer-BoardMember-no-quorum",
+  ],
+  semantics = ":functions-execute",
+  timeout = "long",
+)
+
+kprove_test(
+  name = "proof-perform-action-endpoint-add-proposer-BoardMember",
+  srcs = ["proof-perform-action-endpoint-add-proposer-BoardMember.k"],
+  trusted = [
+      ":trusted-perform-action-endpoint-fragment-performs",
+      ":trusted-perform-action-id-add-proposer-BoardMember",
+  ],
+  semantics = ":functions-execute",
+  timeout = "long",
+)
+
+kprove_test(
+  name = "proof-perform-action-endpoint-add-proposer-Proposer",
+  srcs = ["proof-perform-action-endpoint-add-proposer-Proposer.k"],
+  trusted = [
+      ":trusted-perform-action-endpoint-fragment-performs",
+      ":trusted-perform-action-id-add-proposer-Proposer",
+  ],
+  semantics = ":functions-execute",
+  timeout = "long",
+)
+
+kprove_test(
+  name = "proof-perform-action-endpoint-add-proposer-New",
+  srcs = ["proof-perform-action-endpoint-add-proposer-New.k"],
+  trusted = [
+      ":trusted-perform-action-endpoint-fragment-performs",
+      ":trusted-perform-action-id-add-proposer-New",
+  ],
+  semantics = ":functions-execute",
+  timeout = "long",
+)
+
+kprove_test(
+  name = "proof-perform-action-endpoint-add-proposer-None",
+  srcs = ["proof-perform-action-endpoint-add-proposer-None.k"],
+  trusted = [
+      ":trusted-perform-action-endpoint-fragment-performs",
+      ":trusted-perform-action-id-add-proposer-None",
+  ],
+  semantics = ":functions-execute",
+  timeout = "long",
+)
+
+kprove_test(
+  name = "proof-perform-action-endpoint-add-board-member-New",
+  srcs = ["proof-perform-action-endpoint-add-board-member-New.k"],
+  trusted = [
+      ":trusted-perform-action-endpoint-fragment-performs",
+      ":trusted-perform-action-id-add-board-member-New",
+  ],
+  semantics = ":functions-execute",
+  timeout = "long",
+)
+
+kprove_test(
+  name = "proof-perform-action-endpoint-add-board-member-BoardMember",
+  srcs = ["proof-perform-action-endpoint-add-board-member-BoardMember.k"],
+  trusted = [
+      ":trusted-perform-action-endpoint-fragment-performs",
+      ":trusted-perform-action-id-add-board-member-BoardMember",
+  ],
+  semantics = ":functions-execute",
+  timeout = "long",
+)
+
+kprove_test(
+  name = "proof-perform-action-endpoint-add-board-member-Proposer",
+  srcs = ["proof-perform-action-endpoint-add-board-member-Proposer.k"],
+  trusted = [
+      ":trusted-perform-action-endpoint-fragment-performs",
+      ":trusted-perform-action-id-add-board-member-Proposer",
+  ],
+  semantics = ":functions-execute",
+  timeout = "long",
+)
+
+kprove_test(
+  name = "proof-perform-action-endpoint-add-board-member-None",
+  srcs = ["proof-perform-action-endpoint-add-board-member-None.k"],
+  trusted = [
+      ":trusted-perform-action-endpoint-fragment-performs",
+      ":trusted-perform-action-id-add-board-member-None",
+  ],
+  semantics = ":functions-execute",
+  timeout = "long",
+)
+
+# kprove_test(
+#   name = "proof-perform-action-endpoint-send-egld",
+#   srcs = ["proof-perform-action-endpoint-send-egld.k"],
+#   trusted = [
+#       ":trusted-perform-action-endpoint-fragment-performs",
+#       ":trusted-perform-action-id-send-egld",
+#   ],
+#   semantics = ":functions-execute",
+#   timeout = "long",
+# )
+
+# kprove_test(
+#   name = "proof-perform-action-endpoint-sc-call",
+#   srcs = ["proof-perform-action-endpoint-sc-call.k"],
+#   trusted = [
+#       ":trusted-perform-action-endpoint-fragment-performs",
+#       ":trusted-perform-action-id-sc-call",
+#   ],
+#   semantics = ":functions-execute",
+#   timeout = "long",
+# )
+
+# kprove_test(
+#   name = "proof-perform-action-endpoint-sc-deploy",
+#   srcs = ["proof-perform-action-endpoint-sc-deploy.k"],
+#   trusted = [
+#       ":trusted-perform-action-endpoint-fragment-performs",
+#       ":trusted-perform-action-id-sc-deploy",
+#   ],
+#   semantics = ":functions-execute",
+#   timeout = "long",
+# )
+
+# kprove_test(
+#   name = "proof-perform-action-endpoint-nothing",
+#   srcs = ["proof-perform-action-endpoint-nothing.k"],
+#   trusted = [
+#       ":trusted-perform-action-endpoint-fragment-performs",
+#       ":trusted-perform-action-id-nothing",
+#   ],
+#   semantics = ":functions-execute",
+#   timeout = "long",
+# )
+
+kprove_test(
   name = "proof-perform-action-endpoint-fragment-New",
   srcs = ["proof-perform-action-endpoint-fragment-New.k"],
   semantics = ":functions-execute",
@@ -40,16 +303,8 @@ kprove_test(
 )
 
 kprove_test(
-  name = "proof-perform-action-endpoint-fragment-performs-no-signers",
-  srcs = ["proof-perform-action-endpoint-fragment-performs-no-signers.k"],
-  trusted = ["trusted-count-can-sign"],
-  semantics = ":functions-execute",
-  timeout = "long",
-)
-
-kprove_test(
-  name = "proof-perform-action-endpoint-fragment-performs-has-signers",
-  srcs = ["proof-perform-action-endpoint-fragment-performs-has-signers.k"],
+  name = "proof-perform-action-endpoint-fragment-performs",
+  srcs = ["proof-perform-action-endpoint-fragment-performs.k"],
   trusted = ["trusted-count-can-sign"],
   semantics = ":functions-execute",
   timeout = "eternal",
@@ -818,4 +1073,134 @@ ktrusted(
 ktrusted(
   name = "trusted-perform-action-nothing",
   srcs = ["proof-perform-action-nothing.k"],
+)
+
+ktrusted(
+  name = "trusted-perform-action-endpoint-fragment-New",
+  srcs = ["proof-perform-action-endpoint-fragment-New.k"],
+)
+
+ktrusted(
+  name = "trusted-perform-action-endpoint-fragment-None",
+  srcs = ["proof-perform-action-endpoint-fragment-None.k"],
+)
+
+ktrusted(
+  name = "trusted-perform-action-endpoint-fragment-no-quorum-no-signers",
+  srcs = ["proof-perform-action-endpoint-fragment-no-quorum-no-signers.k"],
+)
+
+ktrusted(
+  name = "trusted-perform-action-endpoint-fragment-no-quorum-has-signers",
+  srcs = ["proof-perform-action-endpoint-fragment-no-quorum-has-signers.k"],
+)
+
+ktrusted(
+  name = "trusted-perform-action-endpoint-fragment-performs",
+  srcs = ["proof-perform-action-endpoint-fragment-performs.k"],
+)
+
+ktrusted(
+  name = "trusted-perform-action-id-remove-user-BoardMember",
+  srcs = ["proof-perform-action-id-remove-user-BoardMember.k"],
+)
+
+ktrusted(
+  name = "trusted-perform-action-id-remove-user-BoardMember-too-few",
+  srcs = ["proof-perform-action-id-remove-user-BoardMember-too-few.k"],
+)
+
+ktrusted(
+  name = "trusted-perform-action-id-remove-user-Proposer-nobody-left",
+  srcs = ["proof-perform-action-id-remove-user-Proposer-nobody-left.k"],
+)
+
+ktrusted(
+  name = "trusted-perform-action-id-remove-user-Proposer",
+  srcs = ["proof-perform-action-id-remove-user-Proposer.k"],
+)
+
+ktrusted(
+  name = "trusted-perform-action-id-remove-user-None",
+  srcs = ["proof-perform-action-id-remove-user-None.k"],
+)
+
+ktrusted(
+  name = "trusted-perform-action-id-remove-user-New",
+  srcs = ["proof-perform-action-id-remove-user-New.k"],
+)
+
+ktrusted(
+  name = "trusted-perform-action-id-change-quorum",
+  srcs = ["proof-perform-action-id-change-quorum.k"],
+)
+
+ktrusted(
+  name = "trusted-perform-action-id-change-quorum-no-quorum",
+  srcs = ["proof-perform-action-id-change-quorum-no-quorum.k"],
+)
+
+ktrusted(
+  name = "trusted-perform-action-id-add-proposer-BoardMember-no-quorum",
+  srcs = ["proof-perform-action-id-add-proposer-BoardMember-no-quorum.k"],
+)
+
+ktrusted(
+  name = "trusted-perform-action-id-add-proposer-BoardMember",
+  srcs = ["proof-perform-action-id-add-proposer-BoardMember.k"],
+)
+
+ktrusted(
+  name = "trusted-perform-action-id-add-proposer-Proposer",
+  srcs = ["proof-perform-action-id-add-proposer-Proposer.k"],
+)
+
+ktrusted(
+  name = "trusted-perform-action-id-add-proposer-New",
+  srcs = ["proof-perform-action-id-add-proposer-New.k"],
+)
+
+ktrusted(
+  name = "trusted-perform-action-id-add-proposer-None",
+  srcs = ["proof-perform-action-id-add-proposer-None.k"],
+)
+
+ktrusted(
+  name = "trusted-perform-action-id-add-board-member-New",
+  srcs = ["proof-perform-action-id-add-board-member-New.k"],
+)
+
+ktrusted(
+  name = "trusted-perform-action-id-add-board-member-BoardMember",
+  srcs = ["proof-perform-action-id-add-board-member-BoardMember.k"],
+)
+
+ktrusted(
+  name = "trusted-perform-action-id-add-board-member-Proposer",
+  srcs = ["proof-perform-action-id-add-board-member-Proposer.k"],
+)
+
+ktrusted(
+  name = "trusted-perform-action-id-add-board-member-None",
+  srcs = ["proof-perform-action-id-add-board-member-None.k"],
+)
+
+ktrusted(
+  name = "trusted-perform-action-id-send-egld",
+  srcs = ["proof-perform-action-id-send-egld.k"],
+)
+
+ktrusted(
+  name = "trusted-perform-action-id-sc-call",
+  srcs = ["proof-perform-action-id-sc-call.k"],
+)
+
+ktrusted(
+  name = "trusted-perform-action-id-sc-deploy",
+  srcs = ["proof-perform-action-id-sc-deploy.k"],
+)
+
+ktrusted(
+  name = "trusted-perform-action-id-nothing",
+  srcs = ["proof-perform-action-id-nothing.k"],
 )

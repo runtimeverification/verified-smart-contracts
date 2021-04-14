@@ -1,24 +1,15 @@
 //@ proof
-require "trusted-count-can-sign.k"  //@ Bazel remove
+require "trusted-perform-action-endpoint-fragment-no-quorum-no-signers.k"  //@ Bazel remove
 
-module PROOF-PERFORM-ACTION-ENDPOINT-FRAGMENT-PERFORMS-NO-SIGNERS
-  imports TRUSTED-COUNT-CAN-SIGN
+module PROOF-PERFORM-ACTION-ENDPOINT-NO-QUORUM-NO-SIGNERS
+  imports TRUSTED-PERFORM-ACTION-ENDPOINT-FRAGMENT-NO-QUORUM-NO-SIGNERS
 //@ trusted
-// module TRUSTED-PERFORM-ACTION-ENDPOINT-FRAGMENT-PERFORMS-NO-SIGNERS
+// module TRUSTED-PERFORM-ACTION-ENDPOINT-NO-QUORUM-NO-SIGNERS
 //@ end
   imports FUNCTIONS-EXECUTE
 
   claim <T><TT>
-          <k> runPseudoCode(
-                  caller_address = getCaller();
-                  caller_id = getUserId(caller_address);
-                  caller_role = getUserIdToRole(caller_id);
-                  require(userRoleCanPerformAction(caller_role));
-                  require(quorumReached(ActionId:Usize));
-                  performActionFromId(ActionId);
-              )
-              ~> K:K
-          </k>
+          <k> call(performActionEndpoint(ActionId:Usize)) ~> K:K </k>
           invariantStateFull(
               NumUsers:Usize,
               UserIdToAddress:Map,
@@ -38,11 +29,7 @@ module PROOF-PERFORM-ACTION-ENDPOINT-FRAGMENT-PERFORMS-NO-SIGNERS
         </TT></T>
       =>
         <T><TT>
-          <k> runPseudoCode(
-                  performActionFromId(ActionId);
-              )
-              ~> K:K
-          </k>
+          <k> error ~> K:K </k>
           invariantStateFull(
               NumUsers,
               UserIdToAddress,
@@ -63,12 +50,9 @@ module PROOF-PERFORM-ACTION-ENDPOINT-FRAGMENT-PERFORMS-NO-SIGNERS
               )
         </TT></T>
     requires true
-        andBool userIdToRoleInvariant(UserIdToRole)
-        andBool actionSignersInvariant(ActionSigners)
-
         andBool (Role ==K BoardMember orBool Role ==K Proposer)
         andBool notBool ActionId in_keys(ActionSigners)
-        andBool Quorum ==Int 0
+        andBool Quorum >Int 0
     ensures true
     //@ proof
     //@ trusted
