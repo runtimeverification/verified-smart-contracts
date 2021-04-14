@@ -8,6 +8,7 @@ pipeline {
   environment {
     VSC_USE_KSERVER           = false
 
+    VSC_ERC20_SOLAR_ENABLED   = true
     VSC_MINIMAL_ENABLED       = true
     VSC_MAINNET_TEST_ENABLED  = true
     VSC_KTEST_ENABLED         = true
@@ -17,6 +18,7 @@ pipeline {
     VSC_BIHU_ENABLED          = true
     VSC_UNISWAP_ENABLED       = true
     VSC_ERC20_MAINNET_ENABLED = false
+    VSC_ERC20_MAINNET_SOLAR_ENABLED = false
   }
 
   stages {
@@ -75,6 +77,15 @@ pipeline {
           }
       } }
     }
+    //todo move after Minimal
+    stage('Solar') {
+      when {
+        environment name: 'VSC_ERC20_SOLAR_ENABLED', value: 'true'
+      }
+      steps { ansiColor('xterm') {
+          sh ' make jenkins MODE=SOLAR NPROCS="$NPROCS" '
+      } }
+    }
     stage('Minimal') {
       when {
         environment name: 'VSC_MINIMAL_ENABLED', value: 'true'
@@ -89,6 +100,7 @@ pipeline {
       }
       steps { ansiColor('xterm') {
           sh ' make -C erc20/all/mainnet-test test NPROCS="$NPROCS" TIMEOUT=30m '
+          sh ' make -C erc20/all/mainnet-solar-test test NPROCS="$NPROCS" TIMEOUT=30m '
       } }
     }
     stage('KTest') {
@@ -139,7 +151,7 @@ pipeline {
           sh ' make jenkins MODE=UNISWAP NPROCS="$NPROCS" '
       } }
     }
-    stage('ERC20 mainnet') {
+    stage('ERC20 Mainnet') {
       when {
         environment name: 'VSC_ERC20_MAINNET_ENABLED', value: 'true'
       }
@@ -147,6 +159,17 @@ pipeline {
         sh '''
           export EXT_KPROVE_OPTS="--branching-allowed 16"
           make -C erc20/all/mainnet-specs test NPROCS="$NPROCS" TIMEOUT=30m
+        '''
+      } }
+    }
+    stage('ERC20 Mainnet Solar') {
+      when {
+        environment name: 'VSC_ERC20_MAINNET_SOLAR_ENABLED', value: 'true'
+      }
+      steps { ansiColor('xterm') {
+        sh '''
+          export EXT_KPROVE_OPTS="--branching-allowed 16"
+          make -C erc20/all/mainnet-solar-specs test NPROCS="$NPROCS" TIMEOUT=30m
         '''
       } }
     }

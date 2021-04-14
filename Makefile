@@ -3,6 +3,7 @@
 MINIMAL_DIRS:=   resources erc20/vyper erc20/zeppelin
 KTEST_DIRS:=     k-test
 ERC20_DIRS:=     erc20/hkg erc20/hobby erc20/ds-token
+SOLAR_DIRS:=     erc20/solar
 DEPOSIT_DIRS:=   deposit/bytecode-verification
 GNOSIS_DIRS:=    gnosis gnosis/test
 GNOSIS_BMC_DIRS:=gnosis/bmc

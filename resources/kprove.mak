@@ -87,7 +87,8 @@ KEVM_VERSION     :=$(shell cat $(KEVM_VERSION_FILE))
 
 K_REPO_DIR:=$(abspath $(dir $(K_VERSION_FILE))/k)
 KEVM_REPO_DIR:=$(abspath $(dir $(KEVM_VERSION_FILE))/evm-semantics)
-KEVM_BUILD_DIR:=$(KEVM_REPO_DIR)/.build/defn/$(K_BACKEND)
+KEVM_BUILD_LAST_DIR:=$(K_BACKEND)
+KEVM_BUILD_DIR:=$(KEVM_REPO_DIR)/.build/defn/$(KEVM_BUILD_LAST_DIR)
 
 K_BIN:=$(abspath $(K_REPO_DIR)/k-distribution/target/release/k/bin)
 
@@ -156,7 +157,7 @@ clean-kevm-cache:
 deps: deps-tangle deps-k deps-kevm
 deps-tangle: $(PANDOC_TANGLE_TIMESTAMP)
 deps-k:      $(K_REPO_DIR)/mvn-$(K_BACKEND).timestamp
-deps-kevm:   $(KEVM_REPO_DIR)/make-$(K_BACKEND).timestamp
+deps-kevm:   $(KEVM_REPO_DIR)/make-$(KEVM_BUILD_LAST_DIR).timestamp
 
 %/submodule.timestamp:
 	git submodule update --init --recursive -- $*
@@ -173,14 +174,16 @@ $(K_REPO_DIR)/mvn-$(K_BACKEND).timestamp: $(K_VERSION_FILE) | $(K_REPO_DIR)
 $(K_REPO_DIR):
 	git clone $(K_REPO_URL) $(K_REPO_DIR)
 
-$(KEVM_REPO_DIR)/make-$(K_BACKEND).timestamp: $(KEVM_VERSION_FILE) $(K_REPO_DIR)/mvn-$(K_BACKEND).timestamp | $(KEVM_REPO_DIR)
+KOMPILE_COMMAND?=$(MAKE) build-$(K_BACKEND) K_BIN=$(K_BIN)
+
+$(KEVM_REPO_DIR)/make-$(KEVM_BUILD_LAST_DIR).timestamp: $(KEVM_VERSION_FILE) $(K_REPO_DIR)/mvn-$(K_BACKEND).timestamp | $(KEVM_REPO_DIR)
 	cd $(KEVM_REPO_DIR) \
 		&& git fetch \
 		&& git clean -fdx \
 		&& git reset --hard $(KEVM_VERSION) \
 		&& make tangle-deps \
 		&& make defn \
-		&& $(K_BIN)/kompile -v --debug --backend $(K_BACKEND) -I $(KEVM_BUILD_DIR) -d $(KEVM_BUILD_DIR) --main-module ETHEREUM-SIMULATION --syntax-module ETHEREUM-SIMULATION $(KEVM_BUILD_DIR)/driver.k
+		&& $(KOMPILE_COMMAND)
 	touch $@
 
 $(KEVM_REPO_DIR):
