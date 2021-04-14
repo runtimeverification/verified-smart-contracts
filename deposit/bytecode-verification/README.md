@@ -1,4 +1,6 @@
-# Bytecode Verification of Deposit Contract
+_**[DEPRECATED: The result in this directory is outdated. The deposit contract has been reimplemented in Solidity and reverified. The latest result can be found at https://github.com/runtimeverification/deposit-contract-verification.]**_
+
+# Bytecode Verification of Deposit Contract _(Vyper Implementation)_
 
 This directory presents the formal verification artifacts of the [deposit contract] bytecode, compiled by the Vyper compiler version [`1761-HOTFIX-v0.1.0-beta.13`].
 
