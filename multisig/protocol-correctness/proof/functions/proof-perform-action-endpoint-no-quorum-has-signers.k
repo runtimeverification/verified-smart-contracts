@@ -1,10 +1,10 @@
 //@ proof
-require "trusted-perform-action-endpoint-fragment-no-quorum-no-signers.k"  //@ Bazel remove
+require "trusted-perform-action-endpoint-fragment-no-quorum-has-signers.k"  //@ Bazel remove
 
-module PROOF-PERFORM-ACTION-ENDPOINT-NO-QUORUM-NO-SIGNERS
-  imports TRUSTED-PERFORM-ACTION-ENDPOINT-FRAGMENT-NO-QUORUM-NO-SIGNERS
+module PROOF-PERFORM-ACTION-ENDPOINT-NO-QUORUM-HAS-SIGNERS
+  imports TRUSTED-PERFORM-ACTION-ENDPOINT-FRAGMENT-NO-QUORUM-HAS-SIGNERS
 //@ trusted
-// module TRUSTED-PERFORM-ACTION-ENDPOINT-NO-QUORUM-NO-SIGNERS
+// module TRUSTED-PERFORM-ACTION-ENDPOINT-NO-QUORUM-HAS-SIGNERS
 //@ end
   imports FUNCTIONS-EXECUTE
 

@@ -9,7 +9,7 @@ module PROOF-PERFORM-ACTION-ENDPOINT-NEW
   imports FUNCTIONS-EXECUTE
 
   claim <T><TT>
-          <k> call(performActionEndpoint(ActionId:Usize)) ~> K:K </k>
+          <k> call(performActionEndpoint(_ActionId:Usize)) ~> K:K </k>
           invariantStateFull(
               NumUsers:Usize,
               UserIdToAddress:Map,

@@ -23,6 +23,22 @@ sh_binary(
 )
 
 sh_binary(
+  name = "kprove_kompile_tool",
+  srcs = ["kprove-kompile.sh"],
+  deps = [":k_release"],
+  data = [":k_release"],
+  visibility = ["//visibility:public"],
+)
+
+sh_binary(
+  name = "kore_tool",
+  srcs = ["kore.sh"],
+  deps = [":k_release"],
+  data = [":k_release"],
+  visibility = ["//visibility:public"],
+)
+
+sh_binary(
   name = "ktrusted_tool",
   srcs = ["make-trusted.py"],
   visibility = ["//visibility:public"],
