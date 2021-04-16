@@ -20,6 +20,9 @@ shift
 COMMAND_OUTPUT=$1
 shift
 
+KOMPILE_OUTPUT=$(dirname $1)
+shift
+
 MODULE_NAME=$(basename "$ORIGINAL_FILE" | sed 's/\.[^\.]*$//' | tr [:lower:] [:upper:])
 
 KOMPILE_TOOL_DIR=kompile_tool
@@ -51,3 +54,7 @@ DEFINITION_FILE=$(dirname $SPEC_FILE)/vdefinition.kore
 cp $DEFINITION_FILE $DEFINITION_OUTPUT
 
 echo $COMMAND > $COMMAND_OUTPUT
+
+mkdir -p $KOMPILE_OUTPUT
+
+cp $TMP_DIR/$(basename $KOMPILE_DIR)/* $KOMPILE_OUTPUT

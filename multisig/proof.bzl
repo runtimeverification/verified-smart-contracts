@@ -231,6 +231,15 @@ def _kprove_kompile_impl(ctx):
   output_spec = ctx.actions.declare_file(ctx.label.name + '.spec.kore')
   output_definition = ctx.actions.declare_file(ctx.label.name + '.definition.kore')
   output_command = ctx.actions.declare_file(ctx.label.name + '.command')
+
+  output_kompile_files = [
+    ctx.actions.declare_file(ctx.label.name + '-kompiled/' + name)
+    for name in [
+      'allRules.txt', 'cache.bin', 'compiled.bin', 'compiled.txt',
+      'configVars.sh', 'definition.kore', 'macros.kore', 'mainModule.txt',
+      'parsed.txt', 'syntaxDefinition.kore', 'timestamp']
+  ]
+
   runfiles = depset(
       [merged_file, ctx.executable.kprove_kompile_tool]
       + ctx.attr.semantics[KompileInfo].files
@@ -238,7 +247,7 @@ def _kprove_kompile_impl(ctx):
   )
   ctx.actions.run(
       inputs=runfiles.to_list(),
-      outputs=[output_spec, output_definition, output_command],
+      outputs=[output_spec, output_definition, output_command] + output_kompile_files,
       arguments=[
           ctx.attr.semantics[KompileInfo].files[0].path,
           ctx.files.srcs[0].path,
@@ -246,10 +255,12 @@ def _kprove_kompile_impl(ctx):
           output_spec.path,
           output_definition.path,
           output_command.path,
+          output_kompile_files[0].path
       ],
       progress_message="Generating kore for %s" % ctx.files.srcs[0].path,
       executable=ctx.executable.kprove_kompile_tool)
   return [
+      KompileInfo(files=output_kompile_files),
       KproveInfo(
           spec = output_spec,
           definition = output_definition,
@@ -288,7 +299,8 @@ def _kore_test_impl(ctx):
 
   script_file = ctx.actions.declare_file(ctx.label.name + '-runner.sh')
 
-  tool_call = "kompile_tool/kore_tool %s %s %s %s" % (
+  tool_call = "kompile_tool/kore_tool %s %s %s %s %s" % (
+      ctx.attr.kompiled[KompileInfo].files[0].short_path,
       ctx.attr.kompiled[KproveInfo].definition.short_path,
       ctx.attr.kompiled[KproveInfo].spec.short_path,
       ctx.attr.kompiled[KproveInfo].command.short_path,
@@ -314,6 +326,7 @@ def _kore_test_impl(ctx):
           ctx.attr.kompiled[KproveInfo].command,
           ctx.executable.kore_tool,
       ]
+      + ctx.attr.kompiled[KompileInfo].files
       + ctx.attr.k_distribution[DefaultInfo].files.to_list()
       + ctx.attr.debug_script[DefaultInfo].files.to_list()
   )
@@ -361,5 +374,6 @@ def kprove_test(*, name, srcs, trusted=[], semantics, timeout="short"):
   kore_test(
     name = name,
     kompiled = ":%s-kompile" % name,
+    timeout = timeout,
   )
 

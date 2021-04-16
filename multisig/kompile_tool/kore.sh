@@ -2,16 +2,19 @@
 
 set -e
 
-DEFINITION=$1
+KOMPILE_DIR=`dirname $1`
 shift
 
-SPEC=$1
+DEFINITION=$(realpath $1)
+shift
+
+SPEC=$(realpath $1)
 shift
 
 COMMAND=$1
 shift
 
-OUTPUT=$1
+OUTPUT=$(realpath $1)
 shift
 
 MODULE_NAME=$(cat $COMMAND | sed 's/^.*--module \([^ ]*\) .*$/\1/')
@@ -25,17 +28,21 @@ KORE_REPL=$(realpath $KOMPILE_TOOL_DIR/k/bin/kore-repl)
 
 REPL_SCRIPT=$(realpath $KOMPILE_TOOL_DIR/kast.kscript)
 
-BACKEND_COMMAND="kore-exec"
+BACKEND_COMMAND=$KORE_EXEC
 if [ $# -eq 0 ]; then
-  BACKEND_COMMAND="kore-exec"
+  BACKEND_COMMAND=$KORE_EXEC
 else
   if [ "$1" == "--debug" ]; then
-    BACKEND_COMMAND="kore-repl --repl-script $REPL_SCRIPT"
+    BACKEND_COMMAND="$KORE_REPL --repl-script $REPL_SCRIPT"
   else
     echo "Unknown argument: '$1'"
     exit 1
   fi
 fi
+
+PATH=$(realpath $KOMPILE_TOOL_DIR/k/bin):$PATH
+
+cd $(dirname $KOMPILE_DIR)
 
 $BACKEND_COMMAND \
     --smt-timeout 4000 \
