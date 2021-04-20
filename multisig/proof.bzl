@@ -299,7 +299,7 @@ def _kore_test_impl(ctx):
 
   script_file = ctx.actions.declare_file(ctx.label.name + '-runner.sh')
 
-  tool_call = "kompile_tool/kore_tool %s %s %s %s %s %s" % (
+  tool_call = "kompile_tool/kore_tool %s %s %s %s %s %s %s" % (
       ctx.attr.module,
       ctx.attr.kompiled[KompileInfo].files[0].short_path,
       ctx.attr.kompiled[KproveInfo].definition.short_path,
@@ -344,6 +344,7 @@ kore_test = rule(
     attrs = {
         "kompiled": attr.label(providers=[KproveInfo], mandatory=True),
         "module": attr.string(mandatory=True),
+        "breadth": attr.string(mandatory=True),
         "kore_tool": attr.label(
             executable = True,
             cfg = "exec",
@@ -366,7 +367,7 @@ kore_test = rule(
     test = True,
 )
 
-def kprove_test(*, name, srcs, trusted=[], semantics, timeout="short"):
+def kprove_test(*, name, srcs, trusted=[], semantics, breadth="1", timeout="short"):
   kprove_kompile(
     name = "%s-kompile" % name,
     srcs = srcs,
@@ -377,6 +378,7 @@ def kprove_test(*, name, srcs, trusted=[], semantics, timeout="short"):
   kore_test(
     name = name,
     module = name.upper(),
+    breadth = breadth,
     kompiled = ":%s-kompile" % name,
     timeout = timeout,
   )

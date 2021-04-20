@@ -373,6 +373,7 @@ kprove_test(
   name = "proof-perform-action-endpoint-fragment-New",
   srcs = ["proof-perform-action-endpoint-fragment-New.k"],
   semantics = ":functions-execute",
+  breadth = "2", 
 )
 
 kprove_test(
@@ -387,6 +388,7 @@ kprove_test(
   trusted = ["trusted-count-can-sign"],
   semantics = ":functions-execute",
   timeout = "long",
+  breadth = "6",
 )
 
 kprove_test(
@@ -395,6 +397,7 @@ kprove_test(
   trusted = ["trusted-count-can-sign"],
   semantics = ":functions-execute",
   timeout = "long",
+  breadth = "6",
 )
 
 kprove_test(
@@ -403,6 +406,7 @@ kprove_test(
   trusted = [":trusted-perform-action-nothing"],
   semantics = ":functions-execute",
   timeout = "moderate",
+  breadth = "3",
 )
 
 kprove_test(
@@ -411,6 +415,7 @@ kprove_test(
   trusted = [":trusted-perform-action-remove-user-BoardMember"],
   semantics = ":functions-execute",
   timeout = "moderate",
+  breadth = "3",
 )
 
 kprove_test(
@@ -419,6 +424,7 @@ kprove_test(
   trusted = [":trusted-perform-action-remove-user-BoardMember-too-few"],
   semantics = ":functions-execute",
   timeout = "moderate",
+  breadth = "3",
 )
 
 kprove_test(
@@ -427,6 +433,7 @@ kprove_test(
   trusted = [":trusted-perform-action-remove-user-Proposer-nobody-left"],
   semantics = ":functions-execute",
   timeout = "moderate",
+  breadth = "3",
 )
 
 kprove_test(
@@ -435,6 +442,7 @@ kprove_test(
   trusted = [":trusted-perform-action-remove-user-Proposer"],
   semantics = ":functions-execute",
   timeout = "moderate",
+  breadth = "3",
 )
 
 kprove_test(
@@ -443,6 +451,7 @@ kprove_test(
   trusted = [":trusted-perform-action-remove-user-None"],
   semantics = ":functions-execute",
   timeout = "moderate",
+  breadth = "3",
 )
 
 kprove_test(
@@ -451,6 +460,7 @@ kprove_test(
   trusted = [":trusted-perform-action-remove-user-New"],
   semantics = ":functions-execute",
   timeout = "moderate",
+  breadth = "3",
 )
 
 kprove_test(
@@ -458,6 +468,7 @@ kprove_test(
   srcs = ["proof-perform-action-id-change-quorum.k"],
   trusted = [":trusted-perform-action-change-quorum"],
   semantics = ":functions-execute",
+  breadth = "3",
 )
 
 kprove_test(
@@ -465,6 +476,7 @@ kprove_test(
   srcs = ["proof-perform-action-id-change-quorum-no-quorum.k"],
   trusted = [":trusted-perform-action-change-quorum-no-quorum"],
   semantics = ":functions-execute",
+  breadth = "3",
 )
 
 kprove_test(
@@ -473,6 +485,7 @@ kprove_test(
   trusted = [":trusted-perform-action-add-proposer-BoardMember-no-quorum"],
   semantics = ":functions-execute",
   timeout = "moderate",
+  breadth = "3",
 )
 
 kprove_test(
@@ -481,6 +494,7 @@ kprove_test(
   trusted = [":trusted-perform-action-add-proposer-BoardMember"],
   semantics = ":functions-execute",
   timeout = "moderate",
+  breadth = "3",
 )
 
 kprove_test(
@@ -489,6 +503,7 @@ kprove_test(
   trusted = [":trusted-perform-action-add-proposer-Proposer"],
   semantics = ":functions-execute",
   timeout = "moderate",
+  breadth = "3",
 )
 
 kprove_test(
@@ -497,6 +512,7 @@ kprove_test(
   trusted = [":trusted-perform-action-add-proposer-New"],
   semantics = ":functions-execute",
   timeout = "moderate",
+  breadth = "5",
 )
 
 kprove_test(
@@ -505,6 +521,7 @@ kprove_test(
   trusted = [":trusted-perform-action-add-proposer-None"],
   semantics = ":functions-execute",
   timeout = "moderate",
+  breadth = "5",
 )
 
 kprove_test(
@@ -513,6 +530,7 @@ kprove_test(
   trusted = [":trusted-perform-action-add-board-member-New"],
   semantics = ":functions-execute",
   timeout = "moderate",
+  breadth = "3",
 )
 
 kprove_test(
@@ -521,6 +539,7 @@ kprove_test(
   trusted = [":trusted-perform-action-add-board-member-BoardMember"],
   semantics = ":functions-execute",
   timeout = "moderate",
+  breadth = "3",
 )
 
 kprove_test(
@@ -529,6 +548,7 @@ kprove_test(
   trusted = [":trusted-perform-action-add-board-member-Proposer"],
   semantics = ":functions-execute",
   timeout = "moderate",
+  breadth = "3",
 )
 
 kprove_test(
@@ -537,6 +557,7 @@ kprove_test(
   trusted = [":trusted-perform-action-add-board-member-None"],
   semantics = ":functions-execute",
   timeout = "moderate",
+  breadth = "3",
 )
 
 kprove_test(
@@ -544,6 +565,7 @@ kprove_test(
   srcs = ["proof-perform-action-id-send-egld.k"],
   trusted = [":trusted-perform-action-send-egld"],
   semantics = ":functions-execute",
+  breadth = "3",
 )
 
 kprove_test(
@@ -552,6 +574,7 @@ kprove_test(
   trusted = [":trusted-perform-action-sc-call"],
   semantics = ":functions-execute",
   timeout = "moderate",
+  breadth = "3",
 )
 
 kprove_test(
@@ -560,6 +583,7 @@ kprove_test(
   trusted = [":trusted-perform-action-sc-deploy"],
   semantics = ":functions-execute",
   timeout = "moderate",
+  breadth = "3",
 )
 
 kprove_test(
@@ -575,6 +599,7 @@ kprove_test(
   trusted = [":trusted-change-user-role-BoardMember"],
   semantics = ":functions-execute",
   timeout = "moderate",
+  breadth = "2", 
 )
 
 kprove_test(
@@ -589,6 +614,7 @@ kprove_test(
   srcs = ["proof-perform-action-remove-user-Proposer.k"],
   trusted = [":trusted-change-user-role-Proposer"],
   semantics = ":functions-execute",
+  breadth = "2", 
 )
 
 kprove_test(
@@ -711,6 +737,7 @@ kprove_test(
   srcs = ["proof-change-user-role-BoardMember.k"],
   semantics = ":functions-execute",
   timeout = "moderate",
+  breadth = "3",
 )
 
 kprove_test(
@@ -718,6 +745,7 @@ kprove_test(
   srcs = ["proof-change-user-role-New.k"],
   semantics = ":functions-execute",
   timeout = "long",
+  breadth = "3",
 )
 
 kprove_test(
@@ -725,6 +753,7 @@ kprove_test(
   srcs = ["proof-change-user-role-None.k"],
   semantics = ":functions-execute",
   timeout = "moderate",
+  breadth = "3",
 )
 
 kprove_test(
@@ -732,6 +761,7 @@ kprove_test(
   srcs = ["proof-change-user-role-Proposer.k"],
   semantics = ":functions-execute",
   timeout = "moderate",
+  breadth = "3",
 )
 
 kprove_test(
@@ -739,6 +769,7 @@ kprove_test(
   srcs = ["proof-count-can-sign.k"],
   semantics = ":functions-execute",
   timeout = "moderate",
+  breadth = "3",
 )
 
 kprove_test(
@@ -747,6 +778,7 @@ kprove_test(
   trusted = [":trusted-count-can-sign"],
   semantics = ":functions-execute",
   timeout = "long",
+  breadth = "2", 
 )
 
 kprove_test(
@@ -761,6 +793,7 @@ kprove_test(
   trusted = [":trusted-count-can-sign"],
   semantics = ":functions-execute",
   timeout = "moderate",
+  breadth = "2", 
 )
 
 kprove_test(
@@ -769,6 +802,7 @@ kprove_test(
   trusted = [":trusted-count-can-sign"],
   semantics = ":functions-execute",
   timeout = "moderate",
+  breadth = "2", 
 )
 
 kprove_test(
@@ -783,6 +817,7 @@ kprove_test(
   trusted = [":trusted-count-can-sign"],
   semantics = ":functions-execute",
   timeout = "long",
+  breadth = "2", 
 )
 
 kprove_test(
@@ -791,6 +826,7 @@ kprove_test(
   trusted = [":trusted-count-can-sign"],
   semantics = ":functions-execute",
   timeout = "long",
+  breadth = "2", 
 )
 
 kprove_test(
@@ -798,6 +834,7 @@ kprove_test(
   srcs = ["proof-propose-action-BoardMember.k"],
   semantics = ":functions-execute",
   timeout = "long",
+  breadth = "2",
 )
 
 kprove_test(
@@ -817,6 +854,7 @@ kprove_test(
   srcs = ["proof-propose-action-Proposer.k"],
   semantics = ":functions-execute",
   timeout = "long",
+  breadth = "2", 
 )
 
 kprove_test(
@@ -828,6 +866,7 @@ kprove_test(
   ],
   semantics = ":functions-execute",
   timeout = "moderate",
+  breadth = "2", 
 )
 
 kprove_test(
@@ -854,6 +893,7 @@ kprove_test(
   name = "proof-propose-sc-deploy-fragment",
   srcs = ["proof-propose-sc-deploy-fragment.k"],
   semantics = ":functions-execute",
+  breadth = "6",
 )
 
 kprove_test(
@@ -865,6 +905,7 @@ kprove_test(
   ],
   semantics = ":functions-execute",
   timeout = "moderate",
+  breadth = "2", 
 )
 
 kprove_test(
@@ -872,12 +913,14 @@ kprove_test(
   srcs = ["proof-sign-caller-none.k"],
   semantics = ":functions-execute",
   timeout = "moderate",
+  breadth = "2", 
 )
 
 kprove_test(
   name = "proof-sign-caller-not-user",
   srcs = ["proof-sign-caller-not-user.k"],
   semantics = ":functions-execute",
+  breadth = "2", 
 )
 
 kprove_test(
@@ -885,6 +928,7 @@ kprove_test(
   srcs = ["proof-sign-caller-proposer.k"],
   semantics = ":functions-execute",
   timeout = "moderate",
+  breadth = "2", 
 )
 
 kprove_test(
@@ -898,6 +942,7 @@ kprove_test(
   srcs = ["proof-sign-existing-signers-in-list.k"],
   semantics = ":functions-execute",
   timeout = "moderate",
+  breadth = "2", 
 )
 
 kprove_test(
@@ -905,6 +950,7 @@ kprove_test(
   srcs = ["proof-sign-existing-signers-not-in-list.k"],
   semantics = ":functions-execute",
   timeout = "moderate",
+  breadth = "2", 
 )
 
 kprove_test(
@@ -912,6 +958,7 @@ kprove_test(
   srcs = ["proof-sign-no-signers.k"],
   semantics = ":functions-execute",
   timeout = "moderate",
+  breadth = "2", 
 )
 
 kprove_test(

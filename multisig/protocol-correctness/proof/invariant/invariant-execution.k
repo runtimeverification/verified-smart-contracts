@@ -680,11 +680,26 @@ module PERFORM-ACTION-ENDPOINT-INSTRUMENTATION
   syntax KItem ::= splitPerformActionEndpoint2(actionId:Usize)
   syntax KItem ::= splitPerformActionEndpoint3(action:Action)
   syntax KItem ::= splitPerformActionEndpoint4(action:Action)
+  syntax KItem ::= splitActionSigners(actionId:Usize, signers:Map)
 
-  rule  preCall
-        ~> (.K => splitPerformActionEndpoint(ActionId))
-        ~> call(performActionEndpoint(ActionId:Usize))
+  rule  <k> preCall
+            ~> (.K => splitPerformActionEndpoint(ActionId))
+            ~> call(performActionEndpoint(ActionId:Usize))
+            ~> _:KItem
+            ~> _:KItem
+            ~> _:KItem
+            ~> (.K => splitActionSigners(ActionId, ActionSigners))
+            ~> runExternalCalls(_:ExternalCommands)
+        ...</k>
+        <action-signers>ActionSigners:Map</action-signers>
     [priority(20)]
+
+  rule  splitActionSigners(ActionId:Usize, ActionSigners:Map)
+        =>  branchK(
+                ActionId in_keys(ActionSigners),
+                makeConcreteValue(ActionId, rExpressionList, ActionSigners),
+                .K
+            )
 
   rule <k> splitPerformActionEndpoint(ActionId:Usize)
           =>  branchK(
@@ -831,9 +846,36 @@ module PERFORM-ACTION-ENDPOINT-INSTRUMENTATION
         <caller-address>CallerAddress:Address</caller-address>
     requires CallerId in_keys(UserIdToRole)
 
+  // TODO: Delete.
+  syntax KItem ::= makeConcreteValueTmp(key:KItem, valueType:ReflectionType, Map)
+  rule makeConcreteValueTmp(Key:KItem, ValueType:ReflectionType, M:Map)
+    =>    splitMapTmp(Key, M, ?_Value:KItem, ?_Remainder:Map)
+      // ~>  cast(M[Key], ValueType)
+      // ~>  removeValue
+      // ~>  concretizeValue(M[Key])
+    requires Key in_keys(M)
+
+  syntax KItem ::= splitMapTmp(key:KItem, toSplit:Map, value:KItem, remainder:Map)
+    [function, functional]
+
+  // rule splitMapTmp(Key:KItem, M:Map, _Value:KItem, _Remainder:Map) => stuck
+  //   requires notBool Key in_keys(M)
+  // rule splitMapTmp(Key:KItem, (Key |-> _:KItem) _:Map, _Value:KItem, _Remainder:Map)
+  //     => endSplitMap
+  //   [simplification(30)]
+  rule splitMapTmp(Key:KItem, (K1:KItem |-> _SomeValue:KItem) M:Map, Value:KItem, Remainder:Map)
+      => splitMapTmp(Key, M, Value, Remainder)
+    requires notBool (Key ==K K1) andBool Key in_keys(M)
+    [simplification(30)]
+  rule splitMapTmp(Key:KItem, M:Map, Value:KItem, Remainder:Map)
+      => endSplitMap
+    requires Key in_keys(M)
+    ensures M ==K (Key |-> Value Remainder)
+    [simplification(50)]
+
   rule  <k>
           splitAddBoardMember2(UserAddress:Address)
-          =>  makeConcreteValue(UserAddress, rUsize, AddressToUserId)
+          =>  makeConcreteValueTmp(UserAddress, rUsize, AddressToUserId)
               ~> branchK(
                 AddressToUserId[UserAddress] in_keys(UserIdToRole),
                 splitAddBoardMember3(UserAddress),

@@ -26,6 +26,7 @@ module PROOF-PERFORM-PARTS-ADD-BOARD-MEMBER
               ~> popContext
               ~> evaluateReturnValue
               ~> clearExternalCallEnv
+              ~> splitActionSigners(ActionId:Usize, ActionSigners:Map)
               ~> runExternalCalls(EC:ExternalCommands)
           </k>
           invariantStateStack(
@@ -38,7 +39,7 @@ module PROOF-PERFORM-PARTS-ADD-BOARD-MEMBER
               u(Quorum:Int),
               ActionLastIndex0:Usize,
               (ActionId |-> Action ActionData0:Map) #as ActionData:Map,
-              ActionSigners0:Map,
+              ActionSigners:Map,
               CallerAddress:Address,
               stack(
                   invariantMultisigState(
@@ -51,7 +52,7 @@ module PROOF-PERFORM-PARTS-ADD-BOARD-MEMBER
                       u(Quorum),
                       ActionLastIndex0,
                       ActionData,
-                      ActionSigners0),
+                      ActionSigners),
                   .Map,
                   PerformedActions,
                   .stack),
@@ -84,10 +85,10 @@ module PROOF-PERFORM-PARTS-ADD-BOARD-MEMBER
             u(Quorum),
             ActionLastIndex0,
             ActionData0,
-            ActionSigners0,
+            ActionSigners,
             expand(expanded))
         andBool CallerId in_keys(UserIdToRole)
-        andBool Quorum <=Int countCanSignFunction({ActionSigners0[ActionId] orDefault [.]}:>ExpressionList, opaque(UserIdToRole))
+        andBool Quorum <=Int countCanSignFunction({ActionSigners[ActionId] orDefault [.]}:>ExpressionList, opaque(UserIdToRole))
     ensures invariant(
         ?NumUsers1,
         ?UserIdToAddress1,

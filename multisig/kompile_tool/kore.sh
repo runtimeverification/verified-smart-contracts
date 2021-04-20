@@ -20,23 +20,26 @@ shift
 OUTPUT=$(realpath $1)
 shift
 
+BREADTH=$1
+shift
+
 MODULE_NAME=$(cat $COMMAND | sed 's/^.*--module \([^ ]*\) .*$/\1/')
 
 # SPEC_MODULE_NAME=$(cat $COMMAND | sed 's/^.*--spec-module \([^ ]*\) .*$/\1/')
 
 KOMPILE_TOOL_DIR=kompile_tool
 
-KORE_EXEC=$(realpath $KOMPILE_TOOL_DIR/k/bin/kore-exec)
-KORE_REPL=$(realpath $KOMPILE_TOOL_DIR/k/bin/kore-repl)
-
 REPL_SCRIPT=$(realpath $KOMPILE_TOOL_DIR/kast.kscript)
+
+KORE_EXEC="$(realpath $KOMPILE_TOOL_DIR/k/bin/kore-exec) --breadth $BREADTH"
+KORE_REPL="$(realpath $KOMPILE_TOOL_DIR/k/bin/kore-repl) --repl-script $REPL_SCRIPT"
 
 BACKEND_COMMAND=$KORE_EXEC
 if [ $# -eq 0 ]; then
   BACKEND_COMMAND=$KORE_EXEC
 else
   if [ "$1" == "--debug" ]; then
-    BACKEND_COMMAND="$KORE_REPL --repl-script $REPL_SCRIPT"
+    BACKEND_COMMAND=$KORE_REPL
   else
     echo "Unknown argument: '$1'"
     exit 1

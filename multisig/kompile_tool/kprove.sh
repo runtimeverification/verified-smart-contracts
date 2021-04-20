@@ -16,8 +16,8 @@ shift
 PROOF_FILE=$(realpath $1)
 shift
 
-#BREADTH=$1
-#shift
+BREADTH=$1
+shift
 
 MODULE_NAME=$(basename "$ORIGINAL_FILE" | sed 's/\.[^\.]*$//' | tr [:lower:] [:upper:])
 
@@ -29,7 +29,6 @@ KOMPILE_TOOL_DIR=kompile_tool
 KPROVE=$(realpath $KOMPILE_TOOL_DIR/k/bin/kprove)
 REPL_SCRIPT=$(realpath $KOMPILE_TOOL_DIR/kast.kscript)
 
-#KORE_EXEC="kore-exec --breadth $BREADTH"
 KORE_EXEC="kore-exec --breadth $BREADTH"
 KORE_REPL="kore-repl --repl-script $REPL_SCRIPT"
 
