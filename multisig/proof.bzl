@@ -299,17 +299,19 @@ def _kore_test_impl(ctx):
 
   script_file = ctx.actions.declare_file(ctx.label.name + '-runner.sh')
 
-  tool_call = "kompile_tool/kore_tool %s %s %s %s %s" % (
+  tool_call = "kompile_tool/kore_tool %s %s %s %s %s %s" % (
+      ctx.attr.module,
       ctx.attr.kompiled[KompileInfo].files[0].short_path,
       ctx.attr.kompiled[KproveInfo].definition.short_path,
       ctx.attr.kompiled[KproveInfo].spec.short_path,
       ctx.attr.kompiled[KproveInfo].command.short_path,
-      ctx.label.name + '.output.k')
+      ctx.label.name + '.output.k',
+      ctx.attr.breadth)
 
   command_parts = [
-      "pushd $(pwd)",
+      "pushd $(pwd) > /dev/null",
       "%s --debug" % tool_call,
-      "popd",
+      "popd > /dev/null",
   ]
   script_lines = [
       "#!/usr/bin/env bash",
@@ -340,7 +342,8 @@ def _kore_test_impl(ctx):
 kore_test = rule(
     implementation = _kore_test_impl,
     attrs = {
-        "kompiled": attr.label(providers=[KproveInfo]),
+        "kompiled": attr.label(providers=[KproveInfo], mandatory=True),
+        "module": attr.string(mandatory=True),
         "kore_tool": attr.label(
             executable = True,
             cfg = "exec",
@@ -373,6 +376,7 @@ def kprove_test(*, name, srcs, trusted=[], semantics, timeout="short"):
 
   kore_test(
     name = name,
+    module = name.upper(),
     kompiled = ":%s-kompile" % name,
     timeout = timeout,
   )

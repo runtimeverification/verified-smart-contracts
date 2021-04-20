@@ -1,3 +1,7 @@
+require "protocol-correctness/pseudocode.k"
+require "protocol-correctness/proof/execution-proof-helpers.k"
+require "protocol-correctness/proof/invariant.k"
+
 module COUNT-CAN-SIGN-PARTS
   imports EXECUTION-PROOF-HELPERS
   imports INVARIANT-HELPERS
@@ -18,7 +22,7 @@ module COUNT-CAN-SIGN-PARTS
             performedActions:List)
       [function, functional]
 
-  rule Stack(
+  rule countCanSignLhs(
             SignerIds:ExpressionList,
             K:K,
             Users:UsersCell,
@@ -152,7 +156,7 @@ module COUNT-CAN-SIGN-PARTS
             quorum:KItem,
             ActionStateCell,
             variables:Map,
-            Stack:Stack,
+            stack:Stack,
             ExternalCallEnvCell)
       [function, functional]
 

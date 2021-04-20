@@ -1,10 +1,10 @@
-require "../functions/trusted-discard-action-has-signers.k"
-require "../functions/trusted-discard-action-no-role.k"
-require "../functions/trusted-discard-action-no-signers.k"
-require "../functions/trusted-discard-action-no-signers-no-action.k"
-require "../functions/trusted-discard-action-no-user.k"
-require "../functions/trusted-discard-action-no-valid-signers.k"
-require "../functions/trusted-discard-action-no-valid-signers-no-action.k"
+require "protocol-correctness/proof/functions/trusted-discard-action-has-signers.k"  //@ Bazel remove
+require "protocol-correctness/proof/functions/trusted-discard-action-no-role.k"  //@ Bazel remove
+require "protocol-correctness/proof/functions/trusted-discard-action-no-signers.k"  //@ Bazel remove
+require "protocol-correctness/proof/functions/trusted-discard-action-no-signers-no-action.k"  //@ Bazel remove
+require "protocol-correctness/proof/functions/trusted-discard-action-no-user.k"  //@ Bazel remove
+require "protocol-correctness/proof/functions/trusted-discard-action-no-valid-signers.k"  //@ Bazel remove
+require "protocol-correctness/proof/functions/trusted-discard-action-no-valid-signers-no-action.k"  //@ Bazel remove
 
 module PROOF-DISCARD-ACTION
   imports INVARIANT-EXECUTION

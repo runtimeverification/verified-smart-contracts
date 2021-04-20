@@ -1,17 +1,16 @@
 //@ proof
-require "trusted-perform-action-endpoint-fragment-performs.k"  //@ Bazel remove
-require "trusted-perform-action-endpoint-id-remove-user-BoardMember.k"  //@ Bazel remove
+require "../functions/trusted-perform-action-endpoint-add-proposer-BoardMember-no-quorum-eq.k"  //@ Bazel remove
 
-module PROOF-PERFORM-ACTION-ENDPOINT-REMOVE-USER-BOARDMEMBER-EQ
-  imports TRUSTED-PERFORM-ACTION-ENDPOINT-FRAGMENT-PERFORMS
-  imports TRUSTED-PERFORM-ACTION-ID-REMOVE-USER-BOARDMEMBER
+module PROOF-PERFORM-PARTS-ADD-PROPOSER-BOARDMEMBER-NO-QUORUM-EQ
+  imports TRUSTED-PERFORM-ACTION-ENDPOINT-ADD-PROPOSER-BOARDMEMBER-NO-QUORUM-EQ
 //@ trusted
-// module TRUSTED-PERFORM-ACTION-ENDPOINT-REMOVE-USER-BOARDMEMBER-EQ
+// module TRUSTED-PERFORM-PARTS-ADD-PROPOSER-BOARDMEMBER-NO-QUORUM-EQ
 //@ end
-  imports FUNCTIONS-EXECUTE
+
+  imports PERFORM-ACTION-ENDPOINT-INSTRUMENTATION
 
   claim <T><TT>
-          <k> call(performActionEndpoint(ActionId:Usize)) ~> K:K </k>
+          <k> add-proposer-BoardMember-no-quorum-eq.k ~> call(performActionEndpoint(ActionId:Usize)) ~> K:K </k>
           invariantStateFull(
               NumUsers:Usize,
               UserIdToAddress:Map,
@@ -21,11 +20,11 @@ module PROOF-PERFORM-ACTION-ENDPOINT-REMOVE-USER-BOARDMEMBER-EQ
               u(NumBoardMembers:Int),
               u(NumProposers:Int),
               (CallerId |-> BoardMember
-                  UserIdToRoleInner:Map
+                  _UserIdToRole:Map
               ) #as UserIdToRole:Map,
               u(Quorum:Int),
               ActionLastIndex:Usize,
-              ActionId |-> RemoveUser(CallerAddress:Address) #as Action:Action
+              ActionId |-> AddProposer(CallerAddress:Address) #as Action:Action
                   ActionData:Map,
               ActionSigners:Map,
               CallerAddress:Address,
@@ -36,30 +35,29 @@ module PROOF-PERFORM-ACTION-ENDPOINT-REMOVE-USER-BOARDMEMBER-EQ
         </TT></T>
       =>
         <T><TT>
-          <k> evaluate(void) ~> K:K </k>
+          <k> error ~> K:K </k>
           invariantStateFull(
               NumUsers,
               UserIdToAddress,
               AddressToUserId,
-              u(NumBoardMembers -Int 1),
+              u(NumBoardMembers),
               u(NumProposers),
-              UserIdToRoleInner,
+              UserIdToRole,
               u(Quorum),
               ActionLastIndex,
-              ActionData,
-              ActionSigners[ActionId <- undef],
+              ActionId |-> Action ActionData,
+              ActionSigners,
               CallerAddress,
               Stack,
               ?_Variables:Map,
-              ListItem(Action) PerformedActions
+              PerformedActions
               )
         </TT></T>
     requires true
         // perform-from-id
         andBool isKResult(Action)
         andBool addressToUserIdInvariant(AddressToUserId)
-        andBool NumBoardMembers +Int NumProposers -Int 1 >Int 0
-        andBool Quorum <=Int NumBoardMembers -Int 1
+        andBool Quorum ==Int NumBoardMembers
 
         // perform-fragment
         andBool actionSignersInvariant(ActionSigners)
@@ -71,3 +69,4 @@ module PROOF-PERFORM-ACTION-ENDPOINT-REMOVE-USER-BOARDMEMBER-EQ
     // [trusted]
     //@ end
 endmodule
+

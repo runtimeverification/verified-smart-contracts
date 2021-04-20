@@ -1,23 +1,24 @@
 //@ proof
-require "trusted-perform-action-endpoint-fragment-no-quorum-no-signers.k"  //@ Bazel remove
+require "../functions/trusted-perform-action-endpoint-New.k"  //@ Bazel remove
 
-module PROOF-PERFORM-ACTION-ENDPOINT-NO-QUORUM-NO-SIGNERS
-  imports TRUSTED-PERFORM-ACTION-ENDPOINT-FRAGMENT-NO-QUORUM-NO-SIGNERS
+module PROOF-PERFORM-PARTS-NEW
+  imports TRUSTED-PERFORM-ACTION-ENDPOINT-NEW
 //@ trusted
-// module TRUSTED-PERFORM-ACTION-ENDPOINT-NO-QUORUM-NO-SIGNERS
+// module TRUSTED-PERFORM-PARTS-NEW
 //@ end
-  imports FUNCTIONS-EXECUTE
+
+  imports PERFORM-ACTION-ENDPOINT-INSTRUMENTATION
 
   claim <T><TT>
-          <k> call(performActionEndpoint(ActionId:Usize)) ~> K:K </k>
+          <k> new.k ~> call(performActionEndpoint(_ActionId:Usize)) ~> K:K </k>
           invariantStateFull(
               NumUsers:Usize,
               UserIdToAddress:Map,
-              (CallerAddress |-> UserId:Usize _AddressToUserId:Map) #as AddressToUserId:Map,
+              AddressToUserId:Map,
               NumBoardMembers:Usize,
               NumProposers:Usize,
-              (UserId |-> Role:UserRole _UserIdToRole:Map) #as UserIdToRole:Map,
-              u(Quorum:Int),
+              UserIdToRole:Map,
+              Quorum:Usize,
               ActionLastIndex:Usize,
               ActionData:Map,
               ActionSigners:Map,
@@ -37,22 +38,21 @@ module PROOF-PERFORM-ACTION-ENDPOINT-NO-QUORUM-NO-SIGNERS
               NumBoardMembers,
               NumProposers,
               UserIdToRole,
-              u(Quorum),
+              Quorum,
               ActionLastIndex,
               ActionData,
               ActionSigners,
               CallerAddress,
               Stack,
               caller_address |-> CallerAddress
-                caller_id |-> UserId
-                caller_role |-> Role,
+                caller_id |-> u(0)
+                caller_role |-> None,
               PerformedActions
               )
         </TT></T>
     requires true
-        andBool (Role ==K BoardMember orBool Role ==K Proposer)
-        andBool notBool ActionId in_keys(ActionSigners)
-        andBool Quorum >Int 0
+        andBool notBool CallerAddress in_keys(AddressToUserId)
+        andBool notBool u(0) in_keys(UserIdToRole)
     ensures true
     //@ proof
     //@ trusted

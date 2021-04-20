@@ -2,6 +2,9 @@
 
 set -e
 
+SPEC_MODULE_NAME=$1
+shift
+
 KOMPILE_DIR=`dirname $1`
 shift
 
@@ -19,7 +22,7 @@ shift
 
 MODULE_NAME=$(cat $COMMAND | sed 's/^.*--module \([^ ]*\) .*$/\1/')
 
-SPEC_MODULE_NAME=$(cat $COMMAND | sed 's/^.*--spec-module \([^ ]*\) .*$/\1/')
+# SPEC_MODULE_NAME=$(cat $COMMAND | sed 's/^.*--spec-module \([^ ]*\) .*$/\1/')
 
 KOMPILE_TOOL_DIR=kompile_tool
 

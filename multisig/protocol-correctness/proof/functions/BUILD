@@ -34,19 +34,10 @@ kprove_test(
 )
 
 kprove_test(
-  name = "proof-perform-action-endpoint-no-quorum-no-signers",
-  srcs = ["proof-perform-action-endpoint-no-quorum-no-signers.k"],
-  trusted = [":trusted-perform-action-endpoint-fragment-no-quorum-no-signers"],
+  name = "proof-perform-action-endpoint-no-quorum",
+  srcs = ["proof-perform-action-endpoint-no-quorum.k"],
+  trusted = [":trusted-perform-action-endpoint-fragment-no-quorum"],
   semantics = ":functions-execute",
-  timeout = "moderate",
-)
-
-kprove_test(
-  name = "proof-perform-action-endpoint-no-quorum-has-signers",
-  srcs = ["proof-perform-action-endpoint-no-quorum-has-signers.k"],
-  trusted = [":trusted-perform-action-endpoint-fragment-no-quorum-has-signers"],
-  semantics = ":functions-execute",
-  timeout = "long",
 )
 
 kprove_test(
@@ -57,6 +48,7 @@ kprove_test(
       ":trusted-perform-action-id-nothing",
   ],
   semantics = ":functions-execute",
+  timeout = "moderate",
 )
 
 kprove_test(
@@ -67,6 +59,7 @@ kprove_test(
       ":trusted-perform-action-id-remove-user-BoardMember",
   ],
   semantics = ":functions-execute",
+  timeout = "moderate",
 )
 
 kprove_test(
@@ -136,6 +129,17 @@ kprove_test(
 )
 
 kprove_test(
+  name = "proof-perform-action-endpoint-remove-user-Proposer-eq",
+  srcs = ["proof-perform-action-endpoint-remove-user-Proposer-eq.k"],
+  trusted = [
+      ":trusted-perform-action-endpoint-fragment-performs",
+      ":trusted-perform-action-id-remove-user-Proposer",
+  ],
+  semantics = ":functions-execute",
+  timeout = "moderate",
+)
+
+kprove_test(
   name = "proof-perform-action-endpoint-remove-user-None",
   srcs = ["proof-perform-action-endpoint-remove-user-None.k"],
   trusted = [
@@ -143,6 +147,7 @@ kprove_test(
       ":trusted-perform-action-id-remove-user-None",
   ],
   semantics = ":functions-execute",
+  timeout = "moderate",
 )
 
 kprove_test(
@@ -164,6 +169,7 @@ kprove_test(
       ":trusted-perform-action-id-change-quorum",
   ],
   semantics = ":functions-execute",
+  timeout = "moderate",
 )
 
 kprove_test(
@@ -174,6 +180,7 @@ kprove_test(
       ":trusted-perform-action-id-change-quorum-no-quorum",
   ],
   semantics = ":functions-execute",
+  timeout = "moderate",
 )
 
 kprove_test(
@@ -228,6 +235,7 @@ kprove_test(
       ":trusted-perform-action-id-add-proposer-Proposer",
   ],
   semantics = ":functions-execute",
+  timeout = "moderate",
 )
 
 kprove_test(
@@ -248,6 +256,7 @@ kprove_test(
       ":trusted-perform-action-id-add-proposer-New",
   ],
   semantics = ":functions-execute",
+  timeout = "moderate",
 )
 
 kprove_test(
@@ -258,6 +267,7 @@ kprove_test(
       ":trusted-perform-action-id-add-proposer-None",
   ],
   semantics = ":functions-execute",
+  timeout = "moderate",
 )
 
 kprove_test(
@@ -323,6 +333,7 @@ kprove_test(
       ":trusted-perform-action-id-add-board-member-None",
   ],
   semantics = ":functions-execute",
+  timeout = "moderate",
 )
 
 kprove_test(
@@ -333,6 +344,7 @@ kprove_test(
       ":trusted-perform-action-id-send-egld",
   ],
   semantics = ":functions-execute",
+  timeout = "moderate",
 )
 
 kprove_test(
@@ -343,6 +355,7 @@ kprove_test(
       ":trusted-perform-action-id-sc-call",
   ],
   semantics = ":functions-execute",
+  timeout = "moderate",
 )
 
 kprove_test(
@@ -353,6 +366,7 @@ kprove_test(
       ":trusted-perform-action-id-sc-deploy",
   ],
   semantics = ":functions-execute",
+  timeout = "moderate",
 )
 
 kprove_test(
@@ -368,16 +382,8 @@ kprove_test(
 )
 
 kprove_test(
-  name = "proof-perform-action-endpoint-fragment-no-quorum-no-signers",
-  srcs = ["proof-perform-action-endpoint-fragment-no-quorum-no-signers.k"],
-  trusted = ["trusted-count-can-sign"],
-  semantics = ":functions-execute",
-  timeout = "moderate",
-)
-
-kprove_test(
-  name = "proof-perform-action-endpoint-fragment-no-quorum-has-signers",
-  srcs = ["proof-perform-action-endpoint-fragment-no-quorum-has-signers.k"],
+  name = "proof-perform-action-endpoint-fragment-no-quorum",
+  srcs = ["proof-perform-action-endpoint-fragment-no-quorum.k"],
   trusted = ["trusted-count-can-sign"],
   semantics = ":functions-execute",
   timeout = "long",
@@ -466,6 +472,7 @@ kprove_test(
   srcs = ["proof-perform-action-id-add-proposer-BoardMember-no-quorum.k"],
   trusted = [":trusted-perform-action-add-proposer-BoardMember-no-quorum"],
   semantics = ":functions-execute",
+  timeout = "moderate",
 )
 
 kprove_test(
@@ -513,6 +520,7 @@ kprove_test(
   srcs = ["proof-perform-action-id-add-board-member-BoardMember.k"],
   trusted = [":trusted-perform-action-add-board-member-BoardMember"],
   semantics = ":functions-execute",
+  timeout = "moderate",
 )
 
 kprove_test(
@@ -520,6 +528,7 @@ kprove_test(
   srcs = ["proof-perform-action-id-add-board-member-Proposer.k"],
   trusted = [":trusted-perform-action-add-board-member-Proposer"],
   semantics = ":functions-execute",
+  timeout = "moderate",
 )
 
 kprove_test(
@@ -527,6 +536,7 @@ kprove_test(
   srcs = ["proof-perform-action-id-add-board-member-None.k"],
   trusted = [":trusted-perform-action-add-board-member-None"],
   semantics = ":functions-execute",
+  timeout = "moderate",
 )
 
 kprove_test(
@@ -541,6 +551,7 @@ kprove_test(
   srcs = ["proof-perform-action-id-sc-call.k"],
   trusted = [":trusted-perform-action-sc-call"],
   semantics = ":functions-execute",
+  timeout = "moderate",
 )
 
 kprove_test(
@@ -548,6 +559,7 @@ kprove_test(
   srcs = ["proof-perform-action-id-sc-deploy.k"],
   trusted = [":trusted-perform-action-sc-deploy"],
   semantics = ":functions-execute",
+  timeout = "moderate",
 )
 
 kprove_test(
@@ -562,6 +574,7 @@ kprove_test(
   srcs = ["proof-perform-action-remove-user-BoardMember-too-few.k"],
   trusted = [":trusted-change-user-role-BoardMember"],
   semantics = ":functions-execute",
+  timeout = "moderate",
 )
 
 kprove_test(
@@ -590,6 +603,7 @@ kprove_test(
   srcs = ["proof-perform-action-remove-user-New.k"],
   trusted = [":trusted-change-user-role-New"],
   semantics = ":functions-execute",
+  timeout = "moderate",
 )
 
 kprove_test(
@@ -630,6 +644,7 @@ kprove_test(
   srcs = ["proof-perform-action-add-proposer-New.k"],
   trusted = [":trusted-change-user-role-New"],
   semantics = ":functions-execute",
+  timeout = "moderate",
 )
 
 kprove_test(
@@ -702,7 +717,7 @@ kprove_test(
   name = "proof-change-user-role-New",
   srcs = ["proof-change-user-role-New.k"],
   semantics = ":functions-execute",
-  timeout = "moderate",
+  timeout = "long",
 )
 
 kprove_test(
@@ -731,7 +746,7 @@ kprove_test(
   srcs = ["proof-discard-action-has-signers.k"],
   trusted = [":trusted-count-can-sign"],
   semantics = ":functions-execute",
-  timeout = "moderate",
+  timeout = "long",
 )
 
 kprove_test(
@@ -775,7 +790,7 @@ kprove_test(
   srcs = ["proof-discard-action-no-valid-signers.k"],
   trusted = [":trusted-count-can-sign"],
   semantics = ":functions-execute",
-  timeout = "moderate",
+  timeout = "long",
 )
 
 kprove_test(
@@ -801,7 +816,7 @@ kprove_test(
   name = "proof-propose-action-Proposer",
   srcs = ["proof-propose-action-Proposer.k"],
   semantics = ":functions-execute",
-  timeout = "moderate",
+  timeout = "long",
 )
 
 kprove_test(
@@ -945,14 +960,14 @@ kprove_test(
   name = "proof-unsign-other-signers-first",
   srcs = ["proof-unsign-other-signers-first.k"],
   semantics = ":functions-execute",
-  timeout = "moderate",
+  timeout = "long",
 )
 
 kprove_test(
   name = "proof-unsign-other-signers-not-first",
   srcs = ["proof-unsign-other-signers-not-first.k"],
   semantics = ":functions-execute",
-  timeout = "moderate",
+  timeout = "long",
 )
 
 kprove_test(
@@ -1128,13 +1143,8 @@ ktrusted(
 )
 
 ktrusted(
-  name = "trusted-perform-action-endpoint-fragment-no-quorum-no-signers",
-  srcs = ["proof-perform-action-endpoint-fragment-no-quorum-no-signers.k"],
-)
-
-ktrusted(
-  name = "trusted-perform-action-endpoint-fragment-no-quorum-has-signers",
-  srcs = ["proof-perform-action-endpoint-fragment-no-quorum-has-signers.k"],
+  name = "trusted-perform-action-endpoint-fragment-no-quorum",
+  srcs = ["proof-perform-action-endpoint-fragment-no-quorum.k"],
 )
 
 ktrusted(
@@ -1288,3 +1298,202 @@ ktrusted(
   srcs = ["proof-discard-action-no-valid-signers.k"],
   visibility = ["//visibility:public"],
 )
+
+ktrusted(
+  name = "trusted-perform-action-endpoint-add-board-member-BoardMember-eq",
+  srcs = ["proof-perform-action-endpoint-add-board-member-BoardMember-eq.k"],
+  visibility = ["//visibility:public"],
+)
+
+ktrusted(
+  name = "trusted-perform-action-endpoint-add-board-member-BoardMember",
+  srcs = ["proof-perform-action-endpoint-add-board-member-BoardMember.k"],
+  visibility = ["//visibility:public"],
+)
+
+ktrusted(
+  name = "trusted-perform-action-endpoint-add-board-member-New",
+  srcs = ["proof-perform-action-endpoint-add-board-member-New.k"],
+  visibility = ["//visibility:public"],
+)
+
+ktrusted(
+  name = "trusted-perform-action-endpoint-add-board-member-None",
+  srcs = ["proof-perform-action-endpoint-add-board-member-None.k"],
+  visibility = ["//visibility:public"],
+)
+
+ktrusted(
+  name = "trusted-perform-action-endpoint-add-board-member-Proposer-eq",
+  srcs = ["proof-perform-action-endpoint-add-board-member-Proposer-eq.k"],
+  visibility = ["//visibility:public"],
+)
+
+ktrusted(
+  name = "trusted-perform-action-endpoint-add-board-member-Proposer",
+  srcs = ["proof-perform-action-endpoint-add-board-member-Proposer.k"],
+  visibility = ["//visibility:public"],
+)
+
+ktrusted(
+  name = "trusted-perform-action-endpoint-add-proposer-BoardMember-eq",
+  srcs = ["proof-perform-action-endpoint-add-proposer-BoardMember-eq.k"],
+  visibility = ["//visibility:public"],
+)
+
+ktrusted(
+  name = "trusted-perform-action-endpoint-add-proposer-BoardMember",
+  srcs = ["proof-perform-action-endpoint-add-proposer-BoardMember.k"],
+  visibility = ["//visibility:public"],
+)
+
+ktrusted(
+  name = "trusted-perform-action-endpoint-add-proposer-BoardMember-no-quorum-eq",
+  srcs = ["proof-perform-action-endpoint-add-proposer-BoardMember-no-quorum-eq.k"],
+  visibility = ["//visibility:public"],
+)
+
+ktrusted(
+  name = "trusted-perform-action-endpoint-add-proposer-BoardMember-no-quorum",
+  srcs = ["proof-perform-action-endpoint-add-proposer-BoardMember-no-quorum.k"],
+  visibility = ["//visibility:public"],
+)
+
+ktrusted(
+  name = "trusted-perform-action-endpoint-add-proposer-New",
+  srcs = ["proof-perform-action-endpoint-add-proposer-New.k"],
+  visibility = ["//visibility:public"],
+)
+
+ktrusted(
+  name = "trusted-perform-action-endpoint-add-proposer-None",
+  srcs = ["proof-perform-action-endpoint-add-proposer-None.k"],
+  visibility = ["//visibility:public"],
+)
+
+ktrusted(
+  name = "trusted-perform-action-endpoint-add-proposer-Proposer-eq",
+  srcs = ["proof-perform-action-endpoint-add-proposer-Proposer-eq.k"],
+  visibility = ["//visibility:public"],
+)
+
+ktrusted(
+  name = "trusted-perform-action-endpoint-add-proposer-Proposer",
+  srcs = ["proof-perform-action-endpoint-add-proposer-Proposer.k"],
+  visibility = ["//visibility:public"],
+)
+
+ktrusted(
+  name = "trusted-perform-action-endpoint-change-quorum",
+  srcs = ["proof-perform-action-endpoint-change-quorum.k"],
+  visibility = ["//visibility:public"],
+)
+
+ktrusted(
+  name = "trusted-perform-action-endpoint-change-quorum-no-quorum",
+  srcs = ["proof-perform-action-endpoint-change-quorum-no-quorum.k"],
+  visibility = ["//visibility:public"],
+)
+
+ktrusted(
+  name = "trusted-perform-action-endpoint-New",
+  srcs = ["proof-perform-action-endpoint-New.k"],
+  visibility = ["//visibility:public"],
+)
+
+ktrusted(
+  name = "trusted-perform-action-endpoint-None",
+  srcs = ["proof-perform-action-endpoint-None.k"],
+  visibility = ["//visibility:public"],
+)
+
+ktrusted(
+  name = "trusted-perform-action-endpoint-no-quorum",
+  srcs = ["proof-perform-action-endpoint-no-quorum.k"],
+  visibility = ["//visibility:public"],
+)
+
+ktrusted(
+  name = "trusted-perform-action-endpoint-nothing",
+  srcs = ["proof-perform-action-endpoint-nothing.k"],
+  visibility = ["//visibility:public"],
+)
+
+ktrusted(
+  name = "trusted-perform-action-endpoint-remove-user-BoardMember-eq",
+  srcs = ["proof-perform-action-endpoint-remove-user-BoardMember-eq.k"],
+  visibility = ["//visibility:public"],
+)
+
+ktrusted(
+  name = "trusted-perform-action-endpoint-remove-user-BoardMember",
+  srcs = ["proof-perform-action-endpoint-remove-user-BoardMember.k"],
+  visibility = ["//visibility:public"],
+)
+
+ktrusted(
+  name = "trusted-perform-action-endpoint-remove-user-BoardMember-too-few-eq",
+  srcs = ["proof-perform-action-endpoint-remove-user-BoardMember-too-few-eq.k"],
+  visibility = ["//visibility:public"],
+)
+
+ktrusted(
+  name = "trusted-perform-action-endpoint-remove-user-BoardMember-too-few",
+  srcs = ["proof-perform-action-endpoint-remove-user-BoardMember-too-few.k"],
+  visibility = ["//visibility:public"],
+)
+
+ktrusted(
+  name = "trusted-perform-action-endpoint-remove-user-New",
+  srcs = ["proof-perform-action-endpoint-remove-user-New.k"],
+  visibility = ["//visibility:public"],
+)
+
+ktrusted(
+  name = "trusted-perform-action-endpoint-remove-user-None",
+  srcs = ["proof-perform-action-endpoint-remove-user-None.k"],
+  visibility = ["//visibility:public"],
+)
+
+ktrusted(
+  name = "trusted-perform-action-endpoint-remove-user-Proposer-eq",
+  srcs = ["proof-perform-action-endpoint-remove-user-Proposer-eq.k"],
+  visibility = ["//visibility:public"],
+)
+
+ktrusted(
+  name = "trusted-perform-action-endpoint-remove-user-Proposer",
+  srcs = ["proof-perform-action-endpoint-remove-user-Proposer.k"],
+  visibility = ["//visibility:public"],
+)
+
+ktrusted(
+  name = "trusted-perform-action-endpoint-remove-user-Proposer-nobody-left-eq",
+  srcs = ["proof-perform-action-endpoint-remove-user-Proposer-nobody-left-eq.k"],
+  visibility = ["//visibility:public"],
+)
+
+ktrusted(
+  name = "trusted-perform-action-endpoint-remove-user-Proposer-nobody-left",
+  srcs = ["proof-perform-action-endpoint-remove-user-Proposer-nobody-left.k"],
+  visibility = ["//visibility:public"],
+)
+
+ktrusted(
+  name = "trusted-perform-action-endpoint-sc-call",
+  srcs = ["proof-perform-action-endpoint-sc-call.k"],
+  visibility = ["//visibility:public"],
+)
+
+ktrusted(
+  name = "trusted-perform-action-endpoint-sc-deploy",
+  srcs = ["proof-perform-action-endpoint-sc-deploy.k"],
+  visibility = ["//visibility:public"],
+)
+
+ktrusted(
+  name = "trusted-perform-action-endpoint-send-egld",
+  srcs = ["proof-perform-action-endpoint-send-egld.k"],
+  visibility = ["//visibility:public"],
+)
+

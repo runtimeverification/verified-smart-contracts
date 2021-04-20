@@ -7,3 +7,4 @@ kore-repl*
 out
 .out
 .deps
+trusted-*.k

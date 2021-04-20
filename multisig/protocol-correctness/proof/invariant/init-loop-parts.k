@@ -1,3 +1,7 @@
+require "protocol-correctness/pseudocode.k"
+require "protocol-correctness/proof/execution-proof-helpers.k"
+require "protocol-correctness/proof/invariant.k"
+
 module INIT-LOOP-PARTS
   imports PSEUDOCODE
   imports EXECUTION-PROOF-HELPERS
@@ -13,7 +17,7 @@ module INIT-LOOP-PARTS
             quorum:Usize,
             ActionStateCell,
             variables:Map,
-            Stack:Stack,
+            stack:Stack,
             ExternalCallEnvCell,
             address:Expression,
             userId:Usize)
@@ -85,7 +89,7 @@ module INIT-LOOP-PARTS
             quorum:Usize,
             ActionStateCell,
             variables:Map,
-            Stack:Stack,
+            stack:Stack,
             ExternalCallEnvCell,
             index:Usize,
             address:Expression,

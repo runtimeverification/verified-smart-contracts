@@ -1,4 +1,6 @@
-module TRUSTED-COUNT-CAN-SIGN
+// TODO: Delete and use the one in functions
+
+module TRUSTED-COUNT-CAN-SIGNz
   imports COUNT-CAN-SIGN-PARTS
 
   claim <T> countCanSignLhs(
@@ -57,7 +59,7 @@ module TRUSTED-COUNT-CAN-SIGN
 
 endmodule
 
-module PROOF-COUNT-CAN-SIGN
+module PROOF-COUNT-CAN-SIGNz
   imports INVARIANT-EXECUTION
 
   claim <T> countCanSignLhs(

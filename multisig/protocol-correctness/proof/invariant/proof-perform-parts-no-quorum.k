@@ -1,24 +1,16 @@
 //@ proof
-require "trusted-count-can-sign.k"  //@ Bazel remove
+require "../functions/trusted-perform-action-endpoint-no-quorum.k"  //@ Bazel remove
 
-module PROOF-PERFORM-ACTION-ENDPOINT-FRAGMENT-NO-QUORUM-NO-SIGNERS
-  imports TRUSTED-COUNT-CAN-SIGN
+module PROOF-PERFORM-PARTS-NO-QUORUM
+  imports TRUSTED-PERFORM-ACTION-ENDPOINT-NO-QUORUM
 //@ trusted
-// module TRUSTED-PERFORM-ACTION-ENDPOINT-FRAGMENT-NO-QUORUM-NO-SIGNERS
+// module TRUSTED-PERFORM-PARTS-NO-QUORUM
 //@ end
-  imports FUNCTIONS-EXECUTE
+
+  imports PERFORM-ACTION-ENDPOINT-INSTRUMENTATION
 
   claim <T><TT>
-          <k> runPseudoCode(
-                  caller_address = getCaller();
-                  caller_id = getUserId(caller_address);
-                  caller_role = getUserIdToRole(caller_id);
-                  require(userRoleCanPerformAction(caller_role));
-                  require(quorumReached(ActionId:Usize));
-                  performActionFromId(ActionId);
-              )
-              ~> K:K
-          </k>
+          <k> no-quorum.k ~> call(performActionEndpoint(ActionId:Usize)) ~> K:K </k>
           invariantStateFull(
               NumUsers:Usize,
               UserIdToAddress:Map,
@@ -61,10 +53,8 @@ module PROOF-PERFORM-ACTION-ENDPOINT-FRAGMENT-NO-QUORUM-NO-SIGNERS
     requires true
         andBool userIdToRoleInvariant(UserIdToRole)
         andBool actionSignersInvariant(ActionSigners)
-
         andBool (Role ==K BoardMember orBool Role ==K Proposer)
-        andBool notBool ActionId in_keys(ActionSigners)
-        andBool Quorum >Int 0
+        andBool Quorum >Int countCanSignFunction({ActionSigners[ActionId] orDefault [.]}:>ExpressionList, opaque(UserIdToRole))
     ensures true
     //@ proof
     //@ trusted

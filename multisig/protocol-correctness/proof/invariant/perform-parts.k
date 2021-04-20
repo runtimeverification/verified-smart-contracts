@@ -1,3 +1,7 @@
+require "protocol-correctness/pseudocode.k"
+require "protocol-correctness/proof/execution-proof-helpers.k"
+require "protocol-correctness/proof/invariant.k"
+
 module PERFORM-PARTS
 
   imports EXECUTION-PROOF-HELPERS
@@ -65,7 +69,7 @@ module PERFORM-PARTS
       userIdToRole:Map,
       quorum:Usize,
       ActionStateCell,
-      Stack:Stack,
+      stack:Stack,
       callerAddress:Address,
       performedActions:List)
     [function, functional]
@@ -81,7 +85,7 @@ module PERFORM-PARTS
           quorum:Usize,
           ActionStateCell,
           variables:Map,
-          Stack:Stack,
+          stack:Stack,
           callerAddress:Address,
           performedActions:List)
       [function, functional]

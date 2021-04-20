@@ -1,24 +1,15 @@
 //@ proof
-require "trusted-count-can-sign.k"  //@ Bazel remove
+require "trusted-perform-action-endpoint-fragment-no-quorum-has-signers.k"  //@ Bazel remove
 
-module PROOF-PERFORM-ACTION-ENDPOINT-FRAGMENT-NO-QUORUM-HAS-SIGNERS
-  imports TRUSTED-COUNT-CAN-SIGN
+module PROOF-PERFORM-ACTION-ENDPOINT-NO-QUORUM
+  imports TRUSTED-PERFORM-ACTION-ENDPOINT-FRAGMENT-NO-QUORUM
 //@ trusted
-// module TRUSTED-PERFORM-ACTION-ENDPOINT-FRAGMENT-NO-QUORUM-HAS-SIGNERS
+// module TRUSTED-PERFORM-ACTION-ENDPOINT-NO-QUORUM
 //@ end
   imports FUNCTIONS-EXECUTE
 
   claim <T><TT>
-          <k> runPseudoCode(
-                  caller_address = getCaller();
-                  caller_id = getUserId(caller_address);
-                  caller_role = getUserIdToRole(caller_id);
-                  require(userRoleCanPerformAction(caller_role));
-                  require(quorumReached(ActionId:Usize));
-                  performActionFromId(ActionId);
-              )
-              ~> K:K
-          </k>
+          <k> call(performActionEndpoint(ActionId:Usize)) ~> K:K </k>
           invariantStateFull(
               NumUsers:Usize,
               UserIdToAddress:Map,
@@ -29,7 +20,7 @@ module PROOF-PERFORM-ACTION-ENDPOINT-FRAGMENT-NO-QUORUM-HAS-SIGNERS
               u(Quorum:Int),
               ActionLastIndex:Usize,
               ActionData:Map,
-              (ActionId |-> SignerIds:ExpressionList _ActionSigners:Map) #as ActionSigners:Map,
+              ActionSigners:Map,
               CallerAddress:Address,
               Stack:Stack,
               .Map,
@@ -61,9 +52,8 @@ module PROOF-PERFORM-ACTION-ENDPOINT-FRAGMENT-NO-QUORUM-HAS-SIGNERS
     requires true
         andBool userIdToRoleInvariant(UserIdToRole)
         andBool actionSignersInvariant(ActionSigners)
-
         andBool (Role ==K BoardMember orBool Role ==K Proposer)
-        andBool Quorum >Int countCanSignFunction(SignerIds, opaque(UserIdToRole))
+        andBool Quorum >Int countCanSignFunction({ActionSigners[ActionId] orDefault [.]}:>ExpressionList, opaque(UserIdToRole))
     ensures true
     //@ proof
     //@ trusted

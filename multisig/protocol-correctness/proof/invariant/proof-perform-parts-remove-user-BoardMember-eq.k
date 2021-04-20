@@ -1,17 +1,16 @@
 //@ proof
-require "trusted-perform-action-endpoint-fragment-performs.k"  //@ Bazel remove
-require "trusted-perform-action-endpoint-id-remove-user-BoardMember.k"  //@ Bazel remove
+require "../functions/trusted-perform-action-endpoint-remove-user-BoardMember-eq.k"  //@ Bazel remove
 
-module PROOF-PERFORM-ACTION-ENDPOINT-REMOVE-USER-BOARDMEMBER-EQ
-  imports TRUSTED-PERFORM-ACTION-ENDPOINT-FRAGMENT-PERFORMS
-  imports TRUSTED-PERFORM-ACTION-ID-REMOVE-USER-BOARDMEMBER
+module PROOF-PERFORM-PARTS-REMOVE-USER-BOARDMEMBER-EQ
+  imports TRUSTED-PERFORM-ACTION-ENDPOINT-REMOVE-USER-BOARDMEMBER-EQ
 //@ trusted
-// module TRUSTED-PERFORM-ACTION-ENDPOINT-REMOVE-USER-BOARDMEMBER-EQ
+// module TRUSTED-PERFORM-PARTS-REMOVE-USER-BOARDMEMBER-EQ
 //@ end
-  imports FUNCTIONS-EXECUTE
+
+  imports PERFORM-ACTION-ENDPOINT-INSTRUMENTATION
 
   claim <T><TT>
-          <k> call(performActionEndpoint(ActionId:Usize)) ~> K:K </k>
+          <k> remove-user-BoardMember-eq.k ~> call(performActionEndpoint(ActionId:Usize)) ~> K:K </k>
           invariantStateFull(
               NumUsers:Usize,
               UserIdToAddress:Map,

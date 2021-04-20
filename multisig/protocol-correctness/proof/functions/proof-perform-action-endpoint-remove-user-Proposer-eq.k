@@ -43,7 +43,7 @@ module PROOF-PERFORM-ACTION-ENDPOINT-REMOVE-USER-PROPOSER-EQ
               AddressToUserId,
               u(NumBoardMembers),
               u(NumProposers -Int 1),
-              (CallerId |-> Role UserIdToRoleInner),
+              UserIdToRoleInner,
               u(Quorum),
               ActionLastIndex,
               ActionData,

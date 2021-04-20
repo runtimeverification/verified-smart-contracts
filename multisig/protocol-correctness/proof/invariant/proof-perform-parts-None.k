@@ -1,15 +1,16 @@
 //@ proof
-require "trusted-perform-action-endpoint-fragment-none.k"  //@ Bazel remove
+require "../functions/trusted-perform-action-endpoint-None.k"  //@ Bazel remove
 
-module PROOF-PERFORM-ACTION-ENDPOINT-NONE
-  imports TRUSTED-PERFORM-ACTION-ENDPOINT-FRAGMENT-NONE
+module PROOF-PERFORM-PARTS-NONE
+  imports TRUSTED-PERFORM-ACTION-ENDPOINT-NONE
 //@ trusted
-// module TRUSTED-PERFORM-ACTION-ENDPOINT-NONE
+// module TRUSTED-PERFORM-PARTS-NONE
 //@ end
-  imports FUNCTIONS-EXECUTE
+
+  imports PERFORM-ACTION-ENDPOINT-INSTRUMENTATION
 
   claim <T><TT>
-          <k> call(performActionEndpoint(_ActionId:Usize)) ~> K:K </k>
+          <k> none.k ~> call(performActionEndpoint(_ActionId:Usize)) ~> K:K </k>
           invariantStateFull(
               NumUsers:Usize,
               UserIdToAddress:Map,
