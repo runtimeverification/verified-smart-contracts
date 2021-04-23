@@ -55,6 +55,7 @@ module INVARIANT-HELPERS
       andBool isExpressionList(V) andBool listElementsAreUsize(V) // valuesAreExpressionListOfUsize(ActionSigners)
       andBool isKResult(V)  // valuesAreKResult(ActionSigners)
       andBool valueIsNotEmpty(V, rExpressionList)  // valuesAreNotEmpty(ActionSigners, rExpressionList)
+      andBool listElementsAreDistinct(V)
 
       andBool actionSignersInvariant(ActionSigners)
     [simplification]
@@ -251,7 +252,7 @@ module INVARIANT
             </actions>
           </action-state>
         </multisig-state>
-   
+
   syntax Bool ::= invariant(
       numUsers:Usize,
       userIdToAddress:Map,
@@ -309,6 +310,7 @@ module INVARIANT
       andBool actionSignersInvariant(ActionSigners)
       // andBool valuesAreExpressionListOfUsize(ActionSigners)
       // andBool valuesAreKResult(ActionSigners)
+      // andBool valuesAreExpressionListOfDistinctElements(ActionSigners)
 
       andBool actionDataInvariant(ActionData)
       // andBool valuesAreOfType(ActionData, rAction)
@@ -349,71 +351,6 @@ module INVARIANT
   rule valuesAreDistinct(M:Map) => true
     requires false
       orBool addressToUserIdInvariant(M)
-
-  // TODO: Delete.
-  syntax Bool ::= invariantDebug(
-      numUsers:Usize,
-      userIdToAddress:Map,
-      addressToUserId:Map,
-      numBoardMembers:Usize,
-      numProposers:Usize,
-      userIdToRole:Map,
-      quorum:Usize,
-      actionLastIndex:Usize,
-      actionData:Map,
-      actionSigners:Map,
-      handling:PropertyHandling)  [function, functional]
-
-  rule invariantDebug(
-      u(NumUsers:Int),
-      UserIdToAddress:Map,
-      AddressToUserId:Map,
-      u(NumBoardMembers:Int),
-      u(NumProposers:Int),
-      UserIdToRole:Map,
-      u(Quorum:Int),
-      u(ActionLastIndex:Int),
-      ActionData:Map,
-      ActionSigners:Map,
-      Handling:PropertyHandling)
-    => true
-      andBool notBool u(0) in_keys(UserIdToAddress)
-      andBool notBool u(0) in_keys(UserIdToRole)
-
-      andBool allValuesBecomeKeys(AddressToUserId, UserIdToAddress)
-      andBool allValuesBecomeKeys(UserIdToAddress, AddressToUserId)
-
-      andBool valuesAreOfType(AddressToUserId, rUsize)
-      andBool valuesAreKResult(AddressToUserId)
-      andBool valuesAreNotEmpty(AddressToUserId, rUsize)
-      andBool unusedIdsInMapValues(NumUsers +Int 1, AddressToUserId, Handling)
-      andBool valuesAreDistinct(AddressToUserId)
-
-      andBool valuesAreOfType(UserIdToRole, rUserRole)
-      andBool valuesAreKResult(UserIdToRole)
-      andBool valuesAreNotEmpty(UserIdToRole, rUserRole)
-      andBool unusedIdsInMapKeys(NumUsers +Int 1, keysMap(UserIdToRole), Handling)
-
-      andBool unusedIdsInMapKeys(ActionLastIndex +Int 1, keysMap(ActionData), Handling)
-      andBool unusedIdsInMapKeys(ActionLastIndex +Int 1, keysMap(ActionSigners), Handling)
-      andBool maxMapKey(u(ActionLastIndex), keysMap(ActionData))
-      andBool maxMapKey(u(ActionLastIndex), keysMap(ActionSigners))
-
-      andBool valuesAreExpressionListOfUsize(ActionSigners)
-      andBool valuesAreKResult(ActionSigners)
-
-      andBool valuesAreOfType(ActionData, rAction)
-      andBool valuesAreKResult(ActionData)
-
-      andBool NumUsers >=Int 0 // TODO: Strict >?
-      andBool NumBoardMembers >=Int 0
-      andBool NumProposers >=Int 0
-
-      andBool Quorum <=Int NumBoardMembers
-      andBool (NumBoardMembers +Int NumProposers >Int 0)
-
-      andBool NumBoardMembers ==Int countMapValues(UserIdToRole, wrap(BoardMember))
-      andBool NumProposers ==Int countMapValues(UserIdToRole, wrap(Proposer))
 
   syntax Bool ::= subset(Map, Map)  [function, functional]
   rule subset(K:KItem |-> _:KItem M:Map, N:Map)

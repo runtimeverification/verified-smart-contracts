@@ -58,6 +58,7 @@ module PROOF-DISCARD-ACTION-HAS-SIGNERS
       andBool isKResult(SignerIds)
       andBool listElementsAreUsize(SignerIds)
       andBool userIdToRoleInvariant(UserIdToRole)
+      andBool listElementsAreDistinct(SignerIds)
 
 
       andBool (Role ==K BoardMember orBool Role ==K Proposer)

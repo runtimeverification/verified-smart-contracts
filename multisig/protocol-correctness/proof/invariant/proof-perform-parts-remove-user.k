@@ -1,19 +1,23 @@
 //@ proof
-require "trusted-perform-parts-change-quorum-no-quorum.k"  //@ Bazel remove
-require "trusted-perform-parts-change-quorum-with-quorum.k"  //@ Bazel remove
+require "trusted-perform-parts-remove-user-eq.k"  //@ Bazel remove
+require "trusted-perform-parts-remove-user-neq.k"  //@ Bazel remove
+require "trusted-perform-parts-remove-user-New.k"  //@ Bazel remove
+require "trusted-perform-parts-remove-user-None.k"  //@ Bazel remove
 
-module PROOF-PERFORM-PARTS-CHANGE-QUORUM
+module PROOF-PERFORM-PARTS-REMOVE-USER
   imports INVARIANT-EXECUTION
 
-  imports TRUSTED-PERFORM-PARTS-CHANGE-QUORUM-NO-QUORUM
-  imports TRUSTED-PERFORM-PARTS-CHANGE-QUORUM-WITH-QUORUM
+  imports TRUSTED-PERFORM-PARTS-REMOVE-USER-EQ
+  imports TRUSTED-PERFORM-PARTS-REMOVE-USER-NEQ
+  imports TRUSTED-PERFORM-PARTS-REMOVE-USER-NEW
+  imports TRUSTED-PERFORM-PARTS-REMOVE-USER-NONE
 //@ trusted
-// module TRUSTED-PERFORM-PARTS-CHANGE-QUORUM
+// module TRUSTED-PERFORM-PARTS-REMOVE-USER
 //@ end
   imports PERFORM-ACTION-ENDPOINT-INSTRUMENTATION
 
   claim <T><TT>
-          <k> splitPerformActionEndpoint4(ChangeQuorum(_NewQuorum:Usize) #as Action:Action)
+          <k> splitPerformActionEndpoint4(RemoveUser(_UserAddress:Address) #as Action:Action)
               ~> call(performActionEndpoint(ActionId:Usize))
               ~> popContext
               ~> evaluateReturnValue

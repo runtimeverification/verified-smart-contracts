@@ -101,6 +101,15 @@ module EXECUTION-PROOF-HELPERS
       => isUsize(E) andBool listElementsAreUsize([Es])
     [simplification]
 
+  syntax Bool ::= listElementsAreDistinct(KItem)  [function, functional]
+  rule listElementsAreDistinct([.]) => true
+  rule listElementsAreDistinct([E:Expression, Es:ExpressionCSV])
+      => true
+          andBool notBool #listContains([Es], E)
+          andBool listElementsAreDistinct([Es])
+  rule listElementsAreDistinct(_:KItem) => false
+    [owise]
+
   syntax Bool ::= valuesAreExpressionListOfUsize(Map)  [function, functional]
   rule valuesAreExpressionListOfUsize(.Map) => true
   rule valuesAreExpressionListOfUsize((_ |-> V M:Map) #as _:Map)
@@ -434,6 +443,9 @@ module EXECUTION-PROOF-HELPERS
   rule countCanSignFunction([UserId:Usize, Es:ExpressionCSV], UserId |-> Role:UserRole M:Map)
       => 1 +Int countCanSignFunction([Es], M)  // Remove UserId from the map since each user is counted at most once.
     requires canSignFunction(Role)
+  rule countCanSignFunction([UserId:Usize, Es:ExpressionCSV], M:Map)
+      => countCanSignFunction([Es], M)  // Remove UserId from the map since each user is counted at most once.
+    requires notBool UserId in_keys(M)
   rule countCanSignFunction([_:Expression, Es:ExpressionCSV], M)
       => countCanSignFunction([Es], M)
     [owise]
@@ -454,6 +466,10 @@ module EXECUTION-PROOF-HELPERS
     requires notBool #listContains(Es, UserId)
     [simplification]
 
+  rule countCanSignFunction(Es:ExpressionList, concat(UserId:KItem, _Role:UserRole, M:Map))
+      => countCanSignFunction(Es, M)
+    requires notBool #listContains(Es, UserId)
+    [simplification]
   rule countCanSignFunction([UserId:Usize, Es:ExpressionCSV], concat(UserId1:KItem, Role:UserRole, M:Map))
     => #countCanSignFunction(UserId, [Es], concat(UserId1, Role, M), concat(UserId1, Role, M)[UserId] orDefault None)
     [simplification]

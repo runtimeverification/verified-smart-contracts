@@ -246,6 +246,7 @@ kprove_test(
       ":trusted-perform-action-id-add-proposer-Proposer",
   ],
   semantics = ":functions-execute",
+  timeout = "moderate",
 )
 
 kprove_test(
@@ -769,7 +770,8 @@ kprove_test(
   srcs = ["proof-count-can-sign.k"],
   semantics = ":functions-execute",
   timeout = "moderate",
-  breadth = "3",
+  breadth = "6",
+  # depth ~= 61
 )
 
 kprove_test(

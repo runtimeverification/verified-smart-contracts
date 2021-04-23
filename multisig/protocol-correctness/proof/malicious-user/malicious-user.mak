@@ -1,8 +1,7 @@
 MALICIOUS_USER_OUT_PREFIX=out/malicious-user.
 
-MALICIOUS_USER_ALL := $(wildcard $(MALICIOUS_USER_DIR)/*.k)
-MALICIOUS_USER_PROOFS := $(wildcard $(MALICIOUS_USER_DIR)/proof-*.k)
-MALICIOUS_USER_EXECUTION := $(filter-out $(MALICIOUS_USER_PROOFS), $(MALICIOUS_USER_ALL)) $(PROOF_EXECUTION) $(INVARIANT_EXECUTION)
+MALICIOUS_USER_PROOFS := $(wildcard $(MALICIOUS_USER_DIR)/proofs/*.k)
+MALICIOUS_USER_EXECUTION := $(wildcard $(MALICIOUS_USER_DIR)/*.k) $(PROOF_EXECUTION) $(INVARIANT_EXECUTION)
 
 MALICIOUS_USER_PROOF_TIMESTAMPS := $(addprefix $(MALICIOUS_USER_OUT_PREFIX),$(notdir ${MALICIOUS_USER_PROOFS:.k=.timestamp}))
 MALICIOUS_USER_PROOF_DEBUGGERS := $(addprefix $(MALICIOUS_USER_OUT_PREFIX),$(notdir ${MALICIOUS_USER_PROOFS:.k=.debugger}))
@@ -13,7 +12,7 @@ $(MALICIOUS_USER_OUT_PREFIX)proof.timestamp: ${MALICIOUS_USER_PROOF_TIMESTAMPS}
 	$(DIR_GUARD)
 	@touch $(MALICIOUS_USER_OUT_PREFIX)proof.timestamp
 
-$(MALICIOUS_USER_OUT_PREFIX)proof-%.timestamp: ${MALICIOUS_USER_DIR}/proof-%.k $(MALICIOUS_USER_OUT_PREFIX)execution.timestamp
+$(MALICIOUS_USER_OUT_PREFIX)proof-%.timestamp: ${MALICIOUS_USER_DIR}/proofs/proof-%.k $(MALICIOUS_USER_OUT_PREFIX)execution.timestamp
 	$(DIR_GUARD)
 	@echo "Proving $*..."
 	@cat /proc/uptime | sed 's/\s.*//' > $(MALICIOUS_USER_OUT_PREFIX)proof-$*.duration.temp
@@ -23,7 +22,7 @@ $(MALICIOUS_USER_OUT_PREFIX)proof-%.timestamp: ${MALICIOUS_USER_DIR}/proof-%.k $
 	@rm $(MALICIOUS_USER_OUT_PREFIX)proof-$*.duration.temp
 	@touch $(MALICIOUS_USER_OUT_PREFIX)proof-$*.timestamp
 
-$(MALICIOUS_USER_OUT_PREFIX)proof-%.debugger: ${MALICIOUS_USER_DIR}/proof-%.k $(MALICIOUS_USER_OUT_PREFIX)execution.timestamp
+$(MALICIOUS_USER_OUT_PREFIX)proof-%.debugger: ${MALICIOUS_USER_DIR}/proofs/proof-%.k $(MALICIOUS_USER_OUT_PREFIX)execution.timestamp
 	$(DIR_GUARD)
 	@echo "Debugging $*..."
 	@kprove $< --directory $(MALICIOUS_USER_DIR) --haskell-backend-command $(DEBUG_COMMAND)

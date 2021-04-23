@@ -51,6 +51,7 @@ module PROOF-COUNT-CAN-SIGN
         andBool isKResult(SignerIds)
         andBool listElementsAreUsize(SignerIds)
         andBool userIdToRoleInvariant(UserIdToRole)
+        andBool listElementsAreDistinct(SignerIds)
     ensures true
   //@ proof
   //@ trusted

@@ -12,6 +12,19 @@ kompile(
   ],
 )
 
+klibrary(
+  name = "invariant-execution-files",
+  srcs = ["invariant-execution.k"],
+  deps = [
+      ":count-can-sign-parts-files",
+      ":init-loop-parts-files",
+      ":perform-parts-files",
+      "//protocol-correctness/proof:execution-proof-files",
+      "//protocol-correctness/proof/functions:functions-execute-files",
+  ],
+  visibility = ["//visibility:public"],
+)
+
 # TODO: Delete.
 klibrary(
   name = "count-can-sign-parts-files",
@@ -65,7 +78,7 @@ kprove_test(
   trusted = [
       ":trusted-perform-parts-add-board-member",
       # ":trusted-perform-parts-add-proposer",
-      # ":trusted-perform-parts-change-quorum",
+      # ":trusted-perform-parts-change-quorum-with-quorum",
       # ":trusted-perform-parts-change-quorum-no-quorum",
       # ":trusted-perform-parts-New",
       # ":trusted-perform-parts-no-quorum",
@@ -87,22 +100,36 @@ kprove_test(
       ":trusted-perform-parts-add-proposer-signers",
       ":trusted-perform-parts-add-proposer-no-signers",
       ":trusted-perform-parts-change-quorum",
-      ":trusted-perform-parts-change-quorum-no-quorum",
       ":trusted-perform-parts-New",
       ":trusted-perform-parts-no-quorum",
       ":trusted-perform-parts-None",
-      # ":trusted-perform-parts-Nothing",
       ":trusted-perform-parts-remove-user",
       ":trusted-perform-parts-sc-call",
       ":trusted-perform-parts-sc-deploy",
       ":trusted-perform-parts-send-egld",
   ],
   semantics = ":invariant-execution",
+  timeout = "eternal",
+  breadth = "7",
+  #depth ???
 )
 
 kprove_test(
   name = "proof-perform-parts-change-quorum",
   srcs = ["proof-perform-parts-change-quorum.k"],
+  trusted = [
+      ":trusted-perform-parts-change-quorum-with-quorum",
+      ":trusted-perform-parts-change-quorum-no-quorum",
+  ],
+  semantics = ":invariant-execution",
+  timeout = "eternal",
+  breadth = "6",
+  # depth = 21
+)
+
+kprove_test(
+  name = "proof-perform-parts-change-quorum-with-quorum",
+  srcs = ["proof-perform-parts-change-quorum-with-quorum.k"],
   trusted = [
       "//protocol-correctness/proof/functions:trusted-perform-action-endpoint-change-quorum",
   ],
@@ -311,20 +338,44 @@ kprove_test(
   name = "proof-perform-parts-remove-user",
   srcs = ["proof-perform-parts-remove-user.k"],
   trusted = [
-      ":trusted-perform-parts-remove-user-BoardMember-eq",
-      ":trusted-perform-parts-remove-user-BoardMember-too-few-eq",
-      ":trusted-perform-parts-remove-user-BoardMember",
-      ":trusted-perform-parts-remove-user-BoardMember-too-few",
+      ":trusted-perform-parts-remove-user-eq",
+      ":trusted-perform-parts-remove-user-neq",
       ":trusted-perform-parts-remove-user-New",
       ":trusted-perform-parts-remove-user-None",
+  ],
+  semantics = ":invariant-execution",
+  timeout = "eternal",
+  breadth = "9",
+  # depth = 32
+)
+
+kprove_test(
+  name = "proof-perform-parts-remove-user-eq",
+  srcs = ["proof-perform-parts-remove-user-eq.k"],
+  trusted = [
+      ":trusted-perform-parts-remove-user-BoardMember-eq",
+      ":trusted-perform-parts-remove-user-BoardMember-too-few-eq",
       ":trusted-perform-parts-remove-user-Proposer-eq",
       ":trusted-perform-parts-remove-user-Proposer-nobody-left-eq",
+  ],
+  semantics = ":invariant-execution",
+  timeout = "eternal",
+  breadth = "12",
+  # depth = ~24
+)
+
+kprove_test(
+  name = "proof-perform-parts-remove-user-neq",
+  srcs = ["proof-perform-parts-remove-user-neq.k"],
+  trusted = [
+      ":trusted-perform-parts-remove-user-BoardMember",
+      ":trusted-perform-parts-remove-user-BoardMember-too-few",
       ":trusted-perform-parts-remove-user-Proposer",
       ":trusted-perform-parts-remove-user-Proposer-nobody-left",
   ],
   semantics = ":invariant-execution",
   timeout = "eternal",
-  breadth = "5",
+  breadth = "13",
   # depth = ~25
 )
 
@@ -743,8 +794,8 @@ ktrusted(
 )
 
 ktrusted(
-  name = "trusted-perform-parts-change-quorum",
-  srcs = ["proof-perform-parts-change-quorum.k"],
+  name = "trusted-perform-parts-change-quorum-with-quorum",
+  srcs = ["proof-perform-parts-change-quorum-with-quorum.k"],
   visibility = ["//visibility:public"],
 )
 
@@ -781,6 +832,24 @@ ktrusted(
 ktrusted(
   name = "trusted-perform-parts-remove-user",
   srcs = ["proof-perform-parts-remove-user.k"],
+  visibility = ["//visibility:public"],
+)
+
+ktrusted(
+  name = "trusted-perform-parts-remove-user-eq",
+  srcs = ["proof-perform-parts-remove-user-eq.k"],
+  visibility = ["//visibility:public"],
+)
+
+ktrusted(
+  name = "trusted-perform-parts-remove-user-neq",
+  srcs = ["proof-perform-parts-remove-user-neq.k"],
+  visibility = ["//visibility:public"],
+)
+
+ktrusted(
+  name = "trusted-perform-parts-change-quorum",
+  srcs = ["proof-perform-parts-change-quorum.k"],
   visibility = ["//visibility:public"],
 )
 

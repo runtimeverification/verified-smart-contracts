@@ -35,7 +35,7 @@ trap 'rm -rf -- "$TMP_DIR"' EXIT
 cp -rL $KOMPILE_DIR $TMP_DIR
 chmod -R a+w $TMP_DIR/*
 
-pushd $TMP_DIR
+pushd $TMP_DIR > /dev/null
 
 $KPROVE \
   --spec-module "$MODULE_NAME" \
@@ -45,7 +45,7 @@ $KPROVE \
 SPEC_FILE=$(cat output | grep kore-exec | sed 's/^.*--prove \([^ ]*\) .*$/\1/')
 COMMAND=$(cat output | grep kore-exec)
 
-popd
+popd > /dev/null
 
 cp $SPEC_FILE $SPEC_OUTPUT
 

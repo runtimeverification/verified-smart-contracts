@@ -202,32 +202,32 @@ module PSEUDOCODE-TYPE-REFLECTION
   rule cast(just(K:KItem) => K, _:ReflectionType)
   */
 
-  rule cast(value(K:KItem) => K, _:ReflectionType)
+  rule cast(value(K:KItem) => K, _:ReflectionType)  [label(castValue)]
 
-  rule cast(U:Usize, rUsize) => U
+  rule cast(U:Usize, rUsize) => U  [label(castUsize)]
   rule (.K => stuck) ~> cast(V:KItem, rUsize)
     ensures notBool isUsize(V)
-    [owise]
+    [owise, label(castUsizeStuck)]
 
-  rule cast(U:UserRole, rUserRole) => U
+  rule cast(U:UserRole, rUserRole) => U  [label(castUserRole)]
   rule (.K => stuck) ~> cast(V:KItem, rUserRole)
     ensures notBool isUserRole(V)
-    [owise]
+    [owise, label(castUserRoleStuck)]
 
-  rule cast(V:ExpressionList, rExpressionList) => V
+  rule cast(V:ExpressionList, rExpressionList) => V  [label(castExpressionList)]
   rule (.K => stuck) ~> cast(V:KItem, rExpressionList)
     ensures notBool isExpressionList(V)
-    [owise]
+    [owise, label(castExpressionListStuck)]
 
-  rule cast(A:Action, rAction) => A
+  rule cast(A:Action, rAction) => A  [label(castAction)]
   rule (.K => stuck) ~> cast(V:KItem, rAction)
     ensures notBool isAction(V)
-    [owise]
+    [owise, label(castActionStuck)]
 
-  rule cast(A:Address, rAddress) => A
+  rule cast(A:Address, rAddress) => A  [label(castAddress)]
   rule (.K => stuck) ~> cast(V:KItem, rAddress)
     ensures notBool isAddress(V)
-    [owise]
+    [owise, label(castAddressStuck)]
 
   syntax KItem ::= defaultValue(ReflectionType)  [function, functional]
   rule defaultValue(rUsize) => u(0)
@@ -692,7 +692,6 @@ module PSEUDOCODE-FUNCTIONS
             require(quorumReached(ActionId));
             performActionFromId(ActionId);
       )
-    [label(xyzzy)]
 
   rule call(discardAction(ActionId:Usize))
         => runPseudoCode(
@@ -705,9 +704,9 @@ module PSEUDOCODE-FUNCTIONS
               ok(void);
         )
 
-  rule  call(userRoleCanPropose(None)) => false
-  rule  call(userRoleCanPropose(Proposer)) => true
-  rule  call(userRoleCanPropose(BoardMember)) => true
+  rule  call(userRoleCanPropose(None)) => false  [label(userRoleCanProposeNone)]
+  rule  call(userRoleCanPropose(Proposer)) => true  [label(userRoleCanProposeProposer)]
+  rule  call(userRoleCanPropose(BoardMember)) => true  [label(userRoleCanProposeBoardMember)]
 
   rule  call(userRoleCanSign(None)) => false
   rule  call(userRoleCanSign(Proposer)) => false
@@ -1166,9 +1165,11 @@ module MAP-UTILS
       =>  splitMap(K, M, ?_Value:KItem, ?_Remainder:Map)
           ~> #mapLookup(K, M)
     requires K in_keys(M)
+    [label(mapLookupInKeys)]
   rule mapLookup(K:KItem, M:Map)
       =>  nothing
     requires notBool K in_keys(M)
+    [label(mapLookupNotInKeys)]
   /*
   rule mapLookup(K:KItem, M:Map) => #mapLookup(K, splitMap(K, M, M))
   */
