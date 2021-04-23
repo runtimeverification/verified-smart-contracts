@@ -1,23 +1,22 @@
 //@ proof
-require "trusted-perform-parts-add-board-member-eq.k"  //@ Bazel remove
-require "trusted-perform-parts-add-board-member-neq.k"  //@ Bazel remove
-require "trusted-perform-parts-add-board-member-New.k"  //@ Bazel remove
-require "trusted-perform-parts-add-board-member-None.k"  //@ Bazel remove
+require "trusted-perform-parts-add-proposer-BoardMember.k"  //@ Bazel remove
+require "trusted-perform-parts-add-proposer-BoardMember-no-quorum.k"  //@ Bazel remove
+require "trusted-perform-parts-add-proposer-Proposer.k"  //@ Bazel remove
 
-module PROOF-PERFORM-PARTS-ADD-BOARD-MEMBER
+module PROOF-PERFORM-PARTS-ADD-PROPOSER-SIGNERS-NEQ
   imports INVARIANT-EXECUTION
 
-  imports TRUSTED-PERFORM-PARTS-ADD-BOARD-MEMBER-EQ
-  imports TRUSTED-PERFORM-PARTS-ADD-BOARD-MEMBER-NEQ
-  imports TRUSTED-PERFORM-PARTS-ADD-BOARD-MEMBER-NEW
-  imports TRUSTED-PERFORM-PARTS-ADD-BOARD-MEMBER-NONE
+  imports TRUSTED-PERFORM-PARTS-ADD-PROPOSER-BOARDMEMBER
+  imports TRUSTED-PERFORM-PARTS-ADD-PROPOSER-BOARDMEMBER-NO-QUORUM
+  imports TRUSTED-PERFORM-PARTS-ADD-PROPOSER-PROPOSER
 //@ trusted
-// module TRUSTED-PERFORM-PARTS-ADD-BOARD-MEMBER
+// module TRUSTED-PERFORM-PARTS-ADD-PROPOSER-SIGNERS-NEQ
 //@ end
+
   imports PERFORM-ACTION-ENDPOINT-INSTRUMENTATION
 
   claim <T><TT>
-          <k> splitPerformActionEndpoint4(AddBoardMember(_UserAddress:Address) #as Action:Action)
+          <k> splitAddProposer3(UserAddress)
               ~> call(performActionEndpoint(ActionId:Usize))
               ~> popContext
               ~> evaluateReturnValue
@@ -28,14 +27,17 @@ module PROOF-PERFORM-PARTS-ADD-BOARD-MEMBER
           invariantStateStack(
               NumUsers:Usize,
               UserIdToAddress:Map,
-              (CallerAddress |-> CallerId:Usize _AddressToUserId:Map) #as AddressToUserId:Map,
+              (CallerAddress |-> CallerId:Usize
+                  UserAddress |-> UserId:Usize
+                  _AddressToUserId:Map
+              ) #as AddressToUserId:Map,
               NumBoardMembers:Usize,
               NumProposers:Usize,
               (CallerId |-> CallerRole:UserRole _UserIdToRole:Map) #as UserIdToRole:Map,
               u(Quorum:Int),
               ActionLastIndex0:Usize,
-              (ActionId |-> Action ActionData0:Map) #as ActionData:Map,
-              ActionSigners:Map,
+              (ActionId |-> AddProposer(UserAddress) ActionData0:Map) #as ActionData:Map,
+              (ActionId |-> _Signers:ExpressionList _ActionSigners:Map) #as ActionSigners:Map,
               CallerAddress:Address,
               stack(
                   invariantMultisigState(
@@ -85,6 +87,8 @@ module PROOF-PERFORM-PARTS-ADD-BOARD-MEMBER
             expand(expanded))
         andBool (CallerRole ==K BoardMember orBool CallerRole ==K Proposer)
         andBool Quorum <=Int countCanSignFunction({ActionSigners[ActionId] orDefault [.]}:>ExpressionList, opaque(UserIdToRole))
+        andBool notBool UserAddress ==K CallerAddress
+        andBool UserId in_keys(UserIdToRole)
     ensures invariant(
         ?NumUsers1,
         ?UserIdToAddress1,

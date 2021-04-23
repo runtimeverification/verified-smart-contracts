@@ -7,6 +7,7 @@ module EXECUTION-PROOF-HELPERS
 
   imports PSEUDOCODE
   imports MAP-EXECUTE
+  imports EXPLICIT-KITEM-INJECTION
 
   // Expand and PropertyHandling form a stupid trick used to control symbolic
   // function application.
@@ -365,7 +366,7 @@ module EXECUTION-PROOF-HELPERS
 
   syntax Map ::= keysMap(Map)  [function, functional]
   rule keysMap(.Map) => .Map
-  rule keysMap((K:KItem |-> _:KItem M:Map) #as _:Map) => K |-> 0 keysMap(M)
+  rule keysMap(K:KItem |-> _:KItem M:Map) => K |-> 0 keysMap(M)
     [simplification]
   rule X:KItem in_keys(keysMap(M:Map)) => X in_keys(M)
     [simplification]
@@ -377,60 +378,51 @@ module EXECUTION-PROOF-HELPERS
           #And #Ceil(@V)
     [anywhere, simplification(20)]
 
-  syntax Int ::= countMapValues(Map, KItem)  [function, functional, smtlib(countMapValues)]
+  syntax Int ::= countMapValues(Map, ExplicitKItem)  [function, functional, smtlib(countMapValues)]
   rule countMapValues(.Map, _) => 0
-  rule countMapValues(((_ |-> U) M:Map) #as _:Map, V:KItem) => countMapValues(M, V) +Int countValue(U, V)
+  rule countMapValues(((_ |-> U) M:Map) #as _:Map, V:ExplicitKItem) => countMapValues(M, V) +Int countValue(wrap(U), V)
     [simplification]
 
-  syntax Int ::= countValue(KItem, KItem) [function, functional, smtlib(countMapValue)]
-  rule countValue(V:KItem, V:KItem) => 1
-  rule countValue(_:KItem, _:KItem) => 0 [owise]
+  syntax Int ::= countValue(ExplicitKItem, ExplicitKItem) [function, functional, smtlib(countMapValue)]
+  rule countValue(V:ExplicitKItem, V:ExplicitKItem) => 1
+  rule countValue(_:ExplicitKItem, _:ExplicitKItem) => 0 [owise]
   //  requires notBool (V1 ==K V2)
 
-  rule 0 <=Int countValue(_:KItem, _:KItem) => true [simplification, smt-lemma]
-  rule countValue(_:KItem, _:KItem) >=Int 0 => true [simplification]
-  rule countValue(_:KItem, _:KItem) <=Int 1 => true [simplification, smt-lemma]
+  rule 0 <=Int countValue(_:ExplicitKItem, _:ExplicitKItem) => true [simplification, smt-lemma]
+  // rule countValue(_:KItem, _:KItem) >=Int 0 => true [simplification]
+  rule countValue(_:ExplicitKItem, _:ExplicitKItem) <=Int 1 => true [simplification, smt-lemma]
 
-  rule 0 <=Int countMapValues(_, _) => true  [simplification, smt-lemma]
-  rule countMapValues(_, _) >=Int 0 => true  [simplification]
+  rule 0 <=Int countMapValues(_:Map, _:ExplicitKItem) => true  [simplification, smt-lemma]
+  // rule countMapValues(_, _) >=Int 0 => true  [simplification]
 
-  rule countMapValues(X, Y) >Int 0 => true requires notBool countMapValues(X, Y) ==Int 0 [simplification]
+  // rule countMapValues(X, Y) >Int 0 => true requires notBool countMapValues(X, Y) ==Int 0 [simplification]
 
-  rule countMapValues(_, _) +Int X:Int <=Int 0 => false
-    requires X >Int 0
-    [simplification]
-  // TODO: Replace these with generic int rules.
-  rule 0 <=Int countMapValues(A, B) +Int X:Int => countMapValues(A, B) +Int X >=Int 0
-    [simplification]
-  rule countMapValues(_, _) +Int X:Int >=Int 0 => true
-    requires X >=Int 0
-    [simplification]
-  rule countMapValues(_, _) +Int X:Int >Int 0 => true
-    requires X >Int 0
-    [simplification]
-  rule countValue(_, _) +Int X:Int >=Int 0 => true
-    requires X >=Int 0
-    [simplification]
-  rule countValue(_, _) +Int X:Int >Int 0 => true
-    requires X >Int 0
-    [simplification]
-  /*
-  rule countMapValues(_, _) +Int 1 >=Int 0 => true  [simplification]
-  rule countMapValues(_, _) +Int 2 >=Int 0 => true  [simplification]
-  rule countMapValues(_, _) +Int 1 +Int countMapValues(_, _) >Int 0 => true  [simplification]
-  rule countMapValues(_, _) +Int countMapValues(_, _) +Int X:Int >Int 0
-      => true
-    requires X >Int 0
-    [simplification]
-  rule countMapValues(_, _) +Int countValue(_, _) >=Int 0 => true  [simplification]
-  rule countMapValues(_, _) +Int countValue(_, _) +Int X:Int >=Int 0
-      => true
-    requires X >=Int 0
-    [simplification]
-  rule countMapValues(_, _) +Int countMapValues(_, _) +Int countValue(_, _) +Int 1 >Int 0
-      => true
-    [simplification]
-  */
+  // rule countMapValues(_, _) +Int X:Int <=Int 0 => false
+  //   requires X >Int 0
+  //   [simplification]
+  // // TODO: Replace these with generic int rules.
+  // rule 0 <=Int countMapValues(A, B) +Int X:Int => countMapValues(A, B) +Int X >=Int 0
+  //   [simplification]
+  // rule countMapValues(_, _) +Int X:Int >=Int 0 => true
+  //   requires X >=Int 0
+  //   [simplification]
+  // rule countMapValues(_, _) +Int X:Int >Int 0 => true
+  //   requires X >Int 0
+  //   [simplification]
+  // rule countValue(_, _) +Int X:Int >=Int 0 => true
+  //   requires X >=Int 0
+  //   [simplification]
+  // rule countValue(_, _) +Int X:Int >Int 0 => true
+  //   requires X >Int 0
+  //   [simplification]
+
+  // rule Q:Int <=Int (countMapValues(_, _) #as Cmv:Int) +Int X:Int +Int Y:Int => true
+  //   requires Q:Int <=Int Cmv +Int X:Int andBool Y >=Int 0
+  //   [simplification]
+  // // TODO: Do I really need the rule below?
+  // rule countMapValues(_, _) +Int X:Int +Int Y:Int >=Int 0 => true
+  //   requires X >=Int 0 andBool Y >=Int 0
+  //   [simplification]
 
   // TODO: Proof for this.
   syntax Bool ::= canSignFunction(UserRole)  [function, functional]
@@ -478,5 +470,15 @@ module EXECUTION-PROOF-HELPERS
     [simplification]
 
   rule 0 <=Int countCanSignFunction(_, _) => true  [simplification, smt-lemma]
+
+endmodule
+
+module EXPLICIT-KITEM-INJECTION
+  imports PSEUDOCODE
+
+  // The Haskell backend does not send sort injections to the SMT solver.
+  // However, sometimes, in predicates one needs to use KItems that should be
+  // sent to the SMT solver. ExplicitKItem allows us to do that.
+  syntax ExplicitKItem ::= wrap(KItem)
 
 endmodule

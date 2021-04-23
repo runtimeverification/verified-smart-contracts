@@ -194,8 +194,8 @@ module INIT-LOOP-PARTS
                   UserIdToRole,
                   usesExpanded)
       andBool pListLen(Addresses)
-                  +Int countMapValues(UserIdToRole0, BoardMember)
-              ==Int countMapValues(UserIdToRole, BoardMember)
+                  +Int countMapValues(UserIdToRole0, wrap(BoardMember))
+              ==Int countMapValues(UserIdToRole, wrap(BoardMember))
 
   syntax Bool ::= initLoopInvariant(
       numUsers:Usize,
@@ -233,5 +233,5 @@ module INIT-LOOP-PARTS
       // andBool valuesAreNotEmpty(UserIdToRole, rUserRole)
       andBool unusedIdsInMapKeys(NumUsers +Int 1, keysMap(UserIdToRole), Handling)
 
-      andBool 0 ==Int countMapValues(UserIdToRole, Proposer)
+      andBool 0 ==Int countMapValues(UserIdToRole, wrap(Proposer))
 endmodule

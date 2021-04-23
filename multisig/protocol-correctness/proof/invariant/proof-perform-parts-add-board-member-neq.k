@@ -1,23 +1,19 @@
 //@ proof
-require "trusted-perform-parts-add-board-member-eq.k"  //@ Bazel remove
-require "trusted-perform-parts-add-board-member-neq.k"  //@ Bazel remove
-require "trusted-perform-parts-add-board-member-New.k"  //@ Bazel remove
-require "trusted-perform-parts-add-board-member-None.k"  //@ Bazel remove
+require "trusted-perform-parts-add-board-member-BoardMember.k"  //@ Bazel remove
+require "trusted-perform-parts-add-board-member-Proposer.k"  //@ Bazel remove
 
-module PROOF-PERFORM-PARTS-ADD-BOARD-MEMBER
+module PROOF-PERFORM-PARTS-ADD-BOARD-MEMBER-NEQ
   imports INVARIANT-EXECUTION
 
-  imports TRUSTED-PERFORM-PARTS-ADD-BOARD-MEMBER-EQ
-  imports TRUSTED-PERFORM-PARTS-ADD-BOARD-MEMBER-NEQ
-  imports TRUSTED-PERFORM-PARTS-ADD-BOARD-MEMBER-NEW
-  imports TRUSTED-PERFORM-PARTS-ADD-BOARD-MEMBER-NONE
+  imports TRUSTED-PERFORM-PARTS-ADD-BOARD-MEMBER-BOARDMEMBER
+  imports TRUSTED-PERFORM-PARTS-ADD-BOARD-MEMBER-PROPOSER
 //@ trusted
-// module TRUSTED-PERFORM-PARTS-ADD-BOARD-MEMBER
+// module TRUSTED-PERFORM-PARTS-ADD-BOARD-MEMBER-NEQ
 //@ end
   imports PERFORM-ACTION-ENDPOINT-INSTRUMENTATION
 
   claim <T><TT>
-          <k> splitPerformActionEndpoint4(AddBoardMember(_UserAddress:Address) #as Action:Action)
+          <k> splitAddBoardMember3(UserAddress:Address)
               ~> call(performActionEndpoint(ActionId:Usize))
               ~> popContext
               ~> evaluateReturnValue
@@ -28,13 +24,13 @@ module PROOF-PERFORM-PARTS-ADD-BOARD-MEMBER
           invariantStateStack(
               NumUsers:Usize,
               UserIdToAddress:Map,
-              (CallerAddress |-> CallerId:Usize _AddressToUserId:Map) #as AddressToUserId:Map,
+              (CallerAddress |-> CallerId:Usize UserAddress |-> u(UserId:Int) _AddressToUserId:Map) #as AddressToUserId:Map,
               NumBoardMembers:Usize,
               NumProposers:Usize,
               (CallerId |-> CallerRole:UserRole _UserIdToRole:Map) #as UserIdToRole:Map,
               u(Quorum:Int),
               ActionLastIndex0:Usize,
-              (ActionId |-> Action ActionData0:Map) #as ActionData:Map,
+              (ActionId |-> AddBoardMember(UserAddress) ActionData0:Map) #as ActionData:Map,
               ActionSigners:Map,
               CallerAddress:Address,
               stack(
@@ -85,6 +81,8 @@ module PROOF-PERFORM-PARTS-ADD-BOARD-MEMBER
             expand(expanded))
         andBool (CallerRole ==K BoardMember orBool CallerRole ==K Proposer)
         andBool Quorum <=Int countCanSignFunction({ActionSigners[ActionId] orDefault [.]}:>ExpressionList, opaque(UserIdToRole))
+        andBool notBool UserAddress ==K CallerAddress
+        andBool u(UserId) in_keys(UserIdToRole)
     ensures invariant(
         ?NumUsers1,
         ?UserIdToAddress1,

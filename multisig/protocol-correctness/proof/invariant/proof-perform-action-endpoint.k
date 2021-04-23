@@ -1,12 +1,13 @@
-require "proof-count-can-sign.k"
-require "proof-perform-action.k"
+//@ proof
+require "trusted-perform-parts-add-board-member.k"  //@ Bazel remove
 
 module PROOF-PERFORM-ACTION-ENDPOINT
   imports INVARIANT-EXECUTION
-  imports PSEUDOCODE
 
-  imports TRUSTED-COUNT-CAN-SIGN
-  imports TRUSTED-PERFORM-ACTION
+  imports TRUSTED-PERFORM-PARTS-ADD-BOARD-MEMBER
+//@ trusted
+// module TRUSTED-PERFORM-ACTION-ENDPOINT
+//@ end
 
   claim <T><TT>
           <k> runExternalCalls(
@@ -101,5 +102,9 @@ module PROOF-PERFORM-ACTION-ENDPOINT
               ActionSigners:Map,
               ?_PerformedActions:List):StateCell
         </TT></T>
+    //@ proof
+    //@ trusted
+    // [trusted]
+    //@ end
 
 endmodule

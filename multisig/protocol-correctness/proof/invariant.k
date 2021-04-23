@@ -321,8 +321,8 @@ module INVARIANT
       andBool Quorum <=Int NumBoardMembers
       andBool (NumBoardMembers +Int NumProposers >Int 0)
 
-      andBool NumBoardMembers ==Int countMapValues(UserIdToRole, BoardMember)
-      andBool NumProposers ==Int countMapValues(UserIdToRole, Proposer)
+      andBool NumBoardMembers ==Int countMapValues(UserIdToRole, wrap(BoardMember))
+      andBool NumProposers ==Int countMapValues(UserIdToRole, wrap(Proposer))
 
   // TODO: Maybe move somewhere else.
   rule valuesAreOfType(M:Map, rUsize) => true
@@ -412,8 +412,8 @@ module INVARIANT
       andBool Quorum <=Int NumBoardMembers
       andBool (NumBoardMembers +Int NumProposers >Int 0)
 
-      andBool NumBoardMembers ==Int countMapValues(UserIdToRole, BoardMember)
-      andBool NumProposers ==Int countMapValues(UserIdToRole, Proposer)
+      andBool NumBoardMembers ==Int countMapValues(UserIdToRole, wrap(BoardMember))
+      andBool NumProposers ==Int countMapValues(UserIdToRole, wrap(Proposer))
 
   syntax Bool ::= subset(Map, Map)  [function, functional]
   rule subset(K:KItem |-> _:KItem M:Map, N:Map)

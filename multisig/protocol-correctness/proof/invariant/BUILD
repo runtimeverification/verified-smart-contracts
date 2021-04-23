@@ -59,13 +59,46 @@ klibrary(
 #   semantics = ":invariant-execution",
 # )
 
-# kprove_test(
-#   name = "proof-perform-action-endpoint",
-#   srcs = ["proof-perform-action-endpoint.k"],
-#   trusted = [
-#   ],
-#   semantics = ":invariant-execution",
-# )
+kprove_test(
+  name = "proof-perform-action-endpoint",
+  srcs = ["proof-perform-action-endpoint.k"],
+  trusted = [
+      ":trusted-perform-parts-add-board-member",
+      # ":trusted-perform-parts-add-proposer",
+      # ":trusted-perform-parts-change-quorum",
+      # ":trusted-perform-parts-change-quorum-no-quorum",
+      # ":trusted-perform-parts-New",
+      # ":trusted-perform-parts-no-quorum",
+      # ":trusted-perform-parts-None",
+      # ":trusted-perform-parts-Nothing",
+      # ":trusted-perform-parts-remove-user",
+      # ":trusted-perform-parts-sc-call",
+      # ":trusted-perform-parts-sc-deploy",
+      # ":trusted-perform-parts-send-egld",
+  ],
+  semantics = ":invariant-execution",
+)
+
+kprove_test(
+  name = "proof-perform-parts-1",
+  srcs = ["proof-perform-parts-1.k"],
+  trusted = [
+      ":trusted-perform-parts-add-board-member",
+      ":trusted-perform-parts-add-proposer-signers",
+      ":trusted-perform-parts-add-proposer-no-signers",
+      ":trusted-perform-parts-change-quorum",
+      ":trusted-perform-parts-change-quorum-no-quorum",
+      ":trusted-perform-parts-New",
+      ":trusted-perform-parts-no-quorum",
+      ":trusted-perform-parts-None",
+      # ":trusted-perform-parts-Nothing",
+      ":trusted-perform-parts-remove-user",
+      ":trusted-perform-parts-sc-call",
+      ":trusted-perform-parts-sc-deploy",
+      ":trusted-perform-parts-send-egld",
+  ],
+  semantics = ":invariant-execution",
+)
 
 kprove_test(
   name = "proof-perform-parts-change-quorum",
@@ -152,30 +185,147 @@ kprove_test(
   name = "proof-perform-parts-add-board-member",
   srcs = ["proof-perform-parts-add-board-member.k"],
   trusted = [
-      ":trusted-perform-parts-add-board-member-boardmember-eq",
-      ":trusted-perform-parts-add-board-member-boardmember",
+      "trusted-perform-parts-add-board-member-eq",
+      "trusted-perform-parts-add-board-member-neq",
       ":trusted-perform-parts-add-board-member-new",
       ":trusted-perform-parts-add-board-member-none",
-      ":trusted-perform-parts-add-board-member-proposer-eq",
-      ":trusted-perform-parts-add-board-member-proposer",
   ],
   semantics = ":invariant-execution",
+  timeout = "eternal",
+  breadth = "9", # 0
+  # 57 states
 )
 
 kprove_test(
-  name = "proof-perform-parts-add-proposer",
-  srcs = ["proof-perform-parts-add-proposer.k"],
+  name = "proof-perform-parts-add-board-member-eq",
+  srcs = ["proof-perform-parts-add-board-member-eq.k"],
+  trusted = [
+      ":trusted-perform-parts-add-board-member-boardmember-eq",
+      ":trusted-perform-parts-add-board-member-proposer-eq",
+  ],
+  semantics = ":invariant-execution",
+  timeout = "long",
+  breadth = "6", # 0 
+)
+
+kprove_test(
+  name = "proof-perform-parts-add-board-member-neq",
+  srcs = ["proof-perform-parts-add-board-member-neq.k"],
+  trusted = [
+      ":trusted-perform-parts-add-board-member-boardmember",
+      ":trusted-perform-parts-add-board-member-proposer",
+  ],
+  semantics = ":invariant-execution",
+  timeout = "eternal",
+  breadth = "7", # 0 
+  # depth = ~27
+)
+
+kprove_test(
+  name = "proof-perform-parts-add-proposer-signers",
+  srcs = ["proof-perform-parts-add-proposer-signers.k"],
+  trusted = [
+      ":trusted-perform-parts-add-proposer-signers-eq",
+      ":trusted-perform-parts-add-proposer-signers-neq",
+      ":trusted-perform-parts-add-proposer-New",
+      ":trusted-perform-parts-add-proposer-None",
+  ],
+  semantics = ":invariant-execution",
+  timeout = "eternal",
+  breadth = "5",
+  # depth = ~25
+)
+
+kprove_test(
+  name = "proof-perform-parts-add-proposer-signers-eq",
+  srcs = ["proof-perform-parts-add-proposer-signers-eq.k"],
   trusted = [
       ":trusted-perform-parts-add-proposer-BoardMember-eq",
       ":trusted-perform-parts-add-proposer-BoardMember-no-quorum-eq",
+      ":trusted-perform-parts-add-proposer-Proposer-eq",
+  ],
+  semantics = ":invariant-execution",
+  timeout = "eternal",
+  breadth = "3",
+  # depth = ~32
+)
+
+kprove_test(
+  name = "proof-perform-parts-add-proposer-signers-neq",
+  srcs = ["proof-perform-parts-add-proposer-signers-neq.k"],
+  trusted = [
       ":trusted-perform-parts-add-proposer-BoardMember-no-quorum",
       ":trusted-perform-parts-add-proposer-BoardMember",
-      ":trusted-perform-parts-add-proposer-New",
-      ":trusted-perform-parts-add-proposer-None",
-      ":trusted-perform-parts-add-proposer-Proposer-eq",
       ":trusted-perform-parts-add-proposer-Proposer",
   ],
   semantics = ":invariant-execution",
+  timeout = "eternal",
+  breadth = "4",
+  # depth = ~35
+)
+
+kprove_test(
+  name = "proof-perform-parts-add-proposer-no-signers",
+  srcs = ["proof-perform-parts-add-proposer-no-signers.k"],
+  trusted = [
+      ":trusted-perform-parts-add-proposer-no-signers-eq",
+      ":trusted-perform-parts-add-proposer-no-signers-neq",
+      ":trusted-perform-parts-add-proposer-New",
+      ":trusted-perform-parts-add-proposer-None",
+  ],
+  timeout = "eternal",
+  semantics = ":invariant-execution",
+  breadth = "5",
+  # depth = ~25
+)
+
+kprove_test(
+  name = "proof-perform-parts-add-proposer-no-signers-eq",
+  srcs = ["proof-perform-parts-add-proposer-no-signers-eq.k"],
+  trusted = [
+      ":trusted-perform-parts-add-proposer-BoardMember-eq",
+      ":trusted-perform-parts-add-proposer-BoardMember-no-quorum-eq",
+      ":trusted-perform-parts-add-proposer-Proposer-eq",
+  ],
+  semantics = ":invariant-execution",
+  timeout = "eternal",
+  breadth = "2",
+  # depth = ~22
+)
+
+kprove_test(
+  name = "proof-perform-parts-add-proposer-no-signers-neq",
+  srcs = ["proof-perform-parts-add-proposer-no-signers-neq.k"],
+  trusted = [
+      ":trusted-perform-parts-add-proposer-BoardMember-no-quorum",
+      ":trusted-perform-parts-add-proposer-BoardMember",
+      ":trusted-perform-parts-add-proposer-Proposer",
+  ],
+  semantics = ":invariant-execution",
+  timeout = "eternal",
+  breadth = "3",
+  # depth = ~23
+)
+
+kprove_test(
+  name = "proof-perform-parts-remove-user",
+  srcs = ["proof-perform-parts-remove-user.k"],
+  trusted = [
+      ":trusted-perform-parts-remove-user-BoardMember-eq",
+      ":trusted-perform-parts-remove-user-BoardMember-too-few-eq",
+      ":trusted-perform-parts-remove-user-BoardMember",
+      ":trusted-perform-parts-remove-user-BoardMember-too-few",
+      ":trusted-perform-parts-remove-user-New",
+      ":trusted-perform-parts-remove-user-None",
+      ":trusted-perform-parts-remove-user-Proposer-eq",
+      ":trusted-perform-parts-remove-user-Proposer-nobody-left-eq",
+      ":trusted-perform-parts-remove-user-Proposer",
+      ":trusted-perform-parts-remove-user-Proposer-nobody-left",
+  ],
+  semantics = ":invariant-execution",
+  timeout = "eternal",
+  breadth = "5",
+  # depth = ~25
 )
 
 kprove_test(
@@ -477,3 +627,178 @@ ktrusted(
   srcs = ["proof-perform-parts-add-proposer-Proposer.k"],
   visibility = ["//visibility:public"],
 )
+
+ktrusted(
+  name = "trusted-perform-parts-add-board-member-eq",
+  srcs = ["proof-perform-parts-add-board-member-eq.k"],
+  visibility = ["//visibility:public"],
+)
+
+ktrusted(
+  name = "trusted-perform-parts-add-board-member-neq",
+  srcs = ["proof-perform-parts-add-board-member-neq.k"],
+  visibility = ["//visibility:public"],
+)
+
+ktrusted(
+  name = "trusted-perform-parts-add-board-member",
+  srcs = ["proof-perform-parts-add-board-member.k"],
+  visibility = ["//visibility:public"],
+)
+
+ktrusted(
+  name = "trusted-perform-parts-add-proposer-signers-eq",
+  srcs = ["proof-perform-parts-add-proposer-signers-eq.k"],
+  visibility = ["//visibility:public"],
+)
+
+ktrusted(
+  name = "trusted-perform-parts-add-proposer-signers-neq",
+  srcs = ["proof-perform-parts-add-proposer-signers-neq.k"],
+  visibility = ["//visibility:public"],
+)
+
+ktrusted(
+  name = "trusted-perform-parts-add-proposer-signers",
+  srcs = ["proof-perform-parts-add-proposer-signers.k"],
+  visibility = ["//visibility:public"],
+)
+
+ktrusted(
+  name = "trusted-perform-parts-add-proposer-no-signers-eq",
+  srcs = ["proof-perform-parts-add-proposer-no-signers-eq.k"],
+  visibility = ["//visibility:public"],
+)
+
+ktrusted(
+  name = "trusted-perform-parts-add-proposer-no-signers-neq",
+  srcs = ["proof-perform-parts-add-proposer-no-signers-neq.k"],
+  visibility = ["//visibility:public"],
+)
+
+ktrusted(
+  name = "trusted-perform-parts-add-proposer-no-signers",
+  srcs = ["proof-perform-parts-add-proposer-no-signers.k"],
+  visibility = ["//visibility:public"],
+)
+
+ktrusted(
+  name = "trusted-perform-parts-remove-user-BoardMember-eq",
+  srcs = ["proof-perform-parts-remove-user-BoardMember-eq.k"],
+  visibility = ["//visibility:public"],
+)
+
+ktrusted(
+  name = "trusted-perform-parts-remove-user-BoardMember-too-few-eq",
+  srcs = ["proof-perform-parts-remove-user-BoardMember-too-few-eq.k"],
+  visibility = ["//visibility:public"],
+)
+
+ktrusted(
+  name = "trusted-perform-parts-remove-user-BoardMember",
+  srcs = ["proof-perform-parts-remove-user-BoardMember.k"],
+  visibility = ["//visibility:public"],
+)
+
+ktrusted(
+  name = "trusted-perform-parts-remove-user-BoardMember-too-few",
+  srcs = ["proof-perform-parts-remove-user-BoardMember-too-few.k"],
+  visibility = ["//visibility:public"],
+)
+
+ktrusted(
+  name = "trusted-perform-parts-remove-user-New",
+  srcs = ["proof-perform-parts-remove-user-New.k"],
+  visibility = ["//visibility:public"],
+)
+
+ktrusted(
+  name = "trusted-perform-parts-remove-user-None",
+  srcs = ["proof-perform-parts-remove-user-None.k"],
+  visibility = ["//visibility:public"],
+)
+
+ktrusted(
+  name = "trusted-perform-parts-remove-user-Proposer-eq",
+  srcs = ["proof-perform-parts-remove-user-Proposer-eq.k"],
+  visibility = ["//visibility:public"],
+)
+
+ktrusted(
+  name = "trusted-perform-parts-remove-user-Proposer-nobody-left-eq",
+  srcs = ["proof-perform-parts-remove-user-Proposer-nobody-left-eq.k"],
+  visibility = ["//visibility:public"],
+)
+
+ktrusted(
+  name = "trusted-perform-parts-remove-user-Proposer",
+  srcs = ["proof-perform-parts-remove-user-Proposer.k"],
+  visibility = ["//visibility:public"],
+)
+
+ktrusted(
+  name = "trusted-perform-parts-remove-user-Proposer-nobody-left",
+  srcs = ["proof-perform-parts-remove-user-Proposer-nobody-left.k"],
+  visibility = ["//visibility:public"],
+)
+
+ktrusted(
+  name = "trusted-perform-parts-change-quorum",
+  srcs = ["proof-perform-parts-change-quorum.k"],
+  visibility = ["//visibility:public"],
+)
+
+ktrusted(
+  name = "trusted-perform-parts-change-quorum-no-quorum",
+  srcs = ["proof-perform-parts-change-quorum-no-quorum.k"],
+  visibility = ["//visibility:public"],
+)
+
+ktrusted(
+  name = "trusted-perform-parts-New",
+  srcs = ["proof-perform-parts-New.k"],
+  visibility = ["//visibility:public"],
+)
+
+ktrusted(
+  name = "trusted-perform-parts-no-quorum",
+  srcs = ["proof-perform-parts-no-quorum.k"],
+  visibility = ["//visibility:public"],
+)
+
+ktrusted(
+  name = "trusted-perform-parts-None",
+  srcs = ["proof-perform-parts-None.k"],
+  visibility = ["//visibility:public"],
+)
+
+# ktrusted(
+#   name = "trusted-perform-parts-Nothing",
+#   srcs = ["proof-perform-parts-Nothing.k"],
+#   visibility = ["//visibility:public"],
+# )
+
+ktrusted(
+  name = "trusted-perform-parts-remove-user",
+  srcs = ["proof-perform-parts-remove-user.k"],
+  visibility = ["//visibility:public"],
+)
+
+ktrusted(
+  name = "trusted-perform-parts-sc-call",
+  srcs = ["proof-perform-parts-sc-call.k"],
+  visibility = ["//visibility:public"],
+)
+
+ktrusted(
+  name = "trusted-perform-parts-sc-deploy",
+  srcs = ["proof-perform-parts-sc-deploy.k"],
+  visibility = ["//visibility:public"],
+)
+
+ktrusted(
+  name = "trusted-perform-parts-send-egld",
+  srcs = ["proof-perform-parts-send-egld.k"],
+  visibility = ["//visibility:public"],
+)
+

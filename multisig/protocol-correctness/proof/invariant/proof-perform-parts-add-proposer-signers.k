@@ -1,23 +1,24 @@
 //@ proof
-require "trusted-perform-parts-add-board-member-eq.k"  //@ Bazel remove
-require "trusted-perform-parts-add-board-member-neq.k"  //@ Bazel remove
-require "trusted-perform-parts-add-board-member-New.k"  //@ Bazel remove
-require "trusted-perform-parts-add-board-member-None.k"  //@ Bazel remove
+require "trusted-perform-parts-add-proposer-eq.k"  //@ Bazel remove
+require "trusted-perform-parts-add-proposer-neq.k"  //@ Bazel remove
+require "trusted-perform-parts-add-proposer-New.k"  //@ Bazel remove
+require "trusted-perform-parts-add-proposer-None.k"  //@ Bazel remove
 
-module PROOF-PERFORM-PARTS-ADD-BOARD-MEMBER
+module PROOF-PERFORM-PARTS-ADD-PROPOSER-SIGNERS
   imports INVARIANT-EXECUTION
 
-  imports TRUSTED-PERFORM-PARTS-ADD-BOARD-MEMBER-EQ
-  imports TRUSTED-PERFORM-PARTS-ADD-BOARD-MEMBER-NEQ
-  imports TRUSTED-PERFORM-PARTS-ADD-BOARD-MEMBER-NEW
-  imports TRUSTED-PERFORM-PARTS-ADD-BOARD-MEMBER-NONE
+  imports TRUSTED-PERFORM-PARTS-ADD-PROPOSER-SIGNERS-EQ
+  imports TRUSTED-PERFORM-PARTS-ADD-PROPOSER-SIGNERS-NEQ
+  imports TRUSTED-PERFORM-PARTS-ADD-PROPOSER-NEW
+  imports TRUSTED-PERFORM-PARTS-ADD-PROPOSER-NONE
 //@ trusted
-// module TRUSTED-PERFORM-PARTS-ADD-BOARD-MEMBER
+// module TRUSTED-PERFORM-PARTS-ADD-PROPOSER-SIGNERS
 //@ end
+
   imports PERFORM-ACTION-ENDPOINT-INSTRUMENTATION
 
   claim <T><TT>
-          <k> splitPerformActionEndpoint4(AddBoardMember(_UserAddress:Address) #as Action:Action)
+          <k> splitAddProposer(AddProposer(_UserAddress:Address) #as Action:Action)
               ~> call(performActionEndpoint(ActionId:Usize))
               ~> popContext
               ~> evaluateReturnValue
@@ -35,7 +36,7 @@ module PROOF-PERFORM-PARTS-ADD-BOARD-MEMBER
               u(Quorum:Int),
               ActionLastIndex0:Usize,
               (ActionId |-> Action ActionData0:Map) #as ActionData:Map,
-              ActionSigners:Map,
+              (ActionId |-> _Signers:ExpressionList _ActionSigners:Map) #as ActionSigners:Map,
               CallerAddress:Address,
               stack(
                   invariantMultisigState(

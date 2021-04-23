@@ -12,6 +12,8 @@ module MAP-EXECUTE
   // A (K |-> V M:Map) map representation is bottom if `K in_keys(M)`, hence
   // the function-based representation below. This means that whatever function
   // is using these can manipulate them only through simplification rules.
+  //
+  // TODO: Consider replacing these with Map[<-] or something similar.
   syntax Map  ::= opaque(Map)  [function, functional]
                 | concat(key:KItem, value:KItem, Map)  [function, functional, no-evaluators]
                 | extractMap(Map)   [function, functional]

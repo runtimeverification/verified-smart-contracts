@@ -1,23 +1,22 @@
 //@ proof
-require "trusted-perform-parts-add-board-member-eq.k"  //@ Bazel remove
-require "trusted-perform-parts-add-board-member-neq.k"  //@ Bazel remove
-require "trusted-perform-parts-add-board-member-New.k"  //@ Bazel remove
-require "trusted-perform-parts-add-board-member-None.k"  //@ Bazel remove
+require "trusted-perform-parts-add-proposer-BoardMember-eq.k"  //@ Bazel remove
+require "trusted-perform-parts-add-proposer-BoardMember-no-quorum-eq.k"  //@ Bazel remove
+require "trusted-perform-parts-add-proposer-Proposer-eq.k"  //@ Bazel remove
 
-module PROOF-PERFORM-PARTS-ADD-BOARD-MEMBER
+module PROOF-PERFORM-PARTS-ADD-PROPOSER-SIGNERS-EQ
   imports INVARIANT-EXECUTION
 
-  imports TRUSTED-PERFORM-PARTS-ADD-BOARD-MEMBER-EQ
-  imports TRUSTED-PERFORM-PARTS-ADD-BOARD-MEMBER-NEQ
-  imports TRUSTED-PERFORM-PARTS-ADD-BOARD-MEMBER-NEW
-  imports TRUSTED-PERFORM-PARTS-ADD-BOARD-MEMBER-NONE
+  imports TRUSTED-PERFORM-PARTS-ADD-PROPOSER-BOARDMEMBER-EQ
+  imports TRUSTED-PERFORM-PARTS-ADD-PROPOSER-BOARDMEMBER-NO-QUORUM-EQ
+  imports TRUSTED-PERFORM-PARTS-ADD-PROPOSER-PROPOSER-EQ
 //@ trusted
-// module TRUSTED-PERFORM-PARTS-ADD-BOARD-MEMBER
+// module TRUSTED-PERFORM-PARTS-ADD-PROPOSER-SIGNERS-EQ
 //@ end
+
   imports PERFORM-ACTION-ENDPOINT-INSTRUMENTATION
 
   claim <T><TT>
-          <k> splitPerformActionEndpoint4(AddBoardMember(_UserAddress:Address) #as Action:Action)
+          <k> splitAddProposer1(CallerAddress)
               ~> call(performActionEndpoint(ActionId:Usize))
               ~> popContext
               ~> evaluateReturnValue
@@ -34,8 +33,8 @@ module PROOF-PERFORM-PARTS-ADD-BOARD-MEMBER
               (CallerId |-> CallerRole:UserRole _UserIdToRole:Map) #as UserIdToRole:Map,
               u(Quorum:Int),
               ActionLastIndex0:Usize,
-              (ActionId |-> Action ActionData0:Map) #as ActionData:Map,
-              ActionSigners:Map,
+              (ActionId |-> AddProposer(CallerAddress) ActionData0:Map) #as ActionData:Map,
+              (ActionId |-> _Signers:ExpressionList _ActionSigners:Map) #as ActionSigners:Map,
               CallerAddress:Address,
               stack(
                   invariantMultisigState(

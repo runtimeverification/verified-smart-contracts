@@ -677,6 +677,7 @@ module PERFORM-ACTION-ENDPOINT-INSTRUMENTATION
 
   syntax KItem ::= splitPerformActionEndpoint(actionId:Usize)
   syntax KItem ::= splitPerformActionEndpoint1(actionId:Usize)
+  syntax KItem ::= splitPerformActionEndpoint1a(actionId:Usize)
   syntax KItem ::= splitPerformActionEndpoint2(actionId:Usize)
   syntax KItem ::= splitPerformActionEndpoint3(action:Action)
   syntax KItem ::= splitPerformActionEndpoint4(action:Action)
@@ -715,25 +716,39 @@ module PERFORM-ACTION-ENDPOINT-INSTRUMENTATION
           =>  makeConcreteValue(CallerAddress, rUsize, AddressToUserId)
               ~>  branchK(
                     AddressToUserId[CallerAddress] in_keys(UserIdToRole),
-                    branchK(
-                      Quorum <=Int countCanSignFunction({ActionSigners[ActionId] orDefault [.]}:>ExpressionList, opaque(UserIdToRole)),
-                      branchK(
-                        ActionId in_keys(ActionData),
-                        splitPerformActionEndpoint2(ActionId),
-                        nothing.k
-                      ),
-                      no-quorum.k
-                    ),
+                    makeConcreteValue(AddressToUserId[CallerAddress], rUserRole, UserIdToRole)
+                      ~>  branchK(
+                            ActionId in_keys(ActionSigners),
+                            makeConcreteValue(ActionId, rExpressionList, ActionSigners)
+                              ~> splitPerformActionEndpoint1a(ActionId),
+                            splitPerformActionEndpoint1a(ActionId)
+                          ),
                     none.k
                   )
         ... </k>
         <address-to-user-id>AddressToUserId:Map</address-to-user-id>
-        <quorum>u(Quorum:Int)</quorum>
         <user-roles> UserIdToRole:Map </user-roles>
         <caller-address>CallerAddress:Address</caller-address>
         <action-signers>ActionSigners:Map</action-signers>
-        <action-data>ActionData:Map</action-data>
     requires CallerAddress in_keys(AddressToUserId)
+
+  rule <k> splitPerformActionEndpoint1a(ActionId:Usize)
+          =>  branchK(
+                  Quorum <=Int countCanSignFunction({ActionSigners[ActionId] orDefault [.]}:>ExpressionList, opaque(UserIdToRole)),
+                  branchK(
+                      ActionId in_keys(ActionData),
+                      splitPerformActionEndpoint2(ActionId),
+                      nothing.k
+                  ),
+                  no-quorum.k
+              )
+        ... </k>
+        <address-to-user-id>CallerAddress |-> UserId:KItem _AddressToUserId:Map</address-to-user-id>
+        <caller-address>CallerAddress:Address</caller-address>
+        <quorum>u(Quorum:Int)</quorum>
+        <user-roles>(UserId |-> _Role _UserIdToRole:Map) #as UserIdToRole:Map</user-roles>
+        <action-signers>ActionSigners:Map</action-signers>
+        <action-data>ActionData:Map</action-data>
 
   syntax Bool ::= isAddBoardMember(Action)  [function, functional]
   rule isAddBoardMember(AddBoardMember(_)) => true
@@ -766,7 +781,7 @@ module PERFORM-ACTION-ENDPOINT-INSTRUMENTATION
   rule  <k> splitPerformActionEndpoint2(ActionId)
           =>  makeConcreteValue(ActionId, rAction, ActionData)
               ~> splitPerformActionEndpoint3({ActionData[ActionId]}:>Action)
-        </k>
+        ...</k>
         <action-data>ActionData:Map</action-data>
     requires ActionId in_keys(ActionData)
 
@@ -846,36 +861,9 @@ module PERFORM-ACTION-ENDPOINT-INSTRUMENTATION
         <caller-address>CallerAddress:Address</caller-address>
     requires CallerId in_keys(UserIdToRole)
 
-  // TODO: Delete.
-  syntax KItem ::= makeConcreteValueTmp(key:KItem, valueType:ReflectionType, Map)
-  rule makeConcreteValueTmp(Key:KItem, ValueType:ReflectionType, M:Map)
-    =>    splitMapTmp(Key, M, ?_Value:KItem, ?_Remainder:Map)
-      // ~>  cast(M[Key], ValueType)
-      // ~>  removeValue
-      // ~>  concretizeValue(M[Key])
-    requires Key in_keys(M)
-
-  syntax KItem ::= splitMapTmp(key:KItem, toSplit:Map, value:KItem, remainder:Map)
-    [function, functional]
-
-  // rule splitMapTmp(Key:KItem, M:Map, _Value:KItem, _Remainder:Map) => stuck
-  //   requires notBool Key in_keys(M)
-  // rule splitMapTmp(Key:KItem, (Key |-> _:KItem) _:Map, _Value:KItem, _Remainder:Map)
-  //     => endSplitMap
-  //   [simplification(30)]
-  rule splitMapTmp(Key:KItem, (K1:KItem |-> _SomeValue:KItem) M:Map, Value:KItem, Remainder:Map)
-      => splitMapTmp(Key, M, Value, Remainder)
-    requires notBool (Key ==K K1) andBool Key in_keys(M)
-    [simplification(30)]
-  rule splitMapTmp(Key:KItem, M:Map, Value:KItem, Remainder:Map)
-      => endSplitMap
-    requires Key in_keys(M)
-    ensures M ==K (Key |-> Value Remainder)
-    [simplification(50)]
-
   rule  <k>
           splitAddBoardMember2(UserAddress:Address)
-          =>  makeConcreteValueTmp(UserAddress, rUsize, AddressToUserId)
+          =>  makeConcreteValue(UserAddress, rUsize, AddressToUserId)
               ~> branchK(
                 AddressToUserId[UserAddress] in_keys(UserIdToRole),
                 splitAddBoardMember3(UserAddress),
@@ -900,13 +888,14 @@ module PERFORM-ACTION-ENDPOINT-INSTRUMENTATION
               )
         ...</k>
         <user-roles>UserIdToRole:Map</user-roles>
-        <address-to-user-id>UserAddress |-> UserId:Usize _AddressToUserId:Map</address-to-user-id>
+        <address-to-user-id>UserAddress |-> UserId _AddressToUserId:Map</address-to-user-id>
     requires UserId in_keys(UserIdToRole)
 
   syntax KItem ::= splitAddProposer(Action)
   syntax KItem ::= splitAddProposer1(Address)
   syntax KItem ::= splitAddProposer2(Address)
   syntax KItem ::= splitAddProposer3(Address)
+
   rule  <k>
           splitAddProposer(AddProposer(UserAddress:Address))
           =>  branchK(
@@ -928,9 +917,13 @@ module PERFORM-ACTION-ENDPOINT-INSTRUMENTATION
               ~>  branchK(
                     UserIdToRole[CallerId] ==K BoardMember,
                     branchK(
-                      Quorum <=Int NumBoardMembers -Int 1,
-                      add-proposer-BoardMember-eq.k,
-                      add-proposer-BoardMember-no-quorum-eq.k
+                      Quorum ==K NumBoardMembers,
+                      add-proposer-BoardMember-no-quorum-eq.k,
+                      branchK(
+                        Quorum <=Int NumBoardMembers -Int 1,
+                        add-proposer-BoardMember-eq.k,
+                        stuck
+                      )
                     ),
                     branchK(
                       UserIdToRole[CallerId] ==K Proposer,
@@ -965,7 +958,7 @@ module PERFORM-ACTION-ENDPOINT-INSTRUMENTATION
               ~>  branchK(
                     UserIdToRole[UserId] ==K BoardMember,
                     branchK(
-                      Quorum ==Int NumBoardMembers,
+                      Quorum ==K NumBoardMembers,
                       add-proposer-BoardMember-no-quorum.k,
                       add-proposer-BoardMember.k
                     ),
@@ -1022,15 +1015,15 @@ module PERFORM-ACTION-ENDPOINT-INSTRUMENTATION
                     branchK(
                       NumBoardMembers +Int NumProposers ==Int 1
                           orBool Quorum ==Int NumBoardMembers,
-                      remove-user-Proposer-nobody-left-eq.k,
-                      remove-user-Proposer-eq.k
+                      remove-user-BoardMember-too-few-eq.k,
+                      remove-user-BoardMember-eq.k
                     ),
                     branchK(
                       UserIdToRole[CallerId] ==K Proposer,
                       branchK(
                         NumBoardMembers +Int NumProposers ==Int 1,
-                        remove-user-BoardMember-too-few-eq.k,
-                        remove-user-BoardMember-eq.k
+                        remove-user-Proposer-nobody-left-eq.k,
+                        remove-user-Proposer-eq.k
                       ),
                       stuck
                     )

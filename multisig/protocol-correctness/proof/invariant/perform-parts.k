@@ -210,8 +210,8 @@ module PERFORM-PARTS
       andBool Quorum <=Int NumBoardMembers
       andBool (NumBoardMembers +Int NumProposers >Int 0)
 
-      andBool NumBoardMembers ==Int countMapValues(UserIdToRole, BoardMember)
-      andBool NumProposers ==Int countMapValues(UserIdToRole, Proposer)
+      andBool NumBoardMembers ==Int countMapValues(UserIdToRole, wrap(BoardMember))
+      andBool NumProposers ==Int countMapValues(UserIdToRole, wrap(Proposer))
   rule performLhs(
           Action:Action,
           K:K,

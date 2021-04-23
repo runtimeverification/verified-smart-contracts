@@ -91,12 +91,26 @@ module CONCRETIZE-INSTRUMENTATION
   rule lazyConcretizeValues(M:Map) => concretized(concretizeValues(M, vars(?_, vars(?_, .IntVarList))))
 
   // TODO: Rename this.
+  // TODO: If I know the number of concretized elements alreadyin the map, and I usually do,
+  // I can do this instead of splitMap:
+  // syntax KItem ::= makeConcreteValue2(key:KItem, key2:KItem, Map)
+  // rule makeConcreteValue2(Key:KItem, Key2:KItem, Key2 |-> _:KItem M:Map)
+  //     => .K
+  //   requires Key in_keys(M) andBool notBool (Key ==K Key2)
+  //   ensures M ==K Key |-> ?_Value:KItem ?Remainder:Map andBool notBool Key in_keys(?Remainder)
   syntax KItem ::= makeConcreteValue(key:KItem, valueType:ReflectionType, Map)
   rule makeConcreteValue(Key:KItem, ValueType:ReflectionType, M:Map)
     =>    splitMap(Key, M, ?_Value:KItem, ?_Remainder:Map)
       ~>  cast(M[Key], ValueType)
       ~>  removeValue
       ~>  concretizeValue(M[Key])
+    requires Key in_keys(M)
+
+  syntax KItem ::= concretizeCastInKeys(key:KItem, valueType:ReflectionType, Map)
+  rule concretizeCastInKeys(Key:KItem, ValueType:ReflectionType, M:Map)
+    =>    splitMap(Key, M, ?_Value:KItem, ?_Remainder:Map)
+      ~>  cast(M[Key], ValueType)
+      ~>  removeValue
     requires Key in_keys(M)
 
   syntax KItem ::= makeConcrete(value:KItem, valueType:ReflectionType)
