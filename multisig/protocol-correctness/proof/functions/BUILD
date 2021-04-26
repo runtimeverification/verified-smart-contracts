@@ -388,7 +388,7 @@ kprove_test(
   srcs = ["proof-perform-action-endpoint-fragment-no-quorum.k"],
   trusted = ["trusted-count-can-sign"],
   semantics = ":functions-execute",
-  timeout = "long",
+  timeout = "eternal",
   breadth = "6",
 )
 
@@ -397,7 +397,7 @@ kprove_test(
   srcs = ["proof-perform-action-endpoint-fragment-performs.k"],
   trusted = ["trusted-count-can-sign"],
   semantics = ":functions-execute",
-  timeout = "long",
+  timeout = "eternal",
   breadth = "6",
 )
 
@@ -460,7 +460,7 @@ kprove_test(
   srcs = ["proof-perform-action-id-remove-user-New.k"],
   trusted = [":trusted-perform-action-remove-user-New"],
   semantics = ":functions-execute",
-  timeout = "moderate",
+  timeout = "long",  # "moderate",
   breadth = "3",
 )
 
@@ -623,6 +623,7 @@ kprove_test(
   srcs = ["proof-perform-action-remove-user-None.k"],
   trusted = [":trusted-change-user-role-None"],
   semantics = ":functions-execute",
+  timeout = "moderate",  # "short",
 )
 
 kprove_test(
@@ -794,7 +795,7 @@ kprove_test(
   srcs = ["proof-discard-action-no-signers-no-action.k"],
   trusted = [":trusted-count-can-sign"],
   semantics = ":functions-execute",
-  timeout = "moderate",
+  timeout = "long",  # "moderate",
   breadth = "2", 
 )
 
@@ -803,7 +804,7 @@ kprove_test(
   srcs = ["proof-discard-action-no-signers.k"],
   trusted = [":trusted-count-can-sign"],
   semantics = ":functions-execute",
-  timeout = "moderate",
+  timeout = "long",  # "moderate",
   breadth = "2", 
 )
 
@@ -818,7 +819,7 @@ kprove_test(
   srcs = ["proof-discard-action-no-valid-signers-no-action.k"],
   trusted = [":trusted-count-can-sign"],
   semantics = ":functions-execute",
-  timeout = "long",
+  timeout = "eternal",  # "long",
   breadth = "2", 
 )
 
@@ -827,7 +828,7 @@ kprove_test(
   srcs = ["proof-discard-action-no-valid-signers.k"],
   trusted = [":trusted-count-can-sign"],
   semantics = ":functions-execute",
-  timeout = "long",
+  timeout = "eternal",  # "long",
   breadth = "2", 
 )
 
@@ -835,7 +836,7 @@ kprove_test(
   name = "proof-propose-action-BoardMember",
   srcs = ["proof-propose-action-BoardMember.k"],
   semantics = ":functions-execute",
-  timeout = "long",
+  timeout = "eternal",  # "long",
   breadth = "2",
 )
 
@@ -879,6 +880,7 @@ kprove_test(
       ":trusted-propose-sc-deploy-fragment",
   ],
   semantics = ":functions-execute",
+  timeout = "moderate",  # "short",
 )
 
 kprove_test(
@@ -1034,21 +1036,25 @@ ktrusted(
 ktrusted(
   name = "trusted-propose-action-BoardMember",
   srcs = ["proof-propose-action-BoardMember.k"],
+  visibility = ["//visibility:public"],
 )
 
 ktrusted(
   name = "trusted-propose-action-Proposer",
   srcs = ["proof-propose-action-Proposer.k"],
+  visibility = ["//visibility:public"],
 )
 
 ktrusted(
   name = "trusted-propose-action-error-no-role",
   srcs = ["proof-propose-action-error-no-role.k"],
+  visibility = ["//visibility:public"],
 )
 
 ktrusted(
   name = "trusted-propose-action-error-no-user",
   srcs = ["proof-propose-action-error-no-user.k"],
+  visibility = ["//visibility:public"],
 )
 
 ktrusted(

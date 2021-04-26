@@ -2,9 +2,9 @@
 
 set -e
 
-PARENT_DIR=`dirname $0`
+PARENT_DIR=$(dirname $0)
 
-KOMPILE_DIR=`dirname $1`
+KOMPILE_DIR=$(dirname $1)
 shift
 
 TMP_DIR=$(mktemp -d)
@@ -19,6 +19,8 @@ shift
 BREADTH=$1
 shift
 
+#KOMPILE_PARENT = $(dirname $KOMPILE_DIR)
+#
 MODULE_NAME=$(basename "$ORIGINAL_FILE" | sed 's/\.[^\.]*$//' | tr [:lower:] [:upper:])
 
 cp -rL $KOMPILE_DIR $TMP_DIR
@@ -29,6 +31,9 @@ KOMPILE_TOOL_DIR=kompile_tool
 KPROVE=$(realpath $KOMPILE_TOOL_DIR/k/bin/kprove)
 REPL_SCRIPT=$(realpath $KOMPILE_TOOL_DIR/kast.kscript)
 
+#PROOF_FILE_PATH=$(realpath $PROOF_FILE)
+#REPL_SCRIPT_PATH=$(realpath $REPL_SCRIPT)
+#
 KORE_EXEC="kore-exec --breadth $BREADTH"
 KORE_REPL="kore-repl --repl-script $REPL_SCRIPT"
 
@@ -45,6 +50,7 @@ else
 fi
 
 cd $TMP_DIR
+echo $TMP_DIR
 
 $KPROVE \
   --haskell-backend-command "$BACKEND_COMMAND --smt-timeout 4000" \

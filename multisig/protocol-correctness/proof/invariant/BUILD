@@ -76,7 +76,8 @@ kprove_test(
   name = "proof-perform-action-endpoint",
   srcs = ["proof-perform-action-endpoint.k"],
   trusted = [
-      ":trusted-perform-parts-add-board-member",
+      ":trusted-perform-parts-1",
+      #":trusted-perform-parts-add-board-member",
       # ":trusted-perform-parts-add-proposer",
       # ":trusted-perform-parts-change-quorum-with-quorum",
       # ":trusted-perform-parts-change-quorum-no-quorum",
@@ -595,6 +596,20 @@ kprove_test(
   semantics = ":invariant-execution",
 )
 
+kprove_test(
+  name = "proof-propose-add-board-member",
+  srcs = ["proof-propose-add-board-member.k"],
+  trusted = [
+      "//protocol-correctness/proof/functions:trusted-propose-action-BoardMember",
+      "//protocol-correctness/proof/functions:trusted-propose-action-Proposer",
+      "//protocol-correctness/proof/functions:trusted-propose-action-error-no-user",
+      "//protocol-correctness/proof/functions:trusted-propose-action-error-no-role",
+  ],
+  semantics = ":invariant-execution",
+  timeout = "eternal",
+  breadth = "4" # 0
+)
+
 ktrusted(
   name = "trusted-perform-parts-add-board-member-boardmember-eq",
   srcs = ["proof-perform-parts-add-board-member-boardmember-eq.k"],
@@ -868,6 +883,12 @@ ktrusted(
 ktrusted(
   name = "trusted-perform-parts-send-egld",
   srcs = ["proof-perform-parts-send-egld.k"],
+  visibility = ["//visibility:public"],
+)
+
+ktrusted(
+  name = "trusted-perform-parts-1",
+  srcs = ["proof-perform-parts-1.k"],
   visibility = ["//visibility:public"],
 )
 

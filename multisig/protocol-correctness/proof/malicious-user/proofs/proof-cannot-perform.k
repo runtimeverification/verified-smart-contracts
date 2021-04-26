@@ -1,4 +1,11 @@
+//@ proof
+require "trusted-call-invariant.k"  //@ Bazel remove
+
 module PROOF-CANNOT-PERFORM
+  imports TRUSTED-CALL-INVARIANT
+//@ trusted
+// module TRUSTED-CANNOT-PERFORM
+//@ end
   imports MALICIOUS-USER-EXECUTE
   imports PSEUDOCODE
 
@@ -22,24 +29,24 @@ module PROOF-CANNOT-PERFORM
           <k> K </k>
           invariantState(
               NumUsers,
-              ?UserIdToAddress:Map,
-              ?AddressToUserId:Map,
+              UserIdToAddress:Map,
+              AddressToUserId:Map,
               NumBoardMembers,
               NumProposers,
               UserRoles,
               u(Quorum),
-              ?ActionLastIndex1:Usize,
-              ?ActionData1:Map,
-              ?ActionSigners1:Map,
+              u(?ActionLastIndex:Int),
+              ?ActionData:Map,
+              ?ActionSigners:Map,
               PerformedActions:List):StateCell
         </TT></T>
     requires true
         andBool maliciousInvariant(
             MaliciousAddress,
             NumUsers,
+            // UserIdToAddress,
             UserIdToAddress,
-            UserIdToAddress,
-            AddressToUserId,
+            // AddressToUserId,
             AddressToUserId,
             NumBoardMembers,
             NumProposers,
@@ -56,15 +63,19 @@ module PROOF-CANNOT-PERFORM
             MaliciousAddress,
             NumUsers,
             UserIdToAddress,
-            ?UserIdToAddress,
+            // ?UserIdToAddress,
             AddressToUserId,
-            ?AddressToUserId,
+            // ?AddressToUserId,
             NumBoardMembers,
             NumProposers,
             UserRoles,
             u(Quorum),
-            ?ActionLastIndex,
+            u(?ActionLastIndex),
             ?ActionData,
             ?ActionSigners,
             usesExpanded)
+    //@ proof
+    //@ trusted
+    // [trusted]
+    //@ end
 endmodule

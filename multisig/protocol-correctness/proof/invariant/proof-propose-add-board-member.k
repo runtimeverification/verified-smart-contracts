@@ -1,9 +1,9 @@
-require "../functions/functions-execute.k"
+require "../functions/functions-execute.k"  //@ Bazel remove
 
-require "../functions/trusted-propose-action-BoardMember.k"
-require "../functions/trusted-propose-action-Proposer.k"
-require "../functions/trusted-propose-action-error-no-user.k"
-require "../functions/trusted-propose-action-error-no-role.k"
+require "../functions/trusted-propose-action-BoardMember.k"  //@ Bazel remove
+require "../functions/trusted-propose-action-Proposer.k"  //@ Bazel remove
+require "../functions/trusted-propose-action-error-no-user.k"  //@ Bazel remove
+require "../functions/trusted-propose-action-error-no-role.k"  //@ Bazel remove
 
 module PROOF-PROPOSE-ADD-BOARD-MEMBER
   imports INVARIANT-EXECUTION

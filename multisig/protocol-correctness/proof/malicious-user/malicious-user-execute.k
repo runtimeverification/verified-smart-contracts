@@ -41,9 +41,9 @@ module MALICIOUS-USER-INVARIANT
   syntax Bool ::= maliciousInvariant(
             maliciousAddress:Address,
             numUsers:Usize,
-            initialUserIdToAddress:Map,
+            // initialUserIdToAddress:Map,
             currentUserIdToAddress:Map,
-            initinalAddressToUserId:Map,
+            // initialAddressToUserId:Map,
             currentAddressToUserId:Map,
             numBoardMembers:Usize,
             numProposers:Usize,
@@ -58,9 +58,9 @@ module MALICIOUS-USER-INVARIANT
   rule  maliciousInvariant(
             MaliciousAddress:Address,
             NumUsers:Usize,
-            InitialUserIdToAddress:Map,
+            // InitialUserIdToAddress:Map,
             CurrentUserIdToAddress:Map,
-            InitialAddressToUserId:Map,
+            // InitialAddressToUserId:Map,
             CurrentAddressToUserId:Map,
             NumBoardMembers:Usize,
             NumProposers:Usize,
@@ -83,8 +83,8 @@ module MALICIOUS-USER-INVARIANT
             ActionData,
             ActionSigners,
             Handling)
-        andBool mapIncluded(InitialUserIdToAddress, CurrentUserIdToAddress)
-        andBool mapIncluded(InitialAddressToUserId, CurrentAddressToUserId)
+        // andBool mapIncluded(InitialUserIdToAddress, CurrentUserIdToAddress)
+        // andBool mapIncluded(InitialAddressToUserId, CurrentAddressToUserId)
         andBool onlyThisSigner(CurrentAddressToUserId, MaliciousAddress, ActionSigners)
         andBool Quorum >=Int 2
 endmodule

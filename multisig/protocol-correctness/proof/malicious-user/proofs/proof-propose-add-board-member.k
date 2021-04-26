@@ -1,19 +1,22 @@
 //@ proof
-require "trusted-propose-add-board-member.k"  //@ Bazel remove
+require "../functions/trusted-propose-action-BoardMember.k"  //@ Bazel remove
+require "../functions/trusted-propose-action-Proposer.k"  //@ Bazel remove
+require "../functions/trusted-propose-action-error-no-user.k"  //@ Bazel remove
+require "../functions/trusted-propose-action-error-no-role.k"  //@ Bazel remove
 
-module PROOF-CALL-INVARIANT
-  imports TRUSTED-PROPOSE-ADD-BOARD-MEMBER
+module PROOF-PROPOSE-ADD-BOARD-MEMBER
+  imports TRUSTED-PROPOSE-ACTION-ERROR-NO-ROLE
+  imports TRUSTED-PROPOSE-ACTION-ERROR-NO-USER
+  imports TRUSTED-PROPOSE-ACTION-BOARDMEMBER
+  imports TRUSTED-PROPOSE-ACTION-PROPOSER
 //@ trusted
-// module TRUSTED-CALL-INVARIANT
+// module TRUSTED-PROPOSE-ADD-BOARD-MEMBER
 //@ end
   imports MALICIOUS-USER-EXECUTE
   imports PSEUDOCODE
 
   claim <T><TT>
-          <k> runExternalCallFromUser(MaliciousAddress:Address)
-              ~> runExternalCallsFromUser(MaliciousAddress:Address, Count:Int)
-              ~> K:K
-          </k>
+          <k> runExternalCall(from MaliciousAddress run proposeAddBoardMember(_UserAddress:Address);) ~> K:K </k>
           invariantState(
               NumUsers:Usize,
               UserIdToAddress:Map,
@@ -29,18 +32,16 @@ module PROOF-CALL-INVARIANT
         </TT></T>
       =>
         <T><TT>
-          <k> runExternalCallsFromUser(MaliciousAddress:Address, Count:Int)
-              ~> K:K
-          </k>
+          <k> K </k>
           invariantState(
               NumUsers,
-              UserIdToAddress:Map,
-              AddressToUserId:Map,
+              ?UserIdToAddress:Map,
+              ?AddressToUserId:Map,
               NumBoardMembers,
               NumProposers,
               UserRoles,
               Quorum,
-              u(?ActionLastIndex:Int),
+              ?ActionLastIndex:Usize,
               ?ActionData:Map,
               ?ActionSigners:Map,
               PerformedActions:List):StateCell
@@ -63,21 +64,16 @@ module PROOF-CALL-INVARIANT
         andBool maliciousInvariant(
             MaliciousAddress,
             NumUsers,
-            UserIdToAddress,
-            AddressToUserId,
+            ?UserIdToAddress,
+            ?AddressToUserId,
             NumBoardMembers,
             NumProposers,
             UserRoles,
             Quorum,
-            u(?ActionLastIndex),
+            ?ActionLastIndex,
             ?ActionData,
             ?ActionSigners,
-            //@ proof
-            usesExpanded
-            //@ trusted
-            // expand(expanded)
-            //@ end
-            )
+            usesExpanded)
     //@ proof
     //@ trusted
     // [trusted]

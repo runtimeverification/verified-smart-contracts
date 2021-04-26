@@ -1,10 +1,10 @@
 //@ proof
-require "trusted-perform-parts-add-board-member.k"  //@ Bazel remove
+require "trusted-perform-parts-1.k"  //@ Bazel remove
 
 module PROOF-PERFORM-ACTION-ENDPOINT
   imports INVARIANT-EXECUTION
 
-  imports TRUSTED-PERFORM-PARTS-ADD-BOARD-MEMBER
+  imports TRUSTED-PERFORM-PARTS-1
 //@ trusted
 // module TRUSTED-PERFORM-ACTION-ENDPOINT
 //@ end
