@@ -13,21 +13,21 @@ module CONCRETIZE-INSTRUMENTATION
 
   syntax KItem ::= concretizeValue(KItem)
 
-  rule concretizeValue([CSV:ExpressionCSV]) => concretizeValue(CSV)
+  rule concretizeValue([CSV:ExpressionCSV]) => concretizeValue(CSV)  [label(concretizeValueCsv)]
 
-  rule concretizeValue(u(V:Int)) => concretizeValue(V)
+  rule concretizeValue(u(V:Int)) => concretizeValue(V)  [label(concretizeValueUsize)]
 
-  rule concretizeValue(address(V:Int)) => concretizeValue(V)
+  rule concretizeValue(address(V:Int)) => concretizeValue(V)  [label(concretizeValueAddress)]
 
-  rule concretizeValue(big(V:Int)) => concretizeValue(V)
+  rule concretizeValue(big(V:Int)) => concretizeValue(V)  [label(concretizeValueBig)]
 
-  rule concretizeValue(meta(V:Int)) => concretizeValue(V)
+  rule concretizeValue(meta(V:Int)) => concretizeValue(V)  [label(concretizeValueMeta)]
 
-  rule concretizeValue(bytes(V:String)) => concretizeValue(V)
+  rule concretizeValue(bytes(V:String)) => concretizeValue(V)  [label(concretizeValueBytes)]
 
-  rule concretizeValue(BoardMember) => .K
-  rule concretizeValue(Proposer) => .K
-  rule concretizeValue(None) => .K
+  rule concretizeValue(BoardMember) => .K  [label(concretizeValueBoardMember)]
+  rule concretizeValue(Proposer) => .K  [label(concretizeValueProposer)]
+  rule concretizeValue(None) => .K  [label(concretizeValueNone)]
 
   rule concretizeValue(_) => .K [priority(200)]
 
@@ -127,19 +127,13 @@ module PROOF-INSTRUMENTATION
 
   imports CONCRETIZE-INSTRUMENTATION
 
-  syntax KItem ::= splitEquality(KItem, KItem)
-  rule splitEquality(A:KItem, B:KItem) => .K
-    requires A ==K B
-  rule splitEquality(A:KItem, B:KItem) => .K
-    requires notBool (A ==K B)
-
   syntax KItem ::= splitBoolean(Bool)
-  rule splitBoolean(true) => .K
-  rule splitBoolean(false) => .K
+  rule splitBoolean(true) => .K  [label(splitBooleanTrue)]
+  rule splitBoolean(false) => .K  [label(splitBooleanFalse)]
 
   syntax KItem ::= branchK(Bool, K, K)
-  rule branchK(true, K:K, _:K) => K
-  rule branchK(false, _:K, K:K) => K
+  rule branchK(true, K:K, _:K) => K  [label(branchKTrue)]
+  rule branchK(false, _:K, K:K) => K  [label(branchKFalse)]
 
 endmodule
 
