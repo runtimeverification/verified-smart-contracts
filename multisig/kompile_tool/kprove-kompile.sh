@@ -37,6 +37,7 @@ chmod -R a+w $TMP_DIR/*
 
 pushd $TMP_DIR > /dev/null
 
+nice -n 10 \
 $KPROVE \
   --spec-module "$MODULE_NAME" \
   --dry-run \
