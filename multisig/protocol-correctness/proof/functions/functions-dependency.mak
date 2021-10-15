@@ -1,0 +1,4 @@
+FUNCTIONS_ALL := $(wildcard $(FUNCTIONS_DIR)/*.k)
+FUNCTIONS_PROOFS := $(wildcard $(FUNCTIONS_DIR)/proof-*.k)
+FUNCTIONS_TRUSTED := $(wildcard $(FUNCTIONS_DIR)/trusted-*.k)
+FUNCTIONS_EXECUTION := $(filter-out $(FUNCTIONS_TRUSTED), $(filter-out $(FUNCTIONS_PROOFS), $(FUNCTIONS_ALL))) $(PROOF_EXECUTION)

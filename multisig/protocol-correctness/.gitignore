@@ -1,0 +1,6 @@
+*.timestamp
+*-kompiled
+*.cmp
+.krun-*
+kore-*.tar.gz
+*.tar.gz

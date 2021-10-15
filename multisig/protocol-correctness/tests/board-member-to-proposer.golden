@@ -1,0 +1,65 @@
+<T>
+  <TT>
+    <k>
+      .
+    </k>
+    <state>
+      <multisig-state>
+        <users>
+          <num-users>
+            u ( 2 )
+          </num-users>
+          <user-id-to-address>
+            u ( 1 ) |-> address ( 7 )
+            u ( 2 ) |-> address ( 9 )
+          </user-id-to-address>
+          <address-to-user-id>
+            address ( 7 ) |-> u ( 1 )
+            address ( 9 ) |-> u ( 2 )
+          </address-to-user-id>
+        </users>
+        <board-state>
+          <num-board-members>
+            u ( 1 )
+          </num-board-members>
+          <num-proposers>
+            u ( 1 )
+          </num-proposers>
+          <user-roles>
+            u ( 1 ) |-> BoardMember
+            u ( 2 ) |-> Proposer
+          </user-roles>
+          <quorum>
+            u ( 1 )
+          </quorum>
+        </board-state>
+        <action-state>
+          <action-last-index>
+            u ( 2 )
+          </action-last-index>
+          <actions>
+            <action-data>
+              .Map
+            </action-data>
+            <action-signers>
+              .Map
+            </action-signers>
+          </actions>
+        </action-state>
+      </multisig-state>
+      <pseudocode-state>
+        <variables>
+          .Map
+        </variables>
+        <stack>
+          .List
+        </stack>
+      </pseudocode-state>
+      <external-call-env>
+        <caller-address>
+          uninitialized
+        </caller-address>
+      </external-call-env>
+    </state>
+  </TT>
+</T>

@@ -1,0 +1,4 @@
+from address(7) run init(u(1), [address(7), .]);
+from address(7) run proposeAddProposer(address(9));
+from address(7) run unsign(u(1));
+from address(7) run discardAction(u(1));

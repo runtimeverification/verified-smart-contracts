@@ -1,0 +1,4 @@
+from address(7) run init(u(1), [address(7), .]);
+from address(7) run proposeAddBoardMember(address(8));
+from address(7) run sign(u(1));
+from address(7) run performActionEndpoint(u(1));

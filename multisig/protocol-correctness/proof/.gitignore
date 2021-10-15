@@ -1,0 +1,10 @@
+.kprove-*
+kore-repl*
+*.log
+*.svg
+*.json
+*.eventlog
+out
+.out
+.deps
+trusted-*.k
