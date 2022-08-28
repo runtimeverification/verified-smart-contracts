@@ -190,7 +190,7 @@ contract DSAuth is DSAuthEvents {
         auth
     {
         owner = owner_;
-        emit LogSetOwner(owner);
+        emit LogSetOwner(owner_);
     }
 
     function setAuthority(DSAuthority authority_)
